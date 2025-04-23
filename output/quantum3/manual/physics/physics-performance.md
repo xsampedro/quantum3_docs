@@ -16,11 +16,7 @@ Before doing anything further, you want to ensure that your problems are actuall
 
 ### Quantum Graph Profiler
 
-The ```
-Quantum Graph Profiler
-```
-
- is a tool for profiling all systems performance as well as graphics and Unity scripts. This is mainly useful for determining if anything Unity related is causing the performance issues.
+The `Quantum Graph Profiler` is a tool for profiling all systems performance as well as graphics and Unity scripts. This is mainly useful for determining if anything Unity related is causing the performance issues.
 
 ### Task profiler
 
@@ -55,11 +51,7 @@ For information on Static Colliders see: [Static Colliders](/quantum/current/man
 
 Another way is reducing the amount of interactions between bodies, for example using physics layers or query options.
 
-The collision matrix 3D and 2D are imported from Unity and are available in the ```
-Simulation Config
-```
-
-.
+The collision matrix 3D and 2D are imported from Unity and are available in the `Simulation Config`.
 
 ![Layer Matrix Screenshot](/docs/img/quantum/v3/manual/physics/layer-matrix.png)
 
@@ -67,49 +59,21 @@ Simulation Config
 
 For more in depth information on Physics Settings, see: [Settings](/quantum/current/manual/physics/settings)
 
-```
-World Size
-```
+`World Size` is a field found in the `Map` asset, which is baked by the `QuantumMapData` component. It defines the playable area in the physics engine.
 
-is a field found in the ```
-Map
-```
-
- asset, which is baked by the ```
-QuantumMapData
-```
-
-component. It defines the playable area in the physics engine.
-
-The map is divided into a series of sections called ```
-Buckets
-```
-
-. These are used to resolve the broad and narrow phase queries.
+The map is divided into a series of sections called `Buckets`. These are used to resolve the broad and narrow phase queries.
 
 ### World Size
 
-The ```
-World Size
-```
-
-should match the size of the game's playable area as close as possible in order to be efficient.
+The `World Size` should match the size of the game's playable area as close as possible in order to be efficient.
 
 ![World Size Screenshot](/docs/img/quantum/v3/manual/physics/optimized-world-size.png)
 
-In the first image, the ```
-World Size
-```
-
- is larger than the actual area used in the gameplay. The buckets are not evenly spaced and are wasted. In the second image, the objects are evenly spread in the world area.
+In the first image, the `World Size` is larger than the actual area used in the gameplay. The buckets are not evenly spaced and are wasted. In the second image, the objects are evenly spread in the world area.
 
 It is important to note that adding more buckets than necessary will NOT increase the performance and too few buckets will have too many entries to evaluate. Having too many entries in the first or last bucket will greatly affect performance.
 
-Refer to the ```
-Task Profiler
-```
-
-for evaluating the performance and tweak the values based on what works best for your case.
+Refer to the `Task Profiler` for evaluating the performance and tweak the values based on what works best for your case.
 
 NOTE: If something is out of the world size limits, it is considered in the first or last bucket (whichever is closest).
 
@@ -117,11 +81,7 @@ NOTE: If something is out of the world size limits, it is considered in the firs
 
 Bucket Subdivisions are used to make regular physics queries more efficient. So if your game does not use normal queries, such as only using [Broad-phase Queries](/quantum/current/manual/physics/queries#broadphase_queries), you may set the subdivision count to 0.
 
-Otherwise, the default value provided in the ```
-QuantumMapData
-```
-
- component is enough for most cases.
+Otherwise, the default value provided in the `QuantumMapData` component is enough for most cases.
 
 ### Bucketing Axis
 
@@ -131,11 +91,7 @@ The axis of the World Size subdivision can improve the performance depending on 
 
 In the image on the left, some buckets have 5 entries, while the others on right only have 3.
 
-So, for this image, the ```
-Bucketing Axis
-```
-
-should be set to horizontal, because the physics bodies will be more evenly spread out across the buckets.
+So, for this image, the `Bucketing Axis` should be set to horizontal, because the physics bodies will be more evenly spread out across the buckets.
 
 NOTE: In this example, where there are only a few entries, the change will be minimal. However, when scaled up to hundreds or thousands of entries, it definitely matters.
 
@@ -154,11 +110,7 @@ To optimize this:
 
 You should aim to have a reasonable triangle density for the terrain and mesh colliders, as they play an important role in the performance of the physcis engine. Because of this, depending on the mesh, you might want to create a second simplified mesh for the collider, instead of using the same one for the view.
 
-To visualize these, enable the related fields in the ```
-QuantumGameGizmosSettings
-```
-
-.
+To visualize these, enable the related fields in the `QuantumGameGizmosSettings`.
 
 ![Triangle Gizmos Screenshot](/docs/img/quantum/v3/manual/physics/triangle-gizmos.png)
 
@@ -166,35 +118,19 @@ QuantumGameGizmosSettings
 
 Quantum’s physics engine executes multiple scheduled steps for a diversity of features, however not all of them may be needed depending on the game.
 
-You may disable these features individually in the ```
-SimulationConfig
-```
-
-asset:
+You may disable these features individually in the `SimulationConfig` asset:
 
 ![Physics Toggle Screenshot](/docs/img/quantum/v3/manual/physics/physics-feature-toggle.png)
 
 ## Resting Bodies
 
-When the game has objects that don’t have to move for a long time, it will put them to sleep and skip their forces, velocity, integrations and collision detection. This option can be enabled in the ```
-SimulationConfig
-```
-
- asset:
+When the game has objects that don’t have to move for a long time, it will put them to sleep and skip their forces, velocity, integrations and collision detection. This option can be enabled in the `SimulationConfig` asset:
 
 ![Sleeping Screenshot](/docs/img/quantum/v3/manual/physics/sleeping.png)
 
 ## Solver Iterations
 
-The ```
-Solver Iterations
-```
-
-field in the ```
-SimulationConfig
-```
-
-asset represents how many iterations are used to solve the constraints used by the physics engine, such as collisions and joints.
+The `Solver Iterations` field in the `SimulationConfig` asset represents how many iterations are used to solve the constraints used by the physics engine, such as collisions and joints.
 
 The default value is 4 and generally this is fine for most cases. However it can be increased or decreased depending on the accuracy required.
 
@@ -208,28 +144,12 @@ Such as:
 
 - Make the raycast distance as small as possible to avoid unnecessary collision evaluations.
 
-- Use ```
-  Raycast
-  ```
+- Use `Raycast` instead of `RaycastAll` if only the first collision is important.
 
-   instead of ```
-  RaycastAll
-  ```
-
-   if only the first collision is important.
-
-- Make use of ```
-  QueryOptions
-  ```
-
-   in the Raycast method to ensure it isn't hitting things that does not matter.
+- Make use of `QueryOptions` in the Raycast method to ensure it isn't hitting things that does not matter.
 
 
-For more info on ```
-QueryOptions
-```
-
-, see: [Queries](/quantum/current/manual/physics/queries)
+For more info on `QueryOptions`, see: [Queries](/quantum/current/manual/physics/queries)
 
 ## Broadphase Queries
 

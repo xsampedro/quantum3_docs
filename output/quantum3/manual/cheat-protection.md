@@ -45,24 +45,12 @@ However, there are a number of iterations that can be used to validate the resul
 
 Many start parameters of the actual online Quantum simulation and game are client controlled by default.
 
-Each client uploads ```
-SessionConfig
-```
-
- (Quantum settings) and ```
-RuntimeConfig
-```
-
-(game settings) files before the session starts. Clients also upload their ```
-RuntimePlayer
-```
-
-, which usually describes their game loadout or progression when a player is added to the game.
+Each client uploads `SessionConfig` (Quantum settings) and `RuntimeConfig` (game settings) files before the session starts. Clients also upload their `RuntimePlayer`, which usually describes their game loadout or progression when a player is added to the game.
 
 To secure the data sent by clients, in games running on the Public Quantum Cloud, [Quantum Webhooks](/quantum/current/manual/webhooks) can be used.
 
-| Public Quantum Cloud | The server chooses the first ```<br>SessionConfig<br>```<br> and ```<br>RuntimeConfig<br>```<br> it receives from clients, which is more or less random. ```<br>RuntimePlayer<br>```<br> is completely unprotected. |
-| Webhooks | ```<br>SessionConfig<br>```<br>, ```<br>RuntimeConfig<br>```<br> and ```<br>RuntimePlayer<br>```<br> sent by clients can be checked using HTTP webhooks configured on the Photon dashboard to call the developer's game backend. |
+| Public Quantum Cloud | The server chooses the first `SessionConfig` and `RuntimeConfig` it receives from clients, which is more or less random. `RuntimePlayer` is completely unprotected. |
+| Webhooks | `SessionConfig`, `RuntimeConfig` and `RuntimePlayer` sent by clients can be checked using HTTP webhooks configured on the Photon dashboard to call the developer's game backend. |
 | Custom Quantum Server | All configs can be intercepted and replaced after being retrieved from the developer's game backend. |
 
 ## Custom Authentication

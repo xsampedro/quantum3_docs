@@ -63,8 +63,8 @@ Qtn
 // components define reusable game state data groups
 component Resources
 {
- Int32 Mana;
- FP Health;
+  Int32 Mana;
+  FP Health;
 }
 
 ```
@@ -77,10 +77,9 @@ C#
 
 ```csharp
 var es = frame.Filter<Transform3D, Resources>();
-
 // sets the entity ref and pointers to the components
 while (es.NextUnsafe(out var entity, out var transform, out var resources)) {
- transform->Position += FPVector3.Forward \* frame.DeltaTime;
+  transform->Position += FPVector3.Forward * frame.DeltaTime;
 }
 
 ```
@@ -96,11 +95,11 @@ C#
 ```csharp
 public unsafe class LogicSystem : SystemMainThread
 {
- public override void Update(Frame frame)
- {
- // customer game logic here
- // (frame is a reference for the generated game state container).
- }
+  public override void Update(Frame frame)
+  {
+    // customer game logic here
+    // (frame is a reference for the generated game state container).
+  }
 }
 
 ```

@@ -24,18 +24,10 @@ _PS:_ this is an exaggerated example in which the entities move very fast.
 
 What happens is:
 
-1. The remote player begins to press the ```
-Right Arrow
-```
-
-    button, causing the entity to move to the right;
+1. The remote player begins to press the `Right Arrow` button, causing the entity to move to the right;
 2. During predicted frames, such player input is repeated, causing the remote player entity to continue moving to the right;
 3. The remote player stops pressing the 'Right Arrow' button, but the local client is not yet aware of this change, so it continues to predict that the entity is moving to the right;
-4. When the next Verified frame arrives, the ```
-EntityView
-```
-
-    lerps from the mispredicted position to the correct one, which is a slightly backwards;
+4. When the next Verified frame arrives, the `EntityView` lerps from the mispredicted position to the correct one, which is a slightly backwards;
 
 The lerping is done by the Entity View's Error Prediction setup.
 
@@ -57,19 +49,7 @@ These are the two most common pieces of advice (number 1 is usually enough):
 
 _PS:_ **avoid** changing the Input Delay unless you know that it can really be used in your game without major drawbacks;
 
-If you decide to try this alternative, the suggestion is to navigate to the ```
-DeterministicConfig
-```
-
- asset and set ```
-OffsetMin
-```
-
-to a small value, such as ```
-2
-```
-
-, and see how the game plays.
+If you decide to try this alternative, the suggestion is to navigate to the `DeterministicConfig` asset and set `OffsetMin` to a small value, such as `2`, and see how the game plays.
 
 Back to top
 

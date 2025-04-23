@@ -9,11 +9,7 @@ _Source: https://doc.photonengine.com/quantum/current/manual/animation_
 In Quantum there are two distinct ways to handle animation:
 
 - Poll the game state from Unity; and,
-- Deterministic animation using the ```
-Quantum Animator Addon
-```
-
-.
+- Deterministic animation using the `Quantum Animator Addon`.
 
 ## Polling Based Animation
 
@@ -30,23 +26,20 @@ C#
 ```csharp
 namespace Quantum
 {
-using UnityEngine;
-
-public class CharacterAnimations : QuantumEntityViewComponent
-{
-private Animator \_animator;
-
-public override void OnInitialize()
-{
-\_animator = GetComponentInChildren<Animator>();
-}
-
-public override void OnUpdateView()
-{
-var kcc = PredictedFrame.Get<CharacterController3D>(EntityRef);
-\_animator.SetFloat("Speed", kcc.Velocity.Magnitude.AsFloat);
-}
-}
+  using UnityEngine;
+  public class CharacterAnimations : QuantumEntityViewComponent
+  {
+    private Animator _animator;
+    public override void OnInitialize()
+    {
+      _animator = GetComponentInChildren<Animator>();
+    }
+    public override void OnUpdateView()
+    {
+      var kcc = PredictedFrame.Get<CharacterController3D>(EntityRef);
+      _animator.SetFloat("Speed", kcc.Velocity.Magnitude.AsFloat);
+    }
+  }
 }
 
 ```
@@ -55,11 +48,7 @@ var kcc = PredictedFrame.Get<CharacterController3D>(EntityRef);
 
 Some animations are based on a particular events taking place in the game; e.g. a player pressing jump or getting hit by an enemy. In these cases, it is usually preferable to raise an event from the simulation and have the view listen to it. This ensures decoupling and work well in conjunction with the polling based animation approach.
 
-For a comprehensive explanation on events and callbacks, refer to the ```
-Quantum ECS > Events & Callbacks
-```
-
-page in the Manual.
+For a comprehensive explanation on events and callbacks, refer to the `Quantum ECS > Events & Callbacks` page in the Manual.
 
 From Quantum, a system can trigger a Quantum Event when a character jumps:
 
@@ -68,57 +57,40 @@ C#
 ```csharp
 namespace Quantum
 {
-using Photon.Deterministic;
+    using Photon.Deterministic;
 
-public unsafe struct PlayerMovementFilter
-{
-public EntityRef EntityRef;
-public PlayerID\* PlayerID;
-public Transform3D\* Transform;
-public CharacterController3D\* Kcc;
-}
+    public unsafe struct PlayerMovementFilter
+    {
+        public EntityRef EntityRef;
+        public PlayerID* PlayerID;
+        public Transform3D* Transform;
+        public CharacterController3D* Kcc;
+    }
 
-unsafe class MovementSystem : SystemMainThreadFilter<PlayerMovementFilter>
-{
-public override void Update(Frame frame, ref PlayerMovementFilter filter)
-{
-var input = frame.GetPlayerInput(filter.PlayerID->PlayerRef);
-
-if (input->Jump.WasPressed)
-{
-frame.Events.PlayerJump(filter.EntityRef);
-filter.Kcc->Jump(f);
-}
-}
-}
+    unsafe class MovementSystem : SystemMainThreadFilter<PlayerMovementFilter>
+    {
+        public override void Update(Frame frame, ref PlayerMovementFilter filter)
+        {
+            var input = frame.GetPlayerInput(filter.PlayerID->PlayerRef);
+            if (input->Jump.WasPressed)
+            {
+                frame.Events.PlayerJump(filter.EntityRef);
+                filter.Kcc->Jump(f);
+            }
+        }
+    }
 }
 
 ```
 
-On the Unity side, a Unity component can listen to the ```
-PlayerJump
-```
+On the Unity side, a Unity component can listen to the `PlayerJump` event and reacts to it. These steps are necessary to achieve this:
 
-event and reacts to it. These steps are necessary to achieve this:
-
-1. Define a method that can receive the event - ```
-void Jump(EventPlayerJump e)
-```
-
-.
+1. Define a method that can receive the event - `void Jump(EventPlayerJump e)`.
 2. Subscribe to the event in question.
-3. When the event is received, check if it is meant for the GameObject the script is located on by comparing the ```
-EntityRef
-```
-
-    contained in the event against the one cached earlier.
+3. When the event is received, check if it is meant for the GameObject the script is located on by comparing the `EntityRef` contained in the event against the one cached earlier.
 4. Trigger / Set the parameter(s) in the Unity Animator.
 
-The definition of the event, in any ```
-.qtn
-```
-
-file:
+The definition of the event, in any `.qtn` file:
 
 Qtn
 
@@ -134,27 +106,23 @@ C#
 ```csharp
 namespace Quantum
 {
-using UnityEngine;
-
-public class CharacterAnimations : QuantumEntityViewComponent
-{
-private Animator \_animator;
-
-public override void OnInitialize()
-{
-\_animator = GetComponentInChildren<Animator>();
-
-QuantumEvent.Subscribe<EventPlayerJump>(this, OnPlayerJump);
-}
-
-private void OnPlayerJump(EventPlayerJump e)
-{
-if (e.EntityRef == EntityRef)
-{
-\_animator.SetTrigger("Jump");
-}
-}
-}
+  using UnityEngine;
+  public class CharacterAnimations : QuantumEntityViewComponent
+  {
+    private Animator _animator;
+    public override void OnInitialize()
+    {
+      _animator = GetComponentInChildren<Animator>();
+      QuantumEvent.Subscribe<EventPlayerJump>(this, OnPlayerJump);
+    }
+    private void OnPlayerJump(EventPlayerJump e)
+    {
+      if (e.EntityRef == EntityRef)
+      {
+        _animator.SetTrigger("Jump");
+      }
+    }
+  }
 }
 
 ```
@@ -165,11 +133,7 @@ if (e.EntityRef == EntityRef)
 - Events are not part of the game state and thus are not available to late/re-joining players. It is therefore advisable to first initialize the animation state by polling the latest game state if the game has already started.
 - Use synchronised events for animations that need to be triggered with 100% accuracy, e.g. a victory celebration.
 - Use regular non-synchronised events for animations that need to be snappy, e.g. getting hit.
-- Use the ```
-EventCanceled
-```
-
-callback to graciously exit from animations triggered by a cancelled non-synchronised events. This can happen when the event was raised as part of a prediction but was rolled back during a verified frame.
+- Use the `EventCanceled` callback to graciously exit from animations triggered by a cancelled non-synchronised events. This can happen when the event was raised as part of a prediction but was rolled back during a verified frame.
 
 ## Deterministic Animation
 
@@ -177,11 +141,7 @@ The main advantage of using a deterministic animation system is tick precise ani
 
 The Quantum Animator is a tool enabling deterministic animation. It works by baking information from Unity’s Mecanim Controller and importing every configuration such as the states, the transitions between the states, the motion clips and so on.
 
-Since Quantum 3, the code has been open sourced and is available for download on the ```
-Addons > Animator
-```
-
-page. This page also provides an overview and a quick-guide on how to import and use the tool.
+Since Quantum 3, the code has been open sourced and is available for download on the `Addons > Animator` page. This page also provides an overview and a quick-guide on how to import and use the tool.
 
 Keep in mind its features are limited and it will likely have to be adapted to your needs.
 

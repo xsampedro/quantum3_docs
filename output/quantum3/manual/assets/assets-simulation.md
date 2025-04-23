@@ -13,10 +13,10 @@ Here is a minimal definition of an asset class (for a character spec) with some 
 C#
 
 ```csharp
- public class CharacterSpec : AssetObject {
- public FP Speed;
- public FP MaxHealth;
- }
+  public class CharacterSpec : AssetObject {
+    public FP Speed;
+    public FP MaxHealth;
+  }
 
 ```
 
@@ -32,9 +32,9 @@ Qtn
 
 ```cs
 component CharacterData {
- // reference to an immutable instance of CharacterSpec (from the Quantum asset database)
- asset\_ref<CharacterSpec> Spec;
- // other component data
+    // reference to an immutable instance of CharacterSpec (from the Quantum asset database)
+    asset_ref<CharacterSpec> Spec;
+    // other component data
 }
 
 ```
@@ -55,9 +55,9 @@ The basic use of assets is to read data in runtime and apply it to any computati
 C#
 
 ```csharp
-// consider cd a CharacterData\*, and body a PhysicsBody2D\* (from a component filter, for example)
+// consider cd a CharacterData*, and body a PhysicsBody2D* (from a component filter, for example)
 var spec = frame.FindAsset(cd->Spec);
-body->Velocity = FPVector2.Right \* spec.Speed;
+body->Velocity = FPVector2.Right * spec.Speed;
 
 ```
 
@@ -74,11 +74,9 @@ The following snippet shows examples of what is safe (switching refs) and not sa
 C#
 
 ```csharp
-// cd is a CharacterData\*
-
+// cd is a CharacterData*
 // this is VALID and SAFE, as the CharacterSpec asset ref is part of the game state
 cd->Spec = frame.FindAsset<CharacterSpec>("anotherCharacterSpec-path");
-
 // this is NOR valid NEITHER deterministic, as the internal data from an asset is NOT part of the transient game state:
 var spec = frame.FindAsset<CharacterSpec>("anotherCharacterSpec-path");
 // (DO NOT do this) changing a value directly in the asset object instance
@@ -95,10 +93,10 @@ The basic step for inheritance is to create an abstract base asset class (we'll 
 C#
 
 ```csharp
- public abstract class CharacterSpec : AssetObject {
- public FP Speed;
- public FP MaxHealth;
- }
+  public abstract class CharacterSpec : AssetObject {
+    public FP Speed;
+    public FP MaxHealth;
+  }
 
 ```
 
@@ -107,13 +105,12 @@ Concrete sub-classes of _CharacterSpec_ may add custom data properties of their 
 C#
 
 ```csharp
- public class MageSpec : CharacterSpec {
- public FP HealthRegenerationFactor;
- }
-
- public class WarriorSpec : CharacterSpec {
- public FP Armour;
- }
+  public class MageSpec : CharacterSpec {
+    public FP HealthRegenerationFactor;
+  }
+  public class WarriorSpec : CharacterSpec {
+    public FP Armour;
+  }
 
 ```
 
@@ -131,23 +128,22 @@ The following example adds a virtual method to the base class, and a custom impl
 C#
 
 ```csharp
- public unsafe abstract class CharacterSpec : AssetObject {
- public FP Speed;
- public FP MaxHealth;
- public virtual void UpdateCharacter(Frame frame, EntityRef entity, CharacterData\* data) {
- if (data->Health < 0)
- frame.Destroy(entity);
- }
- }
-
- public unsafe class MageSpec : CharacterSpec {
- public FP HealthRegenerationFactor;
- // reads data from own instance and uses it to update transient health of Character pointer passed as param
- public override void UpdateCharacter(Frame frame, EntityRef entity, CharacterData\* data) {
- data->Health += HealthRegenerationFactor \* frame.DeltaTime;
- base.UpdateCharacter(frame, entity, data);
- }
- }
+  public unsafe abstract class CharacterSpec : AssetObject {
+    public FP Speed;
+    public FP MaxHealth;
+    public virtual void UpdateCharacter(Frame frame, EntityRef entity, CharacterData* data) {
+      if (data->Health < 0)
+        frame.Destroy(entity);
+    }
+  }
+  public unsafe class MageSpec : CharacterSpec {
+    public FP HealthRegenerationFactor;
+    // reads data from own instance and uses it to update transient health of Character pointer passed as param
+    public override void UpdateCharacter(Frame frame, EntityRef entity, CharacterData* data) {
+      data->Health += HealthRegenerationFactor * frame.DeltaTime;
+      base.UpdateCharacter(frame, entity, data);
+    }
+  }
 
 ```
 
@@ -157,7 +153,6 @@ C#
 
 ```csharp
 // Assuming data is the pointer to a specific entity's CharacterData component, and entity is the corresponding EntityRef:
-
 var spec = frame.FindAsset(data->Spec);
 // Updating Health using data-driven polymorphism (behavior depends on the data asset type and instance assigned to character
 spec.UpdateCharacter(frame, entity, data);
@@ -166,53 +161,36 @@ spec.UpdateCharacter(frame, entity, data);
 
 ### Using DSL Generated Structs In Assets
 
-```
-Structs
-```
-
-defined in the DSL can also be used on assets. The DSL struct must be annotated with the ```
-\[Serializable\]
-```
-
- attribute, otherwise the data is not inspectable in Unity.
+`Structs` defined in the DSL can also be used on assets. The DSL struct must be annotated with the `\[Serializable\]` attribute, otherwise the data is not inspectable in Unity.
 
 ```
-\[Serializable\]
+[Serializable]
 struct Foo {
-int Bar;
+  int Bar;
 }
 
 ```
 
-Using the DSL ```
-struct
-```
-
-in a Quantum asset.
+Using the DSL `struct` in a Quantum asset.
 
 C#
 
 ```csharp
- public class FooUser : AssetObject {
- public Foo F;
- }
+  public class FooUser : AssetObject {
+    public Foo F;
+  }
 
 ```
 
-If a struct is not ```
-\[Serializable\]
-```
-
--friendly (e.g. because it is an union or contains a Quantum collection), prototype can be used instead:
+If a struct is not `\[Serializable\]`-friendly (e.g. because it is an union or contains a Quantum collection), prototype can be used instead:
 
 C#
 
 ```csharp
 using Quantum.Prototypes;
-
-public class FooUser : AssetObject {
-public FooPrototype F;
-}
+  public class FooUser : AssetObject {
+    public FooPrototype F;
+  }
 
 ```
 
@@ -230,43 +208,15 @@ fooUser.F.Materialize(frame, ref f, default);
 
 It is possible to add static assets to the asset database at runtime, before the Quantum simulation starts. This can be useful for scenarios such as downloading maps from a backend or procedurally generating content. When adding assets at runtime, it's crucial to ensure that each asset has a deterministic GUID to maintain consistency across all clients.
 
-There are two ways to generate deterministic ```
-AssetGuid
-```
-
-:
+There are two ways to generate deterministic `AssetGuid`:
 
 1. Using a constant:
-   - This is the simplest way to have a deterministic ```
-     AssetGuid
-     ```
-
-     .
-   - You must ensure that another asset is not assigned the same ```
-     AssetGuid
-     ```
-
-     .
-   - This is fine as long as you have a fixed amount of assets to add, and you are sure that the same asset will always be assigned the same ```
-     AssetGuid
-     ```
-
-     .
+   - This is the simplest way to have a deterministic `AssetGuid`.
+   - You must ensure that another asset is not assigned the same `AssetGuid`.
+   - This is fine as long as you have a fixed amount of assets to add, and you are sure that the same asset will always be assigned the same `AssetGuid`.
 2. Generation:
-   - The ```
-     QuantumUnityDB.CreateRuntimeDeterministicGuid
-     ```
-
-      method provides an API to generate ```
-     AssetGuid
-     ```
-
-     s.
-   - It uses the asset object's name as a seed to generate a deterministic ```
-     AssetGuid
-     ```
-
-     .
+   - The `QuantumUnityDB.CreateRuntimeDeterministicGuid` method provides an API to generate `AssetGuid`s.
+   - It uses the asset object's name as a seed to generate a deterministic `AssetGuid`.
    - You should use this approach if the amount of assets you need to add is not fixed.
 
 Usage:
@@ -276,16 +226,12 @@ C#
 ```csharp
 // create any asset
 var assetObject = AssetObject.Create<MyAssetObjectType>();
-
 // set its name
 assetObject.name = "My Unique Asset Object Name";
-
 // get a deterministic GUID
 var guid = QuantumUnityDB.CreateRuntimeDeterministicGuid(assetObject);
-
 // add the asset to the asset database
 QuantumUnityDB.Global.AddAsset(assetObject);
-
 // set the GUID
 assetObject.Guid = guid;
 
@@ -293,11 +239,7 @@ assetObject.Guid = guid;
 
 After the asset is added to the asset database, it is effectively the same as if the asset was created and added in the editor. However, this is only valid if the game has not started yet. Once the game has started, the static asset database should not be mutated.
 
-If you need to add or mutate assets during gameplay, you must use the ```
-DynamicDB
-```
-
- API instead.
+If you need to add or mutate assets during gameplay, you must use the `DynamicDB` API instead.
 
 ## Dynamic Assets
 
@@ -325,25 +267,13 @@ frame.DisposeAsset(assetGuid);
 
 Dynamic assets are not synced between peers. Instead, the code that creates new assets needs to be deterministic and ensure that each peer will generate an asset using the same values.
 
-The only exception to the rule above is when there is a late-join - the new client will receive a snapshot of the _DynamicAssetDB_ along with the latest frame data. Unlike serialization of the frame, serialization and deserialization of dynamic assets is delegated outside of the simulation, to ```
-IAssetSerializer
-```
-
-interface. When run in Unity, ```
-QuantumUnityJsonSerializer
-```
-
-is used by default: it is able to serialize/deserialize any Unity-serializable type.
+The only exception to the rule above is when there is a late-join - the new client will receive a snapshot of the _DynamicAssetDB_ along with the latest frame data. Unlike serialization of the frame, serialization and deserialization of dynamic assets is delegated outside of the simulation, to `IAssetSerializer` interface. When run in Unity, `QuantumUnityJsonSerializer` is used by default: it is able to serialize/deserialize any Unity-serializable type.
 
 ### Initializing DynamicAssetDB
 
 Simulation can be initialized with preexisting dynamic assets. Similar to adding assets during the simulation, these need to be deterministic across clients.
 
-First, an instance of ```
-DynamicAssetDB
-```
-
-needs to be created and filled with assets:
+First, an instance of `DynamicAssetDB` needs to be created and filled with assets:
 
 C#
 
@@ -355,23 +285,7 @@ initialAssets.AddAsset(warriorSpec);
 
 ```
 
-Second, ```
-QuantumGame.StartParameters.InitialDynamicAssets
-```
-
- needs to be used to pass the instance to a new simulation. In Unity, since it is the ```
-QuantumRunner
-```
-
-behaviour that manages a ```
-QuantumGame
-```
-
-, ```
-QuantumRunner.StartParamters.InitialDynamicAssets
-```
-
-is used instead.
+Second, `QuantumGame.StartParameters.InitialDynamicAssets` needs to be used to pass the instance to a new simulation. In Unity, since it is the `QuantumRunner` behaviour that manages a `QuantumGame`, `QuantumRunner.StartParamters.InitialDynamicAssets` is used instead.
 
 ## Built in Assets
 
@@ -380,33 +294,13 @@ Quantum also comes shipped with several built-in assets, such as:
 - **SimulationConfig** \- defines many specifications for a Quantum simulation, from scene management setup, heap configuration, thread count and Physics/Navigation settings;
 - **DeterministicConfig** \- specifies details on the game session, such as it's simulation rate, the checksum interval and lots of configuration regarding Input related to both the client and the server;
 - **QuantumEditorSettings** \- has the definition for many editor-only details, like the folder the DB should be based in, the color of the Gizmos and auto build options for automatically baking maps, nav meshes, etc;
-- **BinaryData** \- an asset that allows the user to reference arbitrary binary information (in the form of a ```
-byte\[\]
-```
-
-). For example, by default the Physics and the Navigation engines uses binary data assets to store information like the static triangles data. This asset also has built in utilities to compress and decompress the data using gzip.
+- **BinaryData** \- an asset that allows the user to reference arbitrary binary information (in the form of a `byte\[\]`). For example, by default the Physics and the Navigation engines uses binary data assets to store information like the static triangles data. This asset also has built in utilities to compress and decompress the data using gzip.
 - **CharacterController3DConfig** \- config asset for the built in 3D KCC.
 - **CharacterController2DConfig** \- config asset for the built in 2D KCC.
-- **PhysicsMaterial** \- defines a ```
-Physics Material
-```
-
-for Quantum's 3D physics engine.
-- **PolygonCollider** \- defines a ```
-Polygon Collider
-```
-
-for Quantum's 2D physics engine.
-- **NavMesh** \- defines a ```
-NavMesh
-```
-
-used by Quantum's navigation system.
-- **NavMeshAgentConfig** \- defines a ```
-NavMesh Agent Config
-```
-
-for Quantum's navigation system.
+- **PhysicsMaterial** \- defines a `Physics Material` for Quantum's 3D physics engine.
+- **PolygonCollider** \- defines a `Polygon Collider` for Quantum's 2D physics engine.
+- **NavMesh** \- defines a `NavMesh` used by Quantum's navigation system.
+- **NavMeshAgentConfig** \- defines a `NavMesh Agent Config` for Quantum's navigation system.
 - **Map** \- stores many static per-scene information such as Physics settings, colliders, NavMesh settings, links, regions and also the Scene Entity Prototypes on that Map. Every Map is correlated with a single Unity scene.
 
 Back to top

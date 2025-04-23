@@ -26,11 +26,7 @@ Here is a list of pros and cons to consider when using Bot SDK HFSM:
 - **Pros**:
 
   - **Performance**: due to its fixed structure nature and simplicity on its internal mechanism, the HFSM is very fast. Then most of the performance depends on how the user implements their specific AI logic, such as the Actions and Decisions;
-  - **Memory Consumption**: the ```
-    HFSMAgent
-    ```
-
-     component is quite simple and only needs to cache a small set of data in order to work. Due to this, having lots of HFSM agents does not increase too much the memory usage;
+  - **Memory Consumption**: the `HFSMAgent` component is quite simple and only needs to cache a small set of data in order to work. Due to this, having lots of HFSM agents does not increase too much the memory usage;
   - **Ease of expression**: the concept of States, Actions and Transitions are quite simple to understand. That's one reason why state machines are often mentioned in the game development area. Both coders and game designers can understand its concepts pretty fast and start developing right away;
   - **Tight control**: its fixed structure allow users to know with more precision what is happening in one State and what can happen in terms of transitions.
 - **Cons**:
@@ -43,15 +39,7 @@ When using Bot SDK, the HFSM is, in general, an interesting approach, specially 
 
 ## Creating a State Machine document
 
-In the Bot SDK window, click on the ```
-New Document
-```
-
- button and choose ```
-Hierarchical Finite State Machine (HFSM)
-```
-
-:
+In the Bot SDK window, click on the `New Document` button and choose `Hierarchical Finite State Machine (HFSM)`:
 
 ![Create new HFSM Document](/docs/img/quantum/v3/addons/bot-sdk/new-document-button.png)
 
@@ -146,11 +134,7 @@ To do that, right click in any blank space and a panel will show all the possibl
 
 ![Initial Decisions](/docs/img/quantum/v3/addons/bot-sdk/initial-decisions.png)
 
-For simplicity sake, let's select the _TrueDecision_, which always returns ```
-True
-```
-
- (meaning that the transition shall happen).
+For simplicity sake, let's select the _TrueDecision_, which always returns `True` (meaning that the transition shall happen).
 
 ![New Decision](/docs/img/quantum/v3/addons/bot-sdk/true-decision.png)
 
@@ -160,15 +144,7 @@ Left click the slot and connect it to the Decision slot:
 
 ![Connected Decision](/docs/img/quantum/v3/addons/bot-sdk/connected-decision.png)
 
-With this setup, whenever the Bot is in ```
-NewState
-```
-
-and the HFSM is updated, the state machine will make a transition to ```
-NewState1
-```
-
-.
+With this setup, whenever the Bot is in `NewState` and the HFSM is updated, the state machine will make a transition to `NewState1`.
 
 **It is possible to edit the value of most slots** by clicking on it's value field.
 
@@ -180,11 +156,7 @@ To navigate back to the upper level, either use the breadcrumb buttons on the to
 
 ![Root on Breadcrumb](/docs/img/quantum/v3/addons/bot-sdk/root-breadcrumb.png)
 
-Alternatively, it is possible to navigate through the States by using the left side panel, in the ```
-States
-```
-
-section:
+Alternatively, it is possible to navigate through the States by using the left side panel, in the `States` section:
 
 ![Root on Hierarchy](/docs/img/quantum/v3/addons/bot-sdk/root-hierarchy.png)
 
@@ -216,11 +188,7 @@ In order to create a new Transition, hover the cursor on the bottom part of a St
 
 These types of node can be used to group up multiple transitions, which can be handy for reusability and organization.
 
-To create a new Transition Set, right click in the empty space and select ```
-Create New Transition Set
-```
-
-. Notice that this kind of node can also be renamed.
+To create a new Transition Set, right click in the empty space and select `Create New Transition Set`. Notice that this kind of node can also be renamed.
 
 This will create a node very similar to the State node: it begins with a single undefined Transition, with the possibility of adding multiple transitions from the bottom corner button:
 
@@ -250,19 +218,7 @@ In the example above, every State on that specific level of the hierarchy will c
 
 It is possible though to define a list of States which should _ignore_ the ANY Transition, or a list of the only ones which _should_ consider it.
 
-These are called the ```
-Excluded List
-```
-
-or ```
-Included List
-```
-
-. Use the diamond shaped button to switch the list type, and pick States from the ```
-+
-```
-
-button:
+These are called the `Excluded List` or `Included List`. Use the diamond shaped button to switch the list type, and pick States from the `+` button:
 
 ![Any Transition Excluded List](/docs/img/quantum/v3/addons/bot-sdk/any-transition-excluded-list.png)
 
@@ -372,58 +328,26 @@ To compile, there are two options:
 - The left button is used to compile only the currently opened document;
 - The right button is used to compile every AI document on the project.
 
-By default, the HFSM files will be located at: ```
-Assets/QuantumUser/Resources/DB/CircuitExport/HFSM\_Assets
-```
+By default, the HFSM files will be located at: `Assets/QuantumUser/Resources/DB/CircuitExport/HFSM\_Assets`.
 
-.
-
-The type of the main asset created by this process is ```
-HFSMRoot
-```
-
-.
+The type of the main asset created by this process is `HFSMRoot`.
 
 ![HFSM Asset](/docs/img/quantum/v3/addons/bot-sdk/hfsm-asset.png)## Using the HFSMRoot asset
 
-To use the created HFSM root asset, make a reference to it using a field of type ```
-AssetRef<HFSMRoot>
-```
-
- and load it via ```
-frame.FindAsset()
-```
-
-.
+To use the created HFSM root asset, make a reference to it using a field of type `AssetRef<HFSMRoot>` and load it via `frame.FindAsset()`.
 
 ## HFSM Coding
 
-The HFSM has a main component named ```
-HFSMAgent
-```
-
-, which can be used basically in two different ways:
+The HFSM has a main component named `HFSMAgent`, which can be used basically in two different ways:
 
 - Add the component into entities, either via code or directly in an Entity Prototype on Unity;
-- Or, declare instances of the ```
-  HFSMAgent
-  ```
+- Or, declare instances of the `HFSMAgent` in the frame's Globals;
 
-   in the frame's Globals;
-
-The most common usage is to add the component into entities. But having it decoupled from entities can also be useful to create things such as a Game Manager HFSM which lies in ```
-frame.Global
-```
-
-and has the logic for the start of a game match, update of game rules, match end, etc.
+The most common usage is to add the component into entities. But having it decoupled from entities can also be useful to create things such as a Game Manager HFSM which lies in `frame.Global` and has the logic for the start of a game match, update of game rules, match end, etc.
 
 ### Initializing an HFSMAgent
 
-When not added directly into an Entity Prototype, the ```
-HFSMAgent
-```
-
- component can be added to entities directly via code. It can be useful for, in runtime, turning an entity into an AI agent, such as when a player disconnects, etc.
+When not added directly into an Entity Prototype, the `HFSMAgent` component can be added to entities directly via code. It can be useful for, in runtime, turning an entity into an AI agent, such as when a player disconnects, etc.
 
 Here is a code snippet for adding the component (only if not already added to the Entity Prototype):
 
@@ -435,21 +359,9 @@ f.Set(myEntity, hfsmAgent);
 
 ```
 
-The ```
-HFSMManager
-```
+The `HFSMManager` class has lots of utility methods which are the main entry points for initializing and updating an HFSM agent.
 
-class has lots of utility methods which are the main entry points for initializing and updating an HFSM agent.
-
-Call ```
-HFSMManager.Init()
-```
-
-in order to initialize an agent, making it store its initial State (as defined in the editor) and already calling ```
-OnEnter
-```
-
-on that state and all of it's Default children hierarchy.
+Call `HFSMManager.Init()` in order to initialize an agent, making it store its initial State (as defined in the editor) and already calling `OnEnter` on that state and all of it's Default children hierarchy.
 
 The initialization step below needs to be done \*whether EntityPrototypes are used or not:
 
@@ -463,38 +375,26 @@ HFSMManager.Init(frame, entityRef, hfsmRootAsset);
 
 ### Initializing using the "OnComponentAdded" callback
 
-It is also possible to setup the reference to the ```
-HFSMRoot
-```
+It is also possible to setup the reference to the `HFSMRoot` asset directly on the EntityPrototype, and use the `OnComponentAdded` signal to initialize the agent with that information.
 
- asset directly on the EntityPrototype, and use the ```
-OnComponentAdded
-```
-
-signal to initialize the agent with that information.
-
-It is what the ```
-BotSDKSystem
-```
-
- showcases. Here is an example:
+It is what the `BotSDKSystem` showcases. Here is an example:
 
 C#
 
 ```csharp
 // At any system...
-public unsafe class AISystem : SystemMainThread, ISignalOnComponentAdded<HFSMAgent>
-{
-public void OnAdded(Frame frame, EntityRef entity, HFSMAgent\* component)
-{
-// Get the HFSMRoot from the component set on the Entity Prototype
-HFSMRoot hfsmRoot = frame.FindAsset<HFSMRoot>(component->Data.Root.Id);
+  public unsafe class AISystem : SystemMainThread, ISignalOnComponentAdded<HFSMAgent>
+  {
+    public void OnAdded(Frame frame, EntityRef entity, HFSMAgent* component)
+    {
+      // Get the HFSMRoot from the component set on the Entity Prototype
+      HFSMRoot hfsmRoot = frame.FindAsset<HFSMRoot>(component->Data.Root.Id);
 
-// Initialize
-HFSMManager.Init(frame, entityRef, hfsmRoot);
-}
-// ...
-}
+      // Initialize
+      HFSMManager.Init(frame, entityRef, hfsmRoot);
+    }
+  // ...
+  }
 
 ```
 
@@ -518,25 +418,23 @@ C#
 ```csharp
 namespace Quantum
 {
-public unsafe class AISystem : SystemMainThreadFilter<AISystem.Filter>, ISignalOnComponentAdded<HFSMAgent>
-{
-public struct Filter
-{
-public EntityRef Entity;
-public HFSMAgent\* HFSMAgent;
-}
-
-public void OnAdded(Frame frame, EntityRef entity, HFSMAgent\* component)
-{
-HFSMRoot hfsmRoot = frame.FindAsset<HFSMRoot>(component->Data.Root.Id);
-HFSMManager.Init(frame, entity, hfsmRoot);
-}
-
-public override void Update(Frame frame, ref Filter filter)
-{
-HFSMManager.Update(frame, frame.DeltaTime, filter.Entity);
-}
-}
+  public unsafe class AISystem : SystemMainThreadFilter<AISystem.Filter>, ISignalOnComponentAdded<HFSMAgent>
+  {
+    public struct Filter
+    {
+      public EntityRef Entity;
+      public HFSMAgent* HFSMAgent;
+    }
+    public void OnAdded(Frame frame, EntityRef entity, HFSMAgent* component)
+    {
+      HFSMRoot hfsmRoot = frame.FindAsset<HFSMRoot>(component->Data.Root.Id);
+      HFSMManager.Init(frame, entity, hfsmRoot);
+    }
+    public override void Update(Frame frame, ref Filter filter)
+    {
+    HFSMManager.Update(frame, frame.DeltaTime, filter.Entity);
+    }
+  }
 }
 
 ```
@@ -547,37 +445,9 @@ HFSMManager.Update(frame, frame.DeltaTime, filter.Entity);
 
 **Creating new HFSM Decisions** is done in a very similar way.
 
-Create a class which inherits from ```
-HFSMDecision
-```
+Create a class which inherits from `HFSMDecision` and override the `Decide` method, returning `true` or `false` depending on which condition should make the decision pass or not.
 
-and override the ```
-Decide
-```
-
-method, returning ```
-true
-```
-
-or ```
-false
-```
-
-depending on which condition should make the decision pass or not.
-
-**Important**: always mark the ```
-AIAction
-```
-
-and ```
-HFSMDecision
-```
-
-classes with the ```
-\[System.Serializable\]
-```
-
-attribute.
+**Important**: always mark the `AIAction` and `HFSMDecision` classes with the `\[System.Serializable\]` attribute.
 
 Here is an example of the most basic HFSM decision provided in the SDK:
 
@@ -586,14 +456,14 @@ C#
 ```csharp
 namespace Quantum
 {
- \[System.Serializable\]
- public partial class TrueDecision : HFSMDecision
- {
- public override unsafe bool Decide(Frame frame, EntityRef entity)
- {
- return true;
- }
- }
+  [System.Serializable]
+  public partial class TrueDecision : HFSMDecision
+  {
+    public override unsafe bool Decide(Frame frame, EntityRef entity)
+    {
+      return true;
+    }
+  }
 }
 
 ```
@@ -604,11 +474,7 @@ Find here more information on the alternatives for settings values to nodes fiel
 
 ## AIParam
 
-Find here more information on using the ```
-AIParam
-```
-
- type, which is useful for having flexible fields that can be defined in different ways: setting it by hand or from Blackboard/Constant/Config Nodes: [AIParam](/quantum/current/addons/bot-sdk/shared-concepts#aiparam).
+Find here more information on using the `AIParam` type, which is useful for having flexible fields that can be defined in different ways: setting it by hand or from Blackboard/Constant/Config Nodes: [AIParam](/quantum/current/addons/bot-sdk/shared-concepts#aiparam).
 
 ## AIContext
 
@@ -620,11 +486,7 @@ There is a class which is used to automate some processes such as initializing a
 
 ## The Debugger
 
-Bot SDK comes with its own debugging tool. It makes it possible for the developer to select any ```
-HFSMAgent
-```
-
-in runtime and see the most recent agent's flow highlighted on the Visual Editor. Here is an example of the debugging tool in the Bot SDK Sample project:
+Bot SDK comes with its own debugging tool. It makes it possible for the developer to select any `HFSMAgent` in runtime and see the most recent agent's flow highlighted on the Visual Editor. Here is an example of the debugging tool in the Bot SDK Sample project:
 
 ![Debugger Graph](/docs/img/quantum/v3/addons/bot-sdk/hfsm-debugger.gif)
 
@@ -636,15 +498,7 @@ In addition, it is also possible to inspect the current states on the hierarchy 
 
 This is the step-by-step necessary in order to use the debugger:
 
-1. Enable the ```
-BotSDKDebuggerSystem
-```
-
-    in the Systems Config file. Using this specific system is optional as the same API it uses can be called from user custom logic: call ```
-BotSDKDebuggerSystemCallbacks.OnVerifiedFrame?.Invoke(frame);
-```
-
-    in verified frames;
+1. Enable the `BotSDKDebuggerSystem` in the Systems Config file. Using this specific system is optional as the same API it uses can be called from user custom logic: call `BotSDKDebuggerSystemCallbacks.OnVerifiedFrame?.Invoke(frame);` in verified frames;
 2. In the visual editor, click on the little bug icon on the top panel. The debugger is _active_ when the icon is colored as green;
 
 ![Debug Active](/docs/img/quantum/v3/addons/bot-sdk/debug-active.png)
@@ -653,47 +507,19 @@ There are two ways of choosing which entity will be debugged:
 
 **Debugging using a Game Object:**
 
-1. Select the prefab/entity prototype which represents a Quantum entity which has the ```
-HFSMAgent
-```
-
-    component;
-2. Add the ```
-BotSDKDebugger
-```
-
-    Unity component to it;
-3. In runtime, with the Bot SDK window opened and the debugger enabled, select the game objects which has the ```
-BotSDKDebugger
-```
-
-. The debugging shall already be working;
+1. Select the prefab/entity prototype which represents a Quantum entity which has the `HFSMAgent` component;
+2. Add the `BotSDKDebugger` Unity component to it;
+3. In runtime, with the Bot SDK window opened and the debugger enabled, select the game objects which has the `BotSDKDebugger`. The debugging shall already be working;
 
 **Debugging using the Debugger Window:**
 
 1. On the simulation side, register the Agent entity to the Debugger Window. It can be done by calling:
 
-```
-BotSDKDebuggerSystem.AddToDebugger(frame, collectorEntity, hfsmAgent, (optional) customLabel);
-```
+`BotSDKDebuggerSystem.AddToDebugger(frame, collectorEntity, hfsmAgent, (optional) customLabel);`
 
+The default name that is shown for the debugged entities follow this pattern: `Entity XX \| AI Document Name`. But it is possible to assign specific labels using the `customLabel` parameter.
 
-
-The default name that is shown for the debugged entities follow this pattern: ```
-Entity XX \| AI Document Name
-```
-
-. But it is possible to assign specific labels using the ```
-customLabel
-```
-
-    parameter.
-
-It is also possible to create naming hierarchies. Use the separator ```
-/
-```
-
-    on the custom label and it will create the hierarchies on the Debugger Window, which can be collapsed and expanded;
+It is also possible to create naming hierarchies. Use the separator `/` on the custom label and it will create the hierarchies on the Debugger Window, which can be collapsed and expanded;
 
 2. On Unity, click on the button next to the debugger activation one. It opens a new window which shows all registered agents. Select the one to be debugged.
 
@@ -716,31 +542,15 @@ Find here more information on how to create comments on the Visual Editor: [Visu
 
 ## Changing the compilation export folder
 
-By default, assets generated by Bot SDK's compilation process will be placed into the folder ```
-Assets/Resources/DB/CircuitExport
-```
-
-. Check here how to change the export folder: [Changing the export folder](/quantum/current/addons/bot-sdk/shared-concepts#changing_the_compilation_export_folder).
+By default, assets generated by Bot SDK's compilation process will be placed into the folder `Assets/Resources/DB/CircuitExport`. Check here how to change the export folder: [Changing the export folder](/quantum/current/addons/bot-sdk/shared-concepts#changing_the_compilation_export_folder).
 
 ## What Happens in a Frame
 
 On Bot SDK, the main entry points are:
 
-- ```
-  HFSMManager.Init
-  ```
-
-  , which is used to initialize the agent and already make it run initial actions of the Default State;
-- ```
-  HFSMManager.Update
-  ```
-
-  , which should be called constantly to update the agents;
-- ```
-  HFSMManager.TriggerEvent
-  ```
-
-  , which forces transition checks specific to an event key.
+- `HFSMManager.Init`, which is used to initialize the agent and already make it run initial actions of the Default State;
+- `HFSMManager.Update`, which should be called constantly to update the agents;
+- `HFSMManager.TriggerEvent`, which forces transition checks specific to an event key.
 
 In order to better visualize what happens during a frame when these methods are executed, here is a flow graph:
 

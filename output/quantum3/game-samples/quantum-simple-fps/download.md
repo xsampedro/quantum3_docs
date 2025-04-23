@@ -25,31 +25,16 @@ The **Quantum Simple FPS** is built for PC and WebGL with Keyboard and Mouse inp
 
 1. Go to the [Photon Engine Dashboard](https://dashboard.photonengine.com) and log in or create an account.
 
-2. On the dashboard open ```
-Applications > Public Cloud
-```
-
-    and select a Quantum 3 app or create a new app selecting Quantum 3 as Photon SDK.
+2. On the dashboard open `Applications > Public Cloud` and select a Quantum 3 app or create a new app selecting Quantum 3 as Photon SDK.
 ![Quantum Hub](/docs/img/quantum/v3/_shared/dashboard-menu.png)
-3. Copy and paste the Quantum 3 AppId into the ```
-App Id Quantum
-```
-
-    field of the ```
-PhotonServerSettings
-```
-
-    asset in the Unity project:
+3. Copy and paste the Quantum 3 AppId into the `App Id Quantum` field of the `PhotonServerSettings` asset in the Unity project:
 
 
    - A) Use the Quantum Hub
 
 ![Quantum Hub](/docs/img/quantum/v3/_shared/hub.png)
 
-   - B) Or find the asset directly using ```
-     Tools > Quantum > Find Config > Photon Server Settings
-     ```
-
+   - B) Or find the asset directly using `Tools > Quantum > Find Config > Photon Server Settings`
 
 ![PhotonServerSettings](/docs/img/quantum/v3/_shared/menu.png)![PhotonServerSettings](/docs/img/quantum/v3/_shared/asset.png)
 

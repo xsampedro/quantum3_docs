@@ -48,25 +48,13 @@ QuantumMenuConfig - Available Scenes
 
 There are two buttons that automate some of the process:
 
-```
-AddCurrentSceneToAvailableScenes
-```
+`AddCurrentSceneToAvailableScenes`: Tries to add the currently loaded scene as an available scene.
 
-: Tries to add the currently loaded scene as an available scene.
-
-```
-InitializeAllBuildSettingsScenes
-```
-
-: Tries to add all scenes that are located in the Unity BuildSettings as available scenes.
+`InitializeAllBuildSettingsScenes` : Tries to add all scenes that are located in the Unity BuildSettings as available scenes.
 
 ## Layout Overview
 
-The sample menu contains a scene and a prefab located in the samples folder. The prefab encompasses all screen prefabs and is structured with a menu base class that references each individual screen. These screens inherit from ```
-QuantumMenuUIScreen
-```
-
- offering various functionalities, for example, enabling users to incorporate animations when hiding and showing them.
+The sample menu contains a scene and a prefab located in the samples folder. The prefab encompasses all screen prefabs and is structured with a menu base class that references each individual screen. These screens inherit from `QuantumMenuUIScreen` offering various functionalities, for example, enabling users to incorporate animations when hiding and showing them.
 
 ## Menu Customization
 
@@ -82,242 +70,106 @@ To achieve a good tradeoff between customization and the ability to make upgrade
 
 #### Prefab Creation
 
-To create a prefab variant, locate the target prefab within the ```
-Assets/Photon/Quantum/Samples
-```
-
-directory. Then, right-click on it and choose ```
-Create > Prefab Variant
-```
-
-.
+To create a prefab variant, locate the target prefab within the `Assets/Photon/Quantum/Samples` directory. Then, right-click on it and choose `Create > Prefab Variant`.
 
 ![Prefab Creation](/docs/img/quantum/v3/manual/sample-menu/prefab-creation.png)
- Prefab Creation
+Prefab Creation
 
 
-As this is a nested prefab, it will need to also create a variant for each of the screens inside ```
-QuantumMenu Variant
-```
-
-. After that, change the screen references on ```
-QuantumMenuUiController
-```
-
-.
+As this is a nested prefab, it will need to also create a variant for each of the screens inside `QuantumMenu Variant`. After that, change the screen references on `QuantumMenuUiController`.
 
 ![Prefab Fix](/docs/img/quantum/v3/manual/sample-menu/prefab-fix.png)
- Prefab Fix
+Prefab Fix
 
 
 Now, in the QuantumMenuScene, or in any other scene used as a menu, replace the original QuantumMenu prefab with its Variant. It's important to place it inside a Canvas for it to work properly.
 
 ![Prefab Replacement](/docs/img/quantum/v3/manual/sample-menu/prefab-replacement.png)
- Prefab Replacement
- ### Prefab Duplication
+Prefab Replacement
+### Prefab Duplication
 
 To customize the menu without losing your changes when upgrading Quantum, duplicating the QuantumMenu prefab is the easiest way. However, there will be no connection between your custom menu and the sample, so future updates will not be incorporated.
 
 ### Constructing Screens
 
-When you inherit from ```
-QuantumMenuUIScreen
-```
-
-, your custom screen gains access to several valuable accessors. These include ```
-IQuantumMenuConfig
-```
-
-, ```
-IQuantumMenuConnection
-```
-
-, ```
-IQuantumMenuConnectArgs
-```
-
-, and ```
-IQuantumMenuUIController
-```
-
-, which may have useful information for your customization needs. Furthermore, it will also inherit the default ```
-Show
-```
-
-and ```
-Hide
-```
-
-methods. Use the [Sample Menu API](/quantum/current/manual/sample-menu/sample-menu-api) documentation for more information about constructing screen using sample menu framework,
+When you inherit from `QuantumMenuUIScreen`, your custom screen gains access to several valuable accessors. These include `IQuantumMenuConfig`, `IQuantumMenuConnection`, `IQuantumMenuConnectArgs`, and `IQuantumMenuUIController`, which may have useful information for your customization needs. Furthermore, it will also inherit the default `Show` and `Hide` methods. Use the [Sample Menu API](/quantum/current/manual/sample-menu/sample-menu-api) documentation for more information about constructing screen using sample menu framework,
 
 ## Screen Plugin
 
-It's a way to add widgets to screens like a plugin, so the same widget can be used by other screens without adding code to the base screen. By inheriting from ```
-QuantumMenuScreenPlugin
-```
-
-, the plugin will receive calls to ```
-Show()
-```
-
-and ```
-Hide()
-```
-
-, as shown in the code snippet below. ```
-QuantumMenuScreenPluginPing
-```
-
-is implemented in the ```
-PhotonMenuViewGameplay
-```
-
- screen and can be used as an example.
+It's a way to add widgets to screens like a plugin, so the same widget can be used by other screens without adding code to the base screen. By inheriting from `QuantumMenuScreenPlugin`, the plugin will receive calls to `Show()` and `Hide()`, as shown in the code snippet below. `QuantumMenuScreenPluginPing` is implemented in the `PhotonMenuViewGameplay` screen and can be used as an example.
 
 C#
 
 ```csharp
 public class QuantumMenuScreenPluginFoo : QuantumMenuScreenPlugin {
 
-public override void Show(QuantumMenuUIScreen screen) {
-base.Show(screen);
-}
-
-public override void Hide(QuantumMenuUIScreen screen) {
-base.Hide(screen);
-}
+    public override void Show(QuantumMenuUIScreen screen) {
+      base.Show(screen);
+    }
+    public override void Hide(QuantumMenuUIScreen screen) {
+      base.Hide(screen);
+    }
 }
 
 ```
 
 ## Simple Connection
 
-In case you wish to build your menu entirely custom, ```
-QuantumSampleConnection
-```
-
-is a simplified scene that can be used as a reference to understand the key procedures necessary to start a session. In ```
-QuantumSimpleConnectionGUI
-```
-
-, you can see the basics necessary to establish a connection, select the map, and start a session.
+In case you wish to build your menu entirely custom, `QuantumSampleConnection` is a simplified scene that can be used as a reference to understand the key procedures necessary to start a session. In `QuantumSimpleConnectionGUI`, you can see the basics necessary to establish a connection, select the map, and start a session.
 
 ![Simple Connection](/docs/img/quantum/v3/manual/sample-menu/simple-connection.png)
- Quantum simple connection
- ## Extending RuntimePlayer data
+Quantum simple connection
+## Extending RuntimePlayer data
 
-By default, the ```
-RuntimePlayer
-```
+By default, the `RuntimePlayer` class comes with a couple useful/common fields meant to speed up the prototyping process: `PlayerNickname` meant to store the name the player has set on the Menu and `PlayerAvatar` which is a reference to an Entity Prototype that represents a character that has a specific player and can be used to create an entity when the simulation starts, in some System's code.
 
-class comes with a couple useful/common fields meant to speed up the prototyping process: ```
-PlayerNickname
-```
-
-meant to store the name the player has set on the Menu and ```
-PlayerAvatar
-```
-
-which is a reference to an Entity Prototype that represents a character that has a specific player and can be used to create an entity when the simulation starts, in some System's code.
-
-Even though the name nickname is set via the Menu UI in runtime, the player avatar is not and it can be set either via code, or directly on the ```
-QuantumMenu
-```
-
- GameObject in the ```
-QuantumMenuUIController
-```
-
-component, on the ```
-ConnectArgs/RuntimePlayers
-```
-
- array.
+Even though the name nickname is set via the Menu UI in runtime, the player avatar is not and it can be set either via code, or directly on the `QuantumMenu` GameObject in the `QuantumMenuUIController` component, on the `ConnectArgs/RuntimePlayers` array.
 
 In order to add more player-specific data and have custom Menu logic that fills such data accordingly, follow the steps below:
 
-1. Find the file ```
-   RuntimePlayer.User.cs
-   ```
-
-    and add the relevant data, and serialize it as demonstrated:
+1. Find the file `RuntimePlayer.User.cs` and add the relevant data, and serialize it as demonstrated:
 
 C#
 
 ```csharp
 namespace Quantum
 {
-using Photon.Deterministic;
-
-public partial class RuntimePlayer
-{
-public int TeamId;
-
-partial void SerializeUserData(BitStream stream)
-{
-stream.Serialize(ref TeamId);
-}
-}
+  using Photon.Deterministic;
+  public partial class RuntimePlayer
+  {
+    public int TeamId;
+    partial void SerializeUserData(BitStream stream)
+    {
+      stream.Serialize(ref TeamId);
+    }
+  }
 }
 
 ```
 
-2. Create a new class that inherits from ```
-   QuantumMenuConnectionBehaviourSDK
-   ```
-
-   , overrides the ```
-   ConnectAsyncInternal()
-   ```
-
-    method and adds the relevant data as demonstrated:
+2. Create a new class that inherits from `QuantumMenuConnectionBehaviourSDK`, overrides the `ConnectAsyncInternal()` method and adds the relevant data as demonstrated:
 
 C#
 
 ```csharp
 namespace Quantum
 {
-using Quantum.Menu;
-using System.Threading.Tasks;
-
-public class CustomQuantumConnectionBehaviour : QuantumMenuConnectionBehaviourSDK
-{
-protected override Task<ConnectResult> ConnectAsyncInternal(QuantumMenuConnectArgs connectArgs)
-{
-connectArgs.RuntimePlayers\[0\].TeamId = 1; // Add any game-specific logic for getting the desired team id here
-return base.ConnectAsyncInternal(connectArgs);
-}
-}
+  using Quantum.Menu;
+  using System.Threading.Tasks;
+  public class CustomQuantumConnectionBehaviour : QuantumMenuConnectionBehaviourSDK
+  {
+    protected override Task<ConnectResult> ConnectAsyncInternal(QuantumMenuConnectArgs connectArgs)
+    {
+      connectArgs.RuntimePlayers[0].TeamId = 1; // Add any game-specific logic for getting the desired team id here
+      return base.ConnectAsyncInternal(connectArgs);
+    }
+  }
 }
 
 ```
 
-3. On the Menu scene, find the ```
-   QuantumMenu
-   ```
-
-    object and replace the ```
-   QuantumMenuConnectionBehaviourSDK
-   ```
-
-    with ```
-   CustomQuantumConnectionBehaviour
-   ```
-
-   . Don't forget to add back the exact same ```
-   OnProgress
-   ```
-
-    callback the previous script had;
-4. On the same object, in the ```
-   QuantumMenuUIController
-   ```
-
-   , make a reference to the newly added component on the field ```
-   Connection
-   ```
-
-   .
+3. On the Menu scene, find the `QuantumMenu` object and replace the `QuantumMenuConnectionBehaviourSDK` with `CustomQuantumConnectionBehaviour`. Don't forget to add back the exact same `OnProgress` callback the previous script had;
+4. On the same object, in the `QuantumMenuUIController`, make a reference to the newly added component on the field `Connection`.
 
 Back to top
 

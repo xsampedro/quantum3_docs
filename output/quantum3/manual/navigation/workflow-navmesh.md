@@ -10,43 +10,15 @@ The baking writes world positions into the Quantum navmesh because only navmeshe
 
 ## Importing A Unity Navmesh
 
-- Add the AI Navigation package ```
-com.unity.ai.navigation
-```
-
-to the Unity project using the ```
-Unity Package Manager > Unity Registry
-```
-
-.
+- Add the AI Navigation package `com.unity.ai.navigation` to the Unity project using the `Unity Package Manager > Unity Registry`.
 ![AI Navigation package](/docs/img/quantum/v3/manual/navigation/workflow-package.png)
 - Create and set up a Unity navmesh surface.
 ![Create a surface](/docs/img/quantum/v3/manual/navigation/workflow-create-surface.png)
-- Create a new GameObject under the map ```
-QuantumMapData
-```
-
-and add a ```
-QuantumMapNavMeshUnity
-```
-
-script.
+- Create a new GameObject under the map `QuantumMapData` and add a `QuantumMapNavMeshUnity` script.
 ![Create script](/docs/img/quantum/v3/manual/navigation/workflow-createscript.png)
-- Add the surface GameObject to the ```
-Nav Mesh Surfaces
-```
-
-list.
+- Add the surface GameObject to the `Nav Mesh Surfaces` list.
 ![Add a Surface](/docs/img/quantum/v3/manual/navigation/workflow-add-surface.png)
-- Select the map object and enable ```
-Everything
-```
-
-on the ```
-Bake All Mode
-```
-
-options. Then press **Bake All**. A navmesh imported message will be logged on the console.
+- Select the map object and enable `Everything` on the `Bake All Mode` options. Then press **Bake All**. A navmesh imported message will be logged on the console.
 
 
 ```
@@ -54,52 +26,20 @@ Imported Unity NavMesh 'Navmesh', cleaned up 7 vertices, found 1 region(s), foun
 
 ```
 
-- The Quantum navmesh asset is baked into two asset files. The navmesh asset and a second binary data asset (```
-\_data
-```
-
-suffix), which are placed next to the map asset.
+- The Quantum navmesh asset is baked into two asset files. The navmesh asset and a second binary data asset (`\_data` suffix), which are placed next to the map asset.
 ![Navmesh assets](/docs/img/quantum/v3/manual/navigation/workflow-navmesh-asset.png)
-- After baking the navmesh asset is referenced in the ```
-QuantumMapData
-```
-
-script under ```
-Nav Mesh Links
-```
-
-.
+- After baking the navmesh asset is referenced in the `QuantumMapData` script under `Nav Mesh Links`.
 ![Map navmesh references](/docs/img/quantum/v3/manual/navigation/workflow-map-navmesh-ref.png)
 - Select the map object to show the Quantum navmesh gizmos. Open the Quantum Gizmo Overlay Menu to toggle different types of gizmo drawing (right-click on the scene tab > Overlay Menu > Quantum Gizmos).
 ![Show Quantum navmesh gizmos](/docs/img/quantum/v3/manual/navigation/workflow-gizmos.png)
-- Optionally toggle navmesh building on different auto build mode triggers in ```
-QuantumEditorSettings
-```
-
-.
+- Optionally toggle navmesh building on different auto build mode triggers in `QuantumEditorSettings`.
 ![Auto build modes](/docs/img/quantum/v3/manual/navigation/workflow-auto-build-mode.png)
-- Add the ```
-Quantum.Core.NavigationSystem
-```
-
-to the ```
-SystemsConfig
-```
-
-that is set on the ```
-RuntimeConfig
-```
-
-when starting the game. The default config has the system correctly added and enabled.
+- Add the `Quantum.Core.NavigationSystem` to the `SystemsConfig` that is set on the `RuntimeConfig` when starting the game. The default config has the system correctly added and enabled.
 ![Auto build modes](/docs/img/quantum/v3/manual/navigation/workflow-navigation-system.png)
 
 ## Import Settings
 
-The conversion from a Unity navmesh to a Quantum navmesh uses import settings that can be customized using the ```
-QuantumMapNavMeshUnity
-```
-
- script.
+The conversion from a Unity navmesh to a Quantum navmesh uses import settings that can be customized using the `QuantumMapNavMeshUnity` script.
 
 |     |     |
 | --- | --- |
@@ -121,11 +61,7 @@ QuantumMapNavMeshUnity
 
 ## Navmesh Settings on the Map
 
-The ```
-QuantumMapData
-```
-
-script has two relevant navmesh settings: the serialization type and the navmesh grid and world size. Both settings get applied and copied to the navmesh asset during baking.
+The `QuantumMapData` script has two relevant navmesh settings: the serialization type and the navmesh grid and world size. Both settings get applied and copied to the navmesh asset during baking.
 
 ### NavMesh Serialize Type
 
@@ -137,39 +73,15 @@ The setting controls how much of the navmesh asset is serialized with the asset 
 | --- | --- | --- |
 | Full | Serializes the full data but computes metadata after loading.<br> <br> Default value. | Medium size |
 | FullWithMetaData | Serializes the full data and meta data (e.g. normals). | Largest size |
-| BakeDataOnly | Serializes only the ```<br>NavMeshBakeData<br>```<br> and bakes the navmesh NavMesh at runtime. | Smallest size |
+| BakeDataOnly | Serializes only the `NavMeshBakeData` and bakes the navmesh NavMesh at runtime. | Smallest size |
 
 ### NavMesh Area and Grid
 
-Gizmos for ```
-NavMesh Area
-```
-
- and ```
-NavMesh Grid
-```
-
-are rendered to the scene when toggled on in the Quantum Navmesh Overlay Menu.
+Gizmos for `NavMesh Area` and `NavMesh Grid` are rendered to the scene when toggled on in the Quantum Navmesh Overlay Menu.
 
 ![Navmesh Area Gizmos](/docs/img/quantum/v3/manual/navigation/workflow-mapdata-navmesh-area-gizmos.png)
 
-The grid is configured by selecting the ```
-QuantumMapData
-```
-
- script under the ```
-NavMesh Settings
-```
-
-headline. The number of grid cells in ```
-X
-```
-
- and ```
-Y/Z
-```
-
-direction and the grid node size (cell dimension in Unity units per cell) result in the overall grid size.
+The grid is configured by selecting the `QuantumMapData` script under the `NavMesh Settings` headline. The number of grid cells in `X` and `Y/Z` direction and the grid node size (cell dimension in Unity units per cell) result in the overall grid size.
 
 ![Navmesh Area Map Data](/docs/img/quantum/v3/manual/navigation/workflow-mapdata-navmesh-area-mapdata.png)
 
@@ -185,60 +97,42 @@ Even if the navmesh world position is not near the origin it still has to be ins
 
 ## Custom Navmesh Baking Callback
 
-The navmesh baking process can be extended by callbacks extending the ```
-MapDataBakerCallback
-```
+The navmesh baking process can be extended by callbacks extending the `MapDataBakerCallback` class.
 
- class.
+Add the following script into `QuantumUser/Editor`.
 
-Add the following script into ```
-QuantumUser/Editor
-```
-
-.
-
-The ```
-QuantumMapBakeAssembly
-```
-
- attribute is required for the baking process to find the callbacks.
+The `QuantumMapBakeAssembly` attribute is required for the baking process to find the callbacks.
 
 C#
 
 ```csharp
-\[assembly: Quantum.QuantumMapBakeAssembly\]
-
+[assembly: Quantum.QuantumMapBakeAssembly]
 namespace Quantum.Editor
 {
-using System.Collections.Generic;
-using UnityEngine;
-
-public class NavmeshBakeCallback : MapDataBakerCallback
-{
-public override void OnBeforeBakeNavMesh(QuantumMapData data)
-{
-// Before any navmesh baking takes place.
-}
-
-public override void OnCollectNavMeshBakeData(QuantumMapData data, List<NavMeshBakeData> navMeshBakeData)
-{
-// Unity navmesh surfaces have been imported and bake data is already filled out.
-Debug.Log($"Found {navMeshBakeData.Count} navmesh bake data");
-}
-
-public override void OnCollectNavMeshes(QuantumMapData data, List<NavMesh> navmeshes)
-{
-// Quantum navmesh have been baked.
-}
-
-public override void OnBakeNavMesh(QuantumMapData data) {
-// Quantum navmeshes have been saved to assets.
-}
-
-// abstract methods have to be implemented but not needed here
-public override void OnBake(QuantumMapData data) { }
-public override void OnBeforeBake(QuantumMapData data) { }
-}
+  using System.Collections.Generic;
+  using UnityEngine;
+  public class NavmeshBakeCallback : MapDataBakerCallback
+  {
+    public override void OnBeforeBakeNavMesh(QuantumMapData data)
+    {
+      // Before any navmesh baking takes place.
+    }
+    public override void OnCollectNavMeshBakeData(QuantumMapData data, List<NavMeshBakeData> navMeshBakeData)
+    {
+      // Unity navmesh surfaces have been imported and bake data is already filled out.
+      Debug.Log($"Found {navMeshBakeData.Count} navmesh bake data");
+    }
+    public override void OnCollectNavMeshes(QuantumMapData data, List<NavMesh> navmeshes)
+    {
+      // Quantum navmesh have been baked.
+    }
+    public override void OnBakeNavMesh(QuantumMapData data) {
+      // Quantum navmeshes have been saved to assets.
+    }
+    // abstract methods have to be implemented but not needed here
+    public override void OnBake(QuantumMapData data) { }
+    public override void OnBeforeBake(QuantumMapData data) { }
+  }
 }
 
 ```

@@ -16,11 +16,7 @@ Examples: "Consider Fighting" evaluates how useful it currently is for the agent
 
 2. **Response Curve**: models one instance of a Response Curve (or Utility Curve) which outputs a score value. It receives an input as parameter which is used for evaluating a specific point of the curve. It uses Unity's AnimationCurve editor for users to express how the score behaves based on the input value. It can be used to express that the utility score increases linearly, exponentially, or maybe it decreases over time, stays constant in a given interval, etc. A Consiration can contain multiple instances of Response Curves which are then combined to generate the final score result;
 
-Example: "Consider Healing" has a Response Curve which has linearly decreasing score value and receives the current entity normalized Health as input, meaning that the Consideration is less relevant when the entity health is closer to ```
-1
-```
-
-.
+Example: "Consider Healing" has a Response Curve which has linearly decreasing score value and receives the current entity normalized Health as input, meaning that the Consideration is less relevant when the entity health is closer to `1`.
 
 3. **Actions**: defines sets of sequential actions to be performed when a Consideration is chosen/updated/not chosen. These are responsible for actually changing the game state as part of an agent's actions.
 
@@ -46,15 +42,7 @@ Find in the videos below an overview of the UT editor and an example of its usag
 
 ## Creating a Utility Theory document
 
-In the Bot SDK window, click on the ```
-New Document
-```
-
-button and choose ```
-Utility Theory (UT)
-```
-
-:
+In the Bot SDK window, click on the `New Document` button and choose `Utility Theory (UT)`:
 
 ![Create new HFSM Document](/docs/img/quantum/v3/addons/bot-sdk/new-document-button.png)
 
@@ -70,11 +58,7 @@ Creating a new UT document already populates it with a very basic Consideration 
 
 This is the main node type on this editor. It has all relevant entry points for defining utility scores, the actions to be performed and if there are other Considerations nested to it.
 
-Within Considerations it is possible to define the Response Curves that the specific Consideration evaluates. Such curves evaluation then results on values on the range ```
-\[0..n\]
-```
-
-. If there are multiple response curves in place, they are multiplied and the result is the utility of executing the Consideration.
+Within Considerations it is possible to define the Response Curves that the specific Consideration evaluates. Such curves evaluation then results on values on the range `\[0..n\]`. If there are multiple response curves in place, they are multiplied and the result is the utility of executing the Consideration.
 
 By default, all the Considerations are evaluated, meaning that the Response Curves output values based on the define Inputs. The Consideration with the greatest Score is chosen as the one to be executed at that particular frame.
 
@@ -90,15 +74,7 @@ Let's analyze the anatomy of a Consideration:
 
 - **Cooldown**: when the Consideration is chosen and its execution starts, the Cooldown defines an amount of seconds in which it will be skipped/ignored;
 
-- **Cooldown Cancels Momentum**: if ```
-true
-```
-
-, the Cooldown forces the Consideration to be skipped no matter if the Consideration had Momentum being applied. If ```
-false
-```
-
-, the Cooldown is only applied after the Momentum is over;
+- **Cooldown Cancels Momentum**: if `true`, the Cooldown forces the Consideration to be skipped no matter if the Consideration had Momentum being applied. If `false`, the Cooldown is only applied after the Momentum is over;
 
 - **Momentum Amount**: if the Consideration is chosen, its Rank value is inscreased to the value defined on this field. Use it to define which Considerations should probably keep being executed for more frames, as this will increase their absolute utility value. Read the Ranking topic further for more information;
 
@@ -145,57 +121,39 @@ When the agent is updated, Consideration C and D have absolute preference and wi
 
 The Rank is always defined in runtime and can change at every frame and can be defined in two ways: either in the Rank container or in the Commitment container (more on the next topic).
 
-The Rank container node accepts input of any node that inherits from the ```
-AIFunctionInt
-```
-
- class. Implement a function which returns the desired rank value based on the game state. Here is an example:
+The Rank container node accepts input of any node that inherits from the `AIFunctionInt` class. Implement a function which returns the desired rank value based on the game state. Here is an example:
 
 C#
 
 ```csharp
 namespace Quantum
 {
-\[System.Serializable\]
-public unsafe class AgentPriority : AIFunction<int>
-{
-public EAgentPriority DesiredPriority;
-
-public override int Execute(Frame frame, EntityRef entity, ref AIContext aiContext)
-{
-// Get an agent-specific component
-var agentData = frame.Unsafe.GetPointer<AgentData>(entity);
-
-// Compare the agent current priority with the priority this AIFunction checks
-// If the agent is currently prioritizing it, then increase the Rank of the Consideration to 10
-// If the priority is something else, set it to 0 instead
-if(agentData->Priority == DesiredPriority)
-{
-return 10;
-}
-else
-{
-return 0;
-}
-}
-}
+  [System.Serializable]
+  public unsafe class AgentPriority : AIFunction<int>
+  {
+    public EAgentPriority DesiredPriority;
+    public override int Execute(Frame frame, EntityRef entity, ref AIContext aiContext)
+    {
+      // Get an agent-specific component
+      var agentData = frame.Unsafe.GetPointer<AgentData>(entity);
+      // Compare the agent current priority with the priority this AIFunction checks
+      // If the agent is currently prioritizing it, then increase the Rank of the Consideration to 10
+      // If the priority is something else, set it to 0 instead
+      if(agentData->Priority == DesiredPriority)
+      {
+        return 10;
+      }
+      else
+      {
+        return 0;
+      }
+    }
+  }
 }
 
 ```
 
-Another example is implementing a ```
-IsInDanger
-```
-
-function which reads the game state/blackboard values in order to identify if the Agent is currently in danger, meaning that there are enemies close to it, or which has LoS to it. If danger is detected, return a Rank value of ```
-10
-```
-
-, meaning that the Considerations with such Rank will have now a very high absolute priority. If there is no danger, just return ```
-0
-```
-
-.
+Another example is implementing a `IsInDanger` function which reads the game state/blackboard values in order to identify if the Agent is currently in danger, meaning that there are enemies close to it, or which has LoS to it. If danger is detected, return a Rank value of `10`, meaning that the Considerations with such Rank will have now a very high absolute priority. If there is no danger, just return `0`.
 
 In order to access the Rank container, double click in the Rank area.
 
@@ -211,49 +169,29 @@ PS: the Rank value generated by Momentum has **higher priority** than the one ca
 
 Now that the Consideration is in Momentum, when does it get back to normal again? There are two main ways into decreasing it:
 
-- By setting a ```
-Momentum Decay
-```
-
-value, it is possible to specify a value which will be used to decrease the Momentum's Rank every second;
-- It is also possible to cancel the Momentum's Rank with the **Commitment** nodes, which return Booleans that can be used to specify **when** the Momentum should be canceled. This is specially useful when the Momentum should not decay by time, but rather via some specific game logic, such as "the target is not reacheable anymore". To create a Commitment function, inherit from ```
-AIFuncionBool
-```
-
-and implement it's ```
-Execute
-```
-
-method. When returning the value ```
-true
-```
-
-, it means that the Momentum should be canceled.
+- By setting a `Momentum Decay` value, it is possible to specify a value which will be used to decrease the Momentum's Rank every second;
+- It is also possible to cancel the Momentum's Rank with the **Commitment** nodes, which return Booleans that can be used to specify **when** the Momentum should be canceled. This is specially useful when the Momentum should not decay by time, but rather via some specific game logic, such as "the target is not reacheable anymore". To create a Commitment function, inherit from `AIFuncionBool` and implement it's `Execute` method. When returning the value `true`, it means that the Momentum should be canceled.
 
 C#
 
 ```csharp
 namespace Quantum
 {
- \[System.Serializable\]
- public unsafe class SampleCommitment : AIFuncionBool
- {
- public override int Execute(Frame frame, EntityRef entity, ref AIContext aiContext)
- {
- return false;
- }
- }
+  [System.Serializable]
+  public unsafe class SampleCommitment : AIFuncionBool
+  {
+    public override int Execute(Frame frame, EntityRef entity, ref AIContext aiContext)
+    {
+      return false;
+    }
+  }
 }
 
 ```
 
 In order to access the Commitment nodes, double click the Commitment area.
 
-The idea is that you might want to **sustain a high Rank value, until some condition is complete**. For example, when an agent follows another character due to a Consideration, it might be desirable to increase its Rank to a high value during the chasing, set zero into Momentum Decay and add a Commitment node which checks if the agent can still reach it's target (it could be a simple distance check). If the target is too far away, then returning ```
-true
-```
-
- will take the Rank of the Consideration back to zero again, increasing the chances that something else will be more useful to the agent.
+The idea is that you might want to **sustain a high Rank value, until some condition is complete**. For example, when an agent follows another character due to a Consideration, it might be desirable to increase its Rank to a high value during the chasing, set zero into Momentum Decay and add a Commitment node which checks if the agent can still reach it's target (it could be a simple distance check). If the target is too far away, then returning `true` will take the Rank of the Consideration back to zero again, increasing the chances that something else will be more useful to the agent.
 
 That said, it is not mandatory to use neither of those techniques, or to use them in exclusivity. It is possible to add Momentum to a Consideration and have both a natural Momentum Decay **and** a Commitment function.
 
@@ -263,15 +201,7 @@ That said, it is not mandatory to use neither of those techniques, or to use the
 
 This is the core of this AI technique. The decision making is all based on defining curves, scoring, multiplying and combining the results to decide what is more useful to do at a given frame.
 
-We are re-using Unity's ```
-AnimationCurve
-```
-
-system in order to define the curves, which are then compiled into its deterministic version which are called ```
-FPAnimationCurve
-```
-
-.
+We are re-using Unity's `AnimationCurve` system in order to define the curves, which are then compiled into its deterministic version which are called `FPAnimationCurve`.
 
 When creating curves, what is mostly important is to use curves that correctly express what is the desired evaluation. Is it some behaviour that is only useful when it is very close to a specific value? Does the utility grows linearly? Exponentially? Should it be zero within a specific range, and then start to increase linearly after some point? Etc.
 
@@ -285,11 +215,7 @@ Here are a few sample images of the response curves saved as presets and used on
 
 In order to define more Response Curves for a Consideration, double click in the curves area to go to the curves graph.
 
-Use the right mouse button to create a new Response Curve, on the ```
-Utility
-```
-
-section.
+Use the right mouse button to create a new Response Curve, on the `Utility` section.
 
 ![Create Curve](/docs/img/quantum/v3/addons/bot-sdk/ut-create-curve.png)
 
@@ -314,33 +240,24 @@ It is possible to see and edit the response curves from the root view:
 
 Input values are defined by custom user logic, as this is very game specific. It could be the Health value that comes from an entity's component, it can be data stored on the blackboard, it can be something gathered from sensors systems, etc.
 
-In order to create custom Input types, create a new class which inherits from ```
-AIFunction<FP>
-```
-
- and implement its ```
-Execute
-```
-
-method.
+In order to create custom Input types, create a new class which inherits from `AIFunction<FP>` and implement its `Execute` method.
 
 C#
 
 ```csharp
 namespace Quantum
 {
- using Photon.Deterministic;
-
- \[System.Serializable\]
- public unsafe partial class InputEntityHealth : AIFunction<FP>
- {
- public override FP Execute(Frame frame, EntityRef entity, ref AIContext aiContext)
- {
- // Read the current health from a component from the agent entity
- var health = frame.Unsafe.GetPointer<Health>(entity);
- return health->Current;
- }
- }
+  using Photon.Deterministic;
+  [System.Serializable]
+  public unsafe partial class InputEntityHealth : AIFunction<FP>
+  {
+    public override FP Execute(Frame frame, EntityRef entity, ref AIContext aiContext)
+    {
+      // Read the current health from a component from the agent entity
+      var health = frame.Unsafe.GetPointer<Health>(entity);
+      return health->Current;
+    }
+  }
 }
 
 ```
@@ -374,54 +291,22 @@ To compile, there are two options:
 - The left button is used to compile only the currently opened document;
 - The right button is used to compile every AI document on the project.
 
-By default, the UT files will be located at: ```
-Assets/QuantumUser/Resources/DB/CircuitExport/UT\_Assets
-```
+By default, the UT files will be located at: `Assets/QuantumUser/Resources/DB/CircuitExport/UT\_Assets`.
 
-.
-
-The type of the main asset created by this process is ```
-UTRoot
-```
-
-.
+The type of the main asset created by this process is `UTRoot`.
 
 ![HFSM Asset](/docs/img/quantum/v3/addons/bot-sdk/ut-asset.png)## Using the UTRoot asset
 
-To use the created UT root asset, make a reference to it using a field of type ```
-AssetRef<UTRoot>
-```
-
- and load it via ```
-frame.FindAsset()
-```
-
-.
+To use the created UT root asset, make a reference to it using a field of type `AssetRef<UTRoot>` and load it via `frame.FindAsset()`.
 
 ## UT Coding
 
-The UT has a main component named ```
-UTAgent
-```
-
-, which can be used basically in two different ways:
+The UT has a main component named `UTAgent`, which can be used basically in two different ways:
 
 - Add the component into entities, either via code or directly in an Entity Prototype on Unity;
-- Or, declare instances of the ```
-  UTAgent
-  ```
+- Or, declare instances of the `UTAgent` in the frame's Globals;
 
-   in the frame's Globals;
-
-The ```
-UTAgent
-```
-
-component has a struct named ```
-UtilityReasoner
-```
-
-which is the main hub of data and logic used by the agent. It stores all the relevant data that is necessary for scoring Considerations and choosing one of them to execute.
+The `UTAgent` component has a struct named `UtilityReasoner` which is the main hub of data and logic used by the agent. It stores all the relevant data that is necessary for scoring Considerations and choosing one of them to execute.
 
 ## Initializing and Updating
 
@@ -441,11 +326,7 @@ Find here more information on the alternatives that you have when settings value
 
 ## AIParam
 
-Find here more information on how to use the ```
-AIParam
-```
-
-type, which is useful if you want to have more flexible fields that can be defined in different ways: settings by hand or from Blackboard/Constant/Config Nodes: [AIParam](/quantum/current/addons/bot-sdk/shared-concepts#aiparam).
+Find here more information on how to use the `AIParam` type, which is useful if you want to have more flexible fields that can be defined in different ways: settings by hand or from Blackboard/Constant/Config Nodes: [AIParam](/quantum/current/addons/bot-sdk/shared-concepts#aiparam).
 
 ## AIContext
 
@@ -461,11 +342,7 @@ Find here more information on how to create comments on the Visual Editor: [Visu
 
 ## Changing the compilation export folder
 
-By default, assets generated by Bot SDK's compilation will be placed into the folder ```
-Assets/Resources/DB/CircuitExport
-```
-
-. See here how you can change the export folder: [Changing the export folder](/quantum/current/addons/bot-sdk/shared-concepts#changing_the_compilation_export_folder).
+By default, assets generated by Bot SDK's compilation will be placed into the folder `Assets/Resources/DB/CircuitExport`. See here how you can change the export folder: [Changing the export folder](/quantum/current/addons/bot-sdk/shared-concepts#changing_the_compilation_export_folder).
 
 Back to top
 

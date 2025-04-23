@@ -42,24 +42,12 @@ In all client SDKs except PUN, AppVersion is the same thing as [GameVersion](#ga
 
 If you use PUN and non-PUN clients at the same time or if you have clients with different PUN versions,
 
-you need to take into consideration PUN's specific AppVersion format: ```
-{gameVersion}\_{PUN\_version}
-```
+you need to take into consideration PUN's specific AppVersion format: `{gameVersion}\_{PUN\_version}`.
 
-.
-
-So if you set the ```
-gameVersion
-```
-
-to "1.0" in PUN and use PUN version "1.80" then the resulting AppVersion is "1.0\_1.80".
+So if you set the `gameVersion` to "1.0" in PUN and use PUN version "1.80" then the resulting AppVersion is "1.0\_1.80".
 
 If you mix PUN and non-PUN clients, be aware that PUN registers a few Unity related classes as Custom Types.
-That allows serialization of Unity's ```
-Vector3
-```
-
- but you need to check the "CustomTypes.cs" of PUN to support this in other client SDKs.
+That allows serialization of Unity's `Vector3` but you need to check the "CustomTypes.cs" of PUN to support this in other client SDKs.
 
 * * *
 
@@ -357,11 +345,7 @@ Messages are in general anything that updates someone else or does something on 
 
 Sending an Event (or RPC) to all other clients counts as one message per player in that room: One send, the others receive.
 
-PUN is special, because it tries to aggregate updates by ```
-OnPhotonSerializeView
-```
-
-.
+PUN is special, because it tries to aggregate updates by `OnPhotonSerializeView`.
 
 If possible, the updates of several objects are aggregated into one message.
 

@@ -8,11 +8,7 @@ _Source: https://doc.photonengine.com/quantum/current/technical-samples/webgl-as
 
 ![Crazy Games](/docs/img/quantum/v3/technical-samples/webgl-asteroids/img-init.png)## Overview
 
-Take aim and blast some asteroids in this WebGL sample, created aiming the [Crazy Games](https://www.crazygames.com/) platform, [Gameplay link](https://www.crazygames.com/game/quantum-crazy-starter-webgl)! This project demonstrates setting up Photon Quantum and Unity3D targeting WebGL as platform, featuring a streamlined Asteroids-inspired game integrated with the ```
-CrazySDK
-```
-
- from Crazy Games. Using [Unity Addressables](https://docs.unity3d.com/Packages/com.unity.addressables@2.3/manual/index.html) to reduces build size while delivering smoother gameplay.
+Take aim and blast some asteroids in this WebGL sample, created aiming the [Crazy Games](https://www.crazygames.com/) platform, [Gameplay link](https://www.crazygames.com/game/quantum-crazy-starter-webgl)! This project demonstrates setting up Photon Quantum and Unity3D targeting WebGL as platform, featuring a streamlined Asteroids-inspired game integrated with the `CrazySDK` from Crazy Games. Using [Unity Addressables](https://docs.unity3d.com/Packages/com.unity.addressables@2.3/manual/index.html) to reduces build size while delivering smoother gameplay.
 
 This WebGL sample is a great first step for those new to Photon products!
 
@@ -35,25 +31,9 @@ For a more in-depth, multiplayer-focused experience, check out our [Asteroids tu
 - Unity: 6000.0.17f1.
 - Platforms: WebGL
 
-To run the sample in online multiplayer mode, first create a Quantum AppId in the [PhotonEngine Dashboard](https://dashboard.photonengine.com) and paste it into the ```
-AppId
-```
+To run the sample in online multiplayer mode, first create a Quantum AppId in the [PhotonEngine Dashboard](https://dashboard.photonengine.com) and paste it into the `AppId` field in `PhotonServerSettings` asset.
 
-field in ```
-PhotonServerSettings
-```
-
-asset.
-
-Then load the ```
-Menu
-```
-
-scene in the Scenes menu and press ```
-Play
-```
-
-.
+Then load the `Menu` scene in the Scenes menu and press `Play`.
 
 ## How to Play
 
@@ -65,21 +45,9 @@ Play
 
 #### Controls
 
-- ```
-  A/D
-  ```
-
-   keys to steer;
-- ```
-  W
-  ```
-
-   key to throttle;
-- ```
-  Space/Left Click
-  ```
-
-   to shoote;
+- `A/D` keys to steer;
+- `W` key to throttle;
+- `Space/Left Click` to shoote;
 
 ## Gameplay Implementation
 
@@ -99,25 +67,13 @@ Asset loading starts after the play button is pressed, and progress is shown dur
 
 ![Loading Scene](/docs/img/quantum/v3/technical-samples/webgl-asteroids/img-2.png)
 
-In this sample, the Quantum ```
-Look-up-tables files (LUT)
-```
-
-is treated as an Addressable. As a result, it was moved from the Resources folder to a new location, ```
-Resources\_moved
-```
-
-. This optimization reduces the build size by approximately 2MB.
+In this sample, the Quantum `Look-up-tables files (LUT)` is treated as an Addressable. As a result, it was moved from the Resources folder to a new location, `Resources\_moved`. This optimization reduces the build size by approximately 2MB.
 
 ## CrazySDK
 
 The CrazySDK is integrated into this project, demonstrating the basic features required to have a multiplayer game approved during the project review in the CrazyGames platform.
 
-The [multiplayer requirements](https://docs.crazygames.com/requirements/multiplayer/) are handled by ```
-CrazyManager.cs
-```
-
-, it is responsible for checking if the game needs to be treated as [instantMuliplayer](https://docs.crazygames.com/sdk/game/#instant-multiplayer), generates [invite link](https://docs.crazygames.com/sdk/game/#invite-link) and trigger the [invite button](https://docs.crazygames.com/sdk/game/#invite-button).
+The [multiplayer requirements](https://docs.crazygames.com/requirements/multiplayer/) are handled by `CrazyManager.cs`, it is responsible for checking if the game needs to be treated as [instantMuliplayer](https://docs.crazygames.com/sdk/game/#instant-multiplayer), generates [invite link](https://docs.crazygames.com/sdk/game/#invite-link) and trigger the [invite button](https://docs.crazygames.com/sdk/game/#invite-button).
 
 More info about these features can be found under CrazyGames documentation.
 

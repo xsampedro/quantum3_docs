@@ -35,11 +35,7 @@ The quantum solution also comes with some samples on how to handle:
 - Filling Room: how to fill the room with Bots if there are not enough players connected to the match;
 - Bot Entities: creating entities which are **not** related to Players at all.
 
-All of these configurable using the ```
-RuntimeConfig.User.cs
-```
-
- file.
+All of these configurable using the `RuntimeConfig.User.cs` file.
 
 ## The Spellcaster Sample
 
@@ -48,7 +44,7 @@ The sample contains:
 - Sample code and an AI document for a Utility Theory agent (UT);
 
 ![Spellcaster Sample](/docs/img/quantum/v2/addons/bot-sdk/bot-sdk-spellcaster.gif)
- The Spellcaster is the AI agent. It's objective is to protect it's castle from the enemies.
+The Spellcaster is the AI agent. It's objective is to protect it's castle from the enemies.
 
 
 The sample HFSM provided:

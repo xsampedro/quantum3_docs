@@ -4,15 +4,7 @@ _Source: https://doc.photonengine.com/quantum/current/getting-started/faq_
 
 # Frequently Asked Questions
 
-Most of the FAQ content is derived from questions asked by developers in the ```
-#quantum-sdk-v2
-```
-
- and ```
-#beginner-questions
-```
-
-Discord chat. Also use the search functionality there to find more help.
+Most of the FAQ content is derived from questions asked by developers in the `#quantum-sdk-v2` and `#beginner-questions` Discord chat. Also use the search functionality there to find more help.
 
 ## Quantum Unity Framework
 
@@ -28,15 +20,7 @@ When the AppId is rejected by the server there is no proper error message, yet. 
 
 ### Why is there a 1 second delay before the Quantum game starts?
 
-Check the ```
-Room Wait Time (seconds)
-```
-
- in your ```
-Deterministic Config
-```
-
-asset. There you can tweak it. The _Room Wait Time_ is used to cope with fluctuating ping times.
+Check the `Room Wait Time (seconds)` in your `Deterministic Config` asset. There you can tweak it. The _Room Wait Time_ is used to cope with fluctuating ping times.
 
 It will always be used in full to help sync all client sessions at start. If you set it to 1 second, it will always wait the full 1 second.
 
@@ -44,29 +28,13 @@ It will always be used in full to help sync all client sessions at start. If you
 
 ### Why is the connection timing out while trying to connect to ns.exitgames.com?
 
-To get more details increase the connection log level ```
-Network Logging
-```
-
- in your ```
-PhotonServerSettings
-```
-
-. Most often, the timeout is due to your UDP traffic being blocked.
+To get more details increase the connection log level `Network Logging` in your `PhotonServerSettings`. Most often, the timeout is due to your UDP traffic being blocked.
 
 For guide on how to analyze your situation, please refer to the **Analyzing Disconnects** page in the Photon Realtime documentation: [Analyzing Disconnects](/realtime/current/troubleshooting/analyzing-disconnects "Analyzing Disconnects")
 
 ### How can I debug a frozen game?
 
-Adding the ```
-QUANTUM\_STALL\_WATCHER\_ENABLED
-```
-
- define to ```
-Project Settings > Player > Scripting Define Symbols
-```
-
-will enable a watcher script to spin up a thread which will watch the Update loop. If a stall is detected (i.e. the Update takes more than X seconds to be called again), it will create a crash. This is useful when debugging freezes on the simulation as the generated crash should have the call stack from all threads running.
+Adding the `QUANTUM\_STALL\_WATCHER\_ENABLED` define to `Project Settings > Player > Scripting Define Symbols` will enable a watcher script to spin up a thread which will watch the Update loop. If a stall is detected (i.e. the Update takes more than X seconds to be called again), it will create a crash. This is useful when debugging freezes on the simulation as the generated crash should have the call stack from all threads running.
 
 ### Is there an effective way to simulate network latency when running the game in Unity Editor?
 
@@ -86,27 +54,15 @@ Clumsy Filter: (udp.DstPort == 5056 or udp.SrcPort == 5056) or (tcp.DstPort == 4
 
 ### Why is the game simulation running faster after pausing or debugging a breakpoint?
 
-By default the time is measured internally and does not compensate for halting the simulation. When ```
-DeltaTimeType
-```
-
- on the SimulationConfig is changed to ```
-EngineDeltaTime
-```
-
-the gameplay will resume in regular speed after a pause. Caveat: Changing it will make every client use the setting which might be undesirable when only used for debugging. Although some games with very tight camera controls (e.g. flight simulation) will profit from setting it to ```
-EngineDeltaTime
-```
-
-.
+By default the time is measured internally and does not compensate for halting the simulation. When `DeltaTimeType` on the SimulationConfig is changed to `EngineDeltaTime` the gameplay will resume in regular speed after a pause. Caveat: Changing it will make every client use the setting which might be undesirable when only used for debugging. Although some games with very tight camera controls (e.g. flight simulation) will profit from setting it to `EngineDeltaTime`.
 
 C#
 
 ```csharp
 public enum SimulationUpdateTime {
-Default = 0, // internal clock
-EngineDeltaTime = 1, // Time.deltaTime (Unity)
-EngineUnscaledDeltaTime = 2 // Time.unscaledDeltaTime
+    Default = 0,                        // internal clock
+    EngineDeltaTime = 1,                // Time.deltaTime (Unity)
+    EngineUnscaledDeltaTime = 2         // Time.unscaledDeltaTime
 }
 
 ```
@@ -121,54 +77,26 @@ Triangle culling during the import step is another alternative which we could pr
 
 ![Navmesh Island](/docs/img/quantum/v2/getting-started/faq/navmesh-island.png)### Why does my game gets a timeout disconnection when the Scene loading takes too long?
 
-When loading a Unity scene, even if it is done with ```
-LoadSceneAsync
-```
+When loading a Unity scene, even if it is done with `LoadSceneAsync`, the main thread can freeze for some time accordingly to the size and complexity of such scene. This can then result in a disconnect error due to timeout as the communication doesn't happen while the game is frozen.
 
-, the main thread can freeze for some time accordingly to the size and complexity of such scene. This can then result in a disconnect error due to timeout as the communication doesn't happen while the game is frozen.
+To prevent this from happening, you can use some of the API provided in the `ConnectionHandler` class. Here is a step-by-step on how to setup and use it:
 
-To prevent this from happening, you can use some of the API provided in the ```
-ConnectionHandler
-```
+- Check if there is any Game Object with the `ConnectionHandler` component. If there is none, please add one;
 
- class. Here is a step-by-step on how to setup and use it:
+- On the component, you'll be able to see a field named `KeepAliveInBackground`, which you can use to increase the time that the connection will be kept. The value is informed in milliseconds;
 
-- Check if there is any Game Object with the ```
-  ConnectionHandler
-  ```
-
-   component. If there is none, please add one;
-
-- On the component, you'll be able to see a field named ```
-  KeepAliveInBackground
-  ```
-
-  , which you can use to increase the time that the connection will be kept. The value is informed in milliseconds;
-
-- You should now inform what is the ```
-  QuantumLoadBalancingClient
-  ```
-
-  , to which there is a static getter on ```
-  UIMain
-  ```
-
-  , in case you use it (it comes by default with Quantum). Once you have done this, you can start the ```
-  StartFallbackSendAckThread
-  ```
-
-  . Here is a sample snippet on how to achieve that:
+- You should now inform what is the `QuantumLoadBalancingClient`, to which there is a static getter on `UIMain`, in case you use it (it comes by default with Quantum). Once you have done this, you can start the `StartFallbackSendAckThread`. Here is a sample snippet on how to achieve that:
 
 
 C#
 
 ```csharp
-// Before starting loading the scene
-if (\_connectionHandler != null)
-{
-\_connectionHandler.Client = UIMain.Client;
-\_connectionHandler.StartFallbackSendAckThread();
-}
+    // Before starting loading the scene
+    if (_connectionHandler != null)
+    {
+      _connectionHandler.Client = UIMain.Client;
+      _connectionHandler.StartFallbackSendAckThread();
+    }
 
 ```
 
@@ -176,19 +104,9 @@ if (\_connectionHandler != null)
 
 IL2CPP compilation throws the following error:
 
-```
-bracket nesting level exceeded maximum
-```
+`bracket nesting level exceeded maximum`
 
-Which can be caused by for example by large classes or structs like ```
-RuntimeConfig
-```
-
-or ```
-GetHashCode()
-```
-
-methods of DSL generated components.
+Which can be caused by for example by large classes or structs like `RuntimeConfig` or `GetHashCode()` methods of DSL generated components.
 
 To workaround this issue split up the large data into smaller structs.
 
@@ -206,70 +124,39 @@ It is possible though to check/log "frame.IsVerified" in order to check if a fra
 
 ### What's the difference between FP.MaxValue and FP.UseableMax?
 
-The fixed point math only uses 16+16 bits of its 64-bit value. This makes part of the math faster because we don't have to check for overflows. That said: ```
-FP.MinValue
-```
-
-and ```
-FP.MaxValue
-```
-
-are using all 64 bits and should **never** be used for calculations. Use ```
-FP.UseableMax
-```
-
-and ```
-FP.UseableMin
-```
-
-instead (to initialize a distance variable with the min FP value for example).
+The fixed point math only uses 16+16 bits of its 64-bit value. This makes part of the math faster because we don't have to check for overflows. That said: `FP.MinValue` and `FP.MaxValue` are using all 64 bits and should **never** be used for calculations. Use `FP.UseableMax` and `FP.UseableMin` instead (to initialize a distance variable with the min FP value for example).
 
 **N.B.:** FP can represent values from -32,768 to 32,768 (-2¹⁵ to 2¹⁵).
 
 ### Why does the pointer to a new struct point to stale data?
 
-Inside the loop the pointer to the struct gets the same stack pointer and will contain stale data if **neither**```
-new
-```
-
-or ```
-default
-```
-
-was used.
+Inside the loop the pointer to the struct gets the same stack pointer and will contain stale data if **neither**`new` or `default` was used.
 
 Qtn
 
 ```cs
 struct Bar {
-public bool Foo;
+    public bool Foo;
 }
+static unsafe void Main(string[] args) {
+    for (int i = 0; i < 2; i++) {
+        Bar bar;
+        //Bar bar = default(Bar); // <---- Fixes the stale data
 
-static unsafe void Main(string\[\] args) {
-for (int i = 0; i < 2; i++) {
+        Bar* barPt = &bar;
+        if (barPt->Foo)
+            Console.WriteLine("Stuff and Things");
 
-Bar bar;
-//Bar bar = default(Bar); // <---- Fixes the stale data
-
-Bar\* barPt = &bar;
-if (barPt->Foo)
-Console.WriteLine("Stuff and Things");
-
-barPt->Foo = true;
-}
-
-Console.ReadKey();
+        barPt->Foo = true;
+    }
+    Console.ReadKey();
 }
 
 ```
 
 ### Why is my simulation desync-ing?
 
-When ```
-DeterministicConfig.ChecksumInterval
-```
-
-is > 0 a checksum of a verified frame is computed, sent to the server and compared with checksums that other clients have sent.
+When `DeterministicConfig.ChecksumInterval` is > 0 a checksum of a verified frame is computed, sent to the server and compared with checksums that other clients have sent.
 
 Most common causes are:
 
@@ -297,13 +184,13 @@ C#
 
 ```csharp
 public class CleaningSystem : SystemBase {
- public Boolean HasShoweredToday; // <----- Error
- public override void Update(Frame frame) {
- if (!HasShoweredToday && frame.Global->ElapsedTime > 100) {
- Shower();
- HasShoweredToday = true;
- }
- }
+    public Boolean HasShoweredToday;    // <----- Error
+    public override void Update(Frame frame) {
+        if (!HasShoweredToday && frame.Global->ElapsedTime > 100) {
+            Shower();
+            HasShoweredToday = true;
+        }
+    }
 }
 
 ```
@@ -315,44 +202,31 @@ C#
 ```csharp
 // Frame
 unsafe partial class Frame {
- public Boolean HasShoweredToday;
- partial void CopyFromUser(Frame frame) {
- // Implement copy of the custom parameters.
- }
+    public Boolean HasShoweredToday;
+    partial void CopyFromUser(Frame frame) {
+        // Implement copy of the custom parameters.
+    }
 }
-
 public class CleaningSystem : SystemBase {
- public override void Update(Frame frame) {
- if (!frame.HasShoweredToday && frame.Global->ElapsedTime > 100) {
- Shower();
- frame.HasShoweredToday = true;
- }
- }
+    public override void Update(Frame frame) {
+        if (!frame.HasShoweredToday && frame.Global->ElapsedTime > 100) {
+            Shower();
+            frame.HasShoweredToday = true;
+        }
+    }
 }
 
 ```
 
 #### Floating point math
 
-Refrain from using floats inside the simulation and exclusively use ```
-FP
-```
+Refrain from using floats inside the simulation and exclusively use `FP` math.
 
- math.
-
-Handle ```
-FP.FromFloat\_UNSAFE()
-```
-
-with care. Using it "offline" for balancing asset generation on one machine is fine; however, be aware this can return different results on different platforms. If you need to import floats during run-time and cannot use integers or FPs (e.g. downloading balancing data), convert from **String to FP**.
+Handle `FP.FromFloat\_UNSAFE()` with care. Using it "offline" for balancing asset generation on one machine is fine; however, be aware this can return different results on different platforms. If you need to import floats during run-time and cannot use integers or FPs (e.g. downloading balancing data), convert from **String to FP**.
 
 #### Data Created During AssetObject.Loaded()
 
-```
-AssetObject.Loaded()
-```
-
-is called once per asset during loading. It is totally fine to store, calculate and store new data inside the asset members at this time - **N.B.:** If you are running the simulation on the server, all games will share this one asset.
+`AssetObject.Loaded()` is called once per asset during loading. It is totally fine to store, calculate and store new data inside the asset members at this time - **N.B.:** If you are running the simulation on the server, all games will share this one asset.
 
 If your assets are loaded from Resources and you are either restarting the Unity Editor or resetting the Unity DB at runtime, be aware that Unity does not unload the Unity asset.
 
@@ -360,20 +234,18 @@ C#
 
 ```csharp
 public partial class FooAsset {
- public Foo Settings;
- public int RawData;
+  public Foo Settings;
+  public int RawData;
 
- \[NonSerialized\]
- public List<int> Bar = new List<int>();
-
- public override AssetObject AssetObject => Settings;
-
- public override void Loaded(IResourceManager resourceManager, Native.Allocator allocator)
- {
- base.Loaded(resourceManager, allocator);
- // This will break on the second run (see above) because Bar needs to be reset by either Bar.Clear() or Bar = new List<int>()
- Bar.Add(RawData);
- }
+  [NonSerialized]
+  public List<int> Bar = new List<int>();
+  public override AssetObject AssetObject => Settings;
+    public override void Loaded(IResourceManager resourceManager, Native.Allocator allocator)
+    {
+      base.Loaded(resourceManager, allocator);
+    // This will break on the second run (see above) because Bar needs to be reset by either Bar.Clear() or Bar = new List<int>()
+    Bar.Add(RawData);
+  }
 }
 
 ```
@@ -393,16 +265,8 @@ public partial class FooAsset {
 **Alternatively** all players can switch the room. Because this involves server transitions and with distributed systems a lot of things can fail it is recommended to try to soft-restart the simulation and only use room transition as a last resort.
 
 - Share the id of the new room between the clients using (e.g. Photon room properties or a Quantum command). Or create the new room programmatically/deterministically (be careful that this cannot be guessed easily).
-- Every client stops the Quantum session and runs ```
-LeaveRoom()
-```
-
-but does not disconnect.
-- All clients use ```
-JoinOrCreate()
-```
-
-to connect to the new room.
+- Every client stops the Quantum session and runs `LeaveRoom()` but does not disconnect.
+- All clients use `JoinOrCreate()` to connect to the new room.
 - Mitigate connection problems like clients restarting their app during the process, other connection errors, waiting for players to join, etc
 
 [Photon Realtime Matchmaking Guide](/realtime/current/lobby-and-matchmaking/matchmaking-and-lobby)
@@ -411,17 +275,9 @@ to connect to the new room.
 
 Not directly. Unity does not support overlapping fields.
 
-Instead ```
-<UnionName>\_Prototype
-```
+Instead `<UnionName>\_Prototype` can be used as it is Unity-serializable and has a drawer.
 
- can be used as it is Unity-serializable and has a drawer.
-
-To convert to a ```
-union
-```
-
--struct like this:
+To convert to a `union`-struct like this:
 
 C#
 

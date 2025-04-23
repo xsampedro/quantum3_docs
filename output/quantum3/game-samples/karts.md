@@ -33,25 +33,9 @@ The sample supports up to 12 karts, has 2 tracks, 4 different powerups, 3 kart t
 
 ## Before You Start
 
-To run the sample in online multiplayer mode, first create a Quantum AppId in the [PhotonEngine Dashboard](https://dashboard.photonengine.com) and paste it into the ```
-AppId
-```
+To run the sample in online multiplayer mode, first create a Quantum AppId in the [PhotonEngine Dashboard](https://dashboard.photonengine.com) and paste it into the `AppId` field in `PhotonServerSettings` asset.
 
- field in ```
-PhotonServerSettings
-```
-
-asset.
-
-Then load the ```
-Menu
-```
-
- scene in the Scenes menu and press ```
-Play
-```
-
-.
+Then load the `Menu` scene in the Scenes menu and press `Play`.
 
 ## Highlights
 

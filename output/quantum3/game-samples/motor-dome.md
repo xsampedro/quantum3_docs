@@ -20,25 +20,9 @@ The **Quantum Motor Dome** sample demonstrates an approach on how to build a fre
 
 ## Before You Start
 
-Create a Quantum AppId from the [Photon Dashboard](https://dashboard.photonengine.com/) and paste it into the ```
-AppId
-```
+Create a Quantum AppId from the [Photon Dashboard](https://dashboard.photonengine.com/) and paste it into the `AppId` in the `PhotonServerSettings` asset, located in the Unity project under `Assets/Resources`.
 
- in the ```
-PhotonServerSettings
-```
-
-asset, located in the Unity project under ```
-Assets/Resources
-```
-
-.
-
-Select ```
-StartScene
-```
-
-from the scenes dropdown and press the play button.
+Select `StartScene` from the scenes dropdown and press the play button.
 
 ## Download
 
@@ -52,10 +36,7 @@ from the scenes dropdown and press the play button.
 
 - Broadphase Queries for collision handling
 - Custom state machine for game state
-- Custom baked map data using ```
-MapDataBakerCallback
-```
-
+- Custom baked map data using `MapDataBakerCallback`
 - Player nicknames and player character customization
 
 ### Gameplay
@@ -77,101 +58,33 @@ The project uses the legacy Unity input system.
 
 local input:
 
-- ```
-P
-```
-
-key to open the pause menu
+- `P` key to open the pause menu
 
 quantum input:
 
-- steer with ```
-A
-```
-
-and ```
-D
-```
-
-keys / left and right arrows / left thumbstick X axis
-- boost with ```
-W
-```
-
-key / up arrow / A button / RB
-- brake with ```
-S
-```
-
-key / down arrow / B button / LB
+- steer with `A` and `D` keys / left and right arrows / left thumbstick X axis
+- boost with `W` key / up arrow / A button / RB
+- brake with `S` key / down arrow / B button / LB
 
 ### Getting Into A Game
 
 Matchmaking:
 
-To play an online match, select ```
-Matchmaking
-```
-
- followed by ```
-Start Queue
-```
-
-. At this point, the Matchmaker takes over and the Quantum session begins. After a brief waiting period, the ```
-LoadSyncSystem
-```
-
- will progress to the intro sequence, after which the game will begin. The game state is entirely autonomous, not relying on player input to progress.
+To play an online match, select `Matchmaking` followed by `Start Queue`. At this point, the Matchmaker takes over and the Quantum session begins. After a brief waiting period, the `LoadSyncSystem` will progress to the intro sequence, after which the game will begin. The game state is entirely autonomous, not relying on player input to progress.
 
 Practice Mode:
 
-To play a solo match, select practice. The ```
-QuantumRunnerLocalDebug
-```
-
-in the game scene handles starting up the Quantum session. The intro phase will be bypassed by the ```
-LoadSyncSystem
-```
-
-.
+To play a solo match, select practice. The `QuantumRunnerLocalDebug` in the game scene handles starting up the Quantum session. The intro phase will be bypassed by the `LoadSyncSystem`.
 
 ### Matchmaker
 
-Deriving from ```
-QuantumCallbacks
-```
-
-and implementing ```
-IConnectionCallbacks
-```
-
-, ```
-IMatchmakingCallbacks
-```
-
-, ```
-IInRoomCallbacks
-```
-
-, ```
-IOnEventCallback
-```
-
-, the Matchmaker class takes care of the flow of connecting to a game and delegating the various callbacks. The main entry point is the static ```
-Connect
-```
-
-method, which signals back to the caller when the connection state updates.
+Deriving from `QuantumCallbacks` and implementing `IConnectionCallbacks`, `IMatchmakingCallbacks`, `IInRoomCallbacks`, `IOnEventCallback`, the Matchmaker class takes care of the flow of connecting to a game and delegating the various callbacks. The main entry point is the static `Connect` method, which signals back to the caller when the connection state updates.
 
 ### Game State
 
 The Game State System enables and disables systems which implement any of the game state interfaces. Systems may implement one or many interfaces, and will be enabled while in any of the corresponding game states. Systems which do not implement a game state interface remain untouched by the game state system.
 
-When the game state changes, a ```
-GameStateChanged
-```
-
-event is sent, containing both the old and new game state.
+When the game state changes, a `GameStateChanged` event is sent, containing both the old and new game state.
 
 The system is designed to be reusable, and can have states changed or added with little effort.
 
@@ -182,229 +95,92 @@ pre
 ```pre
 quantum.code
 └ Game
- ├ Game State
- │ ├ gameState.qtn
- │ └ IGameStates.cs
- └ Systems
- └ GameStateSystem.cs
+  ├ Game State
+  │ ├ gameState.qtn
+  │ └ IGameStates.cs
+  └ Systems
+    └ GameStateSystem.cs
 
 ```
 
 ### Events
 
-The ```
-EventSubscriptions
-```
-
- class listens for the majority of events. All "player" events are delegated to the ```
-InterfaceManager
-```
-
-for handling.
+The `EventSubscriptions` class listens for the majority of events. All "player" events are delegated to the `InterfaceManager` for handling.
 
 State System:
 
-- ```
-GameStateChanged
-```
-
+- `GameStateChanged`
 
 Gameplay:
 
-- ```
-PickupCollected
-```
-
-- ```
-PlayerDied
-```
-
-- ```
-PlayerLeadGained
-```
-
-- ```
-PlayerReconnected
-```
-
-- ```
-PlayerScoreChanged
-```
-
+- `PickupCollected`
+- `PlayerDied`
+- `PlayerLeadGained`
+- `PlayerReconnected`
+- `PlayerScoreChanged`
 
 Other:
 
-- ```
-PlayerLeft
-```
+- `PlayerLeft`
+- `PlayerDataChanged`
+- `Shutdown`
 
-- ```
-PlayerDataChanged
-```
+Events listened to by the `ShipView` class:
 
-- ```
-Shutdown
-```
-
-
-Events listened to by the ```
-ShipView
-```
-
-class:
-
-- ```
-PlayerVulnerable
-```
-
-- ```
-PlayerDataChanged
-```
-
+- `PlayerVulnerable`
+- `PlayerDataChanged`
 
 ### Collisions
 
-Collisions between players leverage Quantum's [broadphase queries](https://doc.photonengine.com/quantum/current/manual/physics/queries#broadphase_queries). Pickups use ```
-PhysicsCollider3D
-```
-
-and ```
-OnTriggerEnter3D
-```
-
-for collision detection.
+Collisions between players leverage Quantum's [broadphase queries](https://doc.photonengine.com/quantum/current/manual/physics/queries#broadphase_queries). Pickups use `PhysicsCollider3D` and `OnTriggerEnter3D` for collision detection.
 
 Broadphase:
 
-```
-ShipCollisionInjectionSystem.cs
-```
+`ShipCollisionInjectionSystem.cs` \- For each ship, a linecast query is added for each segment of the ship's trail.
 
-\- For each ship, a linecast query is added for each segment of the ship's trail.
-
-```
-ShipCollisionRetrievalSystem.cs
-```
-
-\- Evaluates collisions between ships and trails, and differentiates a ship colliding with the end of its own trail for scoring.
+`ShipCollisionRetrievalSystem.cs` \- Evaluates collisions between ships and trails, and differentiates a ship colliding with the end of its own trail for scoring.
 
 Pickups:
 
-```
-PickupSystem.cs
-```
-
-\- Collisions with pickups rely on ships having a ```
-PhysicsCollider3D
-```
-
-with the callback flag ```
-OnDynamicTriggerEnter
-```
-
-, and pickups having a ```
-PhysicsCollider3D
-```
-
-with ```
-IsTrigger
-```
-
-ticked. These are configured on the entity prototypes, and can be found in ```
-Assets/Resources/DB/Quantum Prefabs
-```
-
-of the Unity project.
+`PickupSystem.cs` \- Collisions with pickups rely on ships having a `PhysicsCollider3D` with the callback flag `OnDynamicTriggerEnter`, and pickups having a `PhysicsCollider3D` with `IsTrigger` ticked. These are configured on the entity prototypes, and can be found in `Assets/Resources/DB/Quantum Prefabs` of the Unity project.
 
 ### Custom Baked Map Data
 
-This sample utilizes the ```
-UserAsset
-```
-
-field of the ```
-MapData
-```
-
-asset to associate additional information with the map.
+This sample utilizes the `UserAsset` field of the `MapData` asset to associate additional information with the map.
 
 See [Map Baking](https://doc.photonengine.com/quantum/current/manual/map-baking) for more information.
 
 Quantum:
 
-- ```
-MapMeta.cs
-```
-
-\- Stores the position of spawnpoints, and the size and origin of the play space.
+- `MapMeta.cs` \- Stores the position of spawnpoints, and the size and origin of the play space.
 
 Unity:
 
-- ```
-MapDataMeta.cs
-```
-
-\- A MonoBehaviour which holds information to be baked to the ```
-MapMeta
-```
-
-asset.
-- ```
-CustomMapBaker.cs
-```
-
-\- Derives from ```
-MapDataBakerCallback
-```
-
-in order to bake the view-side map data into the Quantum-side ```
-MapMeta
-```
-
-asset.
+- `MapDataMeta.cs` \- A MonoBehaviour which holds information to be baked to the `MapMeta` asset.
+- `CustomMapBaker.cs` \- Derives from `MapDataBakerCallback` in order to bake the view-side map data into the Quantum-side `MapMeta` asset.
 
 ### Customization
 
 Unity:
 
-- ```
-LocalData.cs
-```
-
-\- Holds customization data before it has been sent to Quantum.
+- `LocalData.cs` \- Holds customization data before it has been sent to Quantum.
 
 Quantum:
 
-- ```
-RuntimePlayer.User.cs
-```
+- `RuntimePlayer.User.cs` \- Serializes the player's nickname, ship prototype, and selected colors. The view can then access these by retrieving the `RuntimePlayer` via the frame's `GetPlayerData` method.
 
-\- Serializes the player's nickname, ship prototype, and selected colors. The view can then access these by retrieving the ```
-RuntimePlayer
-```
-
-via the frame's ```
-GetPlayerData
-```
-
-method.
-
-The below snippet shows how a ```
-ColorRGBA
-```
-
-may be serialized. Note that the alpha is not used, and so does not need to be serialized. Each color then uses only 3 bytes.
+The below snippet shows how a `ColorRGBA` may be serialized. Note that the alpha is not used, and so does not need to be serialized. Each color then uses only 3 bytes.
 
 C#
 
 ```cs
 partial void SerializeUserData(BitStream stream)
 {
-/\\* ... \*/
-stream.Serialize(ref primaryColor.R);
-stream.Serialize(ref primaryColor.G);
-stream.Serialize(ref primaryColor.B);
-/\\* ... \*/
+    /* ... */
+    stream.Serialize(ref primaryColor.R);
+    stream.Serialize(ref primaryColor.G);
+    stream.Serialize(ref primaryColor.B);
+    /* ... */
 }
 
 ```

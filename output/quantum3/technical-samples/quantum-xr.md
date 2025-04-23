@@ -19,19 +19,7 @@ Also, a few physics-based mini-games are also available (basket ball, punching b
 ## Before You start
 
 - The project has been developed with Unity 2022.3 and Quantum 3.0
-- To run the sample, first create a Quantum AppId and a Voice AppId in the [PhotonEngine Dashboard](https://dashboard.photonengine.com) and paste them it into the ```
-App Id Quantum
-```
-
-and ```
-App Id Voice
-```
-
-fields in Photon Server Settings (reachable from the Tools/Quantum menu). Then load the scene and press ```
-Play
-```
-
-.
+- To run the sample, first create a Quantum AppId and a Voice AppId in the [PhotonEngine Dashboard](https://dashboard.photonengine.com) and paste them it into the `App Id Quantum` and `App Id Voice` fields in Photon Server Settings (reachable from the Tools/Quantum menu). Then load the scene and press `Play`.
 
 ## Download
 
@@ -119,15 +107,7 @@ Those physics hands are very similar to grabbed object:
 - They follow the hand position, but constantly
 - This following is based on the same PID controller-based forces
 
-To limit the object that can be collided by those physics hands, we have setup a special collision matrix, to have control on which object could be punched. The physics hands are in the ```
-PhysicsHands
-```
-
-layer, and can only interact with objects in the ```
-PhysicsHandsPushable
-```
-
-layer.
+To limit the object that can be collided by those physics hands, we have setup a special collision matrix, to have control on which object could be punched. The physics hands are in the `PhysicsHands` layer, and can only interact with objects in the `PhysicsHandsPushable` layer.
 
 [![Quantum XR Collision matrix](/docs/img/quantum/v3/technical-samples/quantum-xr/quantum-xr-collisionmatrix.jpg)](/docs/img/quantum/v3/technical-samples/quantum-xr/quantum-xr-collisionmatrix.jpg)
 
@@ -137,11 +117,7 @@ If needed, this could be changed by using a compound collider, and changing its 
 
 ### Hand view: position override and pseudo-haptic feedback
 
-To provide a more natural display of an user hand, the hand position is overridden in the ```
-HandView
-```
-
-in some cases:
+To provide a more natural display of an user hand, the hand position is overridden in the `HandView` in some cases:
 
 - (1) in general case for the local user, to display the most up to date and reactive hand position from the hardware data
 - (2) when a physics grabbing occurs, to ensure that the hand "sticks" on the grabbed object at the position it was initially grabbed (we don't want to make visible that the grabbable object is following the hand with forces, involving a slight offset)
@@ -169,25 +145,13 @@ Indeed, it is a good practice to hide the scene with a fade to black before movi
 That's why, teleporting a player involves several steps:
 
 - first, we read information from the controllers to check whether the teleport button has been activated,
-- then, inputs are sent to Quantum, so the locomotion system can checks each hand's input to update the ```
-LocomotionRayState
-```
-
-state machine of each hand entity. If a teleport request occurs, an event is sent to Unity to start the fade-in.
+- then, inputs are sent to Quantum, so the locomotion system can checks each hand's input to update the `LocomotionRayState` state machine of each hand entity. If a teleport request occurs, an event is sent to Unity to start the fade-in.
 - when the fade-in is complete, a command is sent to Quantum to move the rig's elements,
 - once teleportation is complete, an event is sent to Unity to do the fade-out.
 
-During this process, the visual of the ray is managed on the Unity side based on the ```
-LocomotionRayState
-```
+During this process, the visual of the ray is managed on the Unity side based on the `LocomotionRayState` state machine.
 
-state machine.
-
-More details in the ```
-RayAndLocomotionSystem
-```
-
-section below.
+More details in the `RayAndLocomotionSystem` section below.
 
 ### Tractor beams
 
@@ -222,11 +186,7 @@ It's important to save CPU resources on limited devices like autonomous XR heads
 
 So, prediction culling is activated in this sample : it means that no Quantum prediction and rollback are computed for objects that are not in the player's field of vision.
 
-To do so, the ```
-PredictionCulling
-```
-
-component is added on the camera of the hardware rig.
+To do so, the `PredictionCulling` component is added on the camera of the hardware rig.
 
 [![Quantum XR Prediction Culling](/docs/img/quantum/v3/technical-samples/quantum-xr/quantum-xr-prediction-culling.jpg)](/docs/img/quantum/v3/technical-samples/quantum-xr/quantum-xr-prediction-culling.jpg)
 
@@ -235,11 +195,11 @@ It consists in setting up a prediction area in front of the user. The radius of 
 C#
 
 ```csharp
-if (enablePredictionCulling)
-{
-centerPosition = transform.position + transform.forward \* offset;
-QuantumRunner.Default.Game.SetPredictionArea(centerPosition.ToFPVector3(), radius.ToFP());
-wasCulled = true;
+        if (enablePredictionCulling)
+        {
+            centerPosition = transform.position + transform.forward * offset;
+            QuantumRunner.Default.Game.SetPredictionArea(centerPosition.ToFPVector3(), radius.ToFP());
+            wasCulled = true;
 
 ```
 
@@ -247,15 +207,7 @@ wasCulled = true;
 
 Due to the headset rendering and interactions, this sample don't use the usual Quantum menu.
 
-So the sample provide a very simple ```
-ConnectionManager
-```
-
-to initiate the connection from the ```
-QuantumXRDemoScene
-```
-
-scene.
+So the sample provide a very simple `ConnectionManager` to initiate the connection from the `QuantumXRDemoScene` scene.
 
 It will create a room if none is created, and join an existing one randomly otherwise.
 
@@ -263,30 +215,9 @@ This connection manager always starts an online connection. So to be able to do 
 
 It does the following:
 
-- it starts the underlying RealTime session with ```
-MatchmakingExtensions.ConnectToRoomAsync
-```
-
-- then it starts the ```
-Quantumrunner
-```
-
-with ```
-SessionRunner.StartAsync
-```
-
-, passing the config (with the systems config, the simulation config, ...) stored in ```
-RuntimeConfig runtimeConfig
-```
-
-- finally, when the game is started, it add the local player with ```
-game.AddPlayer
-```
-
-, passing the player data stored in the ```
-RuntimePlayer runtimePlayer
-```
-
+- it starts the underlying RealTime session with `MatchmakingExtensions.ConnectToRoomAsync`
+- then it starts the `Quantumrunner` with `SessionRunner.StartAsync`, passing the config (with the systems config, the simulation config, ...) stored in `RuntimeConfig runtimeConfig`
+- finally, when the game is started, it add the local player with `game.AddPlayer`, passing the player data stored in the `RuntimePlayer runtimePlayer`
 
 ## Core systems details
 
@@ -300,15 +231,7 @@ Both have the same logic:
 - They determine if it should adapt those values (smoothing, predictions, …)
 - They apply the local position as an offset to the rig position
 
-They use position smoothing config files, ```
-PositionSmoothingConfig
-```
-
-(```
-HandPositionSmoothingConfig
-```
-
-for hands, which offers additional options regarding the view position override), to determine how to adapt the input position.
+They use position smoothing config files, `PositionSmoothingConfig` (`HandPositionSmoothingConfig` for hands, which offers additional options regarding the view position override), to determine how to adapt the input position.
 
 [![Quantum XR Hand view override](/docs/img/quantum/v3/technical-samples/quantum-xr/quantum-xr-positionsmoothingconfig.png)](/docs/img/quantum/v3/technical-samples/quantum-xr/quantum-xr-positionsmoothingconfig.png)
 
@@ -326,7 +249,7 @@ C#
 ```csharp
 if (f.IsVerified)
 {
-filter.Head->PositionsBuffer.Insert(headLocalization, f.Number);
+    filter.Head->PositionsBuffer.Insert(headLocalization, f.Number);
 }
 
 ```
@@ -339,31 +262,26 @@ C#
 FPVector3 accumulatedDeltaPosition = FPVector3.Zero;
 for (int i = 0; i < (UsedEntries -1); i++)
 {
-accumulatedDeltaPosition = accumulatedDeltaPosition + LastPositions\[i + 1\] - LastPositions\[i\];
+    accumulatedDeltaPosition = accumulatedDeltaPosition + LastPositions[i + 1] - LastPositions[i];
 }
 RigPartPosition predictedLocation = default;
 var ratio = (FP)1 / (UsedEntries - 1);
-var lastInstantSpeed = accumulatedDeltaPosition \* ratio;
+var lastInstantSpeed = accumulatedDeltaPosition * ratio;
 
 ```
 
-Then we apply this speed for each frame since the last verified frame, but to take into account that the further we are from the verified frame, the less we can trust the computed speed, the ```
-speedConversionOverTime
-```
-
-(from 0 to 100) decrease the usage of this verified frame speed.
+Then we apply this speed for each frame since the last verified frame, but to take into account that the further we are from the verified frame, the less we can trust the computed speed, the `speedConversionOverTime` (from 0 to 100) decrease the usage of this verified frame speed.
 
 C#
 
 ```csharp
 FPVector3 cumulatedMove = FPVector3.Zero;
 var distancePerFrame = lastInstantSpeed;
-
 while (remainingFrameToPredict > 0)
 {
-cumulatedMove = cumulatedMove + distancePerFrame;
-distancePerFrame = distancePerFrame \* config.speedConversionOverTime / 100;
-remainingFrameToPredict--;
+    cumulatedMove = cumulatedMove + distancePerFrame;
+    distancePerFrame = distancePerFrame * config.speedConversionOverTime / 100;
+    remainingFrameToPredict--;
 }
 
 ```
@@ -377,57 +295,31 @@ This smoothing lerps 2 values:
 - The speed: it is important to have a smooth hand speed, to avoid having visual artefacts
 - The position: we of course want to be sure to move from the current position to the predicted position
 
-All lerps (speed, rotation, and position) can be tuned through their respective ```
-PositionSmoothingConfig
-```
-
-settings.
+All lerps (speed, rotation, and position) can be tuned through their respective `PositionSmoothingConfig` settings.
 
 C#
 
 ```csharp
 if (previousSpeed != FPVector3.Zero)
 {
-lastInstantSpeed = FPVector3.Lerp(previousSpeed, lastInstantSpeed, config.speedSmoothingRatio);
+    lastInstantSpeed = FPVector3.Lerp(previousSpeed, lastInstantSpeed, config.speedSmoothingRatio);
 }
 var continuationPosition = currentPosition + lastInstantSpeed;
-
 smoothedPredictedLocation.Position = FPVector3.Lerp(continuationPosition, predictedLocation.Position, config.positionSmoothingRatio);
 smoothedPredictedLocation.Rotation = FPQuaternion.Slerp(currentRotation, predictedLocation.Rotation, config.rotationSmoothingRatio);
-
 previousSpeed = lastInstantSpeed;
 
 ```
 
 ### GrabberSystem and GrabbableSystem
 
-Those system deals with the grabbing of entities having a ```
-Grabbable
-```
+Those system deals with the grabbing of entities having a `Grabbable` component.
 
-component.
-
-In the ```
-GrabberSystem
-```
-
-, entities having a ```
-Grabber
-```
-
-components (hands entities) are filtered.
+In the `GrabberSystem`, entities having a `Grabber` components (hands entities) are filtered.
 
 The grabbing status is checked from the input, and can trigger grabs of hovered grabbables, and ungrabs of previously grabbed grabbable.
 
-The hovering over a grabbable is detected through the Physics3D system signals, ```
-OnTriggerEnter3D
-```
-
-and ```
-OnTriggerExit3D
-```
-
-.
+The hovering over a grabbable is detected through the Physics3D system signals, `OnTriggerEnter3D` and `OnTriggerExit3D`.
 
 C#
 
@@ -435,57 +327,36 @@ C#
 #region Hovering detection
 public void OnTriggerEnter3D(Frame frame, TriggerInfo3D info)
 {
-var grabberEntity = info.Entity;
-var grabbableEntity = info.Other;
-if (frame.Unsafe.TryGetPointer<Grabbable>(grabbableEntity, out var grabbable) && frame.Unsafe.TryGetPointer<Grabber>(grabberEntity, out var grabber))
-{
-// Grabber hovering a grabbbable
-grabber->HoveredEntity = grabbableEntity;
+    var grabberEntity = info.Entity;
+    var grabbableEntity = info.Other;
+    if (frame.Unsafe.TryGetPointer<Grabbable>(grabbableEntity, out var grabbable) && frame.Unsafe.TryGetPointer<Grabber>(grabberEntity, out var grabber))
+    {
+        // Grabber hovering a grabbbable
+        grabber->HoveredEntity = grabbableEntity;
+    }
 }
-}
-
 public void OnTriggerExit3D(Frame frame, ExitInfo3D info)
 {
-var grabberEntity = info.Entity;
-var grabbableEntity = info.Other;
-if (frame.Unsafe.TryGetPointer<Grabbable>(grabbableEntity, out var grabbable) && frame.Unsafe.TryGetPointer<Grabber>(grabberEntity, out var grabber))
-{
-// Grabber stop hovering a grabbbable
-if (grabber->HoveredEntity == grabbableEntity)
-{
-grabber->HoveredEntity = EntityRef.None;
-}
-}
+    var grabberEntity = info.Entity;
+    var grabbableEntity = info.Other;
+    if (frame.Unsafe.TryGetPointer<Grabbable>(grabbableEntity, out var grabbable) && frame.Unsafe.TryGetPointer<Grabber>(grabberEntity, out var grabber))
+    {
+        // Grabber stop hovering a grabbbable
+        if (grabber->HoveredEntity == grabbableEntity)
+        {
+            grabber->HoveredEntity = EntityRef.None;
+        }
+    }
 }
 #endregion
 
 ```
 
-During grab and ungrab, both the ```
-Grabber
-```
+During grab and ungrab, both the `Grabber` and `Grabbable` components reference their counterpart entities
 
-and ```
-Grabbable
-```
+Then, in the `GrabbableSystem` the `Grabbable` entity "follows" the grabber entity. Either with position following (the object will follow the hand position, passing through objects), or with force based following, forces driving the move toward the grabbing hand.
 
-components reference their counterpart entities
-
-Then, in the ```
-GrabbableSystem
-```
-
-the ```
-Grabbable
-```
-
-entity "follows" the grabber entity. Either with position following (the object will follow the hand position, passing through objects), or with force based following, forces driving the move toward the grabbing hand.
-
-The force grabbing logic can be configured through ```
-ForceFollowConfig
-```
-
-configuration files
+The force grabbing logic can be configured through `ForceFollowConfig` configuration files
 
 [![Quantum XR Hand view override](/docs/img/quantum/v3/technical-samples/quantum-xr/quantum-xr-forcefollowconfig.png)](/docs/img/quantum/v3/technical-samples/quantum-xr/quantum-xr-forcefollowconfig.png)
 
@@ -495,19 +366,18 @@ C#
 
 ```csharp
 var error = targetPosition - followingTransform->Position;
-
 if (error.Magnitude > config.teleportDistance)
 {
-// Teleport due to distance
-positionPid.Reset();
-followingBody->Velocity = FPVector3.Zero;
-followingTransform->Position = targetPosition;
+    // Teleport due to distance
+    positionPid.Reset();
+    followingBody->Velocity = FPVector3.Zero;
+    followingTransform->Position = targetPosition;
 }
 else
 {
-var command = positionPid.UpdateCommand(error, f.DeltaTime, config.pidSettings, ignoreIntegration: config.ignorePidIntegrationWhileColliding && isColliding);
-var impulse = FPVector3.ClampMagnitude(commandScaleRatio \* config.commandScale \* command, config.maxCommandMagnitude) \* followingBody->Mass;
-followingBody->AddLinearImpulse(impulse);
+    var command = positionPid.UpdateCommand(error, f.DeltaTime, config.pidSettings, ignoreIntegration: config.ignorePidIntegrationWhileColliding && isColliding);
+    var impulse = FPVector3.ClampMagnitude(commandScaleRatio * config.commandScale * command, config.maxCommandMagnitude) * followingBody->Mass;
+    followingBody->AddLinearImpulse(impulse);
 }
 
 ```
@@ -520,39 +390,23 @@ C#
 // Release velocity kick
 if (config.applyReleaseVelocityKick)
 {
-var velocityMagnitude = grabbableBody->Velocity.Magnitude;
-if (config.minVelocityTriggeringKick <= velocityMagnitude && velocityMagnitude <= config.maxVelocityTriggeringKick)
-{
-grabbableBody->Velocity = config.velocityKickFactor \* grabbableBody->Velocity;
-}
+    var velocityMagnitude = grabbableBody->Velocity.Magnitude;
+    if (config.minVelocityTriggeringKick <= velocityMagnitude && velocityMagnitude <= config.maxVelocityTriggeringKick)
+    {
+        grabbableBody->Velocity = config.velocityKickFactor * grabbableBody->Velocity;
+    }
 }
 
 ```
 
 ### PhysicsHandsSystem
 
-The ```
-PhysicsHandSystem
-```
-
-applies the same logic than the ```
-Grabbablesystem
-```
-
-for force following grabbable, but for 2 invisible colliders always following the hand.
+The `PhysicsHandSystem` applies the same logic than the `Grabbablesystem` for force following grabbable, but for 2 invisible colliders always following the hand.
 
 The only specificities are that:
 
 - The physics hands collider is disabled when grabbing an object, to stop any haptic feedback
-- If a grabbable was colliding before being grabbed, we cancel this collision info stored in the Grabbable component (as, since we disable the collider, ```
-OnCollision3D
-```
-
-might not be triggered properly in the ```
-GrabbableSystem
-```
-
-)
+- If a grabbable was colliding before being grabbed, we cancel this collision info stored in the Grabbable component (as, since we disable the collider, `OnCollision3D` might not be triggered properly in the `GrabbableSystem`)
 
 ### RayAndLocomotionSystem
 
@@ -562,153 +416,124 @@ Please note that the player rotation is not described here to simplify the readi
 
 [![Quantum XR Teleport overview](/docs/img/quantum/v3/technical-samples/quantum-xr/quantum-xr-teleport.jpg)](/docs/img/quantum/v3/technical-samples/quantum-xr/quantum-xr-teleport.jpg) #### Reading hardware info
 
-The ```
-input
-```
-
-QTN file defines the input data to be synchronized.
+The `input` QTN file defines the input data to be synchronized.
 
 In order to reduce the bandwidth, FPVector3 & FPQuaternion are replaced by optimized versions that only serialize the 32 LSBs of the raw value, instead of the full 64 bits.
 
 This operation is lossless as long as values are within the FP usable range (-32K, 32K).
 
-For each hand, the input includes the the ray status : ```
-LeftHandIsRayEnabled
-```
-
-& ```
-RightHandIsRayEnabled
-```
-
-.
+For each hand, the input includes the the ray status : `LeftHandIsRayEnabled` & `RightHandIsRayEnabled`.
 
 C#
 
 ```csharp
-import struct FPVector3RawInt(12);
-import struct FPQuaternionRawInt(16);
-
-input
-{
-// Headset
-FPVector3RawInt HeadsetPosition; // Local position relatively to the rig root
-FPQuaternionRawInt HeadsetRotation; // Local position relatively to the rig root
-RigDetectionState DetectionState; // Rig parts state
-
-// LeftHand
-FPVector3RawInt LeftHandPosition; // Local position relatively to the rig root
-FPQuaternionRawInt LeftHandRotation; // Local position relatively to the rig root
-Button LeftHandIsRayEnabled; // RayCast Status
-Button LeftHandIsGrabbing;
-Byte LeftHandGripLevel;
-Byte LeftHandTriggerLevel;
-button LeftHandIsThumbTouched;
-button LeftHandIsIndexTouched;
-
-// RightHand
-FPVector3RawInt RightHandPosition; // Local position relatively to the rig root
-FPQuaternionRawInt RightHandRotation; // Local position relatively to the rig root
-Button RightHandIsRayEnabled; // RayCast Status
-Button RightHandIsGrabbing;
-Byte RightHandGripLevel;
-Byte RightHandTriggerLevel;
-button RightHandIsThumbTouched;
-button RightHandIsIndexTouched;
-}
+        import struct FPVector3RawInt(12);
+        import struct FPQuaternionRawInt(16);
+        input
+        {
+            // Headset
+            FPVector3RawInt HeadsetPosition;     // Local position relatively to the rig root
+            FPQuaternionRawInt HeadsetRotation;  // Local position relatively to the rig root
+            RigDetectionState DetectionState;    // Rig parts state
+            // LeftHand
+            FPVector3RawInt LeftHandPosition;     // Local position relatively to the rig root
+            FPQuaternionRawInt LeftHandRotation;  // Local position relatively to the rig root
+            Button LeftHandIsRayEnabled;          // RayCast Status
+            Button LeftHandIsGrabbing;
+            Byte LeftHandGripLevel;
+            Byte LeftHandTriggerLevel;
+            button LeftHandIsThumbTouched;
+            button LeftHandIsIndexTouched;
+            // RightHand
+            FPVector3RawInt RightHandPosition;     // Local position relatively to the rig root
+            FPQuaternionRawInt RightHandRotation;  // Local position relatively to the rig root
+            Button RightHandIsRayEnabled;          // RayCast Status
+            Button RightHandIsGrabbing;
+            Byte RightHandGripLevel;
+            Byte RightHandTriggerLevel;
+            button RightHandIsThumbTouched;
+            button RightHandIsIndexTouched;
+        }
 
 ```
 
-The ```
-QuantumXRInput
-```
-
-script is responsible for collecting Unity inputs and passing them into the Quantum engine
+The `QuantumXRInput` script is responsible for collecting Unity inputs and passing them into the Quantum engine
 
 C#
 
 ```csharp
 
-private void OnEnable()
-{
-QuantumCallback.Subscribe(this, (CallbackPollInput callback) => PollInput(callback));
-}
-
-public void PollInput(CallbackPollInput callback)
-{
-Quantum.Input input = new Quantum.Input();
-if (hardwareRig == null)
-{
-hardwareRig = FindObjectOfType<HardwareRig>();
-}
-if (hardwareRig)
-{
-var headsetPosition = hardwareRig.transform.InverseTransformPoint(hardwareRig.headset.transform.position).ToFPVector3();
-var headsetRotation = (Quaternion.Inverse(hardwareRig.transform.rotation) \* hardwareRig.headset.transform.rotation).ToFPQuaternion();
-input.HeadsetPosition = (FPVector3RawInt)headsetPosition;
-input.HeadsetRotation = (FPQuaternionRawInt)headsetRotation;
-
-var leftHandInfo = FillHandInfo(hardwareRig.leftHand);
-input.LeftHandPosition = (FPVector3RawInt)leftHandInfo.Position;
-input.LeftHandRotation = (FPQuaternionRawInt)leftHandInfo.Rotation;
-input.LeftHandIsRayEnabled = leftHandInfo.IsRayEnabled;
-input.LeftHandIsGrabbing = leftHandInfo.IsGrabbing;
-input.LeftHandGripLevel = leftHandInfo.Buttons.GripLevel;
-input.LeftHandTriggerLevel = leftHandInfo.Buttons.TriggerLevel;
-input.LeftHandIsThumbTouched = leftHandInfo.Buttons.IsThumbTouched;
-input.LeftHandIsIndexTouched = leftHandInfo.Buttons.IsIndexTouched;
-
-var rightHandInfo = FillHandInfo(hardwareRig.rightHand);
-input.RightHandPosition = (FPVector3RawInt)rightHandInfo.Position;
-input.RightHandRotation = (FPQuaternionRawInt)rightHandInfo.Rotation;
-input.RightHandIsRayEnabled = rightHandInfo.IsRayEnabled;
-input.RightHandIsGrabbing = rightHandInfo.IsGrabbing;
-input.RightHandGripLevel = rightHandInfo.Buttons.GripLevel;
-input.RightHandTriggerLevel = rightHandInfo.Buttons.TriggerLevel;
-input.RightHandIsThumbTouched = rightHandInfo.Buttons.IsThumbTouched;
-input.RightHandIsIndexTouched = rightHandInfo.Buttons.IsIndexTouched;
-
-input.DetectionState = RigDetectionState.Detected;
-}
-else
-{
-Debug.LogError("Input polled while hardware rig is not found");
-input.DetectionState = RigDetectionState.NotDetected;
-}
-
-callback.SetInput(input, DeterministicInputFlags.Repeatable);
-}
+        private void OnEnable()
+        {
+            QuantumCallback.Subscribe(this, (CallbackPollInput callback) => PollInput(callback));
+        }
+        public void PollInput(CallbackPollInput callback)
+        {
+            Quantum.Input input = new Quantum.Input();
+            if (hardwareRig == null)
+            {
+                hardwareRig = FindObjectOfType<HardwareRig>();
+            }
+            if (hardwareRig)
+            {
+                var headsetPosition = hardwareRig.transform.InverseTransformPoint(hardwareRig.headset.transform.position).ToFPVector3();
+                var headsetRotation = (Quaternion.Inverse(hardwareRig.transform.rotation) * hardwareRig.headset.transform.rotation).ToFPQuaternion();
+                input.HeadsetPosition = (FPVector3RawInt)headsetPosition;
+                input.HeadsetRotation = (FPQuaternionRawInt)headsetRotation;
+                var leftHandInfo = FillHandInfo(hardwareRig.leftHand);
+                input.LeftHandPosition = (FPVector3RawInt)leftHandInfo.Position;
+                input.LeftHandRotation = (FPQuaternionRawInt)leftHandInfo.Rotation;
+                input.LeftHandIsRayEnabled = leftHandInfo.IsRayEnabled;
+                input.LeftHandIsGrabbing = leftHandInfo.IsGrabbing;
+                input.LeftHandGripLevel = leftHandInfo.Buttons.GripLevel;
+                input.LeftHandTriggerLevel = leftHandInfo.Buttons.TriggerLevel;
+                input.LeftHandIsThumbTouched = leftHandInfo.Buttons.IsThumbTouched;
+                input.LeftHandIsIndexTouched = leftHandInfo.Buttons.IsIndexTouched;
+                var rightHandInfo = FillHandInfo(hardwareRig.rightHand);
+                input.RightHandPosition = (FPVector3RawInt)rightHandInfo.Position;
+                input.RightHandRotation = (FPQuaternionRawInt)rightHandInfo.Rotation;
+                input.RightHandIsRayEnabled = rightHandInfo.IsRayEnabled;
+                input.RightHandIsGrabbing = rightHandInfo.IsGrabbing;
+                input.RightHandGripLevel = rightHandInfo.Buttons.GripLevel;
+                input.RightHandTriggerLevel = rightHandInfo.Buttons.TriggerLevel;
+                input.RightHandIsThumbTouched = rightHandInfo.Buttons.IsThumbTouched;
+                input.RightHandIsIndexTouched = rightHandInfo.Buttons.IsIndexTouched;
+                input.DetectionState = RigDetectionState.Detected;
+            }
+            else
+            {
+                Debug.LogError("Input polled while hardware rig is not found");
+                input.DetectionState = RigDetectionState.NotDetected;
+            }
+            callback.SetInput(input, DeterministicInputFlags.Repeatable);
+        }
 
 ```
 
 #### Quantum teleport request processing
 
-The locomotion QTN file defines the ```
-LocomotionRay
-```
-
-component.
+The locomotion QTN file defines the `LocomotionRay` component.
 
 Qtn
 
 ```cs
 component LocomotionRay{
-FPVector3 PositionOffset;
-FPVector3 RotationOffset;
-\[ExcludeFromPrototype\]
-LocomotionRayState State;
-\[ExcludeFromPrototype\]
-FPVector3 Target;
-AssetRef<LocomotionConfig> Config;
-\[...\]
+    FPVector3 PositionOffset;
+    FPVector3 RotationOffset;
+    [ExcludeFromPrototype]
+    LocomotionRayState State;
+    [ExcludeFromPrototype]
+    FPVector3 Target;
+    AssetRef<LocomotionConfig> Config;
+    [...]
 }
-
 enum LocomotionRayState{
-NotPointing,
-PointingValidTarget,
-PointingInvalidTarget,
-MoveToTargetRequested,
-AttractableGrabbableTargeted,
-AttractingGrabbable
+    NotPointing,
+    PointingValidTarget,
+    PointingInvalidTarget,
+    MoveToTargetRequested,
+    AttractableGrabbableTargeted,
+    AttractingGrabbable
 }
 
 ```
@@ -717,232 +542,157 @@ This component must be added on each hand entity.
 
 ![Quantum XR hand prototype](/docs/img/quantum/v3/technical-samples/quantum-xr/quantum-xr-hand-prototype.jpg)
 
-So, on the Quantum side, at each ```
-Update()
-```
-
-, the ```
-RayAndLocomotionSystem
-```
-
-can read the input provided by Unity and update the locomotion ray state.
+So, on the Quantum side, at each `Update()`, the `RayAndLocomotionSystem` can read the input provided by Unity and update the locomotion ray state.
 
 C#
 
 ```csharp
 public override void Update(Frame frame, ref RayAndLocomotionSystem.Filter filter)
 {
-var input = frame.GetPlayerInput(filter.PlayerLink->Player);
-\[...\]
+    var input = frame.GetPlayerInput(filter.PlayerLink->Player);
+    [...]
+    if (Rig.TryGetComponents<LocomotionRay>(frame, filter.Rig->LeftHandEntity, out var leftHandLocomotionRay, out var leftHandTransform) == false)
+        return;
+    if (Rig.TryGetComponents<LocomotionRay>(frame, filter.Rig->RightHandEntity, out var rightHandLocomotionRay, out var rightHandTransform) == false)
+        return;
 
-if (Rig.TryGetComponents<LocomotionRay>(frame, filter.Rig->LeftHandEntity, out var leftHandLocomotionRay, out var leftHandTransform) == false)
-return;
-if (Rig.TryGetComponents<LocomotionRay>(frame, filter.Rig->RightHandEntity, out var rightHandLocomotionRay, out var rightHandTransform) == false)
-return;
-
-var leftHandInfo = HandInfo.HandInfoFromInput(HandSide.Left, input);
-var rightHandInfo = HandInfo.HandInfoFromInput(HandSide.Right, input);
-
-UpdateRayState(f, ref filter, input->LeftHand, leftHandTransform, filter.Rig->LeftHandEntity, leftHandLocomotionRay, out var leftHitEntity);
-UpdateRayState(f, ref filter, input->RightHand, rightHandTransform, filter.Rig->RightHandEntity, rightHandLocomotionRay, out var rightHitEntity);
-\[...\]
+    var leftHandInfo = HandInfo.HandInfoFromInput(HandSide.Left, input);
+    var rightHandInfo = HandInfo.HandInfoFromInput(HandSide.Right, input);
+    UpdateRayState(f, ref filter, input->LeftHand, leftHandTransform, filter.Rig->LeftHandEntity, leftHandLocomotionRay, out var leftHitEntity);
+    UpdateRayState(f, ref filter, input->RightHand, rightHandTransform, filter.Rig->RightHandEntity, rightHandLocomotionRay, out var rightHitEntity);
+    [...]
 }
 
 ```
 
-If the player requested a teleport and if the target is a valid target, then the event ```
-OnMoveToTargetRequested
-```
-
-is raised.
+If the player requested a teleport and if the target is a valid target, then the event `OnMoveToTargetRequested` is raised.
 
 C#
 
 ```csharp
 
-public unsafe void UpdateRayState(Frame frame, ref Filter filter, HandInfo handInfo, Transform3D\* handTransform, EntityRef handEntity, LocomotionRay\* locomotionRay, out EntityRef hitEntity)
-{
-\[...\]
-else if (locomotionRay->State == LocomotionRayState.PointingValidTarget)
-{
-// Planning teleport
-locomotionRay->State = LocomotionRayState.MoveToTargetRequested;
-frame.Events.OnMoveToTargetRequested(filter.PlayerLink->Player, locomotionRay->Target);
-}
-\[...\]
-}
+ public unsafe void UpdateRayState(Frame frame, ref Filter filter, HandInfo handInfo, Transform3D* handTransform, EntityRef handEntity, LocomotionRay* locomotionRay, out EntityRef hitEntity)
+        {
+         [...]
+            else if (locomotionRay->State == LocomotionRayState.PointingValidTarget)
+            {
+                // Planning teleport
+                locomotionRay->State = LocomotionRayState.MoveToTargetRequested;
+                frame.Events.OnMoveToTargetRequested(filter.PlayerLink->Player, locomotionRay->Target);
+            }
+            [...]
+        }
 
 ```
 
-Please note that a locomotion and a blocking layer masks can be defined in a ```
-LocomotionConfig
-```
-
-asset file in order to specify which objects block the raycast or can be used as a teleport target.
+Please note that a locomotion and a blocking layer masks can be defined in a `LocomotionConfig` asset file in order to specify which objects block the raycast or can be used as a teleport target.
 
 #### Unity prepares the teleportation
 
-On the Unity side, event reception is handled by the ```
-RigView
-```
-
-.
+On the Unity side, event reception is handled by the `RigView`.
 
 If the teleport request event has been raised by the local player, a fade to black is started to hide the scene and avoid kinetosis due to the change in position.
 
-When the fade in is complete, Unity informs the Quantum engine thanks to the ```
-CommandReadyForTeleport
-```
-
-command.
+When the fade in is complete, Unity informs the Quantum engine thanks to the `CommandReadyForTeleport` command.
 
 C#
 
 ```csharp
-public class RigView : QuantumEntityViewComponent<XRViewContext>
-{
+ public class RigView : QuantumEntityViewComponent<XRViewContext>
+    {
 
-private void Start()
-{
-QuantumEvent.Subscribe<EventOnMoveToTargetRequested>(listener: this, handler: MoveToTargetRequested);
-QuantumEvent.Subscribe<EventOnMoveToTargetDone>(listener: this, handler: MoveToTargetDone);
-\[...\]
-}
-
-private void MoveToTargetRequested(EventOnMoveToTargetRequested callback)
-{
-if (isLocalUserRig == false) return;
-var movingPlayer = callback.Player;
-var rigPlayer = VerifiedFrame.Get<PlayerLink>(EntityRef).Player;
-if (rigPlayer != movingPlayer) return;
-// fadein
-StartCoroutine(TeleportPreparation());
-}
-
-IEnumerator TeleportPreparation()
-{
-if (ViewContext.hardwareRig.headset.fader)
-{
-yield return ViewContext.hardwareRig.headset.fader.FadeIn();
-}
-Game.SendCommand(new CommandReadyForTeleport());
-}
+        private void Start()
+        {
+            QuantumEvent.Subscribe<EventOnMoveToTargetRequested>(listener: this, handler: MoveToTargetRequested);
+            QuantumEvent.Subscribe<EventOnMoveToTargetDone>(listener: this, handler: MoveToTargetDone);
+            [...]
+        }
+        private void MoveToTargetRequested(EventOnMoveToTargetRequested callback)
+        {
+            if (isLocalUserRig == false) return;
+            var movingPlayer = callback.Player;
+            var rigPlayer = VerifiedFrame.Get<PlayerLink>(EntityRef).Player;
+            if (rigPlayer != movingPlayer) return;
+            // fadein
+            StartCoroutine(TeleportPreparation());
+        }
+        IEnumerator TeleportPreparation()
+        {
+            if (ViewContext.hardwareRig.headset.fader)
+            {
+                yield return ViewContext.hardwareRig.headset.fader.FadeIn();
+            }
+            Game.SendCommand(new CommandReadyForTeleport());
+        }
 
 ```
 
 #### Quantum teleportation
 
-At each ```
-Update()
-```
+At each `Update()`, the Quantum `RayAndLocomotionSystem` checks if the `CommandReadyForTeleport` command occured.
 
-, the Quantum ```
-RayAndLocomotionSystem
-```
-
-checks if the ```
-CommandReadyForTeleport
-```
-
-command occured.
-
-If so, it moves the rig parts to the target position and raised the ```
-OnMoveToTargetDone
-```
-
-event.
+If so, it moves the rig parts to the target position and raised the `OnMoveToTargetDone` event.
 
 C#
 
 ```csharp
 public override void Update(Frame frame, ref RayAndLocomotionSystem.Filter filter)
 {
-\[...\]
-CheckTeleportAuthorization(frame, ref filter, leftHandLocomotionRay, rightHandLocomotionRay, leftHandTransform, rightHandTransform);
-\[...\]
+    [...]
+    CheckTeleportAuthorization(frame, ref filter, leftHandLocomotionRay, rightHandLocomotionRay, leftHandTransform, rightHandTransform);
+    [...]
 }
-
-void CheckTeleportAuthorization(Frame frame, ref Filter filter, LocomotionRay\* leftHandLocomotionRay, LocomotionRay\* rightHandLocomotionRay, Transform3D\* leftHandTransform, Transform3D\* rightHandTransform)
+void CheckTeleportAuthorization(Frame frame, ref Filter filter, LocomotionRay* leftHandLocomotionRay, LocomotionRay* rightHandLocomotionRay, Transform3D* leftHandTransform, Transform3D* rightHandTransform)
 {
-// check command
-var command = frame.GetPlayerCommand(filter.PlayerLink->Player) as CommandReadyForTeleport;
-if (command != null)
-{
-LocomotionRay\* sourceRay = null;
-if (leftHandLocomotionRay->State == LocomotionRayState.MoveToTargetRequested)
-sourceRay = leftHandLocomotionRay;
-else if (rightHandLocomotionRay->State == LocomotionRayState.MoveToTargetRequested)
-sourceRay = rightHandLocomotionRay;
-
-if (sourceRay != null)
-{
-Teleport(frame, ref filter, sourceRay->Target, leftHandTransform, rightHandTransform);
-frame.Events.OnMoveToTargetDone(filter.PlayerLink->Player, sourceRay->Target);
-sourceRay->State = LocomotionRayState.NotPointing;
-}
-}
+    // check command
+    var command = frame.GetPlayerCommand(filter.PlayerLink->Player) as CommandReadyForTeleport;
+    if (command != null)
+    {
+        LocomotionRay* sourceRay = null;
+        if (leftHandLocomotionRay->State == LocomotionRayState.MoveToTargetRequested)
+            sourceRay = leftHandLocomotionRay;
+        else if (rightHandLocomotionRay->State == LocomotionRayState.MoveToTargetRequested)
+            sourceRay = rightHandLocomotionRay;
+        if (sourceRay != null)
+        {
+            Teleport(frame, ref filter, sourceRay->Target, leftHandTransform, rightHandTransform);
+            frame.Events.OnMoveToTargetDone(filter.PlayerLink->Player, sourceRay->Target);
+            sourceRay->State = LocomotionRayState.NotPointing;
+        }
+    }
 }
 
 ```
 
 #### Unity end of teleportation
 
-Like for the ```
-OnMoveToTargetRequested
-```
-
-event, on the Unity side the ```
-RigView
-```
-
-is in charge to received the ```
-OnMoveToTargetDone
-```
-
-event in order to process the fade out and synchronize the hardware rig position to the network rig position set by Quantum engine.
+Like for the `OnMoveToTargetRequested` event, on the Unity side the `RigView` is in charge to received the `OnMoveToTargetDone` event in order to process the fade out and synchronize the hardware rig position to the network rig position set by Quantum engine.
 
 C#
 
 ```csharp
 
 private void MoveToTargetDone(EventOnMoveToTargetDone callback)
-{
-// Check that we are the local user, and that this rig is the one related to the local user, before applying fade and camera moves based on the rig move
-var movingPlayer = callback.Player;
-if (IsLocalRigPLayer(movingPlayer) == false) return;
-
-// Synchronize hardware rig position to network rig position (ensure that the camera, located in the hardware rig, will follow the actual network head position)
-var rigTransform3D = PredictedFrame.Get<Transform3D>(EntityRef);
-ViewContext.hardwareRig.transform.position = rigTransform3D.Position.ToUnityVector3();
-// fadeout
-StartCoroutine(TeleportEnd());
-}
+        {
+            // Check that we are the local user, and that this rig is the one related to the local user, before applying fade and camera moves based on the rig move
+            var movingPlayer = callback.Player;
+            if (IsLocalRigPLayer(movingPlayer) == false) return;
+            // Synchronize hardware rig position to network rig position (ensure that the camera, located in the hardware rig, will follow the actual network head position)
+            var rigTransform3D = PredictedFrame.Get<Transform3D>(EntityRef);
+            ViewContext.hardwareRig.transform.position = rigTransform3D.Position.ToUnityVector3();
+            // fadeout
+            StartCoroutine(TeleportEnd());
+        }
 
 ```
 
 #### Ray beam visual
 
-Each hand entity has the ```
-LocomotionHandler
-```
+Each hand entity has the `LocomotionHandler` component.
 
-component.
+It is in charge of displaying the ray beam based on the `LocomotionRayState` state machine of the `LocomotionRay` entity.
 
-It is in charge of displaying the ray beam based on the ```
-LocomotionRayState
-```
-
-state machine of the ```
-LocomotionRay
-```
-
-entity.
-
-Also, this class implement the ```
-IHandViewListener
-```
-
-interface to update the ray position when the hand position changed.
+Also, this class implement the `IHandViewListener` interface to update the ray position when the hand position changed.
 
 ## Gameplays specific elements
 
@@ -952,98 +702,40 @@ interface to update the ray position when the hand position changed.
 
 Some games require trajectory analysis to determine whether a player has made a successful shot, i.e. whether the ball enters a defined goal or gate.
 
-To do so, the ```
-ScoringGates
-```
+To do so, the `ScoringGates` QTN file defines:
 
-QTN file defines:
-
-- ```
-ScoringGate
-```
-
-component: it is used to define gate properties (size and direction to mark a point). To add a scoring gate in the scene, a Quantum entity with the ```
-ScoringGate
-```
-
-entity must be added.
-- ```
-Scorable
-```
-
-component: it must be added the objects (balls) to be thrown into the gate.
-- ```
-OnScore
-```
-
-event is raised when a ```
-Scorable
-```
-
-entity passed through the gate.
+- `ScoringGate` component: it is used to define gate properties (size and direction to mark a point). To add a scoring gate in the scene, a Quantum entity with the `ScoringGate` entity must be added.
+- `Scorable` component: it must be added the objects (balls) to be thrown into the gate.
+- `OnScore` event is raised when a `Scorable` entity passed through the gate.
 
 Please note that it is possible to define if the ball must enter the gate in a specific direction.
 
-The ball trajectory anaylis is managed by the ```
-ScoringGateSystem
-```
+The ball trajectory anaylis is managed by the `ScoringGateSystem`.
 
-.
+The filter provides all entities with a `ScoringGate` and the `OnTrigger3D()` method generates the `OnScore` event when the ball has passed through the top & the bottom sections.
 
-The filter provides all entities with a ```
-ScoringGate
-```
+The `ConfigurePhysicsCallbacks()` method verifies that the physics callback flags are properly set on the gate.
 
-and the ```
-OnTrigger3D()
-```
+On Unity side, the `ScoringGateView` is in charge to change the gate material and play an audio file when the player made a successful shot.
 
-method generates the ```
-OnScore
-```
-
-event when the ball has passed through the top & the bottom sections.
-
-The ```
-ConfigurePhysicsCallbacks()
-```
-
-method verifies that the physics callback flags are properly set on the gate.
-
-On Unity side, the ```
-ScoringGateView
-```
-
-is in charge to change the gate material and play an audio file when the player made a successful shot.
-
-To do so, it subscribes to the Quantum ```
-OnScore
-```
-
-event and call the ```
-Score()
-```
-
-method to generate the visual and audio feedbacks.
+To do so, it subscribes to the Quantum `OnScore` event and call the `Score()` method to generate the visual and audio feedbacks.
 
 C#
 
 ```csharp
-private void Start()
-{
-QuantumEvent.Subscribe<EventOnScore>(listener: this, handler: Score);
-}
+        private void Start()
+        {
+            QuantumEvent.Subscribe<EventOnScore>(listener: this, handler: Score);
+        }
 
-
-private void Score(EventOnScore callback)
-{
-if (callback.scoringGateEntity != EntityRef) return;
-
-restoreMaterialTime = Time.time + scoredEffectDuration;
-scoringRenderer.material = scoredMatarial;
-if(audioSource)
-audioSource.Play();
-}
+        private void Score(EventOnScore callback)
+        {
+            if (callback.scoringGateEntity != EntityRef) return;
+            restoreMaterialTime = Time.time + scoredEffectDuration;
+            scoringRenderer.material = scoredMatarial;
+            if(audioSource)
+                audioSource.Play();
+        }
 
 ```
 
@@ -1051,11 +743,7 @@ audioSource.Play();
 
 Some objects of the scene (balls, rackets) can be thrown out of the player's reach.
 
-In order to return these objects to their initial position when they are too far away, the ```
-BoundarySystem
-```
-
-checks whether entities are inside bounds and teleports them accordingly.
+In order to return these objects to their initial position when they are too far away, the `BoundarySystem` checks whether entities are inside bounds and teleports them accordingly.
 
 To do so, a Boundary QTN file contains the datas required for this feature.
 
@@ -1064,48 +752,40 @@ Qtn
 ```cs
 component Bounded
 {
-FPVector3 InitialPosition;
-FPQuaternion InitialRotation;
-bool Initialized;
-FPVector3 Extends;
-FPVector3 LimitCenter;
+    FPVector3 InitialPosition;
+    FPQuaternion InitialRotation;
+    bool Initialized;
+    FPVector3 Extends;
+    FPVector3 LimitCenter;
 }
 
 ```
 
-In the ```
-BoundarySystem
-```
-
-, the filter retrieves all entities with the Bounded component
+In the `BoundarySystem`, the filter retrieves all entities with the Bounded component
 
 C#
 
 ```csharp
-public struct Filter
-{
-public EntityRef Entity;
-public Bounded\* Bounded;
-public Transform3D\* Transform;
-}
+        public struct Filter
+        {
+            public EntityRef Entity;
+            public Bounded* Bounded;
+            public Transform3D* Transform;
+        }
 
 ```
 
-In the ```
-Update()
-```
-
-, if the entity start position has not yet been saved (at launch), them the intial position & rotation are saved.
+In the `Update()`, if the entity start position has not yet been saved (at launch), them the intial position & rotation are saved.
 
 C#
 
 ```csharp
-if(filter.Bounded->Initialized == false)
-{
-filter.Bounded->Initialized = true;
-filter.Bounded->InitialPosition = filter.Transform->Position;
-filter.Bounded->InitialRotation = filter.Transform->Rotation;
-}
+ if(filter.Bounded->Initialized == false)
+            {
+                filter.Bounded->Initialized = true;
+                filter.Bounded->InitialPosition = filter.Transform->Position;
+                filter.Bounded->InitialRotation = filter.Transform->Rotation;
+            }
 
 ```
 
@@ -1116,15 +796,15 @@ In this case, in addition to reinitialized the object position & rotation, it is
 C#
 
 ```csharp
-if (IsOutOfBounds(filter.Transform->Position, filter.Bounded->LimitCenter, extends))
-{
-if(f.Unsafe.TryGetPointer<PhysicsBody3D>(filter.Entity,out var physicsBody3D))
-{
-physicsBody3D->Velocity = FPVector3.Zero;
-physicsBody3D->AngularVelocity = FPVector3.Zero;
-}
-filter.Transform->Teleport(f, filter.Bounded->InitialPosition, filter.Bounded->InitialRotation);
-}
+   if (IsOutOfBounds(filter.Transform->Position, filter.Bounded->LimitCenter, extends))
+            {
+                if(f.Unsafe.TryGetPointer<PhysicsBody3D>(filter.Entity,out var physicsBody3D))
+                {
+                    physicsBody3D->Velocity = FPVector3.Zero;
+                    physicsBody3D->AngularVelocity = FPVector3.Zero;
+                }
+                filter.Transform->Teleport(f, filter.Bounded->InitialPosition, filter.Bounded->InitialRotation);
+            }
 
 ```
 
@@ -1132,11 +812,7 @@ Of course, to activate this functionality on an object, the component must be ad
 
 If no extends is defined in the component, a default extends of 12 meters is set.
 
-Also, although this is not shown in the scene, thanks to the ```
-LimitCenter
-```
-
-variable it is possible to define a specific center for the bounds.
+Also, although this is not shown in the scene, thanks to the `LimitCenter` variable it is possible to define a specific center for the bounds.
 
 For basketball, for example, it would be possible to define the center of the bound at the shooting position, and reset the ball's position as soon as it is a few meters from the shooting position to avoid fetching the ball after every shot.
 
@@ -1148,27 +824,11 @@ The punching ball game is quite easy to develop with Quantum.
 
 This consists of adding a spring joint to an object that can be punch with the hand.
 
-So, as explain in the Physics Hands chapter, the ball must be configured with the ```
-PhysicsHandsPushable
-```
+So, as explain in the Physics Hands chapter, the ball must be configured with the `PhysicsHandsPushable` layer.
 
-layer.
+A `PhysicsJoint3D` with a `Spring` type must be added to the ball Quantum entity. The connected entity is en entity located on the game support.
 
-A ```
-PhysicsJoint3D
-```
-
-with a ```
-Spring
-```
-
-type must be added to the ball Quantum entity. The connected entity is en entity located on the game support.
-
-The rope visual is managed by the very simple ```
-RopeAnchor
-```
-
-component : it draw a line renderer between the top of the ball and the other side of the rope (the entity located on the game support).
+The rope visual is managed by the very simple `RopeAnchor` component : it draw a line renderer between the top of the ball and the other side of the rope (the entity located on the game support).
 
 ### Plinko
 
@@ -1176,104 +836,80 @@ component : it draw a line renderer between the top of the ball and the other si
 
 For this game, the only thing that has been developed is to get an audio feedback only when the ball hits one of the obstacles.
 
-To achieve this, an ```
-OnCollisionDetectedWithStaticCollider
-```
-
-event is defined in the ```
-qrabbing
-```
-
-QTN file.
+To achieve this, an `OnCollisionDetectedWithStaticCollider` event is defined in the `qrabbing` QTN file.
 
 Qtn
 
 ```cs
 event OnCollisionDetectedWithStaticCollider {
-EntityRef GrabbableEntity;
-EntityRef CollidedEntity;
-String CollidedEntityName;
-LayerMask CollidedEntityLayer;
-String CollidedEntityTag;
-nothashed FP Velocity;
+    EntityRef GrabbableEntity;
+    EntityRef CollidedEntity;
+    String CollidedEntityName;
+    LayerMask CollidedEntityLayer;
+    String CollidedEntityTag;
+    nothashed FP Velocity;
 }
 
 ```
 
-This event includes the collided entity tag and is called by the ```
-GrabbableSystem
-```
-
-on the ```
-OnCollisionEnter3D
-```
-
-callback if the grabbable object collides with a static entity.
+This event includes the collided entity tag and is called by the `GrabbableSystem` on the `OnCollisionEnter3D` callback if the grabbable object collides with a static entity.
 
 C#
 
 ```csharp
 public void OnCollisionEnter3D(Frame frame, CollisionInfo3D info)
 {
-var grabbableEntity = info.Entity;
-var infoStatic = info.IsStatic;
-
-if (frame.Unsafe.TryGetPointer<Grabbable>(grabbableEntity, out var grabbable))
-{
-if (frame.Unsafe.TryGetPointer<PhysicsBody3D>(grabbableEntity, out var grabbablePhysicsBody3D))
-{
-if (infoStatic)
-{
-var collidedEntity = info.Other;
-var collisionStaticData = info.StaticData;
-var collidedEntityName = collisionStaticData.Name;
-var collidedEntityLayer = collisionStaticData.Layer;
-var collidedEntityTag = collisionStaticData.Tag;
-frame.Events.OnCollisionDetectedWithStaticCollider(grabbableEntity, collidedEntity, collidedEntityName, collidedEntityLayer, collidedEntityTag, grabbablePhysicsBody3D->Velocity.Magnitude);
-}
-else
-{
-frame.Events.OnCollisionDetectedWithDynamicCollider(grabbableEntity, grabbablePhysicsBody3D->Velocity.Magnitude);
-}
-}
-}
+    var grabbableEntity = info.Entity;
+    var infoStatic = info.IsStatic;
+    if (frame.Unsafe.TryGetPointer<Grabbable>(grabbableEntity, out var grabbable))
+    {
+        if (frame.Unsafe.TryGetPointer<PhysicsBody3D>(grabbableEntity, out var grabbablePhysicsBody3D))
+        {
+            if (infoStatic)
+            {
+                var collidedEntity = info.Other;
+                var collisionStaticData = info.StaticData;
+                var collidedEntityName = collisionStaticData.Name;
+                var collidedEntityLayer = collisionStaticData.Layer;
+                var collidedEntityTag = collisionStaticData.Tag;
+                frame.Events.OnCollisionDetectedWithStaticCollider(grabbableEntity, collidedEntity, collidedEntityName, collidedEntityLayer, collidedEntityTag, grabbablePhysicsBody3D->Velocity.Magnitude);
+            }
+            else
+            {
+                frame.Events.OnCollisionDetectedWithDynamicCollider(grabbableEntity, grabbablePhysicsBody3D->Velocity.Magnitude);
+            }
+        }
+    }
 }
 
 ```
 
-On the Unity side, the ```
-GrabbableView
-```
-
-subscribes to this event and play the audio clip only if the collided entity tag match with the tag filter configured.
+On the Unity side, the `GrabbableView` subscribes to this event and play the audio clip only if the collided entity tag match with the tag filter configured.
 
 C#
 
 ```csharp
-private void Awake()
-{
-\[...\]
-if (enableAudioFeedback)
-{
-if (audioSource == null)
-audioSource = gameObject.GetComponent<AudioSource>();
-
-QuantumEvent.Subscribe<EventOnCollisionDetectedWithStaticCollider>(listener: this, handler: CollisionDetectedWithStaticCollider);
-QuantumEvent.Subscribe<EventOnCollisionDetectedWithDynamicCollider>(listener: this, handler: CollisionDetectedWithDynamicCollider);
-}
-}
-
-private void CollisionDetectedWithStaticCollider(EventOnCollisionDetectedWithStaticCollider callback)
-{
-if (callback.GrabbableEntity == EntityRef)
-{
-if(useStaticColliderTagFilter && staticColliderTagFilter != callback.CollidedEntityTag)
-return;
-
-if(callback.Velocity.AsFloat > minVelocityForAudioFeedback)
-PlayAudioFeeback(Mathf.Clamp01(callback.Velocity.AsFloat / 10f));
-}
-}
+        private void Awake()
+        {
+            [...]
+            if (enableAudioFeedback)
+            {
+                if (audioSource == null)
+                    audioSource = gameObject.GetComponent<AudioSource>();
+                QuantumEvent.Subscribe<EventOnCollisionDetectedWithStaticCollider>(listener: this, handler: CollisionDetectedWithStaticCollider);
+                QuantumEvent.Subscribe<EventOnCollisionDetectedWithDynamicCollider>(listener: this, handler: CollisionDetectedWithDynamicCollider);
+            }
+        }
+        private void CollisionDetectedWithStaticCollider(EventOnCollisionDetectedWithStaticCollider callback)
+        {
+            if (callback.GrabbableEntity == EntityRef)
+            {
+                if(useStaticColliderTagFilter && staticColliderTagFilter != callback.CollidedEntityTag)
+                    return;
+                if(callback.Velocity.AsFloat > minVelocityForAudioFeedback)
+                    PlayAudioFeeback(Mathf.Clamp01(callback.Velocity.AsFloat / 10f));
+            }
+        }
 
 ```
 
@@ -1281,21 +917,9 @@ PlayAudioFeeback(Mathf.Clamp01(callback.Velocity.AsFloat / 10f));
 
 ![Quantum XR No Gravity ](/docs/img/quantum/v3/technical-samples/quantum-xr/quantum-xr-no-gravity.jpg)
 
-In this game we use scoring gates explained above and have configured the balls with the ```
-PhysicsHandsPushable
-```
+In this game we use scoring gates explained above and have configured the balls with the `PhysicsHandsPushable` layer so that players can punch them with their hands.
 
-layer so that players can punch them with their hands.
-
-To avoid gravity on the balls, the parameter ```
-Gravity Scale
-```
-
-of the ```
-PhysicsBody3D
-```
-
-is set to 0.
+To avoid gravity on the balls, the parameter `Gravity Scale` of the `PhysicsBody3D` is set to 0.
 
 ### Racket game
 

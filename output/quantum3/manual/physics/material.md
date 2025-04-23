@@ -31,7 +31,6 @@ C#
 ```csharp
 var material = f.FindAsset<PhysicsMaterial>("steel");
 collider.Material = material;
-
 f.Set(entity, collider);
 
 ```
@@ -46,8 +45,7 @@ C#
 
 ```csharp
 // this is NOT safe and cannot be rolled-back:
-collider->Material.Restitution = FP.\_0;
-
+collider->Material.Restitution = FP._0;
 // switching a reference is safe and can be rolled back:
 var newMaterial = f.FindAsset<PhysicsMaterial>("ice");
 collider->Material = newMaterial;

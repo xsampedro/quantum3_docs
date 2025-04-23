@@ -27,94 +27,42 @@ Running a Quantum replay requires four parts:
 
 ### Unity
 
-Before starting Quantum, set the ```
-RecordingFlags
-```
-
- to either ```
-Input
-```
-
-or ```
-All
-```
-
-.
+Before starting Quantum, set the `RecordingFlags` to either `Input` or `All`.
 
 C#
 
 ```cs
-\[Flags\]
-public enum RecordingFlags {
-None = 0, // records nothing, default setting
-Input = 1 << 0, // records input
-Checksums = 1 << 1, // records checksums (must be enabled)
-All = Input \| Checksums // recorded input and checksum
-}
+  [Flags]
+  public enum RecordingFlags {
+    None = 0,                 // records nothing, default setting
+    Input = 1 << 0,           // records input
+    Checksums = 1 << 1,       // records checksums (must be enabled)
+    All = Input | Checksums   // recorded input and checksum
+  }
 
 ```
 
-- Use the inspector ```
-  enum
-  ```
-
-   field of the ```
-  QuantumRunnerLocalDebug
-  ```
-
-   or
+- Use the inspector `enum` field of the `QuantumRunnerLocalDebug` or
 
 ![RunnerLocalDebug](/docs/img/quantum/v3/manual/replay/runner-local-debug.png)
 
-- Use the inspector ```
-  enum
-  ```
-
-   field in the ```
-  QuantumMenuUIController.ConnectArgs
-  ```
-
-   when using the Quantum menu or
+- Use the inspector `enum` field in the `QuantumMenuUIController.ConnectArgs` when using the Quantum menu or
 
 ![Menu UI Controller](/docs/img/quantum/v3/manual/replay/menu-ui-controller.png)
 
-- Set the flags on the ```
-  SessionRunner.Arguments
-  ```
-
-   when calling ```
-  SessionRunner.Start()
-  ```
-
-   or
+- Set the flags on the `SessionRunner.Arguments` when calling `SessionRunner.Start()` or
 
 ![SessionRunner.Arguments](/docs/img/quantum/v3/manual/replay/arguments-recording-flags.png)
 
-- Alternatively the input recording can also be started manually using ```
-  QuantumGame.StartRecordingInput()
-  ```
-
-  .
+- Alternatively the input recording can also be started manually using `QuantumGame.StartRecordingInput()`.
 
 PS: Input recording in general will create managed memory allocations.
 
-**Start** the game, then save the replay by selecting one of Unity Editor menu options below. The exported file can either include the asset db for convenience or exclude the asset db to keep the replay files size small. The default replay file location is ```
-Assets/QuantumUser/Replays
-```
+**Start** the game, then save the replay by selecting one of Unity Editor menu options below. The exported file can either include the asset db for convenience or exclude the asset db to keep the replay files size small. The default replay file location is `Assets/QuantumUser/Replays`. The default name consists of the current loaded map name and the datetime. It may export a second file with the `-DB` postfix for the excluded asset db.
 
-. The default name consists of the current loaded map name and the datetime. It may export a second file with the ```
--DB
-```
+`Quantum > Export > Replay (Include Asset DB)`
 
-postfix for the excluded asset db.
-
-```
-Quantum > Export > Replay (Include Asset DB)
-```
-
-```
-Quantum > Export > Replay (Exclude Asset DB)
-```
+`Quantum > Export > Replay (Exclude Asset DB)`
 
 Alternatively, create and save the replay file manually in code:
 
@@ -132,7 +80,7 @@ C#
 
 ```cs
 using (var file = File.Create("db.json")) {
-quantumGame.AssetSerializer.SerializeAssets(file, quantumGame.ResourceManager.LoadAllAssets().ToArray());
+  quantumGame.AssetSerializer.SerializeAssets(file, quantumGame.ResourceManager.LoadAllAssets().ToArray());
 }
 
 ```
@@ -144,51 +92,15 @@ To save a replay from a session running on the Quantum Public Cloud the replay w
 - [Quantum Webhook - ReplayStart](/quantum/current/manual/webhooks#replaystart)
 - [Quantum Webhook - ReplayChunk](/quantum/current/manual/webhooks#replaychunk)
 
-The start WebRequest comes with the ```
-SessionConfig
-```
+The start WebRequest comes with the `SessionConfig` and `RuntimeConfig` configuration files. The chunks will arrive frequently until `IsLast` is finally `true`, representing the streaming input from all players.
 
-and ```
-RuntimeConfig
-```
-
-configuration files. The chunks will arrive frequently until ```
-IsLast
-```
-
-is finally ```
-true
-```
-
-, representing the streaming input from all players.
-
-To make the replays playable in Unity, either serialize them in JSON into a ```
-QuantumReplayFile
-```
-
-class or create another data structure to store the required data.
+To make the replays playable in Unity, either serialize them in JSON into a `QuantumReplayFile` class or create another data structure to store the required data.
 
 ## How To Run A Replay
 
 ### Unity
 
-Instead of the ```
-QuantumRunnerLocalDebug
-```
-
- script use the ```
-QuantumRunnerLocalReplay
-```
-
-script to start a local game using a replay. Drag and drop the recorded file into the ```
-Replay File
-```
-
- field of the inspector. If the default file naming convention is used it will detect and set the asset ```
-Database File
-```
-
-automatically. Press play.
+Instead of the `QuantumRunnerLocalDebug` script use the `QuantumRunnerLocalReplay` script to start a local game using a replay. Drag and drop the recorded file into the `Replay File` field of the inspector. If the default file naming convention is used it will detect and set the asset `Database File` automatically. Press play.
 
 ![RunnerLocalReplay](/docs/img/quantum/v3/manual/replay/runner-local-replay.png)
 
@@ -208,74 +120,47 @@ Step 2: Create an input provider from the replay file. It will automatically cre
 C#
 
 ```cs
-\_replayInputProvider = replayFile.CreateInputProvider();
+_replayInputProvider = replayFile.CreateInputProvider();
 
 ```
 
-Step 3: Create the ```
-SessionRunner
-```
-
- arguments. For example, decode the binary ```
-RuntimeConfig
-```
-
-, set the simulation to ```
-DeterministicGameMode.Replay
-```
-
- mode. ```
-InitialTick
-```
-
-and ```
-FrameData
-```
-
- are only required if the replay does not start from the beginning.
+Step 3: Create the `SessionRunner` arguments. For example, decode the binary `RuntimeConfig`, set the simulation to `DeterministicGameMode.Replay` mode. `InitialTick` and `FrameData` are only required if the replay does not start from the beginning.
 
 C#
 
 ```cs
 var serializer = new QuantumUnityJsonSerializer();
 var runtimeConfig = serializer.ConfigFromByteArray<RuntimeConfig>(replayFile.RuntimeConfigData.Decode(), compressed: true);
-
 var arguments = new SessionRunner.Arguments {
-RunnerFactory = QuantumRunnerUnityFactory.DefaultFactory,
-RuntimeConfig = runtimeConfig,
-SessionConfig = replayFile.DeterministicConfig,
-ReplayProvider = \_replayInputProvider,
-GameMode = DeterministicGameMode.Replay,
-RunnerId = "LOCALREPLAY",
-PlayerCount = replayFile.DeterministicConfig.PlayerCount,
-InstantReplaySettings = InstantReplayConfig,
-InitialTick = replayFile.InitialTick,
-FrameData = replayFile.InitialFrameData,
-DeltaTimeType = DeltaTypeType
+  RunnerFactory = QuantumRunnerUnityFactory.DefaultFactory,
+  RuntimeConfig = runtimeConfig,
+  SessionConfig = replayFile.DeterministicConfig,
+  ReplayProvider = _replayInputProvider,
+  GameMode = DeterministicGameMode.Replay,
+  RunnerId = "LOCALREPLAY",
+  PlayerCount = replayFile.DeterministicConfig.PlayerCount,
+  InstantReplaySettings = InstantReplayConfig,
+  InitialTick = replayFile.InitialTick,
+  FrameData = replayFile.InitialFrameData,
+  DeltaTimeType = DeltaTypeType
 };
 
 ```
 
-Step 4: Use the asset database saved with the replay or an external asset database source or do not set a different ```
-ResourceManager
-```
-
-at all.
+Step 4: Use the asset database saved with the replay or an external asset database source or do not set a different `ResourceManager` at all.
 
 C#
 
 ```cs
 var assets = replayFile.AssetDatabaseData?.Decode();
 if (DatabaseFile != null) {
- assets = DatabaseFile.bytes;
+  assets = DatabaseFile.bytes;
 }
-
 var serializer = new QuantumUnityJsonSerializer();
-
 if (assets?.Length > 0) {
- \_resourceAllocator = new QuantumUnityNativeAllocator();
- \_resourceManager = new ResourceManagerStatic(serializer.AssetsFromByteArray(assets), new QuantumUnityNativeAllocator());
- arguments.ResourceManager = \_resourceManager;
+  _resourceAllocator = new QuantumUnityNativeAllocator();
+  _resourceManager = new ResourceManagerStatic(serializer.AssetsFromByteArray(assets), new QuantumUnityNativeAllocator());
+  arguments.ResourceManager = _resourceManager;
 }
 
 ```
@@ -285,7 +170,7 @@ Step 5: Finally, start the game.
 C#
 
 ```cs
-\_runner = QuantumRunner.StartGame(arguments);
+_runner = QuantumRunner.StartGame(arguments);
 
 ```
 
@@ -294,70 +179,48 @@ Optionally start verifying a list of checksums and log out checksum mismatches.
 C#
 
 ```cs
-\_runner.Game.StartVerifyingChecksums(replayFile.Checksums);
+_runner.Game.StartVerifyingChecksums(replayFile.Checksums);
 
 ```
 
 ### .Net Application
 
-Create or update the .Net simulation project by selecting the ```
-QuantumDotnetBuildSettings
-```
+Create or update the .Net simulation project by selecting the `QuantumDotnetBuildSettings` asset and pressing `Generate Dotnet Project`.
 
- asset and pressing ```
-Generate Dotnet Project
-```
-
-.
-
-Open and compile the solution file under ```
-Assets/../Quantum.Dotnet/Quantum.Dotnet.sln
-```
-
-.
+Open and compile the solution file under `Assets/../Quantum.Dotnet/Quantum.Dotnet.sln`.
 
 Start the runner from the command line accordingly.
 
 ```
-Quantum.Dotnet\\Quantum.Runner.Dotnet\\bin\\Debug> .\\Quantum.Runner.exe --help
+Quantum.Dotnet\Quantum.Runner.Dotnet\bin\Debug> .\Quantum.Runner.exe --help
 Description:
-Main method to start a Quantum runner.
-
+  Main method to start a Quantum runner.
 Usage:
-Quantum.Runner \[options\]
-
+  Quantum.Runner [options]
 Options:
- --replay-path <replay-path> Path to the Quantum replay json file.
- --lut-path <lut-path> Path to the LUT folder.
- --db-path <db-path> Optionally an extra path to the Quantum database json file.
- --checksum-path <checksum-path> Optionally an extra path to the checksum file.
- --version Show version information
- -?, -h, --help Show help and usage information
+  --replay-path <replay-path>      Path to the Quantum replay json file.
+  --lut-path <lut-path>            Path to the LUT folder.
+  --db-path <db-path>              Optionally an extra path to the Quantum database json file.
+  --checksum-path <checksum-path>  Optionally an extra path to the checksum file.
+  --version                        Show version information
+  -?, -h, --help                   Show help and usage information
 
 ```
 
 For example:
 
 ```
-Quantum.Dotnet\\Quantum.Runner.Dotnet\\bin\\Debug>.\\Quantum.Runner.exe
- --replay-path ..\\..\\..\\..\\Assets\\QuantumUser\\Replays\\MapTestNavMeshAgents-2024-06-17-14-19-46.json
- --lut-path ..\\..\\..\\..\\Assets\\Photon\\Quantum\\Resources\\LUT
+Quantum.Dotnet\Quantum.Runner.Dotnet\bin\Debug>.\Quantum.Runner.exe
+  --replay-path ..\..\..\..\Assets\QuantumUser\Replays\MapTestNavMeshAgents-2024-06-17-14-19-46.json
+  --lut-path ..\..\..\..\Assets\Photon\Quantum\Resources\LUT
 
 ```
 
-**Caveat:** Recorded checksums in Unity are not compatible with the ones generated in the Dotnet runner. Activate ```
-ChecksumCrossPlatformDeterminism
-```
-
-in the SessionConfig to validate recorded checksums on different platforms.
+**Caveat:** Recorded checksums in Unity are not compatible with the ones generated in the Dotnet runner. Activate `ChecksumCrossPlatformDeterminism` in the SessionConfig to validate recorded checksums on different platforms.
 
 ## PlayerIsLocal()
 
-The PlayerIsLocal-check on ```
-Quantum.Game.Session
-```
-
- is good for numerous view control for example camera, audio and VFX focus. **But** it won't work for replays.
+The PlayerIsLocal-check on `Quantum.Game.Session` is good for numerous view control for example camera, audio and VFX focus. **But** it won't work for replays.
 
 Replays captured online using the webhook for example will never have this information.
 
@@ -368,84 +231,58 @@ C#
 ```csharp
 public class CustomViewContext : MonoBehaviour, IQuantumViewContext
 {
-private PlayerRef \_focusedPlayer;
-
-public bool IsFocusedPlayer(QuantumGame game, PlayerRef player)
-{
-if (game.Session.GameMode == DeterministicGameMode.Replay)
-{
-return player == \_focusedPlayer;
-}
-
-return game.PlayerIsLocal(player);
-}
+  private PlayerRef _focusedPlayer;
+  public bool IsFocusedPlayer(QuantumGame game, PlayerRef player)
+  {
+    if (game.Session.GameMode == DeterministicGameMode.Replay)
+    {
+      return player == _focusedPlayer;
+    }
+    return game.PlayerIsLocal(player);
+  }
 }
 
 ```
 
 ## QuantumReplayFile API
 
-The ```
-QuantumReplayFile
-```
+The `QuantumReplayFile` holds all relevant data to run a Quantum replay and can be serialized in JSON.
 
-holds all relevant data to run a Quantum replay and can be serialized in JSON.
+The replay has to include a valid input history saved as `InputHistoryDeltaCompressed` or `InputHistoryLegacy`. The former is much more files size friendly and is the only mode that input is streamed from the Photon Public Cloud.
 
-The replay has to include a valid input history saved as ```
-InputHistoryDeltaCompressed
-```
+The `RuntimeConfigData` is stored in a binary serialized form (Quantum.AssetSerializer) like the data that is received during replay streaming.
 
- or ```
-InputHistoryLegacy
-```
-
-. The former is much more files size friendly and is the only mode that input is streamed from the Photon Public Cloud.
-
-The ```
-RuntimeConfigData
-```
-
- is stored in a binary serialized form (Quantum.AssetSerializer) like the data that is received during replay streaming.
-
-The replay may include a serialized (AssetSerializer) asset db ```
-AssetDatabaseData
-```
-
-for convenience, which should be omitted in production environments where file size is an issue.
+The replay may include a serialized (AssetSerializer) asset db `AssetDatabaseData` for convenience, which should be omitted in production environments where file size is an issue.
 
 The replay may contain recorded checksums that can be verified at runtime as a development feature.
 
-The ```
-QuantumJsonFriendlyDataBlob
-```
-
- is a wrapper around storing binary data in JSON to work around the problem that Unity JSON tools only serialize byte arrays verbosely.
+The `QuantumJsonFriendlyDataBlob` is a wrapper around storing binary data in JSON to work around the problem that Unity JSON tools only serialize byte arrays verbosely.
 
 C#
 
 ```cs
 public class QuantumReplayFile {
-// Delta compressed binary input history, this is the same that is send over replay webhooks for example.
-public QuantumJsonFriendlyDataBlob InputHistoryDeltaCompressed;
-// Full verbose input used in Quantum 2.1, which is still functional, but has only fringe use cases.
-public DeterministicTickInputSet\[\] InputHistoryLegacy;
-// Binary serialized RuntimeConfig.
-// Use AssetSerializer.ConfigToByteArray(runtimeConfig, compress: true)
-/// </summary>
-public QuantumJsonFriendlyDataBlob RuntimeConfigData;
-/// The session config.
-public DeterministicSessionConfig DeterministicConfig;
-/// The last tick of the input.
-public int LastTick;
-/// The initial tick to start from, requires <see cref="InitialFrameData"/> to be set.
-public int InitialTick;
-/// Optional frame data to start the replay with. This is used for save games for example.
-public byte\[\] InitialFrameData;
-/// Optional checksums. Omit this for replays in production environments.
-public ChecksumFile Checksums;
-/// Optional serialized asset database. Omit this for replays in production environments.
-/// Use AssetSerializer.SerializeAssets(stream, ResourceManager.LoadAllAssets().ToArray()
-public QuantumJsonFriendlyDataBlob AssetDatabaseData;
+  // Delta compressed binary input history, this is the same that is send over replay webhooks for example.
+  public QuantumJsonFriendlyDataBlob InputHistoryDeltaCompressed;
+  // Full verbose input used in Quantum 2.1, which is still functional, but has only fringe use cases.
+  public DeterministicTickInputSet[] InputHistoryLegacy;
+  // Binary serialized RuntimeConfig.
+  // Use AssetSerializer.ConfigToByteArray(runtimeConfig, compress: true)
+  /// </summary>
+  public QuantumJsonFriendlyDataBlob RuntimeConfigData;
+  /// The session config.
+  public DeterministicSessionConfig DeterministicConfig;
+  /// The last tick of the input.
+  public int LastTick;
+  /// The initial tick to start from, requires <see cref="InitialFrameData"/> to be set.
+  public int InitialTick;
+  /// Optional frame data to start the replay with. This is used for save games for example.
+  public byte[] InitialFrameData;
+  /// Optional checksums. Omit this for replays in production environments.
+  public ChecksumFile Checksums;
+  /// Optional serialized asset database. Omit this for replays in production environments.
+  /// Use AssetSerializer.SerializeAssets(stream, ResourceManager.LoadAllAssets().ToArray()
+  public QuantumJsonFriendlyDataBlob AssetDatabaseData;
 }
 
 ```
@@ -454,12 +291,12 @@ C#
 
 ```cs
 public class QuantumJsonFriendlyDataBlob {
-/// The byte array is saved as is.
-public byte\[\] Binary;
-/// The byte array is saved as Base64 text.
-public string Base64;
-/// Both Binary and Base64 can be GZip compressed.
-public bool IsCompressed;
+  /// The byte array is saved as is.
+  public byte[] Binary;
+  /// The byte array is saved as Base64 text.
+  public string Base64;
+  /// Both Binary and Base64 can be GZip compressed.
+  public bool IsCompressed;
 }
 
 ```
@@ -468,11 +305,7 @@ public bool IsCompressed;
 
 We provide a script which demonstrates how to do instant replays, like kill-cam replays which happen during the game, in an auxiliary QuantumRunner, and then gets back to the default runner once the instant replay is over.
 
-To use it, just add the Unity component called ```
-QuantumInstantReplayDemo
-```
-
-to a Game Object, do the setup (set playback speed, replay length, etc.) and then, during gameplay, hit the Start and Stop buttons.
+To use it, just add the Unity component called `QuantumInstantReplayDemo` to a Game Object, do the setup (set playback speed, replay length, etc.) and then, during gameplay, hit the Start and Stop buttons.
 
 ![Instant Replay Image](/docs/img/quantum/v2/manual/replay/instant-replay.png)Back to top
 

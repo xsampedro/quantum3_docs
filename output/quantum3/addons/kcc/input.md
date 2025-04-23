@@ -10,24 +10,11 @@ To get perfectly smooth movement and camera, it is mandatory to apply input sign
 
 The mouse delta is obtained using:
 
-- ```
-UnityEngine.Input.GetAxis("Mouse X")
-```
+- `UnityEngine.Input.GetAxis("Mouse X")`
+- `UnityEngine.Input.GetAxisRaw("Mouse X")`
+- `UnityEngine.InputSystem.Mouse.current.delta.ReadValue()`
 
-- ```
-UnityEngine.Input.GetAxisRaw("Mouse X")
-```
-
-- ```
-UnityEngine.InputSystem.Mouse.current.delta.ReadValue()
-```
-
-
-All methods above return position delta polled from mouse without any post-processing. Depending on mouse polling rate (common is 125Hz, gaming mouses usually 1000Hz), you get these values for ```
-Mouse X
-```
-
-when moving with the mouse:
+All methods above return position delta polled from mouse without any post-processing. Depending on mouse polling rate (common is 125Hz, gaming mouses usually 1000Hz), you get these values for `Mouse X` when moving with the mouse:
 
 ![Mouse input with 125Hz polling and 120 FPS](/docs/img/quantum/v3/addons/kcc/input-smoothing-125hz-120fps.jpg)Mouse input with 125Hz polling and 120 FPS.
 
@@ -46,71 +33,44 @@ To get perfectly smooth look, there are 2 possible solutions:
 1. Mouse polling, engine update rate and monitor refresh rate must be aligned - for example 360Hz mouse polling, 360 FPS engine update rate, 360Hz monitor refresh rate. Not realistic.
 2. Input smoothing - gives almost perfectly smooth results (the difference is noticeable also on high-end gaming setup) at the cost of increased input lag by few milliseconds.
 
-The KCC provides utility script ```
-Vector2Accumulator
-```
-
-. Following code shows its usage to calculate smooth mouse position delta from values in last 20 milliseconds.
+The KCC provides utility script `Vector2Accumulator`. Following code shows its usage to calculate smooth mouse position delta from values in last 20 milliseconds.
 
 C#
 
 ```csharp
 public class PlayerInput : MonoBehaviour
 {
-// Creates an accumulator with 20ms smoothing window.
-private Vector2Accumulator \_lookRotationAccumulator = new Vector2Accumulator(0.02f, true);
+    // Creates an accumulator with 20ms smoothing window.
+    private Vector2Accumulator _lookRotationAccumulator = new Vector2Accumulator(0.02f, true);
+    private void Update()
+    {
+        Vector2 mouseDelta = Mouse.current.delta.ReadValue();
+        _lookRotationAccumulator.Accumulate(mouseDelta);
+    }
 
-private void Update()
-{
-Vector2 mouseDelta = Mouse.current.delta.ReadValue();
+    private void PollInput(CallbackPollInput callback)
+    {
+        Quantum.Input input = new Quantum.Input();
 
-\_lookRotationAccumulator.Accumulate(mouseDelta);
-}
+        // 1. Option - consume whole smoothed mouse delta which is aligned to render time.
+        // input.LookRotationDelta = _lookRotationAccumulator.Consume();
 
-private void PollInput(CallbackPollInput callback)
-{
-Quantum.Input input = new Quantum.Input();
-
-// 1\. Option - consume whole smoothed mouse delta which is aligned to render time.
-// input.LookRotationDelta = \_lookRotationAccumulator.Consume();
-
-// 2\. Option (better) - consume smoothed mouse delta which is aligned to Quantum frame time.
-// This variant ensures smooth interpolation when look rotation propagates to transform.
-input.LookRotationDelta = \_lookRotationAccumulator.ConsumeFrameAligned(callback.Game);
-
-callback.SetInput(input, DeterministicInputFlags.Repeatable);
-}
+        // 2. Option (better) - consume smoothed mouse delta which is aligned to Quantum frame time.
+        // This variant ensures smooth interpolation when look rotation propagates to transform.
+        input.LookRotationDelta = _lookRotationAccumulator.ConsumeFrameAligned(callback.Game);
+        callback.SetInput(input, DeterministicInputFlags.Repeatable);
+    }
 }
 
 ```
 
 Following images show mouse delta being propagated to **accumulated look rotation** (roughly 90°) with various mouse polling rates, engine update rates and smoothing windows:
 
-- ```
-Purple
-```
-
-\- No smoothing applied.
-- ```
-Cyan
-```
-
-\- 10ms smoothing window.
-- ```
-Green
-```
-
-\- 20ms smoothing window.
-- ```
-Yellow
-```
-
-\- 30ms smoothing window.
-- ```
-Blue
-```
-
-\- 40ms smoothing window.
+- `Purple` \- No smoothing applied.
+- `Cyan` \- 10ms smoothing window.
+- `Green` \- 20ms smoothing window.
+- `Yellow` \- 30ms smoothing window.
+- `Blue` \- 40ms smoothing window.
 
 ![Accumulated look rotation with 125Hz mouse polling and 120 FPS](/docs/img/quantum/v3/addons/kcc/accumulated-input-125hz-120fps.jpg)Accumulated look rotation with 125Hz mouse polling and 120 FPS.
 

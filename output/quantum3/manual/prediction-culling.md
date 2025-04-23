@@ -22,21 +22,13 @@ To set up prediction culling, there are two steps; one in Quantum and one in Uni
 
 ### In Quantum
 
-By default, the Prediction Culling systems are already enabled in the sample Systems Config asset, located in ```
-Assets/Photon/Quantum/Samples/SampleScenes/Resources
-```
-
-:
+By default, the Prediction Culling systems are already enabled in the sample Systems Config asset, located in `Assets/Photon/Quantum/Samples/SampleScenes/Resources`:
 
 ![Prediction Culling Systems](/docs/img/quantum/v3/manual/prediction-culling-systems.png)### In Unity
 
 In Unity, it is necessary to set the prediction area. This will be used to decide which entities to cull from prediction.
 
-Update the prediction area by calling ```
-SetPredictionArea()
-```
-
-on every Unity update:
+Update the prediction area by calling `SetPredictionArea()` on every Unity update:
 
 C#
 
@@ -59,37 +51,17 @@ CPU cycles are saved on account of physics and navmesh related agents skipping u
 
 ### Iterators
 
-The game codes can also benefit from _Prediction Culling_. Any filter that includes a ```
-Transform2D
-```
-
- or ```
-Transform3D
-```
-
-will be subject to culling based on their positions.
+The game codes can also benefit from _Prediction Culling_. Any filter that includes a `Transform2D` or `Transform3D` will be subject to culling based on their positions.
 
 Essentially whenever a prediction frame is running, calling any of the methods below will only return entities within the limits of the prediction radius, while the same call will return all active instances when simulating the verified frames after input confirmations arrive).
 
-- ```
-f.Filter()
-```
-
-- ```
-f.Unsafe.FilterStruct()
-```
-
+- `f.Filter()`
+- `f.Unsafe.FilterStruct()`
 
 **N.B.:** While **filters** benefit from _Prediction Culling_, **component iterators** _do NOT_.
 
-- ```
-f.GetComponentIterator()
-```
-
-- ```
-f.Unsafe.GetComponentBlockIterator()
-```
-
+- `f.GetComponentIterator()`
+- `f.Unsafe.GetComponentBlockIterator()`
 
 ### Manual Culling Control Flags
 
@@ -107,11 +79,7 @@ To keep a consistent state and avoid desync, **de-flag** the culled entities on 
 
 ## Avoiding RNG Issues
 
-Using _RNGSession_ instances with _Prediction Culling_ is perfectly safe and determinism is guaranteed. However, their combined use can result in some visual jitter when two entities share a _RNGSession_, such as the default one stored in Quantum's ```
-\_globals\_
-```
-
-. This is due to new a RNG value being generated for a _predicted_ entity after a _verifited_ frame was simulated, thus changing/modifying the entity's final position.
+Using _RNGSession_ instances with _Prediction Culling_ is perfectly safe and determinism is guaranteed. However, their combined use can result in some visual jitter when two entities share a _RNGSession_, such as the default one stored in Quantum's `\_globals\_`. This is due to new a RNG value being generated for a _predicted_ entity after a _verifited_ frame was simulated, thus changing/modifying the entity's final position.
 
 The solution is to store an isolated RNGSession struct in each entity subject to culling. The isolation guarantees culling will not affect the final positions of predicted entities unless the rollback actually required it.
 
@@ -119,7 +87,7 @@ chsarp
 
 ```chsarp
 struct SomeStruct {
-RNGSession MyRNG;
+    RNGSession MyRNG;
 }
 
 ```

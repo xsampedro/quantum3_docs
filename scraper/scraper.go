@@ -64,15 +64,33 @@ func New(config Config) *Scraper {
 				return &result
 			},
 		},
+		// Rule for inline code elements (like <code> in paragraphs)
 		md.Rule{
-			Filter: []string{"code", "pre"},
+			Filter: []string{"code"},
+			Replacement: func(content string, selec *goquery.Selection, opt *md.Options) *string {
+				// Check if this is an inline code element (parent is not pre)
+				if selec.Parent().Is("pre") {
+					return nil // Let the pre+code rule handle code blocks
+				}
+				
+				// This is an inline code element, use single backticks
+				result := "`" + content + "`"
+				return &result
+			},
+		},
+		// Rule for code blocks (pre+code)
+		md.Rule{
+			Filter: []string{"pre"},
 			Replacement: func(content string, selec *goquery.Selection, opt *md.Options) *string {
 				// Determine the language if possible
-				lang := selec.AttrOr("class", "")
-				if strings.Contains(lang, "language-") {
-					lang = strings.Replace(lang, "language-", "", 1)
-				} else {
-					lang = ""
+				var lang string
+				if codeElement := selec.Find("code"); codeElement.Length() > 0 {
+					lang = codeElement.AttrOr("class", "")
+					if strings.Contains(lang, "language-") {
+						lang = strings.Replace(lang, "language-", "", 1)
+					} else {
+						lang = ""
+					}
 				}
 				
 				// Check if content already contains triple backticks
@@ -303,6 +321,17 @@ func (s *Scraper) cleanupMarkdownFiles() error {
 			// Replace pattern: ```(language)\n```(language2)\n with just the inner block
 			markdown = cleanNestedCodeBlocks(markdown)
 			
+			// Fix incorrectly formatted inline code blocks (```file.txt``` instead of `file.txt`)
+			inlineCodeRegex := regexp.MustCompile("```([^`\n]+?)```")
+			markdown = inlineCodeRegex.ReplaceAllString(markdown, "`$1`")
+			
+			// Fix broken inline code blocks that have newlines
+			brokenInlineCodeRegex := regexp.MustCompile("```\n([^`\n]+?)\n```\n")
+			markdown = brokenInlineCodeRegex.ReplaceAllString(markdown, "`$1`\n\n")
+			
+			// Fix redundant backticks inside code blocks
+			markdown = fixRedundantBackticksInCodeBlocks(markdown)
+			
 			// Save the cleaned content
 			if err := os.WriteFile(path, []byte(markdown), 0644); err != nil {
 				return err
@@ -333,6 +362,44 @@ func cleanNestedCodeBlocks(content string) string {
 	content = strings.ReplaceAll(content, "``````", "```")
 	
 	return content
+}
+
+// fixRedundantBackticksInCodeBlocks removes redundant backticks inside code blocks
+func fixRedundantBackticksInCodeBlocks(content string) string {
+	// Split the content by the code block markers
+	var result strings.Builder
+	codeBlockRegex := regexp.MustCompile("```([a-zA-Z0-9]*)\n([\\s\\S]*?)\n```")
+	
+	lastIndex := 0
+	for _, match := range codeBlockRegex.FindAllStringSubmatchIndex(content, -1) {
+		// Add text before the code block
+		result.WriteString(content[lastIndex:match[0]])
+		
+		// Get the language and the code content
+		language := content[match[2]:match[3]]
+		codeContent := content[match[4]:match[5]]
+		
+		// Check if the code content starts and ends with backticks
+		if strings.HasPrefix(codeContent, "`") && strings.HasSuffix(codeContent, "`") {
+			// Remove leading and trailing backticks
+			codeContent = strings.TrimPrefix(codeContent, "`")
+			codeContent = strings.TrimSuffix(codeContent, "`")
+		}
+		
+		// Rebuild the code block without redundant backticks
+		result.WriteString("```")
+		result.WriteString(language)
+		result.WriteString("\n")
+		result.WriteString(codeContent)
+		result.WriteString("\n```")
+		
+		lastIndex = match[1]
+	}
+	
+	// Add any remaining content
+	result.WriteString(content[lastIndex:])
+	
+	return result.String()
 }
 
 // GetVisitedURLs returns a list of all visited URLs

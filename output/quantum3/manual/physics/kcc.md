@@ -49,13 +49,12 @@ C#
 
 ```csharp
 // 2D KCC
-var kccConfig = frame.FindAsset<CharacterController2DConfig>(KCC\_CONFIG\_PATH);
+var kccConfig = frame.FindAsset<CharacterController2DConfig>(KCC_CONFIG_PATH);
 var kcc = new CharacterController2D();
 kcc.Init(frame, kccConfig)
 f.Add(entity, kcc);
-
 // 3D KCC
-var kccConfig = frame.FindAsset<CharacterController3DConfig>(KCC\_CONFIG\_PATH);
+var kccConfig = frame.FindAsset<CharacterController3DConfig>(KCC_CONFIG_PATH);
 var kcc = new CharacterController3D();
 kcc.Init(frame, kccConfig)
 f.Add(entity, kcc);
@@ -66,57 +65,17 @@ f.Add(entity, kcc);
 
 The component has to be initiliazed after being created. The available initializing options are:
 
-- (code) the ```
-Init()
-```
-
-method _without_ parameter, it will load the ```
-DefaultCharacterController
-```
-
-from ```
-Assets/Resources/DB/Configs
-```
-
-.
-- (code) the ```
-Init()
-```
-
-method _with_ parameter, it will load the passed in ```
-CharacterControllerConfig
-```
-
-.
-- (editor) add the ```
-CharacterControllerConfig
-```
-
-to the ```
-Config
-```
-
-slot in the ```
-Character Controller
-```
-
-component.
+- (code) the `Init()` method _without_ parameter, it will load the `DefaultCharacterController` from `Assets/Resources/DB/Configs`.
+- (code) the `Init()` method _with_ parameter, it will load the passed in `CharacterControllerConfig`.
+- (editor) add the `CharacterControllerConfig` to the `Config` slot in the `Character Controller` component.
 
 ## The Character Controller Config
 
-Create a KCC config asset via the context menu under ```
-Create > Quantum > Assets > Physics > CharacterController2D/3D
-```
-
-.
+Create a KCC config asset via the context menu under `Create > Quantum > Assets > Physics > CharacterController2D/3D`.
 
 ### Default Config Assets
 
-The default 2D and 3D KCC Config assets are located inside the ```
-Assets/QuantumUser/Resources/
-```
-
-folder. Here is how the 3D KCC config looks like:
+The default 2D and 3D KCC Config assets are located inside the `Assets/QuantumUser/Resources/` folder. Here is how the 3D KCC config looks like:
 
 ![KCC 3D Default Config](/docs/img/quantum/v3/manual/physics/physics-kcc-config.png)
 The DefaultConfigKCC3D Config Asset.
@@ -128,17 +87,9 @@ The DefaultConfigKCC3D Config Asset.
 - **Extent** defines a radius in which collisions are detected preemptively.
 - **Max Contacts** is used to select the amount of contact points computed by the KCC. 1 will usually work fine and is the most performant option. When experiencing jerky movement, try setting this to 2; the additional overhead is negligible.
 - **Layer Mask** defines which collider layers should be taken into consideration by the physics query performed by the KCC.
-- **Air Control** toggle to ```
-True
-```
-
-and the KCC is able to perform movement adjustments when it not touching the ground.
+- **Air Control** toggle to `True` and the KCC is able to perform movement adjustments when it not touching the ground.
 - **Acceleration** defines how fast the character accelerates.
-- **Base Jump Impulse** defines the strength of the impulse when calling the KCC ```
-Jump()
-```
-
-method. If no value is passed to the method, this value will be used.
+- **Base Jump Impulse** defines the strength of the impulse when calling the KCC `Jump()` method. If no value is passed to the method, this value will be used.
 - **Max Speed** caps the character's maximal horizontal speed.
 - **Gravity** applies a gravity force to the KCC.
 - **Max Slope** defines the maximal angle, in degrees, the character can walk up and down.
@@ -175,155 +126,87 @@ C#
 ```csharp
 // Initialization
 public void Init(FrameBase frame, CharacterController3DConfig config = null);
-
 // Jump
 public void Jump(FrameBase frame, bool ignoreGrounded = false, FP? impulse = null);
-
 // Move
 public void Move(FrameBase frame, EntityRef entity, FPVector3 direction, IKCCCallbacks3D callback = null, int? layerMask = null, Boolean? useManifoldNormal = null, FP? deltaTime = null);
-
 // Raw Information
-public static CharacterController3DMovement ComputeRawMovement(Frame frame, EntityRef entity, Transform3D\* transform, CharacterController3D\* kcc, FPVector3 direction, IKCCCallbacks3D callback = null, int? layerMask = null, bool? useManifoldNormal = null);
+public static CharacterController3DMovement ComputeRawMovement(Frame frame, EntityRef entity, Transform3D* transform, CharacterController3D* kcc, FPVector3 direction, IKCCCallbacks3D callback = null, int? layerMask = null, bool? useManifoldNormal = null);
 
 ```
 
-The ```
-Jump
-```
-
- and ```
-Move
-```
-
-methods are convenient for prototyping, while ```
-ComputeRawMovement
-```
-
- provides the key information for creating custom movement. In the example KCC's provided by Quantum, the information from ```
-ComputeRawMovement
-```
-
-is used by the internal steering method ```
-ComputeRawSteer
-```
-
- to compute the steering used in ```
-Move
-```
-
-.
+The `Jump` and `Move` methods are convenient for prototyping, while `ComputeRawMovement` provides the key information for creating custom movement. In the example KCC's provided by Quantum, the information from `ComputeRawMovement` is used by the internal steering method `ComputeRawSteer` to compute the steering used in `Move`.
 
 **IMPORTANT:**
 
-The implementations of ```
-Jump()
-```
-
-, ```
-Move()
-```
-
-and ```
-ComputeRawSteer()
-```
-
- are presented below for fostering understanding and help create custom implementations specific to the game's requirements.
+The implementations of `Jump()`, `Move()` and `ComputeRawSteer()` are presented below for fostering understanding and help create custom implementations specific to the game's requirements.
 
 #### CharacterController3DMovement
 
-```
-ComputeRawMovement()
-```
+`ComputeRawMovement()` computes the environmental data necessary for the steering by performing a ShapeOverlap and processing the data. The method returns a `CharacterController3DMovement` struct which can then be applied to the character movement. The movement data provided can also be used to create a custom steering implementation.
 
-computes the environmental data necessary for the steering by performing a ShapeOverlap and processing the data. The method returns a ```
-CharacterController3DMovement
-```
-
-struct which can then be applied to the character movement. The movement data provided can also be used to create a custom steering implementation.
-
-The ```
-CharacterController3DMovement
-```
-
- struct holds the following information:
+The `CharacterController3DMovement` struct holds the following information:
 
 C#
 
 ```csharp
 public enum CharacterMovementType
 {
-None, // grounded with no desired direction passed
-FreeFall, // no contacts within the Radius
-SlopeFall, // there is at least 1 ground contact within the Radius, specifically a contact with a normal angle vs -gravity <= maxSlopeAngle). It is possible to be "grounded" without this type of contact (see Grounded property in the CharacterController3DMovement)
-Horizontal, // there is NO ground contact, but there is at least one lateral contact (normal angle vs -gravity > maxSlopeAngle)
+    None, // grounded with no desired direction passed
+    FreeFall, // no contacts within the Radius
+    SlopeFall, // there is at least 1 ground contact within the Radius, specifically a contact with a normal angle vs -gravity <= maxSlopeAngle). It is possible to be "grounded" without this type of contact (see Grounded property in the CharacterController3DMovement)
+    Horizontal, // there is NO ground contact, but there is at least one lateral contact (normal angle vs -gravity > maxSlopeAngle)
 }
-
 public struct CharacterController3DMovement
 {
-public CharacterMovementType Type;
+  public CharacterMovementType Type;
 
-// the surface normal of the closest unique contact
-public FPVector3 NearestNormal;
+  // the surface normal of the closest unique contact
+  public FPVector3 NearestNormal;
 
-// the average normal from all contacts
-public FPVector3 AvgNormal;
+  // the average normal from all contacts
+  public FPVector3 AvgNormal;
 
-// the normal of the closest contact that qualifies as ground
-public FPVector3 GroundNormal;
+  // the normal of the closest contact that qualifies as ground
+  public FPVector3 GroundNormal;
 
-// the surface tangent (from GroundNormal and the derived direction) for Horizontal move, or the normalized desired direction when in CharacterMovementType.FreeFall
-public FPVector3 Tangent;
+  // the surface tangent (from GroundNormal and the derived direction) for Horizontal move, or the normalized desired direction when in CharacterMovementType.FreeFall
+  public FPVector3 Tangent;
 
-// surface tangent computed from closest the contact normal vs -gravity (does not consider current velocity of CC itself).
-public FPVector3 SlopeTangent;
+  // surface tangent computed from closest the contact normal vs -gravity (does not consider current velocity of CC itself).
+  public FPVector3 SlopeTangent;
 
-// accumulated projected correction from all contacts within the Radius. It compensates with dot-products to NOT overshoot.
-public FPVector3 Correction;
+  // accumulated projected correction from all contacts within the Radius. It compensates with dot-products to NOT overshoot.
+  public FPVector3 Correction;
 
-// max penetration of the closest contact within the Radius
-public FP Penetration;
+  // max penetration of the closest contact within the Radius
+  public FP Penetration;
 
-// uses the EXTENDED radius to assign this Boolean AND the GroundedNormalas to avoid oscilations of the grounded state when moving over slightly irregular terrain
-public Boolean Grounded;
+  // uses the EXTENDED radius to assign this Boolean AND the GroundedNormalas to avoid oscilations of the grounded state when moving over slightly irregular terrain
+  public Boolean Grounded;
 
-// number of contacts within Radius
-public int Contacts;
+  // number of contacts within Radius
+  public int Contacts;
 }
 
 ```
 
-```
-ComputeRawMovement()
-```
-
-is used by the ```
-Move()
-```
-
-method.
+`ComputeRawMovement()` is used by the `Move()` method.
 
 #### Jump()
 
 **This is only a reference implementation.**
 
-The ```
-Jump
-```
-
- simply adds an impulse to the KCC's current Velocity and toggles the _Jumped_ boolean which will be processed by the internal ```
-ComputeRawSteer
-```
-
-Method.
+The `Jump` simply adds an impulse to the KCC's current Velocity and toggles the _Jumped_ boolean which will be processed by the internal `ComputeRawSteer` Method.
 
 C#
 
 ```csharp
 public void Jump(FrameBase frame, bool ignoreGrounded = false, FP? impulse = null) {
- if (Grounded \|\| ignoreGrounded) {
- Velocity.Y.RawValue = impulse?.RawValue ?? frame.FindAsset<CharacterController3DConfig>(Config.Id).BaseJumpImpulse.RawValue;
- Jumped = true;
- }
+    if (Grounded || ignoreGrounded) {
+        Velocity.Y.RawValue = impulse?.RawValue ?? frame.FindAsset<CharacterController3DConfig>(Config.Id).BaseJumpImpulse.RawValue;
+        Jumped = true;
+    }
 }
 
 ```
@@ -332,11 +215,7 @@ public void Jump(FrameBase frame, bool ignoreGrounded = false, FP? impulse = nul
 
 **This is only a reference implementation.**
 
-```
-Move()
-```
-
-takes the following things by taking into consideration when calculating the character's new position:
+`Move()` takes the following things by taking into consideration when calculating the character's new position:
 
 - the current position
 - the direction
@@ -345,49 +224,32 @@ takes the following things by taking into consideration when calculating the cha
 - slopes
 - and more
 
-All these aspects can be defined in the config asset passed to the ```
-Init()
-```
+All these aspects can be defined in the config asset passed to the `Init()` method. This is convenient for prototyping FPS/TPS/Action games which have terrains, mesh colliders and primitives.
 
- method. This is convenient for prototyping FPS/TPS/Action games which have terrains, mesh colliders and primitives.
-
-**NOTE:** Since it calculates everything and returns a final ```
-FPVector3
-```
-
-result, it does not give much control over the movement itself. For tighter control over the movement, use ```
-ComputeRawMovement()
-```
-
-and create custom steering + movement.
+**NOTE:** Since it calculates everything and returns a final `FPVector3` result, it does not give much control over the movement itself. For tighter control over the movement, use `ComputeRawMovement()` and create custom steering + movement.
 
 C#
 
 ```csharp
 public void Move(Frame frame, EntityRef entity, FPVector3 direction, IKCCCallbacks3D callback = null, int? layerMask = null, Boolean? useManifoldNormal = null, FP? deltaTime = null) {
-Assert.Check(frame.Has<Transform3D>(entity));
-
-var transform = frame.GetPointer<Transform3D>(entity);
-var dt = deltaTime ?? frame.DeltaTime;
-
-CharacterController3DMovement movementPack;
-fixed (CharacterController3D\* thisKcc = &this) {
-movementPack = ComputeRawMovement(frame, entity, transform, thisKcc, direction, callback, layerMask, useManifoldNormal);
-}
-
-ComputeRawSteer(frame, ref movementPack, dt);
-
-var movement = Velocity \* dt;
-if (movementPack.Penetration > FP.EN3) {
-var config = frame.FindAsset<CharacterController3DConfig>(Config.Id);
-if (movementPack.Penetration > config.MaxPenetration) {
-movement += movementPack.Correction;
-} else {
-movement += movementPack.Correction \* config.PenetrationCorrection;
-}
-}
-
-transform->Position += movement;
+  Assert.Check(frame.Has<Transform3D>(entity));
+  var transform = frame.GetPointer<Transform3D>(entity);
+  var dt        = deltaTime ?? frame.DeltaTime;
+  CharacterController3DMovement movementPack;
+  fixed (CharacterController3D* thisKcc = &this) {
+    movementPack = ComputeRawMovement(frame, entity, transform, thisKcc, direction, callback, layerMask, useManifoldNormal);
+  }
+  ComputeRawSteer(frame, ref movementPack, dt);
+  var movement = Velocity * dt;
+  if (movementPack.Penetration > FP.EN3) {
+    var config = frame.FindAsset<CharacterController3DConfig>(Config.Id);
+    if (movementPack.Penetration > config.MaxPenetration) {
+      movement += movementPack.Correction;
+    } else {
+      movement += movementPack.Correction * config.PenetrationCorrection;
+    }
+  }
+  transform->Position += movement;
 }
 
 ```
@@ -398,137 +260,116 @@ Steering involves computing the movement based on the position, radius and veloc
 
 **This is only a reference implementation.**
 
-```
-ComputeRawSteer
-```
-
-is an internal method that does the bulk of the movement calculations based on the type of movement the character is currently performing. In the example KCCs, ```
-Move
-```
-
-requests the ```
-movementPack
-```
-
-values from ```
-ComputeRawMovement
-```
-
-and passes them to ```
-ComputeRawSteer
-```
-
-.
+`ComputeRawSteer` is an internal method that does the bulk of the movement calculations based on the type of movement the character is currently performing. In the example KCCs, `Move` requests the `movementPack` values from `ComputeRawMovement` and passes them to `ComputeRawSteer`.
 
 C#
 
 ```csharp
 private void ComputeRawSteer(FrameThreadSafe f, ref CharacterController3DMovement movementPack, FP dt) {
+  Grounded = movementPack.Grounded;
+  var config = f.FindAsset(Config);
+  var minYSpeed = -FP._100;
+  var maxYSpeed = FP._100;
 
-Grounded = movementPack.Grounded;
-var config = f.FindAsset(Config);
-var minYSpeed = -FP.\_100;
-var maxYSpeed = FP.\_100;
+  switch (movementPack.Type) {
 
-switch (movementPack.Type) {
+    // FreeFall
+    case CharacterMovementType.FreeFall:
 
-// FreeFall
-case CharacterMovementType.FreeFall:
+      Velocity.Y -= config._gravityStrength * dt;
 
-Velocity.Y -= config.\_gravityStrength \* dt;
+      if (!config.AirControl || movementPack.Tangent == default(FPVector3)) {
+        Velocity.X = FPMath.Lerp(Velocity.X, FP._0, dt * config.Braking);
+        Velocity.Z = FPMath.Lerp(Velocity.Z, FP._0, dt * config.Braking);
+      } else {
+        Velocity += movementPack.Tangent * config.Acceleration * dt;
+      }
 
-if (!config.AirControl \|\| movementPack.Tangent == default(FPVector3)) {
-Velocity.X = FPMath.Lerp(Velocity.X, FP.\_0, dt \* config.Braking);
-Velocity.Z = FPMath.Lerp(Velocity.Z, FP.\_0, dt \* config.Braking);
-} else {
-Velocity += movementPack.Tangent \* config.Acceleration \* dt;
-}
+      break;
 
-break;
+    // Grounded movement
+    case CharacterMovementType.Horizontal:
 
-// Grounded movement
-case CharacterMovementType.Horizontal:
+      // apply tangent velocity
+      Velocity += movementPack.Tangent * config.Acceleration * dt;
+      var tangentSpeed = FPVector3.Dot(Velocity, movementPack.Tangent);
 
-// apply tangent velocity
-Velocity += movementPack.Tangent \* config.Acceleration \* dt;
-var tangentSpeed = FPVector3.Dot(Velocity, movementPack.Tangent);
+      // lerp current velocity to tangent
+      var tangentVel = tangentSpeed * movementPack.Tangent;
+      var lerp = config.Braking * dt;
+      Velocity.X = FPMath.Lerp(Velocity.X, tangentVel.X, lerp);
+      Velocity.Z = FPMath.Lerp(Velocity.Z, tangentVel.Z, lerp);
 
-// lerp current velocity to tangent
-var tangentVel = tangentSpeed \* movementPack.Tangent;
-var lerp = config.Braking \* dt;
-Velocity.X = FPMath.Lerp(Velocity.X, tangentVel.X, lerp);
-Velocity.Z = FPMath.Lerp(Velocity.Z, tangentVel.Z, lerp);
+      // we only lerp the vertical velocity if the character is not jumping in this exact frame,
+      // otherwise it will jump with a lower impulse
+      if (Jumped == false) {
+        Velocity.Y = FPMath.Lerp(Velocity.Y, tangentVel.Y, lerp);
+      }
 
-// we only lerp the vertical velocity if the character is not jumping in this exact frame,
-// otherwise it will jump with a lower impulse
-if (Jumped == false) {
-Velocity.Y = FPMath.Lerp(Velocity.Y, tangentVel.Y, lerp);
-}
+      // clamp tangent velocity with max speed
+      var tangentSpeedAbs = FPMath.Abs(tangentSpeed);
+      if (tangentSpeedAbs > MaxSpeed) {
+        Velocity -= FPMath.Sign(tangentSpeed) * movementPack.Tangent * (tangentSpeedAbs - MaxSpeed);
+      }
 
-// clamp tangent velocity with max speed
-var tangentSpeedAbs = FPMath.Abs(tangentSpeed);
-if (tangentSpeedAbs > MaxSpeed) {
-Velocity -= FPMath.Sign(tangentSpeed) \* movementPack.Tangent \* (tangentSpeedAbs - MaxSpeed);
-}
+      break;
 
-break;
+    // Sliding due to excessively steep slope
+    case CharacterMovementType.SlopeFall:
 
-// Sliding due to excessively steep slope
-case CharacterMovementType.SlopeFall:
+      Velocity += movementPack.SlopeTangent * config.Acceleration * dt;
+      minYSpeed = -config.MaxSlopeSpeed;
 
-Velocity += movementPack.SlopeTangent \* config.Acceleration \* dt;
-minYSpeed = -config.MaxSlopeSpeed;
+      break;
 
-break;
+    // No movement, only deceleration
+    case CharacterMovementType.None:
 
-// No movement, only deceleration
-case CharacterMovementType.None:
+      var lerpFactor = dt * config.Braking;
 
-var lerpFactor = dt \* config.Braking;
+      if (Velocity.X.RawValue != 0) {
+        Velocity.X = FPMath.Lerp(Velocity.X, default, lerpFactor);
+        if (FPMath.Abs(Velocity.X) < FP.EN1) {
+          Velocity.X.RawValue = 0;
+        }
+      }
 
-if (Velocity.X.RawValue != 0) {
-Velocity.X = FPMath.Lerp(Velocity.X, default, lerpFactor);
-if (FPMath.Abs(Velocity.X) < FP.EN1) {
-Velocity.X.RawValue = 0;
-}
-}
+      if (Velocity.Z.RawValue != 0) {
+        Velocity.Z = FPMath.Lerp(Velocity.Z, default, lerpFactor);
+        if (FPMath.Abs(Velocity.Z) < FP.EN1) {
+          Velocity.Z.RawValue = 0;
+        }
+      }
 
-if (Velocity.Z.RawValue != 0) {
-Velocity.Z = FPMath.Lerp(Velocity.Z, default, lerpFactor);
-if (FPMath.Abs(Velocity.Z) < FP.EN1) {
-Velocity.Z.RawValue = 0;
-}
-}
+      // we only lerp the vertical velocity back to 0 if the character is not jumping in this exact frame,
+      // otherwise it will jump with a lower impulse
+      if (Velocity.Y.RawValue != 0 && Jumped == false) {
+        Velocity.Y = FPMath.Lerp(Velocity.Y, default, lerpFactor);
+        if (FPMath.Abs(Velocity.Y) < FP.EN1) {
+          Velocity.Y.RawValue = 0;
+        }
+      }
 
-// we only lerp the vertical velocity back to 0 if the character is not jumping in this exact frame,
-// otherwise it will jump with a lower impulse
-if (Velocity.Y.RawValue != 0 && Jumped == false) {
-Velocity.Y = FPMath.Lerp(Velocity.Y, default, lerpFactor);
-if (FPMath.Abs(Velocity.Y) < FP.EN1) {
-Velocity.Y.RawValue = 0;
-}
-}
+      minYSpeed = 0;
 
-minYSpeed = 0;
+      break;
+  }
 
-break;
-}
+  // horizontal is clamped elsewhere
+  if (movementPack.Type != CharacterMovementType.Horizontal) {
+    var h = Velocity.XZ;
 
-// horizontal is clamped elsewhere
-if (movementPack.Type != CharacterMovementType.Horizontal) {
-var h = Velocity.XZ;
+    if (h.SqrMagnitude > MaxSpeed * MaxSpeed) {
+      h = h.Normalized * MaxSpeed;
+    }
 
-if (h.SqrMagnitude > MaxSpeed \* MaxSpeed) {
-h = h.Normalized \* MaxSpeed;
-}
+    Velocity.X = h.X;
+    Velocity.Y = FPMath.Clamp(Velocity.Y, minYSpeed, maxYSpeed);
+    Velocity.Z = h.Y;
+  }
 
-Velocity.X = h.X;
-Velocity.Y = FPMath.Clamp(Velocity.Y, minYSpeed, maxYSpeed);
-Velocity.Z = h.Y;
-}
-
-// reset jump state
-Jumped = false;
+  // reset jump state
+  Jumped = false;
 }
 
 ```
@@ -542,71 +383,54 @@ C#
 ```csharp
 public interface IKCCCallbacks2D
 {
-bool OnCharacterCollision2D(FrameBase f, EntityRef character, Physics2D.Hit hit);
-void OnCharacterTrigger2D(FrameBase f, EntityRef character, Physics2D.Hit hit);
+    bool OnCharacterCollision2D(FrameBase f, EntityRef character, Physics2D.Hit hit);
+    void OnCharacterTrigger2D(FrameBase f, EntityRef character, Physics2D.Hit hit);
 }
-
 public interface IKCCCallbacks3D
 {
-bool OnCharacterCollision3D(FrameBase f, EntityRef character, Physics3D.Hit3D hit);
-void OnCharacterTrigger3D(FrameBase f, EntityRef character, Physics3D.Hit3D hit);
+    bool OnCharacterCollision3D(FrameBase f, EntityRef character, Physics3D.Hit3D hit);
+    void OnCharacterTrigger3D(FrameBase f, EntityRef character, Physics3D.Hit3D hit);
 }
 
 ```
 
-To receive the callbacks and use its information implement the corresponding ```
-IKCCCallbacks
-```
+To receive the callbacks and use its information implement the corresponding `IKCCCallbacks` interface in a system.
 
-interface in a system.
+**Important**: Note that the collision callbacks return a Boolean value. This allows to decide whether a collision should be ignored. Returning `false` makes the character pass through physics object it collided with.
 
-**Important**: Note that the collision callbacks return a Boolean value. This allows to decide whether a collision should be ignored. Returning ```
-false
-```
-
- makes the character pass through physics object it collided with.
-
-Besides implementing the callbacks the movement methods should also pass the ```
-IKCCCallbacks
-```
-
-object; below is a code snippet using the collision callbacks.
+Besides implementing the callbacks the movement methods should also pass the `IKCCCallbacks` object; below is a code snippet using the collision callbacks.
 
 C#
 
 ```csharp
 namespace Quantum
 {
- using Quantum.Core;
- using Quantum.Physics3D;
-
- public unsafe class SampleSystem : SystemMainThreadFilter<SampleSystem.Filter>, IKCCCallbacks3D
- {
- public struct Filter
- {
- public EntityRef EntityRef;
- public CharacterController3D\* KCC;
- }
-
- public bool OnCharacterCollision3D(FrameBase f, EntityRef character, Hit3D hit)
- {
- // read the collision information to decide if this should or not be ignored
- return true;
- }
-
- public void OnCharacterTrigger3D(FrameBase f, EntityRef character, Hit3D hit)
- {
- }
-
- public override void Update(Frame frame, ref Filter filter)
- {
- // \[...\]
- // adding the IKCCCallbacks3D as the last parameter (this system, in this case)
- //CharacterController3D.Move(, input->Direction, this);
- filter.KCC->Move(frame, filter.EntityRef, input->Direction, this);
- // \[...\]
- }
- }
+  using Quantum.Core;
+  using Quantum.Physics3D;
+  public unsafe class SampleSystem : SystemMainThreadFilter<SampleSystem.Filter>, IKCCCallbacks3D
+  {
+    public struct Filter
+    {
+      public EntityRef EntityRef;
+      public CharacterController3D* KCC;
+    }
+    public bool OnCharacterCollision3D(FrameBase f, EntityRef character, Hit3D hit)
+    {
+      // read the collision information to decide if this should or not be ignored
+      return true;
+    }
+    public void OnCharacterTrigger3D(FrameBase f, EntityRef character, Hit3D hit)
+    {
+    }
+    public override void Update(Frame frame, ref Filter filter)
+    {
+      // [...]
+      // adding the IKCCCallbacks3D as the last parameter (this system, in this case)
+      //CharacterController3D.Move(, input->Direction, this);
+      filter.KCC->Move(frame, filter.EntityRef, input->Direction, this);
+      // [...]
+    }
+  }
 }
 
 ```

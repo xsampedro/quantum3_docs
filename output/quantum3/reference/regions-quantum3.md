@@ -154,37 +154,13 @@ Photon Realtime (used by most Photon SDKs) can detect the Best Region to connect
 
 To do so, clients always fetch the list of available regions from the Name Server on connect.
 
-The servers response is used to setup the ```
-LoadBalancingClient.RegionHandler
-```
+The servers response is used to setup the `LoadBalancingClient.RegionHandler` which is also provided via the callback `OnRegionListReceived(RegionHandler regionHandler)`, as defined in the `IConnectionCallbacks`.
 
- which is also provided via the callback ```
-OnRegionListReceived(RegionHandler regionHandler)
-```
+Typically, the next step is to call `regionHandler.PingMinimumOfRegions()` to detect the current ping to each region. You need to pass a method to call on completion and in best case you can also pass the "best region summary" from a previous run (explained below).
 
-, as defined in the ```
-IConnectionCallbacks
-```
+After pinging the servers, the (new) results are summarized in the `regionHandler.SummaryToCache` which should be saved on the device for later use.
 
-.
-
-Typically, the next step is to call ```
-regionHandler.PingMinimumOfRegions()
-```
-
-to detect the current ping to each region. You need to pass a method to call on completion and in best case you can also pass the "best region summary" from a previous run (explained below).
-
-After pinging the servers, the (new) results are summarized in the ```
-regionHandler.SummaryToCache
-```
-
- which should be saved on the device for later use.
-
-Without the ```
-SummaryToCache
-```
-
-from a previous session, all regions will be pinged, which takes a moment longer.
+Without the `SummaryToCache` from a previous session, all regions will be pinged, which takes a moment longer.
 
 If a previous result is available, the client will check:
 
@@ -217,15 +193,7 @@ To debug, set the logging level to "Info" and clear the "current best region" (i
 
 ## Connect to a specific Master Server
 
-To connect your clients to a specific region, set the ```
-AppSettings.FixedRegion
-```
-
- to a valid Region code and call ```
-ConnectUsingSettings(settings)
-```
-
-.
+To connect your clients to a specific region, set the `AppSettings.FixedRegion` to a valid Region code and call `ConnectUsingSettings(settings)`.
 
 The SDK will get the master server address for the requested region from the Name Server (1 in the figure "Connect to Photon Cloud regions") and automatically connect you to the master server in the chosen region (2 in the figure "Connect to Photon Cloud regions").
 
@@ -247,36 +215,20 @@ That keeps the time to request the master servers' addresses as low as possible.
 C#
 
 ```csharp
- loadBalancingClient.ConnectToNameServer()
+    loadBalancingClient.ConnectToNameServer()
 
 ```
 
-After a successful connection, ```
-LoadBalancingClient.OpGetRegions()
-```
+After a successful connection, `LoadBalancingClient.OpGetRegions()` gets called internally. The result of this sets up the `loadBalancingClient.RegionHandler` and calls `OnRegionListReceived` if your code implements it and registered for callbacks.
 
- gets called internally. The result of this sets up the ```
-loadBalancingClient.RegionHandler
-```
-
-and calls ```
-OnRegionListReceived
-```
-
- if your code implements it and registered for callbacks.
-
-With the list of master servers, you could now ping all to figure out the best region to connect to for lowest latency gameplay, or let your players choose a region. This can be done with ```
-RegionHandler.PingMinimumOfRegions()
-```
-
-.
+With the list of master servers, you could now ping all to figure out the best region to connect to for lowest latency gameplay, or let your players choose a region. This can be done with `RegionHandler.PingMinimumOfRegions()`.
 
 When your client has determined a region, connect to the master server for that region (2 in the figure "Connect to Photon Cloud regions").
 
 C#
 
 ```csharp
- loadBalancingClient.ConnectToRegionMaster("us")
+    loadBalancingClient.ConnectToRegionMaster("us")
 
 ```
 

@@ -16,95 +16,31 @@ To get an overview about how the **SDK content** is constructed read about the [
 
 This section shows gives a quick introduction on where to start exploring the basic aspects of a Quantum game and the Platform Shooter 2D sample in particular.
 
-The ```
-QuantumGameScene
-```
+The `QuantumGameScene` contains the `QuantumMap` and `SceneColliders` game objects which later represent parts of the Quantum simulation.
 
- contains the ```
-QuantumMap
-```
-
-and ```
-SceneColliders
-```
-
- game objects which later represent parts of the Quantum simulation.
-
-The static colliders for example are baked into a Quantum map for this scene by pressing ```
-Bake
-```
-
-in the map inspector for example.
+The static colliders for example are baked into a Quantum map for this scene by pressing `Bake` in the map inspector for example.
 
 - [Physics - Static colliders](/quantum/current/manual/physics/statics)
 - [Maps - overview](/quantum/current/manual/maps/overview)
 
-The ```
-QuantumDebugRunner
-```
+The `QuantumDebugRunner` game object is used to start the Quantum simulation inside the current scene when pressing `Play`. It contains the `RuntimeConfig` property where the map and other important Quantum configs are linked to start with.
 
- game object is used to start the Quantum simulation inside the current scene when pressing ```
-Play
-```
-
-. It contains the ```
-RuntimeConfig
-```
-
- property where the map and other important Quantum configs are linked to start with.
-
-For example the ```
-SystemsConfig
-```
-
-, it references the ```
-PlatformShooter2DSystemsConfig
-```
-
-asset. The file includes all the Quantum systems that will be started.
+For example the `SystemsConfig`, it references the `PlatformShooter2DSystemsConfig` asset. The file includes all the Quantum systems that will be started.
 
 When loading the scene via the a game menu scene the debug runner disables itself.
 
 - [Quantum ECS - SystemsConfig](/quantum/current/manual/quantum-ecs/systems#systemsconfig)
 - [Configuration files - RuntimeConfig](/quantum/current/manual/config-files#runtimeconfig)
 
-The content of the ```
-Assets/QuantumUser/Simulation
-```
-
-folder includes all game simulation sources and QTN files (Quantum code generation). It uses a Unity ```
-asmref
-```
-
-to be finally added to the simulation dll.
+The content of the `Assets/QuantumUser/Simulation` folder includes all game simulation sources and QTN files (Quantum code generation). It uses a Unity `asmref` to be finally added to the simulation dll.
 
 - [Quantum ECS - DSL](/quantum/current/manual/quantum-ecs/dsl)
 
-While the game is running underneath the ```
-QuantumEntityViewUpdater
-```
+While the game is running underneath the `QuantumEntityViewUpdater` game object Quantum entity views are spawned. For example the player character entity (after selecting on in the UI).
 
-game object Quantum entity views are spawned. For example the player character entity (after selecting on in the UI).
+The two entity prototypes to select from are `Character\_Boy\_Variant` and `Character\_Girl\_Variant` assets.
 
-The two entity prototypes to select from are ```
-Character\_Boy\_Variant
-```
-
- and ```
-Character\_Girl\_Variant
-```
-
-assets.
-
-The ```
-PlayerSystem
-```
-
- class controls how the avatars are created at run-time based on new players joining using the ```
-ISignalOnPlayerAdded
-```
-
-signal.
+The `PlayerSystem` class controls how the avatars are created at run-time based on new players joining using the `ISignalOnPlayerAdded` signal.
 
 - [Entity view](/quantum/current/manual/entityview)
 - [Entity prototypes](/quantum/current/manual/entity-prototypes)
@@ -144,18 +80,18 @@ To use incremental raycasts for bullets is a good approach to prevent fast bulle
 C#
 
 ```csharp
-Physics2D.HitCollection hits = frame.Physics2D.LinecastAll(bulletTransform->Position, futurePosition, -1, QueryOptions.HitAll \| QueryOptions.ComputeDetailedInfo);
+Physics2D.HitCollection hits = frame.Physics2D.LinecastAll(bulletTransform->Position, futurePosition, -1, QueryOptions.HitAll | QueryOptions.ComputeDetailedInfo);
 for (int i = 0; i < hits.Count; i++)
 {
- var entity = hits\[i\].Entity;
- ...
- if (entity == EntityRef.None)
- {
- bulletTransform->Position = hits\[i\].Point;
- // Applies polymorphic behavior on the bullet action
- data.BulletAction(frame, bullet, EntityRef.None);
- return true;
- }
+  var entity = hits[i].Entity;
+  ...
+  if (entity == EntityRef.None)
+  {
+    bulletTransform->Position = hits[i].Point;
+    // Applies polymorphic behavior on the bullet action
+    data.BulletAction(frame, bullet, EntityRef.None);
+    return true;
+  }
 }
 
 ```
@@ -168,19 +104,7 @@ Running character or team selection inside the simulation is much less error-pro
 
 This sample lets the simulation start, while postponing adding a player to the game until after the character has been selected in the UI.
 
-The ```
-CharacterSelectionUIController.cs
-```
-
- handles the UI and finally creates a ```
-RuntimePlayer
-```
-
-object and requests to add a player. The ```
-RuntimePlayer
-```
-
- config can be easily verified via a custom game data backend using the AddPlayer webhook.
+The `CharacterSelectionUIController.cs` handles the UI and finally creates a `RuntimePlayer` object and requests to add a player. The `RuntimePlayer` config can be easily verified via a custom game data backend using the AddPlayer webhook.
 
 C#
 
@@ -188,35 +112,25 @@ C#
 // Create player data with the selected character.
 RuntimePlayer playerData = new RuntimePlayer();
 playerData.PlayerAvatar = characterPrototype;
-
 // Attempt to set the player's nickname from the menu.
 var menu =
 FindAnyObjectByType(typeof(Quantum.Menu.QuantumMenuUIController)) as Quantum.Menu.QuantumMenuUIController;
 if (menu != null)
 {
-playerData.PlayerNickname = menu.ConnectArgs.Username;
+  playerData.PlayerNickname = menu.ConnectArgs.Username;
 }
-
 // Add the player to the game.
 runner.Game.AddPlayer(playerData);
 
 ```
 
-The ```
-PlayerSystem.cs
-```
-
-script inside the simulation listens to the ```
-ISignalOnPlayerAdded
-```
-
-signal to create the player avatar after the add player request was confirmed by the server.
+The `PlayerSystem.cs` script inside the simulation listens to the `ISignalOnPlayerAdded` signal to create the player avatar after the add player request was confirmed by the server.
 
 C#
 
 ```csharp
 EntityRef character = frame.Create(prototypeAsset);
-PlayerLink\* playerLink = frame.Unsafe.GetPointer<PlayerLink>(character);
+PlayerLink* playerLink = frame.Unsafe.GetPointer<PlayerLink>(character);
 playerLink->PlayerRef = player;
 RespawnHelper.RespawnRobot(frame, character);
 

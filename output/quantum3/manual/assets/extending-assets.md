@@ -12,29 +12,21 @@ Quantum assets can be extended with Unity-specific data not relevant for the sim
 
 In Quantum 3, you no longer need to define your asset as partial and import it in a DSL file.
 
-Instead, you should derive directly from ```
-AssetObject
-```
-
- and add your desired information.
+Instead, you should derive directly from `AssetObject` and add your desired information.
 
 ## Example
 
-Let's take the ```
-CharacterSpec
-```
-
-asset as an example.
+Let's take the `CharacterSpec` asset as an example.
 
 C#
 
 ```csharp
 public class CharacterSpec : AssetObject {
-#if QUANTUM\_UNITY
- \[Header("Unity")\]
- public Sprite Icon;
- public Color Color;
- public string DisplayName;
+#if QUANTUM_UNITY
+  [Header("Unity")]
+  public Sprite Icon;
+  public Color Color;
+  public string DisplayName;
 #endif
 }
 
@@ -44,11 +36,7 @@ These fields should only be accessed in the View (Unity) and should NEVER be acc
 
 ### Access at Runtime
 
-To access the extra fields at runtime, use any of the overloads of ```
-QuantumUnityDB.GetGlobalAsset
-```
-
- method.
+To access the extra fields at runtime, use any of the overloads of `QuantumUnityDB.GetGlobalAsset` method.
 
 C#
 
@@ -58,17 +46,13 @@ Debug.Log(characterSpec.DisplayName);
 
 ```
 
-Alternatively, ```
-QuantumUnityDB.TryGetGlobalAsset
-```
-
-can be used.
+Alternatively, `QuantumUnityDB.TryGetGlobalAsset` can be used.
 
 C#
 
 ```csharp
 if (QuantumUnityDB.TryGetGlobalAsset(assetPath, out CharacterSpec characterSpec)) {
- Debug.Log(characterSpec.DisplayName);
+  Debug.Log(characterSpec.DisplayName);
 }
 
 ```
@@ -77,11 +61,7 @@ Both of the approaches will result in the asset being loaded into Quantum's Asse
 
 ### Access at Edit-time
 
-To load an asset using its path while in the Unity Editor, the ```
-UnityEditor.AssetDataBase.LoadAssetAtPath<T>()
-```
-
- method can be used.
+To load an asset using its path while in the Unity Editor, the `UnityEditor.AssetDataBase.LoadAssetAtPath<T>()` method can be used.
 
 C#
 
@@ -91,15 +71,7 @@ Debug.Log(characterSpecAsset.DisplayName);
 
 ```
 
-Alternatively, the asset can be loaded using any of ```
-QuantumUnityDB.GetGlobalAssetEditorInstance
-```
-
-of ```
-QuantumUnityDB.TryGetGlobalAssetEditorInstance
-```
-
-method.
+Alternatively, the asset can be loaded using any of `QuantumUnityDB.GetGlobalAssetEditorInstance` of `QuantumUnityDB.TryGetGlobalAssetEditorInstance` method.
 
 C#
 

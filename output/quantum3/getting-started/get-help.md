@@ -35,19 +35,7 @@ For quick turnarounds please include:
   - Modem, router or other network equipments used in the affected network (gateway or between client and server).
   - Via email only: We may request that you provide:
     - Public IP address of affected client(s) / server(s).
-    - Results of ```
-      ping
-      ```
-
-       or ```
-      tracert
-      ```
-
-      /```
-      traceroute
-      ```
-
-      .
+    - Results of `ping` or `tracert`/`traceroute`.
 - add screenshots or a short video if the problem is something visual.
 
 

@@ -14,202 +14,76 @@ The QuantumMapData, on the other hand, contains information about the map that i
 
 ## Map Baking
 
-The QuantumSampleGame scene already comes with a QuantumMapData component which references an asset for the Map called ```
-SampleMap
-```
-
-, which is located in the scene's Resources folder.
+The QuantumSampleGame scene already comes with a QuantumMapData component which references an asset for the Map called `SampleMap`, which is located in the scene's Resources folder.
 
 When creating a new game scene, there are a few alternatives to create and populate the new QuantumMapData component:
 
-1. Create a new Quantum scene from the top toolbar: ```
-   Quantum/Setup/Create New Quantum Scene
-   ```
+1. Create a new Quantum scene from the top toolbar: `Quantum/Setup/Create New Quantum Scene`;
+2. Or transform an already created scene into a Quantum scene with: `Quantum/Setup/Add Quantum To Current Scene`;
+3. Or do the map setup manually by creating the Game Object with the `QuantumMapData` component and create, wherever preferred, a new `Map` asset from the context menu in `Create/Quantum/Map`.
 
-   ;
-2. Or transform an already created scene into a Quantum scene with: ```
-   Quantum/Setup/Add Quantum To Current Scene
-   ```
-
-   ;
-3. Or do the map setup manually by creating the Game Object with the ```
-   QuantumMapData
-   ```
-
-    component and create, wherever preferred, a new ```
-   Map
-   ```
-
-    asset from the context menu in ```
-   Create/Quantum/Map
-   ```
-
-   .
-
-In the ```
-QuantumEditorSettings
-```
-
-asset in the project under the ```
-Editor Features
-```
-
-section, automatic map baking for scene saving, playmode changes and building the app can be enabled or disabled.
+In the `QuantumEditorSettings` asset in the project under the `Editor Features` section, automatic map baking for scene saving, playmode changes and building the app can be enabled or disabled.
 
 While disabling automatic map baking may be useful in certain scenarios, it is important to note that manual map baking can be time-consuming and may introduce human error into the pipeline. As a result, it is generally recommended to keep automatic map baking enabled for most projects.
 
 ![QuantumEditorSettings MapBaking](/docs/img/quantum/v3/manual/manual-quantumeditorsettings-mapbaking.png)
- QuantumEditorSettings Map Baking
+QuantumEditorSettings Map Baking
 
 
-For a Scene to be baked in Quantum, it is necessary to have a ```
-QuantumMapData
-```
+For a Scene to be baked in Quantum, it is necessary to have a `QuantumMapData` component present on a GameObject in the scene. Additionally, if navmesh is present, a `QuantumMapNavMeshUnity` component is needed as well. The `QuantumSampleGame` scene provided with the Quantum SDK comes with the necessary `QuantumMapData` setup already in place.
 
-component present on a GameObject in the scene. Additionally, if navmesh is present, a ```
-QuantumMapNavMeshUnity
-```
-
-component is needed as well. The ```
-QuantumSampleGame
-```
-
-scene provided with the Quantum SDK comes with the necessary ```
-QuantumMapData
-```
-
-setup already in place.
-
-The ```
-QuantumMapData
-```
-
-MonoBehaviour component also includes buttons that can be used to manually trigger the baking process if needed. The ```
-Bake All Mode
-```
-
-can be adjusted to skip certain steps in the baking process.
+The `QuantumMapData` MonoBehaviour component also includes buttons that can be used to manually trigger the baking process if needed. The `Bake All Mode` can be adjusted to skip certain steps in the baking process.
 
 ![MapData Component](/docs/img/quantum/v3/manual/manual-mapdata-mapbaking.png)
- QuantumMapData Component
- ## QuantumMapData
+QuantumMapData Component
+## QuantumMapData
 
-When Quantum bakes a map, it generates a ```
-Map
-```
+When Quantum bakes a map, it generates a `Map` asset that can be found under `Resources/DB/Configs`. However, it is possible to move these assets to another location if desired.
 
-asset that can be found under ```
-Resources/DB/Configs
-```
+It's important to note that the values of the `Map` fields should generally not be changed manually, as re-baking the map will override any manual changes.
 
-. However, it is possible to move these assets to another location if desired.
-
-It's important to note that the values of the ```
-Map
-```
-
-fields should generally not be changed manually, as re-baking the map will override any manual changes.
-
-The ```
-User Asset
-```
-
- field in the Map Asset can be used to inject any asset into the map, which can then be retrieved on the simulation side. This can be done either by manually linking an asset in the inspector or by assigning one from a custom map baking callback. An example for this is shown [below](#adding_custom_data_to_a_map).
+The `User Asset` field in the Map Asset can be used to inject any asset into the map, which can then be retrieved on the simulation side. This can be done either by manually linking an asset in the inspector or by assigning one from a custom map baking callback. An example for this is shown [below](#adding_custom_data_to_a_map).
 
 ### Quantum Editor Settings BakeMapData
 
-Map baking callbacks in Quantum allows users to inject custom steps into the QuantumMapData baking process. To implement a map baking callback, it is possible to create a class that derives from ```
-MapDataBakerCallback
-```
-
-. This also requires the assembly to be marked with a custom attribute, which can be done in a single file by adding ```
-\[assembly: Quantum.QuantumMapBakeAssemblyAttribute\]
-```
-
-. This signs the entire assembly, so it is not necessary to add the same attribute in multiple files. Here's an example implementation:
+Map baking callbacks in Quantum allows users to inject custom steps into the QuantumMapData baking process. To implement a map baking callback, it is possible to create a class that derives from `MapDataBakerCallback`. This also requires the assembly to be marked with a custom attribute, which can be done in a single file by adding `\[assembly: Quantum.QuantumMapBakeAssemblyAttribute\]`. This signs the entire assembly, so it is not necessary to add the same attribute in multiple files. Here's an example implementation:
 
 C#
 
 ```csharp
-\[assembly: Quantum.QuantumMapBakeAssemblyAttribute\]
-
+[assembly: Quantum.QuantumMapBakeAssemblyAttribute]
 namespace Quantum
 {
-public class ExampleMapDataBaker : MapDataBakerCallback
-{
-public override void OnBeforeBake(QuantumMapData data)
-{
-}
-
-public override void OnBake(QuantumMapData data)
-{
-}
-}
+  public class ExampleMapDataBaker : MapDataBakerCallback
+  {
+    public override void OnBeforeBake(QuantumMapData data)
+    {
+    }
+    public override void OnBake(QuantumMapData data)
+    {
+    }
+  }
 }
 
 ```
 
-The ```
-MapDataBakerCallback
-```
-
-attribute in Quantum can be used to specify the order in which multiple custom map baking callbacks are executed. To use this attribute, add it to the custom map baking callback class and specify a ```
-invokeOrder
-```
-
-value. The lower the value, the earlier the callback will be executed during the map baking process.
+The `MapDataBakerCallback` attribute in Quantum can be used to specify the order in which multiple custom map baking callbacks are executed. To use this attribute, add it to the custom map baking callback class and specify a `invokeOrder` value. The lower the value, the earlier the callback will be executed during the map baking process.
 
 Here's an example:
 
 C#
 
 ```csharp
-\[MapDataBakerCallback(invokeOrder:5)\]
+[MapDataBakerCallback(invokeOrder:5)]
 public class ExampleMapDataBaker : MapDataBakerCallback
 
 ```
 
-```
-OnBeforeBake
-```
+`OnBeforeBake` is called before any other MapData baking is executed. It allows to adjust the Unity scene by adding or removing components, for example.
 
-is called before any other MapData baking is executed. It allows to adjust the Unity scene by adding or removing components, for example.
+`OnBake` is called after all built-in baking steps for the map have been executed, but before the `Map` asset is saved. This allows for adjusting the `Map` while accessing all the data of the baked map.
 
-```
-OnBake
-```
-
-is called after all built-in baking steps for the map have been executed, but before the ```
-Map
-```
-
-asset is saved. This allows for adjusting the ```
-Map
-```
-
-while accessing all the data of the baked map.
-
-There are additional virtual callbacks that can be overridden if needed. ```
-OnBeforeBakeNavmesh
-```
-
-, ```
-OnCollectNavMeshBakeData
-```
-
-, ```
-OnCollectNavMeshes
-```
-
-, ```
-OnBakeNavMesh
-```
-
-and an overload of ```
-OnBeforeBake
-```
-
-that provides the bake flags and what triggered the baking.
+There are additional virtual callbacks that can be overridden if needed. `OnBeforeBakeNavmesh`, `OnCollectNavMeshBakeData`, `OnCollectNavMeshes`, `OnBakeNavMesh` and an overload of `OnBeforeBake` that provides the bake flags and what triggered the baking.
 
 ## Adding Custom Data to a Map
 
@@ -228,41 +102,33 @@ asset MapCustomData;
 
 ```
 
-Then, create a new class in the ```
-Quantum
-```
-
- project to store the spawnpoint data:
+Then, create a new class in the `Quantum` project to store the spawnpoint data:
 
 C#
 
 ```csharp
 namespace Quantum
 {
-using System;
-using Photon.Deterministic;
-
-public unsafe partial class MapCustomData
-{
-\[Serializable\]
-public struct SpawnPointData
-{
-public FPVector3 Position;
-
-public FPQuaternion Rotation;
-}
-
-public SpawnPointData DefaultSpawnPoint;
-public SpawnPointData\[\] SpawnPoints;
-
-public void SetEntityToSpawnPoint(Frame frame, EntityRef entity, Int32? index)
-{
-var transform = frame.Unsafe.GetPointer<Transform3D>(entity);
-var spawnPoint = index.HasValue && index.Value < SpawnPoints.Length ? SpawnPoints\[index.Value\] : DefaultSpawnPoint;
-transform->Position = spawnPoint.Position;
-transform->Rotation = spawnPoint.Rotation;
-}
-}
+  using System;
+  using Photon.Deterministic;
+  public unsafe partial class MapCustomData
+  {
+    [Serializable]
+    public struct SpawnPointData
+    {
+      public FPVector3 Position;
+      public FPQuaternion Rotation;
+    }
+    public SpawnPointData DefaultSpawnPoint;
+    public SpawnPointData[] SpawnPoints;
+    public void SetEntityToSpawnPoint(Frame frame, EntityRef entity, Int32? index)
+    {
+      var transform = frame.Unsafe.GetPointer<Transform3D>(entity);
+      var spawnPoint = index.HasValue && index.Value < SpawnPoints.Length ? SpawnPoints[index.Value] : DefaultSpawnPoint;
+      transform->Position = spawnPoint.Position;
+      transform->Rotation = spawnPoint.Rotation;
+    }
+  }
 }
 
 ```
@@ -274,63 +140,45 @@ C#
 ```csharp
 namespace Quantum
 {
-using UnityEditor;
-using UnityEngine;
-
-public class SpawnPointBaker : MapDataBakerCallback
-{
-public override void OnBeforeBake(QuantumMapData data)
-{
-}
-
-public override void OnBake(QuantumMapData data)
-{
-var customData = QuantumUnityDB.GetGlobalAssetEditorInstance<Map>(data.Asset.UserAsset.Id);
-var spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
-
-if (customData == null \|\| spawnPoints.Length == 0)
-{
-return;
-}
-
-var defaultSpawnPoint = spawnPoints\[0\];
-if (customData.DefaultSpawnPoint.Equals(default(MapCustomData.SpawnPointData)))
-{
-customData.DefaultSpawnPoint.Position = defaultSpawnPoint.transform.position.ToFPVector3();
-customData.DefaultSpawnPoint.Rotation = defaultSpawnPoint.transform.rotation.ToFPQuaternion();
-}
-
-customData.SpawnPoints = new MapCustomData.SpawnPointData\[spawnPoints.Length\];
-for (var i = 0; i < spawnPoints.Length; i++)
-{
-customData.SpawnPoints\[i\].Position = spawnPoints\[i\].transform.position.ToFPVector3();
-customData.SpawnPoints\[i\].Rotation = spawnPoints\[i\].transform.rotation.ToFPQuaternion();
-}
-
-#if UNITY\_EDITOR
-EditorUtility.SetDirty(customData);
+  using UnityEditor;
+  using UnityEngine;
+  public class SpawnPointBaker : MapDataBakerCallback
+  {
+    public override void OnBeforeBake(QuantumMapData data)
+    {
+    }
+    public override void OnBake(QuantumMapData data)
+    {
+      var customData = QuantumUnityDB.GetGlobalAssetEditorInstance<Map>(data.Asset.UserAsset.Id);
+      var spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
+      if (customData == null || spawnPoints.Length == 0)
+      {
+        return;
+      }
+      var defaultSpawnPoint = spawnPoints[0];
+      if (customData.DefaultSpawnPoint.Equals(default(MapCustomData.SpawnPointData)))
+      {
+        customData.DefaultSpawnPoint.Position = defaultSpawnPoint.transform.position.ToFPVector3();
+        customData.DefaultSpawnPoint.Rotation = defaultSpawnPoint.transform.rotation.ToFPQuaternion();
+      }
+      customData.SpawnPoints = new MapCustomData.SpawnPointData[spawnPoints.Length];
+      for (var i = 0; i < spawnPoints.Length; i++)
+      {
+        customData.SpawnPoints[i].Position = spawnPoints[i].transform.position.ToFPVector3();
+        customData.SpawnPoints[i].Rotation = spawnPoints[i].transform.rotation.ToFPQuaternion();
+      }
+#if UNITY_EDITOR
+      EditorUtility.SetDirty(customData);
 #endif
+    }
+  }
 }
-}
-}
 
 ```
 
-This baker is relatively simple. It gathers all GameObjects with a ```
-SpawnPoint
-```
+This baker is relatively simple. It gathers all GameObjects with a `SpawnPoint` tag in the scene and extracts their position and rotation, which are then saved into the custom asset. Finally, the asset is marked dirty so that the changes are stored to the disk.
 
-tag in the scene and extracts their position and rotation, which are then saved into the custom asset. Finally, the asset is marked dirty so that the changes are stored to the disk.
-
-To use the custom data, add GameObjects with the SpawnPoint tag to the scene. Then create a ```
-MapCustomDataAsset
-```
-
- and assign it to the ```
-UserAsset
-```
-
-field of the map. To make use of the spawn points in the simulation, employ the following code:
+To use the custom data, add GameObjects with the SpawnPoint tag to the scene. Then create a `MapCustomDataAsset` and assign it to the `UserAsset` field of the map. To make use of the spawn points in the simulation, employ the following code:
 
 C#
 
@@ -357,21 +205,14 @@ One approach is to bake a new map before the Quantum session is started. With th
    - This method is more complex, as you need to ensure that all clients bake the map in the same way. This can be achieved by sharing the seed used for the map generation and by making sure your code is deterministic.
    - This saves bandwidth, as you only need to send the seed to the clients, and they can generate the map themselves.
 
-How to add static assets to the ```
-QuantumUnityDB
-```
-
- at runtime:
+How to add static assets to the `QuantumUnityDB` at runtime:
 
 C#
 
 ```csharp
 var generatedMap = new Map();
-
 // generate...
-
 // add the map to the QuantumUnityDB
-
 QuantumUnityDB.Global.AddAsset(generatedMap);
 
 ```

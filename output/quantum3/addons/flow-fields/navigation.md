@@ -33,41 +33,26 @@ Flows towards each portal are precalculated and reused when needed. Recalculatio
 
 ## Movement
 
-Units movement is not part of this addon. The ```
-FlowFieldPathfinder
-```
-
- provides the direction in which the unit should move to follow calculated path.
+Units movement is not part of this addon. The `FlowFieldPathfinder` provides the direction in which the unit should move to follow calculated path.
 
 There are two movement implementations included in this sample:
 
-1. Simple movement setting the position directly in the Transform2D component - see ```
-   MovementBasic
-   ```
-
-   ;
-2. More advanced movement using the PhysicsBody2D component - see ```
-   MovementAdvanced
-   ```
-
-   .
+1. Simple movement setting the position directly in the Transform2D component - see `MovementBasic`;
+2. More advanced movement using the PhysicsBody2D component - see `MovementAdvanced`.
 
 ### MovementBasic Example
 
 C#
 
 ```csharp
-var pathfinder = frame.GetPointer<FlowFieldPathfinder>(entity);
-
-if (pathfinder->HasDestination == false \|\| pathfinder->AtDestination == true)
-return;
-
+var pathfinder  = frame.GetPointer<FlowFieldPathfinder>(entity);
+if (pathfinder->HasDestination == false || pathfinder->AtDestination == true)
+    return;
 var direction = pathfinder->GetDirection(frame, entity);
 if (direction.Valid == false)
-return;
-
-var transform = frame.GetPointer<Transform2D>(entity);
-transform->Position += direction.Direction \* Speed \* frame.DeltaTime;
+    return;
+var transform        = frame.GetPointer<Transform2D>(entity);
+transform->Position += direction.Direction * Speed * frame.DeltaTime;
 
 ```
 
@@ -76,23 +61,20 @@ transform->Position += direction.Direction \* Speed \* frame.DeltaTime;
 C#
 
 ```csharp
-var pathfinder = frame.GetPointer<FlowFieldPathfinder>(entity);
+var pathfinder  = frame.GetPointer<FlowFieldPathfinder>(entity);
 var physicsBody = frame.GetPointer<PhysicsBody2D>(entity);
-
-if (pathfinder->HasDestination == false \|\| pathfinder->AtDestination == true)
+if (pathfinder->HasDestination == false || pathfinder->AtDestination == true)
 {
-physicsBody->Velocity = default;
-return;
+    physicsBody->Velocity = default;
+    return;
 }
-
 var direction = pathfinder->GetRotationDirection(frame, entity);
 if (direction.Valid == false)
 {
-physicsBody->Velocity = default;
-return;
+    physicsBody->Velocity = default;
+    return;
 }
-
-physicsBody->Velocity = FPVector2.Rotate(FPVector2.Up, direction.Rotation) \* Speed;
+physicsBody->Velocity = FPVector2.Rotate(FPVector2.Up, direction.Rotation) * Speed;
 physicsBody->WakeUp();
 
 ```
