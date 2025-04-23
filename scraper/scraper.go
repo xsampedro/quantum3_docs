@@ -15,6 +15,14 @@ import (
 	"github.com/gocolly/colly/v2"
 )
 
+// DocProvider represents a documentation provider type
+type DocProvider string
+
+const (
+	QuantumProvider DocProvider = "quantum"
+	RealtimeProvider DocProvider = "realtime"
+)
+
 // Config contains the configuration for the API docs scraper
 type Config struct {
 	BaseURL        string
@@ -23,6 +31,7 @@ type Config struct {
 	ListOnly       bool
 	BasePath       string
 	MaxConcurrency int
+	Provider       DocProvider
 }
 
 // Scraper manages the scraping of API documentation
@@ -37,11 +46,21 @@ type Scraper struct {
 // New creates a new API documentation scraper
 func New(config Config) *Scraper {
 	if config.OutputDir == "" {
-		config.OutputDir = "output/quantum3"
+		switch config.Provider {
+		case RealtimeProvider:
+			config.OutputDir = "output/realtime"
+		default:
+			config.OutputDir = "output/quantum3"
+		}
 	}
 
 	if config.BasePath == "" {
-		config.BasePath = "/quantum/current/"
+		switch config.Provider {
+		case RealtimeProvider:
+			config.BasePath = "/realtime/current/"
+		default:
+			config.BasePath = "/quantum/current/"
+		}
 	}
 
 	if config.MaxConcurrency == 0 {
@@ -125,7 +144,12 @@ func (s *Scraper) shouldProcessURL(url string) bool {
 		return false
 	}
 	
-	// Only process URLs in the specified base path
+	// For Realtime provider, ensure we process all realtime URLs
+	if s.config.Provider == RealtimeProvider {
+		return strings.Contains(url, "/realtime/current/")
+	}
+	
+	// For Quantum provider, only process URLs with the specific base path
 	return strings.Contains(url, s.config.BasePath)
 }
 
@@ -214,14 +238,32 @@ func (s *Scraper) Setup() error {
 			}
 			
 			// Extract main content and remove navigation, header, footer
-			// This is site-specific and may need adjustment
+			// Adjust content selection based on provider
 			var mainContent string
+			
+			// Provider-specific selectors for main content
+			var contentSelectors string
+			switch s.config.Provider {
+			case RealtimeProvider:
+				// Specific selectors for Photon Realtime docs
+				contentSelectors = "main, article, .content, .main-content, #content, div[role='main'], body"
+			default:
+				// Default selectors
+				contentSelectors = "main, article, .content, .main-content, #content"
+			}
+			
 			doc.Find("body").Each(func(i int, sel *goquery.Selection) {
 				// Remove navigation, header, footer elements
-				sel.Find("nav, header, footer, script, style, .sidebar, #sidebar").Remove()
+				sel.Find("nav, header, footer, script, style, .sidebar, #sidebar, .navigation, .menu, .cookie-container, .multiplayer-menu, .product-menu, form").Remove()
 				
-				// Find main content - typical container for article content
-				content := sel.Find("main, article, .content, .main-content, #content")
+				// For Realtime docs, do additional cleanup
+				if s.config.Provider == RealtimeProvider {
+					// Remove specific elements by class or ID that might contain navigation/sidebar/header/footer
+					sel.Find(".product-menu, .col-md-3, .multiplayer-menu, .join-circle, .photon-footer").Remove()
+				}
+				
+				// Find main content using provider-specific selectors
+				content := sel.Find(contentSelectors)
 				if content.Length() > 0 {
 					// Use the content we found
 					htmlContent, err := content.Html()
@@ -412,4 +454,39 @@ func (s *Scraper) GetVisitedURLs() []string {
 		urls = append(urls, url)
 	}
 	return urls
+}
+
+// ScrapeRealtimeDocs is a convenience function to scrape Photon Realtime documentation
+func ScrapeRealtimeDocs(outputDir string, listOnly bool, maxConcurrency int) error {
+	// Create a new scraper config for Photon Realtime
+	config := Config{
+		BaseURL:        "https://doc.photonengine.com/realtime/current/getting-started/realtime-intro",
+		OutputDir:      outputDir,
+		AllowedDomains: []string{"doc.photonengine.com"},
+		ListOnly:       listOnly,
+		BasePath:       "/realtime/current/",
+		MaxConcurrency: maxConcurrency,
+		Provider:       RealtimeProvider,
+	}
+
+	// Use empty output dir to use the default
+	if outputDir == "" {
+		config.OutputDir = "output/realtime"
+	}
+
+	// Use default concurrency if not specified
+	if maxConcurrency <= 0 {
+		config.MaxConcurrency = 5
+	}
+
+	// Create a new scraper with this config
+	s := New(config)
+
+	// Set up the scraper
+	if err := s.Setup(); err != nil {
+		return err
+	}
+
+	// Run the scraper
+	return s.Run()
 } 

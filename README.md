@@ -1,6 +1,6 @@
-# Quantum3 API Documentation Scraper
+# Quantum3 and Realtime API Documentation Scraper
 
-A simple Go application that scrapes API documentation from a vendor's website and saves it locally.
+A simple Go application that scrapes API documentation from Photon's websites and saves it locally in Markdown format.
 
 ## Purpose
 
@@ -8,7 +8,7 @@ This repository was created to facilitate uploading API documentation to [Contex
 
 ## Features
 
-- Scrapes Quantum 3 documentation from the official website
+- Scrapes Quantum 3 and Photon Realtime documentation from the official website
 - Converts HTML to clean Markdown format
 - Properly handles and formats code blocks
 - Preserves original document structure
@@ -26,8 +26,11 @@ This repository was created to facilitate uploading API documentation to [Contex
 ├── README.md           # Project documentation
 ├── go.mod              # Go module definition
 ├── main.go             # Main application code
+├── scraper/            # Scraper package code
+│   └── scraper.go      # Core scraping functionality
 └── output/             # Root output directory
-    └── quantum3/       # Output directory for Quantum3 documentation
+    ├── quantum3/       # Output directory for Quantum3 documentation
+    └── realtime/       # Output directory for Photon Realtime documentation
 ```
 
 ## Getting Started
@@ -43,9 +46,14 @@ This repository was created to facilitate uploading API documentation to [Contex
    go mod tidy
    ```
 
-3. Run the application:
+3. Run the application to scrape Quantum documentation:
    ```
-   go run main.go -list=false
+   go run main.go -type=quantum -list-only=false
+   ```
+
+4. Run the application to scrape Realtime documentation:
+   ```
+   go run main.go -type=realtime -list-only=false
    ```
 
 ## GitHub Actions
@@ -64,15 +72,19 @@ The action will run the scraper, commit any changes to the documentation, and pu
 
 To configure the application for your specific needs:
 
-1. Update the vendor domain in `main.go` by modifying the `domain` flag
-2. Set the correct API documentation starting URL by updating the `baseURL` flag
-3. Change the output directory using the `output` flag (defaults to `output/quantum3`)
-4. Use `-list=true` to only list URLs without downloading (defaults to `true`)
-5. Adjust concurrency with the `concurrency` flag (defaults to twice the number of CPU cores)
+1. Use the `-type` flag to specify which documentation to scrape:
+   - `quantum`: Scrapes Quantum documentation
+   - `realtime`: Scrapes Photon Realtime documentation
+
+2. Change the output directory using the `-output` flag (defaults to `output/quantum3` for Quantum or `output/realtime` for Realtime)
+
+3. Use `-list-only=true` to only list URLs without downloading (defaults to `false`)
+
+4. Adjust concurrency with the `-concurrency` flag (defaults to 5)
 
 Example with custom settings:
 ```
-go run main.go -url="https://example.com/docs" -output="output/custom" -list=false -concurrency=4
+go run main.go -type=realtime -output="output/custom-realtime" -list-only=false -concurrency=4
 ```
 
 ## License
