@@ -35,47 +35,12 @@ Starting a local Photon Server is only supported on Windows.
 
 #### Build 52 (Mar 04, 2025)
 
-- Input deserialization errors caused by clients are now ignored, set ```
-ClientInputExceptionTolerance
-```
-
-(default is 2) to define how many are ignored before disconnecting the client
+- Input deserialization errors caused by clients are now ignored, set `ClientInputExceptionTolerance` (default is 2) to define how many are ignored before disconnecting the client
 - Custom plugins running on the cloud are using a more efficient native memory allocator
 - Replaced the scheduled plugin fiber timer with an incremental timer, started at the end of an update which contributes to server stability
-- Fixed an issue that prevented ```
-MaxPlayerSlots
-```
-
-to be set correctly when selecting ```
-  -1
-```
-
-(unlimited) by webhooks
-- The lobby restrictions are now less strict, max count from ```
-3
-```
-
-to ```
-20
-```
-
-and max string length from ```
-64
-```
-
-to```
-128
-```
-
-, violations now fail the game creation instead of silently removing the properties
-- Added a mapping from ```
-PlayerRef
-```
-
-to client object using ```
-DeterministicServer.GetClientForPlayer(PlayerRef)
-```
-
+- Fixed an issue that prevented `MaxPlayerSlots` to be set correctly when selecting `-1` (unlimited) by webhooks
+- The lobby restrictions are now less strict, max count from `3` to `20` and max string length from `64` to`128`, violations now fail the game creation instead of silently removing the properties
+- Added a mapping from `PlayerRef` to client object using `DeterministicServer.GetClientForPlayer(PlayerRef)`
 
 ### 3.0.1
 
@@ -83,91 +48,21 @@ DeterministicServer.GetClientForPlayer(PlayerRef)
 
 - Fixed an issue that could cause the disconnect signal to be missing when replacing disconnected clients on the plugin
 - Fixed an issue that would disconnect fast reconnecting clients before the session has started
-- Removing ```
-ActorNr
-```
-
-property from ```
-Create
-```
-
-and ```
-Join
-```
-
-webhooks because the ids are not know at this point
+- Removing `ActorNr` property from `Create` and `Join` webhooks because the ids are not know at this point
 
 #### Build 39 (Dec 02, 2024)
 
-- Added ```
-ActorNr
-```
-
-and ```
-AuthCookie
-```
-
-properties for all player related webhooks
-- Added ```
-UserData
-```
-
-to the ```
-CreateGameResponse
-```
-
-webhook
-- Added ```
-IsInactive
-```
-
-to the ```
-LeaveGameRequest
-```
-
-webhook
-- Added a getter for ```
-DeterministicPluginClient
-```
-
-objects on the ```
-DeterministicServer
-```
-
-class
-- Added the ```
-RunServerSimulation
-```
-
-flag to the CreateGame webhook response to control running server simulation for particular games
+- Added `ActorNr` and `AuthCookie` properties for all player related webhooks
+- Added `UserData` to the `CreateGameResponse` webhook
+- Added `IsInactive` to the `LeaveGameRequest` webhook
+- Added a getter for `DeterministicPluginClient` objects on the `DeterministicServer` class
+- Added the `RunServerSimulation` flag to the CreateGame webhook response to control running server simulation for particular games
 - Added a new demo project that shows how to intercept and rewrite commands
-- Changed the server simulation wrapper ```
-DotNetSessionRunner
-```
-
-and moved responsibility to another interface implemented by ```
-DotNetSessionContext
-```
-
-which is responsible to make the resource manager or command serialized accessible by custom plugins that do not run the simulation
-- Renamed ```
-DeterministicServer.ServerSimulation
-```
-
-to ```
-SessionRunner
-```
-
-- Deprecated the ```
-DeterministicServer.ClientCount
-```
-
-property
+- Changed the server simulation wrapper `DotNetSessionRunner` and moved responsibility to another interface implemented by `DotNetSessionContext` which is responsible to make the resource manager or command serialized accessible by custom plugins that do not run the simulation
+- Renamed `DeterministicServer.ServerSimulation` to `SessionRunner`
+- Deprecated the `DeterministicServer.ClientCount` property
 - Fixed an issue that caused the game to stall after reconnecting into a single client online game using a RoomTTL
-- Fixed an issue with server snapshots that caused disconnects with ```
-Error #13: Snapshot request failed to start
-```
-
+- Fixed an issue with server snapshots that caused disconnects with `Error #13: Snapshot request failed to start`
 
 ### 3.0.0
 
@@ -193,11 +88,7 @@ Error #13: Snapshot request failed to start
 
 #### Build 24 (Jun 11, 2024)
 
-- Added ```
-DeterministicServer.OnDeterministicSessionCanStart
-```
-
-callback to stall the session start on the plugin
+- Added `DeterministicServer.OnDeterministicSessionCanStart` callback to stall the session start on the plugin
 
 #### Build 21 (Jun 04, 2024)
 

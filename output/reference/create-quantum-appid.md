@@ -6,43 +6,25 @@ _Source: https://doc.photonengine.com/quantum/current/reference/create-quantum-a
 
 Go to the [Photon Engine Dashboard](https://dashboard.photonengine.com) and log in or create an account.
 
-On the dashboard select ```
-Applications > Public Cloud
-```
+On the dashboard select `Applications > Public Cloud` and press `CREATE A NEW APP`.
 
- and press ```
-CREATE A NEW APP
-```
-
-.
-
-![](/docs/img/quantum/v3/reference/dashboard.png)
+![](https://doc.photonengine.com/docs/img/quantum/v3/reference/dashboard.png)
 
 - Select **Quantum** as Photon SDK
 - Select **Quantum 3** as SDK Version
 
-![](/docs/img/quantum/v3/reference/dashboard-create-new-appid.png)
+![](https://doc.photonengine.com/docs/img/quantum/v3/reference/dashboard-create-new-appid.png)
 
 Copy the AppId from the freshly created Quantum app.
 
-![](/docs/img/quantum/v3/reference/dashboard-appid.png)
+![](https://doc.photonengine.com/docs/img/quantum/v3/reference/dashboard-appid.png)
 
-In the Unity Editor paste the AppId into the Quantum Hub text field or into the ```
-PhotonServerSettings.asset
-```
-
- directly.
+In the Unity Editor paste the AppId into the Quantum Hub text field or into the `PhotonServerSettings.asset` directly.
 
 A) Paste into the Quantum Hub mask
 
-![](/docs/img/quantum/v3/reference/hub-appid.png)
+![](https://doc.photonengine.com/docs/img/quantum/v3/reference/hub-appid.png)
 
-B) Select the ```
-PhotonServerSettings
-```
+B) Select the `PhotonServerSettings` asset and paste as `AppSettings > App Id Quantum`
 
-asset and paste as ```
-AppSettings > App Id Quantum
-```
-
-![](/docs/img/quantum/v3/reference/quantum-menu-photonserversettings.png)![](/docs/img/quantum/v3/reference/quantum-photonserversettings.png)Back to top
+![](https://doc.photonengine.com/docs/img/quantum/v3/reference/quantum-menu-photonserversettings.png)![](https://doc.photonengine.com/docs/img/quantum/v3/reference/quantum-photonserversettings.png)Back to top

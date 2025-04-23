@@ -12,9 +12,8 @@ Using predict/rollback networking, it is both ideal for latency-sensitive online
 
 Quantum is free for development. Start building today, launch a game and pay only when its success grows beyond our free tier. [Quantum's pricing](https://www.photonengine.com/quantum/pricing) enables small titles to grow big.
 
-![Quantum Decoupled Architecture](/docs/img/quantum/v2/getting-started/quantum-intro/quantum-sdk-layers.jpg)
+![Quantum Decoupled Architecture](https://doc.photonengine.com/docs/img/quantum/v2/getting-started/quantum-intro/quantum-sdk-layers.jpg)
 Quantum helps developers write clean code. It decouples simulation logic (Quantum ECS) from the view/presentation (Unity), and takes care of the network implementations specifics (predict/rollback + transport layer + game agnostic server logic).
-
 
 The state-of-the-art tech stack is composed of the following pieces:
 
@@ -35,9 +34,8 @@ Quantum uses a game-agnostic authoritative server component, running on our phot
 
 This server component can be extended to integrate with customer hosted back-end systems, e.g. matchmaking, player services, authoritative ‘referee’ simulation.
 
-![Quantum Server-Managed predict/Rollback](/docs/img/quantum/v2/getting-started/quantum-intro/quantum-client-server.jpg)
+![Quantum Server-Managed predict/Rollback](https://doc.photonengine.com/docs/img/quantum/v2/getting-started/quantum-intro/quantum-client-server.jpg)
 In Quantum, input exchange is managed via game-agnostic server logic.
-
 
 The Quantum client library communicates with Quantum server and runs local simulation, performing all input prediction and rollbacks.
 
@@ -59,16 +57,13 @@ Pointer-based C# is used by Quantum, for performance. Complexity and boiler-plat
 
 Qtn
 
-```
 ```cs
 // components define reusable game state data groups
 component Resources
 {
-Int32 Mana;
-FP Health;
+  Int32 Mana;
+  FP Health;
 }
-
-```
 
 ```
 
@@ -78,16 +73,13 @@ The auto-generated API makes it easy to query and modify the game state with com
 
 C#
 
-```
 ```csharp
 var es = frame.Filter<Transform3D, Resources>();
 
 // sets the entity ref and pointers to the components
 while (es.NextUnsafe(out var entity, out var transform, out var resources)) {
-transform->Position += FPVector3.Forward \* frame.DeltaTime;
+  transform->Position += FPVector3.Forward * frame.DeltaTime;
 }
-
-```
 
 ```
 
@@ -99,18 +91,15 @@ Customer game logic is written by implementing Systems, which are stateless piec
 
 C#
 
-```
 ```csharp
 public unsafe class LogicSystem : SystemMainThread
 {
-public override void Update(Frame frame)
-{
-// customer game logic here
-// (frame is a reference for the generated game state container).
+  public override void Update(Frame frame)
+  {
+    // customer game logic here
+    // (frame is a reference for the generated game state container).
+  }
 }
-}
-
-```
 
 ```
 
@@ -118,13 +107,12 @@ public override void Update(Frame frame)
 
 Since Quantum and Unity are decoupled, communication into and out of the Quantum Simulation is well defined:
 
-![Quantum Inputs and Outputs](/docs/img/quantum/v3/getting-started/quantum-intro/quantum-inputs-outputs.jpg)### Asset Database
+![Quantum Inputs and Outputs](https://doc.photonengine.com/docs/img/quantum/v3/getting-started/quantum-intro/quantum-inputs-outputs.jpg)### Asset Database
 
 Unity is known for its flexible editor and asset pipeline. [Assets are defined in Quantum](/quantum/current/manual/assets/assets-simulation), then may be [created within Unity](/quantum/current/manual/assets/assets-unity) specifically to be shared with Quantum, allowing game and level designers to work as flexibly as they normally would in Unity:
 
-![Character Classes - Asset Linking](/docs/img/quantum/v3/asset-linking.png)
+![Character Classes - Asset Linking](https://doc.photonengine.com/docs/img/quantum/v3/asset-linking.png)
 Example of a Quantum Asset for a character which is created & modified in the Unity Editor.
-
 
 These assets are also available in the Unity code, of course.
 

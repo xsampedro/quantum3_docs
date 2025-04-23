@@ -20,11 +20,7 @@ Here are then code snippets which showcases how multiple components can be added
 
 ### Creating the compound component
 
-In the DSL (any ```
-.qtn
-```
-
- file), add the component below.
+In the DSL (any `.qtn` file), add the component below.
 
 Feel free to give them meaningful game-specific names to the components, or to add them in a generic-way to a list.
 
@@ -32,52 +28,42 @@ In this example, there is HFSM responsible only for Moving the entity and anothe
 
 Qtn
 
-```
 ```cs
 component CompoundAgents
 {
- HFSMAgent MovementHFSMAgent;
- HFSMAgent AttackHFSMAgent;
+    HFSMAgent MovementHFSMAgent;
+    HFSMAgent AttackHFSMAgent;
 
- AIBlackboardComponent MovementBlackboard;
- AIBlackboardComponent AttackBlackboard;
+    AIBlackboardComponent MovementBlackboard;
+    AIBlackboardComponent AttackBlackboard;
 
- AssetRefAIBlackboardInitializer MovementBBInitializer;
- AssetRefAIBlackboardInitializer AttackBBInitializer;
+    AssetRefAIBlackboardInitializer MovementBBInitializer;
+    AssetRefAIBlackboardInitializer AttackBBInitializer;
 }
-
-```
 
 ```
 
 ### Extending the AIContext
 
-Create a partial implementation of ```
-AIContextUser
-```
-
-. The context here is, just to exemplify: "given the updated entity, which of its HFSMs is being updated? Which of its Blackboards does that HFSM use?", etc:
+Create a partial implementation of `AIContextUser`. The context here is, just to exemplify: "given the updated entity, which of its HFSMs is being updated? Which of its Blackboards does that HFSM use?", etc:
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
-public unsafe partial struct AIContextUser
-{
-public readonly AIBlackboardComponent\* Blackboard;
-public readonly HFSMAgent\* HFSMAgent;
+  public unsafe partial struct AIContextUser
+  {
+    public readonly AIBlackboardComponent* Blackboard;
+    public readonly HFSMAgent* HFSMAgent;
 
-public AIContextUser(AIBlackboardComponent\* blackboard, HFSMAgent\* hfsmAgent)
-{
-Blackboard = blackboard;
-HFSMAgent = hfsmAgent;
+    public AIContextUser(AIBlackboardComponent* blackboard, HFSMAgent* hfsmAgent)
+    {
+      Blackboard = blackboard;
+      HFSMAgent = hfsmAgent;
+    }
+  }
 }
-}
-}
-
-```
 
 ```
 
@@ -87,26 +73,23 @@ This is exemplified with a ISignalOnComponentAdded, but it is also up to user pr
 
 C#
 
-```
 ```csharp
-public void OnAdded(Frame frame, EntityRef entity, CompoundAgents\* compoundAgents)
+public void OnAdded(Frame frame, EntityRef entity, CompoundAgents* compoundAgents)
 {
-// Initialise Agents
-HFSMRoot hfsmRoot = frame.FindAsset<HFSMRoot>(compoundAgents->MovementHFSMAgent.Data.Root.Id);
-HFSMManager.Init(frame, &compoundAgents->MovementHFSMAgent.Data, entity, hfsmRoot);
+    // Initialise Agents
+    HFSMRoot hfsmRoot = frame.FindAsset<HFSMRoot>(compoundAgents->MovementHFSMAgent.Data.Root.Id);
+    HFSMManager.Init(frame, &compoundAgents->MovementHFSMAgent.Data, entity, hfsmRoot);
 
-hfsmRoot = frame.FindAsset<HFSMRoot>(compoundAgents->AttackHFSMAgent.Data.Root.Id);
-HFSMManager.Init(frame, &compoundAgents->AttackHFSMAgent.Data, entity, hfsmRoot);
+    hfsmRoot = frame.FindAsset<HFSMRoot>(compoundAgents->AttackHFSMAgent.Data.Root.Id);
+    HFSMManager.Init(frame, &compoundAgents->AttackHFSMAgent.Data, entity, hfsmRoot);
 
-// Initialise Blackboards
-AIBlackboardInitializer initializer = frame.FindAsset<AIBlackboardInitializer>(compoundAgents->MovementBBInitializer.Id);
-AIBlackboardInitializer.InitializeBlackboard(frame, &compoundAgents->MovementBlackboard, initializer);
+    // Initialise Blackboards
+    AIBlackboardInitializer initializer = frame.FindAsset<AIBlackboardInitializer>(compoundAgents->MovementBBInitializer.Id);
+    AIBlackboardInitializer.InitializeBlackboard(frame, &compoundAgents->MovementBlackboard, initializer);
 
-initializer = frame.FindAsset<AIBlackboardInitializer>(compoundAgents->AttackBBInitializer.Id);
-AIBlackboardInitializer.InitializeBlackboard(frame, &compoundAgents->AttackBlackboard, initializer);
+    initializer = frame.FindAsset<AIBlackboardInitializer>(compoundAgents->AttackBBInitializer.Id);
+    AIBlackboardInitializer.InitializeBlackboard(frame, &compoundAgents->AttackBlackboard, initializer);
 }
-
-```
 
 ```
 
@@ -116,30 +99,27 @@ Create the AI Context and fill it with each HFSM and Blackboard, then perform th
 
 C#
 
-```
 ```csharp
 public override void Update(Frame frame, ref Filter filter)
 {
-HFSMData\* movementData = &filter.CompoundAgents->MovementHFSMAgent.Data;
-HFSMData\* rotationData = &filter.CompoundAgents->RotationHFSMAgent.Data;
-HFSMData\* attackData = &filter.CompoundAgents->AttackHFSMAgent.Data;
+    HFSMData* movementData = &filter.CompoundAgents->MovementHFSMAgent.Data;
+    HFSMData* rotationData = &filter.CompoundAgents->RotationHFSMAgent.Data;
+    HFSMData* attackData = &filter.CompoundAgents->AttackHFSMAgent.Data;
 
-AIContext aiContext = new AIContext();
+    AIContext aiContext = new AIContext();
 
-AIContextUser movementContext = new AIContextUser(&filter.CompoundAgents->MovementHFSMAgent, &filter.CompoundAgents->MovementBlackboard);
-aiContext.UserData = &userData;
-HFSMManager.Update(frame, frame.DeltaTime, movementData, filter.EntityRef, ref aiContext);
+    AIContextUser movementContext = new AIContextUser(&filter.CompoundAgents->MovementHFSMAgent, &filter.CompoundAgents->MovementBlackboard);
+    aiContext.UserData = &userData;
+    HFSMManager.Update(frame, frame.DeltaTime, movementData, filter.EntityRef, ref aiContext);
 
-AIContextUser rotationContext = new AIContextUser(&filter.CompoundAgents->RotationHFSMAgent, &filter.CompoundAgents->RotationBlackboard);
-aiContext.UserData = &userData;
-HFSMManager.Update(frame, frame.DeltaTime, rotationData, filter.EntityRef, ref aiContext);
+    AIContextUser rotationContext = new AIContextUser(&filter.CompoundAgents->RotationHFSMAgent, &filter.CompoundAgents->RotationBlackboard);
+    aiContext.UserData = &userData;
+    HFSMManager.Update(frame, frame.DeltaTime, rotationData, filter.EntityRef, ref aiContext);
 
-AIContextUser attackContext = new AIContextUser(&filter.CompoundAgents->AttackHFSMAgent, &filter.CompoundAgents->AttackBlackboard);
-aiContext.UserData = &userData;
-HFSMManager.Update(frame, frame.DeltaTime, attackData, filter.EntityRef, ref aiContext);
+    AIContextUser attackContext = new AIContextUser(&filter.CompoundAgents->AttackHFSMAgent, &filter.CompoundAgents->AttackBlackboard);
+    aiContext.UserData = &userData;
+    HFSMManager.Update(frame, frame.DeltaTime, attackData, filter.EntityRef, ref aiContext);
 }
-
-```
 
 ```
 
@@ -151,23 +131,20 @@ There is an _extension method_ which converts to the user context type:
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
-\[System.Serializable\]
-public unsafe class WriteBlackboardCompound : AIAction
-{
-public int Value;
+    [System.Serializable]
+    public unsafe class WriteBlackboardCompound : AIAction
+    {
+        public int Value;
 
-public override void Update(Frame frame, EntityRef entity, ref AIContext aiContext)
-{
-aiContext.UserData().Blackboard->Set(frame, "TestInteger", Value);
+        public override void Update(Frame frame, EntityRef entity, ref AIContext aiContext)
+        {
+            aiContext.UserData().Blackboard->Set(frame, &#34;TestInteger&#34;, Value);
+        }
+    }
 }
-}
-}
-
-```
 
 ```
 

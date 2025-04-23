@@ -20,15 +20,12 @@ This is a basic example definition of a component in the DSL:
 
 Qtn
 
-```
 ```cs
 component Action
 {
-FP Cooldown;
-FP Power;
+    FP Cooldown;
+    FP Power;
 }
-
-```
 
 ```
 
@@ -36,63 +33,33 @@ Labeling them as components (like above), instead of structs, will generate the 
 
 The API to work on components is presented via the _Frame_ class.
 
-You have the option of working on copies on the components, or on them components via pointers. To distinguish between the access type, the API for working on copies is accessible directly via```
-Frame
-```
-
- and the API for accessing pointers is available under ```
-Frame.Unsafe
-```
-
-\- as the latter modifies the memory.
+You have the option of working on copies on the components, or on them components via pointers. To distinguish between the access type, the API for working on copies is accessible directly via`Frame` and the API for accessing pointers is available under `Frame.Unsafe` \- as the latter modifies the memory.
 
 The most basic functions you will require to add, get and set components are the functions of the same name.
 
-```
-Add<T>
-```
-
-is used to add a component to an entity. Each entity can only carry one copy of a certain component. To aid you in debugging, ```
-Add<T>
-```
-
- returns an _AddResult_ Enum.
+`Add<T>` is used to add a component to an entity. Each entity can only carry one copy of a certain component. To aid you in debugging, `Add<T>` returns an _AddResult_ Enum.
 
 C#
 
-```
 ```csharp
 public enum AddResult {
- EntityDoesNotExist = 0, // The EntityRef passed in is invalid.
- ComponentAlreadyExists = 1, // The Entity in question already has this component attached to it.
- ComponentAdded = 2 // The component was successfully added to the entity.
+    EntityDoesNotExist     = 0, // The EntityRef passed in is invalid.
+    ComponentAlreadyExists = 1, // The Entity in question already has this component attached to it.
+    ComponentAdded         = 2  // The component was successfully added to the entity.
 }
 
 ```
 
-```
-
-Once an entity has a component, you can retrieve it with ```
-Get<T>
-```
-
-. This will return a copy of the component value. Since you are working on a copy, you will need to save the modified values on the component using ```
-Set<T>
-```
-
-. Similarly to the _Add_ method, it returns a _SetResult_ which can be used to verify the operation's result or react to it.
+Once an entity has a component, you can retrieve it with `Get<T>`. This will return a copy of the component value. Since you are working on a copy, you will need to save the modified values on the component using `Set<T>`. Similarly to the _Add_ method, it returns a _SetResult_ which can be used to verify the operation's result or react to it.
 
 C#
 
-```
 ```csharp
 public enum SetResult {
- EntityDoesNotExist = 0, // The EntityRef passed in is invalid.
- ComponentUpdated = 1, // The component values were successfully updated.
- ComponentAdded = 2 // The Entity did not have a component of this type yet, so it was added with the new values.
+    EntityDoesNotExist = 0, // The EntityRef passed in is invalid.
+    ComponentUpdated   = 1, // The component values were successfully updated.
+    ComponentAdded     = 2  // The Entity did not have a component of this type yet, so it was added with the new values.
 }
-
-```
 
 ```
 
@@ -100,15 +67,12 @@ For example if you were to set the starting value of a health component, you wou
 
 C#
 
-```
 ```csharp
 private void SetHealth(Frame frame, EntityRef entity, FP value){
- var health = frame.Get<Health>(entity);
- health.Value = value;
- frame.Set(entity, health);
+    var health = frame.Get<Health>(entity);
+    health.Value = value;
+    frame.Set(entity, health);
 }
-
-```
 
 ```
 
@@ -116,63 +80,40 @@ This table recaps the methods already presented and the others offered to you to
 
 | Method | Return | Additional Info |
 | --- | --- | --- |
-| Add<T>(EntityRef entityRef) | ```<br>AddResult<br>```<br> enum, see above. | Allows an invalid ```<br>EntityRef<br>```<br>. |
-| Get<T>(EntityRef entityRef) | A copy of ```<br>T<br>```<br> with the current values. | Does **not** allow an invalid ```<br>EntityRef<br>```<br>.<br> Throws an exception if the component ```<br>T<br>```<br> is not present on the entity. |
-| Set<T>(EntityRef entityRef) | ```<br>SetResult<br>```<br> enum, see above. | Allows an invalid ```<br>EntityRef<br>```<br>. |
-| Has<T>(EntityRef entityRef) | ```<br>true<br>```<br> if the entity exists and the component is attached.<br> <br>```<br>false<br>```<br> if the entity does not exist or the component is not attached. | Allows invalid ```<br>EntityRef<br>```<br> and component to not exist. |
-| TryGet<T>(EntityRef entityRef, out T value) | ```<br>true<br>```<br> if the entity exists and component is attached.<br> <br>```<br>false<br>```<br> if the entity does not exist, or component not attached to it. | Allows an invalid ```<br>EntityRef<br>```<br>. |
-| TryGetComponentSet(EntityRef entityRef, <br>out ComponentSet componentSet) | ```<br>true<br>```<br> = entity exists and all components of the components are attached.<br> <br>```<br>false<br>```<br> = entity does not exist, or one or more components of the set are<br>not attached. | Allows an invalid ```<br>EntityRef<br>```<br>. |
-| Remove<T>(EntityRef entityRef) | No return value. <br>Will remove component if the entity exists and carries the component. <br>Otherwise does nothing. | Allows an invalid ```<br>EntityRef<br>```<br>. |
+| Add<T>(EntityRef entityRef) | `AddResult` enum, see above. | Allows an invalid `EntityRef`. |
+| Get<T>(EntityRef entityRef) | A copy of `T` with the current values. | Does **not** allow an invalid `EntityRef`.<br> Throws an exception if the component `T` is not present on the entity. |
+| Set<T>(EntityRef entityRef) | `SetResult` enum, see above. | Allows an invalid `EntityRef`. |
+| Has<T>(EntityRef entityRef) | `true` if the entity exists and the component is attached.<br> <br>`false` if the entity does not exist or the component is not attached. | Allows invalid `EntityRef` and component to not exist. |
+| TryGet<T>(EntityRef entityRef, out T value) | `true` if the entity exists and component is attached.<br> <br>`false` if the entity does not exist, or component not attached to it. | Allows an invalid `EntityRef`. |
+| TryGetComponentSet(EntityRef entityRef, <br>out ComponentSet componentSet) | `true` = entity exists and all components of the components are attached.<br> <br>`false` = entity does not exist, or one or more components of the set are<br>not attached. | Allows an invalid `EntityRef`. |
+| Remove<T>(EntityRef entityRef) | No return value. <br>Will remove component if the entity exists and carries the component. <br>Otherwise does nothing. | Allows an invalid `EntityRef`. |
 
-To facilitate working on components directly and avoid the -small- overhead from using Get/Set, ```
-Frame.Unsafe
-```
-
-offers unsafe versions of Get and TryGet (see table below).
+To facilitate working on components directly and avoid the -small- overhead from using Get/Set, `Frame.Unsafe` offers unsafe versions of Get and TryGet (see table below).
 
 | Method | Return | Additional Info |
 | --- | --- | --- |
-| GetPointer<T>(EntityRef entityRef) | ```<br>T<br>```<br>\* | Does NOT allow invalid entity ref.<br>Throws an exception if the component ```<br>T<br>```<br> is not present on the entity. |
-| TryGetPointer<T>(EntityRef entityRef<br>out T\* value) | ```<br>true<br>```<br> if the entity exists and component is attached to it.<br> <br>```<br>false<br>```<br> if the entity does not exist, or component not attached to it. | Allows an invalid ```<br>EntityRef<br>```<br>. |
-| AddOrGet<T>(EntityRef entityRef, out <T>\* result) | ```<br>true<br>```<br> if the entity exists and the component is attached or has been attached.<br> <br>```<br>false<br>```<br> if the entity does not exist. | Allows an invalid ```<br>EntityRef<br>```<br>. |
+| GetPointer<T>(EntityRef entityRef) | `T`\* | Does NOT allow invalid entity ref.<br>Throws an exception if the component `T` is not present on the entity. |
+| TryGetPointer<T>(EntityRef entityRef<br>out T\* value) | `true` if the entity exists and component is attached to it.<br> <br>`false` if the entity does not exist, or component not attached to it. | Allows an invalid `EntityRef`. |
+| AddOrGet<T>(EntityRef entityRef, out <T>\* result) | `true` if the entity exists and the component is attached or has been attached.<br> <br>`false` if the entity does not exist. | Allows an invalid `EntityRef`. |
 
-Monolithic structs should be avoided and split up into multiple structs. They can causes ```
-bracket nesting level exceeded maximum
-```
-
- errors when compiling IL2CPP.
+Monolithic structs should be avoided and split up into multiple structs. They can causes `bracket nesting level exceeded maximum` errors when compiling IL2CPP.
 
 ## Singleton Component
 
 A _Singleton Component_ is a special type of component of which only one can exist at any given time. There can ever only be one instance of a specific T singleton component, on _any_ entity in the entire game state - this is enforced deep in the core of the ECS data buffers. This is strictly enforced by Quantum.
 
-A custom _Singleton Component_ can be defined in the DSL using ```
-singleton component
-```
-
-.
+A custom _Singleton Component_ can be defined in the DSL using `singleton component`.
 
 C#
 
-```
 ```csharp
 singleton component MySingleton{
-FP Foo;
+    FP Foo;
 }
 
 ```
 
-```
-
-Singletons inherit an interface called ```
-IComponentSingleton
-```
-
- which itself inherits from ```
-IComponent
-```
-
-. It can therefore do all the common things you would expect from regular components:
+Singletons inherit an interface called `IComponentSingleton` which itself inherits from `IComponent`. It can therefore do all the common things you would expect from regular components:
 
 - It can be attached to any entity.
 - It can be managed with all the regular safe & unsafe methods (e.g. Get, Set, TryGetPointer, etc...).
@@ -196,15 +137,10 @@ In addition to the regular component related methods, there are several special 
 
 ## ComponentTypeRef
 
-The ```
-ComponentTypeRef
-```
-
- struct provides a way for referencing a component by its type during runtime. This is useful if you are dynamically adding a component via polymorphism.
+The `ComponentTypeRef` struct provides a way for referencing a component by its type during runtime. This is useful if you are dynamically adding a component via polymorphism.
 
 C#
 
-```
 ```csharp
 // set in an asset or prototype for example
 ComponentTypeRef componentTypeRef;
@@ -212,8 +148,6 @@ ComponentTypeRef componentTypeRef;
 var componentIndex = ComponentTypeId.GetComponentIndex(componentTypeRef);
 
 frame.Add(entityRef, componentIndex);
-
-```
 
 ```
 
@@ -225,19 +159,16 @@ For example, if we could extend our Action component from before as follows:
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
- public partial struct Action
- {
- public void UpdateCooldown(FP deltaTime){
- Cooldown -= deltaTime;
- }
- }
+    public partial struct Action
+    {
+        public void UpdateCooldown(FP deltaTime){
+            Cooldown -= deltaTime;
+        }
+    }
 }
-
-```
 
 ```
 
@@ -245,16 +176,8 @@ namespace Quantum
 
 There are two component specific reactive callbacks:
 
-- ```
-  ISignalOnComponentAdd<T>
-  ```
-
-  : called when a component type T is added to an entity.
-- ```
-  ISignalOnComponentRemove<T>
-  ```
-
-  : called when a component type T is removed from an entity.
+- `ISignalOnComponentAdd<T>`: called when a component type T is added to an entity.
+- `ISignalOnComponentRemove<T>`: called when a component type T is removed from an entity.
 
 These are particularly useful in case you need to manipulate part of the component when it is added/removed - for instance allocate and deallocate a list in a custom component.
 
@@ -266,16 +189,13 @@ If you were to require a single component only, _ComponentIterator_ (safe) and _
 
 C#
 
-```
 ```csharp
 foreach (var pair in frame.GetComponentIterator<Transform3D>())
 {
- var component = pair.Component;
- component.Position += FPVector3.Forward \* frame.DeltaTime;
- frame.Set(pair.Entity, component);
+    var component = pair.Component;
+    component.Position += FPVector3.Forward * frame.DeltaTime;
+    frame.Set(pair.Entity, component);
 }
-
-```
 
 ```
 
@@ -283,23 +203,20 @@ Component block iterators give you the fastest possible access via pointers.
 
 C#
 
-```
 ```csharp
 // This syntax returns an EntityComponentPointerPair struct
 // which holds the EntityRef of the entity and the requested Component of type T.
 foreach (var pair in frame.Unsafe.GetComponentBlockIterator<Transform3D>())
 {
- pair.Component->Position += FPVector3.Forward \* frame.DeltaTime;
+    pair.Component->Position += FPVector3.Forward * frame.DeltaTime;
 }
 
 // Alternatively, it is possible to use the following syntax to deconstruct the struct
 // and get direct access to the EntityRef and the component
 foreach (var (entityRef, transform) in frame.Unsafe.GetComponentBlockIterator<Transform3D>())
 {
- transform->Position += FPVector3.Forward \* frame.DeltaTime;
+    transform->Position += FPVector3.Forward * frame.DeltaTime;
 }
-
-```
 
 ```
 
@@ -313,11 +230,8 @@ To create a filter simply use the **Filter()** API provided by the frame.
 
 C#
 
-```
 ```csharp
 var filtered = frame.Filter<Transform3D, PhysicsBody3D>();
-
-```
 
 ```
 
@@ -327,7 +241,6 @@ If you need to more specific by creating _without_ and _any_ **ComponentSet** fi
 
 C#
 
-```
 ```csharp
 var without = ComponentSet.Create<CharacterController3D>();
 var any = ComponentSet.Create<NavMeshPathFinder, NavMeshSteeringAgent>();
@@ -335,32 +248,19 @@ var filtered = frame.Filter<Transform3D, PhysicsBody3D>(without, any);
 
 ```
 
-```
-
 A _ComponentSet_ can hold up to 8 components.
 
 The _ComponentSet_ passed as the _without_ parameter will exclude all entities carrying at least one of the components specified in the set. The _any_ set ensures entities have at least one or more of the specified components; if an entity has none of the components specified, it will be excluded by the filter.
 
-Iterating through the filter is as simple as using a while loop with ```
-filter.Next()
-```
-
-. This will fill in all copies of the components, and the ```
-EntityRef
-```
-
-of the entity they are attached to.
+Iterating through the filter is as simple as using a while loop with `filter.Next()`. This will fill in all copies of the components, and the `EntityRef` of the entity they are attached to.
 
 C#
 
-```
 ```csharp
 while (filtered.Next(out var e, out var t, out var b)) {
- t.Position += FPVector3.Forward \* frame.DeltaTime;
- frame.Set(e, t);
+  t.Position += FPVector3.Forward * frame.DeltaTime;
+  frame.Set(e, t);
 }
-
-```
 
 ```
 
@@ -370,13 +270,10 @@ The generic filter also offers the possibility to work with component pointers.
 
 C#
 
-```
 ```csharp
 while (filtered.UnsafeNext(out var e, out var t, out var b)) {
- t->Position += FPVector3.Forward \* frame.DeltaTime;
+  t->Position += FPVector3.Forward * frame.DeltaTime;
 }
-
-```
 
 ```
 
@@ -390,17 +287,14 @@ For this you need to first define a struct with **public** properties for each c
 
 Qtn
 
-```
 ```cs
 struct PlayerFilter
 {
- public EntityRef Entity;
- public CharacterController3D\* KCC;
- public Health\* Health;
- public FP AccumulatedDamage;
+    public EntityRef Entity;
+    public CharacterController3D* KCC;
+    public Health* Health;
+    public FP AccumulatedDamage;
 }
-
-```
 
 ```
 
@@ -412,25 +306,18 @@ The **component type** members in a _FilterStruct_ **HAVE TO BE** pointers; only
 
 C#
 
-```
 ```csharp
 var players = f.Unsafe.FilterStruct<PlayerFilter>();
 var playerStruct = default(PlayerFilter);
 
 while (players.Next(&playerStruct))
 {
- // Do stuff
+    // Do stuff
 }
 
 ```
 
-```
-
-```
-Frame.Unsafe.FilterStruct<T>()
-```
-
-has an overload utilizing the optional ComponentSets _any_ and _without_ to further specify the filter.
+`Frame.Unsafe.FilterStruct<T>()` has an overload utilizing the optional ComponentSets _any_ and _without_ to further specify the filter.
 
 ### Note on Count
 
@@ -443,33 +330,26 @@ Knowing the exact number in advance would require traversing the filter once; as
 
 ## Components Getter
 
-Should you want to get a specific set of components from a _known_ entity, use a filter struct in combination with the ```
-Frame.Unsafe.ComponentGetter
-```
-
-. **N.B.:** This is only available in an unsafe context!
+Should you want to get a specific set of components from a _known_ entity, use a filter struct in combination with the `Frame.Unsafe.ComponentGetter`. **N.B.:** This is only available in an unsafe context!
 
 C#
 
-```
 ```csharp
 public unsafe class MySpecificEntitySystem : SystemMainThread
 
-struct MyFilter {
-public EntityRef Entity; // Mandatory member!
-public Transform2D\* Transform2D;
-public PhysicsBody2D\* Body;
-}
+    struct MyFilter {
+        public EntityRef      Entity; // Mandatory member!
+        public Transform2D*   Transform2D;
+        public PhysicsBody2D* Body;
+    }
 
-public override void Update(Frame frame) {
-MyFilter result = default;
+    public override void Update(Frame frame) {
+        MyFilter result = default;
 
-if (frame.Unsafe.ComponentGetter<MyFilter>().TryGet(frame, frame.Global->MyEntity, &result)) {
-// Do Stuff
-}
-}
-
-```
+        if (frame.Unsafe.ComponentGetter<MyFilter>().TryGet(frame, frame.Global->MyEntity, &result)) {
+            // Do Stuff
+        }
+    }
 
 ```
 
@@ -477,31 +357,28 @@ If this operation has to performed often, you can cache the look-up struct in th
 
 C#
 
-```
 ```csharp
 public unsafe class MySpecificEntitySystem : SystemMainThread
 
-struct MyFilter {
-public EntityRef Entity; // Mandatory member!
-public Transform2D\* Transform2D;
-public PhysicsBody2D\* Body;
-}
+    struct MyFilter {
+        public EntityRef      Entity; // Mandatory member!
+        public Transform2D*   Transform2D;
+        public PhysicsBody2D* Body;
+    }
 
-ComponentGetter<MyFilter> \_myFilterGetter;
+    ComponentGetter<MyFilter> _myFilterGetter;
 
-public override void OnInit(Frame frame) {
-\_myFilterGetter = frame.Unsafe.ComponentGetter<MyFilter>();
-}
+    public override void OnInit(Frame frame) {
+      _myFilterGetter = frame.Unsafe.ComponentGetter<MyFilter>();
+    }
 
-public override void Update(Frame frame) {
-MyFilter result = default;
+    public override void Update(Frame frame) {
+      MyFilter result = default;
 
-if (\_myFilterGetter.TryGet(frame, frame.Global->MyEntity, &result)) {
-// Do Stuff
-}
-}
-
-```
+      if (_myFilterGetter.TryGet(frame, frame.Global->MyEntity, &result)) {
+        // Do Stuff
+      }
+    }
 
 ```
 
@@ -532,31 +409,15 @@ _Note:_ Sometimes a flag-component are also referred to as tag-component because
 
 #### Count
 
-The amount of a components T currently existing in the simulation can be retrieved using ```
-Frame.ComponentCount<T>()
-```
-
-. When used in conjunction with flag components it enables a quick count of, for instance, a certain type of units.
+The amount of a components T currently existing in the simulation can be retrieved using `Frame.ComponentCount<T>()`. When used in conjunction with flag components it enables a quick count of, for instance, a certain type of units.
 
 #### Add / Remove
 
-In case you only need to _temporarily_ attach a flag-component or micro-component to an entity, they remain a suitable options as both the ```
-Add
-```
-
-and ```
-Remove
-```
-
-operations are O(1).
+In case you only need to _temporarily_ attach a flag-component or micro-component to an entity, they remain a suitable options as both the `Add` and `Remove` operations are O(1).
 
 ### Global Lists
 
-An alternative to flag-components, albeit a "less" ECS-ish one, is to keep global lists in ```
-FrameContext.User.cs
-```
-
-. While this does not necessarily scale if you need to keep track of N teams, it is convenient for sets where subsets are limited.
+An alternative to flag-components, albeit a "less" ECS-ish one, is to keep global lists in `FrameContext.User.cs`. While this does not necessarily scale if you need to keep track of N teams, it is convenient for sets where subsets are limited.
 
 If you wanted to highlight all players with less than 50% health, you could hold a global list and do the following:
 
@@ -574,10 +435,7 @@ For user-defined components this number is smaller (236), since the Core DLL alr
 Although this has proven to be enough for most games, it is possible to increase this maximum count to 512 by adding this compiler define to a QTN file:
 
 ```
-```
-#pragma max\_components 512
-
-```
+#pragma max_components 512
 
 ```
 
@@ -587,15 +445,7 @@ Increasing the component count can result in an increase of average simulation t
 
 Quantum 3 allows to define components outside of the DSL and import them manually. This is useful if you need to define components in outside DLLs for example. It is **usually not necessary at all** as the the regular path of defining components in the DSL itself is safer.
 
-To import a component, add ```
-import FooComponent;
-```
-
- or ```
-import singleton FooComponent;
-```
-
-to any DSL file.
+To import a component, add `import FooComponent;` or `import singleton FooComponent;` to any DSL file.
 
 The component definition itself has to follow a few guidelines before being properly imported.
 
@@ -603,39 +453,11 @@ The component definition itself has to follow a few guidelines before being prop
 
 The requirements are that the definition:
 
-1. Implements ```
-IComponent
-```
-
-    interface;
-2. Has ```
-const int SIZE
-```
-
-    field, which defines the size of the component;
-3. Has a ```
-Serialize
-```
-
-    method, which is used to serialize the component (see signature below);
-4. Has ```
-ComponentChangedDelegate OnAdded
-```
-
-    static property (may return null) or static ```
-OnAdded
-```
-
-    method matching the delegate signature.
-5. Has ```
-ComponentChangedDelegate OnRemoved
-```
-
-    static property (may return null) or static ```
-OnRemoved
-```
-
-    method matching the delegate signature.
+1. Implements `IComponent` interface;
+2. Has `const int SIZE` field, which defines the size of the component;
+3. Has a `Serialize` method, which is used to serialize the component (see signature below);
+4. Has `ComponentChangedDelegate OnAdded` static property (may return null) or static `OnAdded` method matching the delegate signature.
+5. Has `ComponentChangedDelegate OnRemoved` static property (may return null) or static `OnRemoved` method matching the delegate signature.
 
 One **safer** alternative is to first define the component in the DSL, copy the generated code of it, then remove it again just so all the important details are handled.
 
@@ -643,28 +465,25 @@ Here is an example of the basic structure needed for a component definition:
 
 C#
 
-```
 ```csharp
-\[StructLayout(LayoutKind.Explicit)\]
+[StructLayout(LayoutKind.Explicit)]
 public unsafe struct Example : IComponent {
-public const int SIZE = sizeof(int);
+  public const int SIZE = sizeof(int);
 
-public static ComponentChangedDelegate OnAdded;
-public static ComponentChangedDelegate OnRemoved;
+  public static ComponentChangedDelegate OnAdded;
+  public static ComponentChangedDelegate OnRemoved;
 
-\[FieldOffset(0)\]
-public int \_number;
+  [FieldOffset(0)]
+  public int _number;
 
-public static void Serialize(void\* ptr, IDeterministicFrameSerializer serializer) {
-serializer.Stream.Serialize(&((Example\*)ptr)->\_number);
+  public static void Serialize(void* ptr, IDeterministicFrameSerializer serializer) {
+    serializer.Stream.Serialize(&((Example*)ptr)->_number);
+  }
+
+  public override int GetHashCode() {
+    return _number;
+  }
 }
-
-public override int GetHashCode() {
-return \_number;
-}
-}
-
-```
 
 ```
 

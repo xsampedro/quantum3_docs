@@ -60,15 +60,7 @@ Regular MonoBehaviour script which controls projectile flying through the enviro
 
 #### UI
 
-The user interface in the **Quantum Simple FPS** is handled in a straightforward manner, without relying on any specific UI framework. The main script responsible for UI management is the ```
-GameUI
-```
-
- script. It enables the appropriate UI game objects that should be visible during gameplay. Additionally, the ```
-GameUI
-```
-
-script maintains references to other UI elements and updates the player UI when a player is spawned.
+The user interface in the **Quantum Simple FPS** is handled in a straightforward manner, without relying on any specific UI framework. The main script responsible for UI management is the `GameUI` script. It enables the appropriate UI game objects that should be visible during gameplay. Additionally, the `GameUI` script maintains references to other UI elements and updates the player UI when a player is spawned.
 
 Back to top
 

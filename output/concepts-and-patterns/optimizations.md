@@ -16,47 +16,19 @@ For more information see [Prediction Culling](/quantum/current/manual/prediction
 
 ### Object Pooling
 
-By default, the ```
-QuantumEntityViewUpdater
-```
-
- creates new instances of the ```
-QuantumEntityView
-```
-
-prefabs whenever an entity gets created and destroys the view GameObjects respectively. This can lead to CPU performance spikes and increased garbage collection. For best performance ```
-QuantumEntityViews
-```
-
- should be pooled.
+By default, the `QuantumEntityViewUpdater` creates new instances of the `QuantumEntityView` prefabs whenever an entity gets created and destroys the view GameObjects respectively. This can lead to CPU performance spikes and increased garbage collection. For best performance `QuantumEntityViews` should be pooled.
 
 For more information see [Pooling](/quantum/current/manual/entityview#pooling)
 
 ### Simulation Rate
 
-The Simulation Rate in Quantum determines how many simulation ticks per second Quantum executes and can be configured in the ```
-SessionConfig
-```
+The Simulation Rate in Quantum determines how many simulation ticks per second Quantum executes and can be configured in the `SessionConfig`.
 
-.
-
-This is the equivalent to ```
-FixedUpdate
-```
-
- in Unity. Running at a lower tick rate frees up CPU budget. It is recommended to lower the Simulation Rate as far as possible as long as it does not affect the quality of the gameplay experience.
+This is the equivalent to `FixedUpdate` in Unity. Running at a lower tick rate frees up CPU budget. It is recommended to lower the Simulation Rate as far as possible as long as it does not affect the quality of the gameplay experience.
 
 ### TargetFrameRate / vSync
 
-By default, on some platforms, Unity tries to render as many frames per second as possible. This additional CPU load can negatively impact the gameplay quality and make lag spikes more noticeable. It is recommended to enable ```
-vSync
-```
-
-or set an ```
-Application.TargetFrameRate
-```
-
-or to give players configuration options for these values.
+By default, on some platforms, Unity tries to render as many frames per second as possible. This additional CPU load can negatively impact the gameplay quality and make lag spikes more noticeable. It is recommended to enable `vSync` or set an `Application.TargetFrameRate` or to give players configuration options for these values.
 
 ## Bandwidth Optimization
 

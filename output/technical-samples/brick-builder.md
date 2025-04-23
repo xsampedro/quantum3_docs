@@ -24,9 +24,7 @@ This technical sample shows options on how to expand the common uses of a Quantu
 
 1. **Download Map** \- downloading a Quantum map from a custom backend at runtime, **before** the Quantum game is stated.
 2. **Procedural Generation** \- generating the map procedurally at runtime **before** the game is started.
-3. **Level Editor** \- collaboratively changing the map at runtime using the **```**
-**DynamicMap**
-**```** API.
+3. **Level Editor** \- collaboratively changing the map at runtime using the **`DynamicMap`** API.
 
 ## Scenes
 
@@ -38,21 +36,9 @@ This technique is typically used when a game has a map sharing system, where pla
 
 #### Simulating a Backend
 
-In order to keep the sample generic, the ```
-MockBackend
-```
+In order to keep the sample generic, the `MockBackend` class is used to fake downloading a map from the Resources folder. The class implements the `IBackend` interface, allowing the developer to plug in their own backend.
 
- class is used to fake downloading a map from the Resources folder. The class implements the ```
-IBackend
-```
-
-interface, allowing the developer to plug in their own backend.
-
-The ```
-IBackend
-```
-
- interface has two methods:
+The `IBackend` interface has two methods:
 
 1. **DownloadMapAsync** \- Downloads a map from the backend asynchronously.
 
@@ -62,39 +48,15 @@ IBackend
    - This version is only used when debugging in the editor.
    - This is because the Debug Runner start callback is synchronous.
 
-These methods return a struct of type ```
-DownloadedMap
-```
-
-, which contains the Map asset along with the binary data asset containing the map's collision geometry.
+These methods return a struct of type `DownloadedMap`, which contains the Map asset along with the binary data asset containing the map's collision geometry.
 
 This data is consumed before Quantum is started in the overriden connection behaviour. See: [Overriding Default Menu Behaviour](#overriding-default-menu-behaviour)
 
-To make this sample work with a real backend the ```
-IBackend
-```
-
- interface needs to be implemented and the ```
-MockBackend
-```
-
-has to be replaced with code that calls a custom backend API.
+To make this sample work with a real backend the `IBackend` interface needs to be implemented and the `MockBackend` has to be replaced with code that calls a custom backend API.
 
 #### ServerMapDownloader
 
-The ```
-ServerMapDownloader
-```
-
- class downloads the map from the ```
-MockBackend
-```
-
-and adds it to the asset resources using the ```
-QuantumUnityDB.Global.AddAsset
-```
-
- method.
+The `ServerMapDownloader` class downloads the map from the `MockBackend` and adds it to the asset resources using the `QuantumUnityDB.Global.AddAsset` method.
 
 This class has three methods:
 
@@ -102,27 +64,14 @@ This class has three methods:
 2. **DownloadAsync** \- Downloads the map from the backend asynchronously and adds it to the asset database.
 3. **AddAsset** \- Adds the asset to the asset database. This is used by both of the previous methods.
 
-   - Without registering the asset in the asset database, the asset would not be accessible via the ```
-     FindAsset
-     ```
+   - Without registering the asset in the asset database, the asset would not be accessible via the `FindAsset` API in the simulation.
 
-      API in the simulation.
-
-```
-AddAsset
-```
-
-works by using the ```
-QuantumUnityDB.Global.AddAsset
-```
-
-method to add the provided asset to the asset database.
+`AddAsset` works by using the `QuantumUnityDB.Global.AddAsset` method to add the provided asset to the asset database.
 
 Example:
 
 C#
 
-```
 ```csharp
 var asset = AssetObject.Create<MyAssetType>();
 
@@ -132,23 +81,13 @@ QuantumUnityDB.Global.AddAsset(asset);
 
 ```
 
-```
-
-```
-SomeDeterministicGuid
-```
-
-in this case is a deterministic guid that is generated based on the asset object. See: [Generating Deterministic Guids](#generating-deterministic-guids)
+`SomeDeterministicGuid` in this case is a deterministic guid that is generated based on the asset object. See: [Generating Deterministic Guids](#generating-deterministic-guids)
 
 After the asset is added to the asset database, it is effectively the same as if the asset was created and added in the editor.
 
 However, this is only valid if the game has not started yet. Once the game has started, the static asset database should not be mutated.
 
-If you need to add or mutate assets during gameplay, you must use the ```
-DynamicDB
-```
-
- API. This is covered in the [Level Editor](#level-editor) section.
+If you need to add or mutate assets during gameplay, you must use the `DynamicDB` API. This is covered in the [Level Editor](#level-editor) section.
 
 #### Deterministic Guids
 
@@ -164,11 +103,7 @@ There are two ways to generate deterministic guids:
    - The [Level Editor](#level-editor) scene uses this approach. See also: [LevelEditorConsts](#leveleditorconsts)
 2. **Generation**:
 
-   - The ```
-     QuantumUnityDB.CreateRuntimeDeterministicGuid
-     ```
-
-      method provides an API to generate guids.
+   - The `QuantumUnityDB.CreateRuntimeDeterministicGuid` method provides an API to generate guids.
    - It uses the asset object's name as a seed to generate a deterministic guid.
    - You should use this approach if the amount of assets you need to add is not fixed.
 
@@ -176,13 +111,12 @@ Usage:
 
 C#
 
-```
 ```csharp
 // create any asset
 var assetObject = AssetObject.Create<MyAssetObjectType>();
 
-// set it's name
-assetObject.name = "Generated Map";
+// set it&#39;s name
+assetObject.name = &#34;Generated Map&#34;;
 
 // get a deterministic guid
 var guid = QuantumUnityDB.CreateRuntimeDeterministicGuid(assetObject);
@@ -195,17 +129,11 @@ assetObject.Guid = guid;
 
 ```
 
-```
-
 ### Procedural Generation
 
 Assets can also be procedurally generated (provided that the approach is deterministic) on each client in the application during runtime and added into the database before the game starts.
 
-The ```
-DynamicDB
-```
-
-API could also be used in this case, but it is not optimal because late joining clients would have to download the map before starting. This can be an issue if the map is very large, leading to timeouts while waiting for the download to complete.
+The `DynamicDB` API could also be used in this case, but it is not optimal because late joining clients would have to download the map before starting. This can be an issue if the map is very large, leading to timeouts while waiting for the download to complete.
 
 In general, it is a good optimization step to avoid having to download anything at all, if it can be locally generated instead.
 
@@ -223,11 +151,7 @@ This class uses two assets for procedural generation:
 
 This class has several methods:
 
-1. **GenerateAndSetMapGuid** \- Generates a map, adds it to the asset database and sets the provided ```
-RuntimeConfig
-```
-
-    map field.
+1. **GenerateAndSetMapGuid** \- Generates a map, adds it to the asset database and sets the provided `RuntimeConfig` map field.
 
    - This is used during debugging in the editor. It is called when the debug runner is started.
 2. **Generate** \- Generates a map and the binary data asset, then adds it to the asset database.
@@ -241,39 +165,20 @@ RuntimeConfig
 
    - When the static collider triangles are read into memory, they are stored in an unmanaged array.
 
-
      Because of this, the triangles need to be converted to a managed array before they can be re-saved to a new binary data asset.
 
-
-     This is done by using the provided utility method ```
-     Utils.FromUnManagedTriangleBuffer
-     ```
-
-     .
-6. **WriteBinaryData** \- Writes the combined triangle information to a ```
-ByteStream
-```
-
-    which is then saved to the created Binary Data.
+     This is done by using the provided utility method `Utils.FromUnManagedTriangleBuffer`.
+6. **WriteBinaryData** \- Writes the combined triangle information to a `ByteStream` which is then saved to the created Binary Data.
 7. **DuplicateMap** \- This duplicates a provided map asset.
 
    - This is needed in order to avoid modifying the base map and the tree map when combining them.
 
 ##### Generation Example:
 
-To use the ```
-DeterministicBrickMapGenerator
-```
-
- class, call the ```
-Generate
-```
-
-method before the game starts, like so:
+To use the `DeterministicBrickMapGenerator` class, call the `Generate` method before the game starts, like so:
 
 C#
 
-```
 ```csharp
 var generator = GetComponent<DeterministicBrickMapGenerator>();
 
@@ -281,51 +186,21 @@ generator.Generate(seed);
 
 ```
 
-```
-
 This will generate a map and add it to the asset database deterministically.
 
 ### Level Editor
 
-This scene demonstrates adding and mutating assets at runtime by using ```
-DynamicDB
-```
+This scene demonstrates adding and mutating assets at runtime by using `DynamicDB` API and the `DynamicMap` API.
 
- API and the ```
-DynamicMap
-```
+The `DynamicDB` is a runtime database that allows for the addition and mutation of assets at runtime. See: [DynamicDB](/quantum/current/manual/assets/assets-simulation#dynamic-assets)
 
-API.
-
-The ```
-DynamicDB
-```
-
- is a runtime database that allows for the addition and mutation of assets at runtime. See: [DynamicDB](/quantum/current/manual/assets/assets-simulation#dynamic-assets)
-
-The ```
-DynamicMap
-```
-
-API is an extension of the ```
-Map
-```
-
-class that overrides the map's default behavior to allow for dynamic
+The `DynamicMap` API is an extension of the `Map` class that overrides the map's default behavior to allow for dynamic
 
 changes to the map at runtime. Specifically, static colliders.
 
 This approach is typically used when the map needs to be mutated in some way during gameplay.
 
-NOTE: ```
-DynamicMap
-```
-
-is not a replacement for the ```
-Map
-```
-
-. It is limited by design and is not usable in the editor, only at runtime.
+NOTE: `DynamicMap` is not a replacement for the `Map`. It is limited by design and is not usable in the editor, only at runtime.
 
 #### Why not use Dynamic Colliders?
 
@@ -337,11 +212,7 @@ Instead of normal input, this sample scene utilizes commands. See: [Commands](/q
 
 This is because map editing does not occur every frame.
 
-When these commands are executed, it calls the appropriate signal which is consumed by the ```
-BrickBuildingSystem
-```
-
-. See: [BrickBuildingSystem](#brickbuildingsystem)
+When these commands are executed, it calls the appropriate signal which is consumed by the `BrickBuildingSystem`. See: [BrickBuildingSystem](#brickbuildingsystem)
 
 ##### PlaceBrickCommand
 
@@ -359,92 +230,32 @@ This command is used to clear all bricks from the map. It is effectively the sam
 
 This is the main system that handles the input and applies the changes to the map.
 
-First, in ```
-OnInit
-```
+First, in `OnInit`, the system uses `DynamicMap.FromStaticMap` to create a clone that can be mutated. Then, it is added to the `DynamicDB`.
 
-, the system uses ```
-DynamicMap.FromStaticMap
-```
+The system listens for the `PlaceBrickCommand`, `DeleteBrickCommand`, and `ClearBricksCommand` signals.
 
-to create a clone that can be mutated. Then, it is added to the ```
-DynamicDB
-```
-
-.
-
-The system listens for the ```
-PlaceBrickCommand
-```
-
-, ```
-DeleteBrickCommand
-```
-
-, and ```
-ClearBricksCommand
-```
-
-signals.
-
-When a signal is received, the system applies the changes with the methods below and updates the map using the ```
-DynamicMap
-```
-
- API.
+When a signal is received, the system applies the changes with the methods below and updates the map using the `DynamicMap` API.
 
 1. **BrickPlaced** \- Places a brick on the map.
 
-   1. This method first looks up the brick in the asset database, then checks if it can be placed at the desired position.
-   2. If the brick can be placed, it is added to the map using the ```
-      DynamicMap
-      ```
-
-       API.
-   3. Depending on the collider type, the brick will be added to the map using either ```
-      AddMeshCollider
-      ```
-
-       (Indicating a mesh collider) or ```
-      AddCollider3D
-      ```
-
-       (Indicating a normal collider).
-   4. Finally, it creates a visual representation of the brick using the ```
-      BrickVisual
-      ```
-
-       class. See: [Brick Visual](#brick-visual)
+1. This method first looks up the brick in the asset database, then checks if it can be placed at the desired position.
+2. If the brick can be placed, it is added to the map using the `DynamicMap` API.
+3. Depending on the collider type, the brick will be added to the map using either `AddMeshCollider` (Indicating a mesh collider) or `AddCollider3D` (Indicating a normal collider).
+4. Finally, it creates a visual representation of the brick using the `BrickVisual` class. See: [Brick Visual](#brick-visual)
 2. **BrickDeleted** \- Removes a brick from the map.
 
-   1. This method uses the static collider index of the brick to remove it from the map.
-   2. If the brick is found, it is removed from the map using either ```
-      RemoveMeshCollider
-      ```
-
-       or ```
-      RemoveCollider3D
-      ```
-
-       depending on the collider type.
+1. This method uses the static collider index of the brick to remove it from the map.
+2. If the brick is found, it is removed from the map using either `RemoveMeshCollider` or `RemoveCollider3D` depending on the collider type.
 
       - One thing to note is that when a collider is removed from the map, the collider index is re-assigned to the last collider in the map.
       - This is done to keep the collider indices contiguous for the physics engine.
-   3. Finally, if all previous steps are successful, the visual representation of the brick is also removed.
+3. Finally, if all previous steps are successful, the visual representation of the brick is also removed.
 
 #### Debugging the Map
 
-The ```
-BrickBuildingSystem
-```
+The `BrickBuildingSystem` also has a debug mode which can be toggled by enabling the `DebugDrawBrickGrid` field in the RuntimeConfig.
 
-also has a debug mode which can be toggled by enabling the ```
-DebugDrawBrickGrid
-```
-
-field in the RuntimeConfig.
-
-![Debug Draw Level Editor](/docs/img/quantum/v3/technical-samples/brick-builder/level-editor-debug.png)
+![Debug Draw Level Editor](https://doc.photonengine.com/docs/img/quantum/v3/technical-samples/brick-builder/level-editor-debug.png)
 
 When this is enabled, the system will draw the grid of the map in the scene view.
 
@@ -460,45 +271,25 @@ This is done by reading the mesh from the associated brick asset and setting it 
 
 #### BrickRotation
 
-The ```
-BrickRotation
-```
-
-enum is used to represent the rotation of the brick. This is because the brick only has four possible rotations.
+The `BrickRotation` enum is used to represent the rotation of the brick. This is because the brick only has four possible rotations.
 
 #### Brick Grid
 
-The ```
-BrickGrid
-```
-
- class is used to represent the grid that contains all the bricks.
+The `BrickGrid` class is used to represent the grid that contains all the bricks.
 
 It stores the bricks in a dictionary where the key is the position of the brick in the grid.
 
 Because of the BrickGrid's potential size, it is not feasible to serialize the grid in the simulation.
 
-Because of this, the grid is serialized and stored in the ```
-FrameContext
-```
-
-.
+Because of this, the grid is serialized and stored in the `FrameContext`.
 
 #### Creating a Brick
 
 To create a brick you need to:
 
-1. Create a new ScriptableObject asset in the ```
-Bricks
-```
-
-    folder.
+1. Create a new ScriptableObject asset in the `Bricks` folder.
 2. Populate the asset with the necessary data, such as the mesh to use, the grid size and any variants.
-3. Add the brick to the ```
-AllBricks
-```
-
-    asset.
+3. Add the brick to the `AllBricks` asset.
 
    - This is simply an asset that contains a list of all bricks that are available to the player.
 
@@ -506,39 +297,15 @@ The brick will now show up in the editor scene and can be placed in the map.
 
 #### File I/O
 
-The ```
-LevelEditorFileController
-```
+The `LevelEditorFileController` class is used to save and load the map to and from a file. It simply serializes the
 
- class is used to save and load the map to and from a file. It simply serializes the
-
-brick information to a ```
-BitStream
-```
-
-and writes it to a file in the ```
-Application.persistentDatapath
-```
-
-.
+brick information to a `BitStream` and writes it to a file in the `Application.persistentDatapath`.
 
 ## Additional Info
 
 ### Overriding Default Menu Behaviour
 
-The ```
-LevelEditorConnectionBehaviour
-```
-
-class overrides the ```
-ConnectAsync
-```
-
-method in the demo menu's ```
-ConnectionBehaviour
-```
-
-class to allow the level editor to perform actions before
+The `LevelEditorConnectionBehaviour` class overrides the `ConnectAsync` method in the demo menu's `ConnectionBehaviour` class to allow the level editor to perform actions before
 
 connecting to the server.
 
@@ -560,18 +327,10 @@ in many areas, such as:
    - In the previous version, you could only have grid objects be 1x1x1 in size.
    - In this version, you can have grid objects of any size.
 3. DynamicMap
-   - Instead of writing the static collider editing from scratch, we now use the new ```
-     DynamicMap
-     ```
-
-      API.
+   - Instead of writing the static collider editing from scratch, we now use the new `DynamicMap` API.
 4. Downloading Static Assets
    - In Quantum 2.1, downloading new static assets at runtime was very complex.
-   - In Quantum 3.0, this has been simplified by using the new ```
-     QuantumUnityDB.Global.AddSource
-     ```
-
-      API.
+   - In Quantum 3.0, this has been simplified by using the new `QuantumUnityDB.Global.AddSource` API.
 
 ## Third Party Assets
 

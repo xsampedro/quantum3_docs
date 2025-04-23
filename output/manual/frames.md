@@ -34,25 +34,9 @@ Contrary to _verified_ frames, _predicted_ frames do not require server-confirme
 
 The Unity-side API offers access to various versions of the predicted frame, see the API explanation below.
 
-- ```
-Predicted
-```
-
-: the simulation "head", based on the synchronised clock.
-- ```
-PredictedPrevious
-```
-
-(predicted - 1): used for main clock-aliasing interpolation (most views will use this to stay smooth, as Unity's local clock may slightly drift from the main server clock. Quantum runs from a separate clock, in sync with the server clock - smoothly corrected).
-- ```
-PreviousUpdatePredicted
-```
-
-: this is the exact frame that was the "Predicted/Head" the last time ```
-Session.Update
-```
-
-was called (with the "corrected" data in it). Used for error correction interpolation (most of the time there will be no error).
+- `Predicted` : the simulation "head", based on the synchronised clock.
+- `PredictedPrevious` (predicted - 1): used for main clock-aliasing interpolation (most views will use this to stay smooth, as Unity's local clock may slightly drift from the main server clock. Quantum runs from a separate clock, in sync with the server clock - smoothly corrected).
+- `PreviousUpdatePredicted`: this is the exact frame that was the "Predicted/Head" the last time `Session.Update` was called (with the "corrected" data in it). Used for error correction interpolation (most of the time there will be no error).
 
 ## API
 
@@ -60,11 +44,7 @@ The concept of _Verified_ and _Predicted_ frames exists in both the simulation a
 
 ### Simulation
 
-In the simulation, one can access the state of the currently simulated frame via the ```
-Frame
-```
-
- class.
+In the simulation, one can access the state of the currently simulated frame via the `Frame` class.
 
 | Method | Return Value | Description |
 | --- | --- | --- |
@@ -73,11 +53,7 @@ Frame
 
 ### View
 
-In the view, the _verified_ and _predicted_ frames are made available via ```
-QuantumRunner.Default.Game.Frames
-```
-
-.
+In the view, the _verified_ and _predicted_ frames are made available via `QuantumRunner.Default.Game.Frames`.
 
 | Method | Description |
 | --- | --- |
@@ -88,15 +64,10 @@ QuantumRunner.Default.Game.Frames
 
 ## Using Frame.User
 
-It is possible to extend the Frame by adding data to ```
-Frame.User.cs
-```
-
-. However, in doing so it will also be necessary to implement the corresponding initialization, allocation and serialization methods used by the frame.
+It is possible to extend the Frame by adding data to `Frame.User.cs`. However, in doing so it will also be necessary to implement the corresponding initialization, allocation and serialization methods used by the frame.
 
 C#
 
-```
 ```csharp
 partial void InitUser() // Initialize the Data
 
@@ -108,8 +79,6 @@ partial void FreeUser() // Free allocated space
 
 ```
 
-```
-
 **NOTE**: Adding an excessive amount of data to the frame will impact performance (de/serialization), as well as affect late joins.
 
 ### Example
@@ -118,35 +87,32 @@ This is a very simple example which does not require manual memory allocation.
 
 C#
 
-```
 ```csharp
 namespace Quantum {
 
- unsafe partial class Frame {
- public byte\[\] Grid => \_grid;
- private byte\[\] \_grid;
+    unsafe partial class Frame    {
+        public byte[] Grid => _grid;
+        private byte[] _grid;
 
- partial void InitUser() {
- \_grid = new byte\[RuntimeConfig.GridSize\];
- }
+        partial void InitUser() {
+            _grid = new byte[RuntimeConfig.GridSize];
+        }
 
- partial void SerializeUser(FrameSerializer serializer)
- {
- serializer.Stream.SerializeArrayLength<Byte>(ref \_grid);
- for (int i = 0; i < Grid.Length; i++)
- {
- serializer.Stream.Serialize(ref Grid\[i\]);
- }
- }
+        partial void SerializeUser(FrameSerializer serializer)
+        {
+            serializer.Stream.SerializeArrayLength<Byte>(ref _grid);
+            for (int i = 0; i < Grid.Length; i++)
+            {
+                serializer.Stream.Serialize(ref Grid[i]);
+            }
+        }
 
- partial void CopyFromUser(Frame frame)
- {
- Array.Copy(frame.\_grid, \_grid, frame.\_grid.Length);
- }
- }
+        partial void CopyFromUser(Frame frame)
+        {
+            Array.Copy(frame._grid, _grid, frame._grid.Length);
+        }
+    }
 }
-
-```
 
 ```
 

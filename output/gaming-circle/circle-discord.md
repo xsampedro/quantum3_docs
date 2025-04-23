@@ -4,7 +4,7 @@ _Source: https://doc.photonengine.com/quantum/current/gaming-circle/circle-disco
 
 # Photon Circle Discord
 
-| The Photon Circle Discord serves as an exclusive platform for all Circle members to engage with each other and get help from the Photon engineering team.<br> <br> The Circle Discord is the primary hub for the latest announcements, as well as the main channel of communication between the Photon team and Circle members. | ![Circle Discord](/docs/img/gamingcircle/discord.jpg) |
+| The Photon Circle Discord serves as an exclusive platform for all Circle members to engage with each other and get help from the Photon engineering team.<br> <br> The Circle Discord is the primary hub for the latest announcements, as well as the main channel of communication between the Photon team and Circle members. | ![Circle Discord](https://doc.photonengine.com/docs/img/gamingcircle/discord.jpg) |
 | :-- | :-: |
 
 ## Private Channels

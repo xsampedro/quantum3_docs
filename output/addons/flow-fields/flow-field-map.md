@@ -6,25 +6,13 @@ _Source: https://doc.photonengine.com/quantum/current/addons/flow-fields/flow-fi
 
 ### Map Hierarchy
 
-The ```
-FlowFieldMap
-```
+The `FlowFieldMap` is subdivided into smaller chunks named `FlowFieldController`. Each controller is subdivided into tiles.
 
- is subdivided into smaller chunks named ```
-FlowFieldController
-```
-
-. Each controller is subdivided into tiles.
-
-![Map Hierarchy](/docs/img/quantum/v2/addons/flow-fields/map-hierarchy-1.png)
+![Map Hierarchy](https://doc.photonengine.com/docs/img/quantum/v2/addons/flow-fields/map-hierarchy-1.png)
 Example of a map with dimensions 32x32 and controller size 8.
 ### FlowFieldMapUtility
 
-```
-FlowFieldMapUtility
-```
-
-is a static helper class with useful methods like LineOfSight, converting world positions to map location, etc.
+`FlowFieldMapUtility` is a static helper class with useful methods like LineOfSight, converting world positions to map location, etc.
 
 ### Modifying a Flow Field map
 
@@ -34,11 +22,8 @@ There are two ways to modify an existing map:
 
 C#
 
-```
 ```csharp
 public void SetOriginalTileCost(Frame frame, Vector2Byte location, byte cost)
-
-```
 
 ```
 
@@ -46,22 +31,15 @@ public void SetOriginalTileCost(Frame frame, Vector2Byte location, byte cost)
 
 C#
 
-```
 ```csharp
 public int AddCostModifier(Frame frame, FPVector2 minPosition, FPVector2 maxPosition, byte cost)
 public bool RemoveCostModifier(Frame frame, int modifierID)
 
 ```
 
-```
-
 ## Map Creation
 
-The ```
-FlowFieldMap
-```
-
- is created in runtime and stored in the FrameContext.
+The `FlowFieldMap` is created in runtime and stored in the FrameContext.
 
 ### Parameters
 
@@ -73,14 +51,11 @@ FlowFieldMap
 
 C#
 
-```
 ```csharp
-var ffMap = new FlowFieldMap(new Vector2Int(16, 16), FP.\_2, 8, 4, COSTS);
+var ffMap = new FlowFieldMap(new Vector2Int(16, 16), FP._2, 8, 4, COSTS);
 ffMap.Initialize(frame.SimulationConfig.ThreadCount, false);
 
 frame.Context.FlowFieldMap = ffMap;
-
-```
 
 ```
 
@@ -88,11 +63,7 @@ frame.Context.FlowFieldMap = ffMap;
 
 ### Frame Context
 
-The ```
-FlowFieldMap
-```
-
-can hold lots of data in case of large maps, so it is not suitable to keep such data in the Frame.
+The `FlowFieldMap` can hold lots of data in case of large maps, so it is not suitable to keep such data in the Frame.
 
 FlowFieldMap is stored in the FrameContext which means changes to it has to be done very carefully. To prevent any desyncs between clients it is crucial to modify it only in Verified frames.
 
@@ -100,33 +71,9 @@ Having too big frame size can lead to lower performance and serialized data for 
 
 ### Late join and Reconnect
 
-Due to the fact that ```
-FlowFieldMap
-```
+Due to the fact that `FlowFieldMap` is not part of the frame, it implements custom serialization - see `FlowFieldMap.Serialize()`.
 
- is not part of the frame, it implements custom serialization - see ```
-FlowFieldMap.Serialize()
-```
-
-.
-
-By default, the addon comes with a call for such serialization method in ```
-Frame.User.cs
-```
-
-, on the partial ```
-SerializeUser
-```
-
-implementation. When using the addon, please make sure this code is not removed. Either use it as provided on the addon, or add a call to ```
-FlowFieldMap.Serialize()
-```
-
- in your ```
-SerializeUser
-```
-
-method if you already have custom code in it.
+By default, the addon comes with a call for such serialization method in `Frame.User.cs`, on the partial `SerializeUser` implementation. When using the addon, please make sure this code is not removed. Either use it as provided on the addon, or add a call to `FlowFieldMap.Serialize()` in your `SerializeUser` method if you already have custom code in it.
 
 Back to top
 

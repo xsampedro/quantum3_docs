@@ -9,7 +9,7 @@ Path calculations are split in two main steps:
 1. Calculate the path using portals data and A\*;
 2. Calculate the smoothed path
 
-![Navigation](/docs/img/quantum/v2/addons/flow-fields/navigation-1.png)
+![Navigation](https://doc.photonengine.com/docs/img/quantum/v2/addons/flow-fields/navigation-1.png)
 Red path shows the raw path, green path shows the smoothed path
 ## A\* Path
 
@@ -21,7 +21,7 @@ The smooth path is calculated per agent. The goal is to remove unnecessary corne
 
 Only the first corner of the smooth path is calculated in order improve the performance of the pathfinders which might change their destination before reaching it, meaning that the general path will be gradually smoothed, and it progresses as soon as a smooth corner is reached.
 
-![Navigation](/docs/img/quantum/v2/addons/flow-fields/navigation-2.png)
+![Navigation](https://doc.photonengine.com/docs/img/quantum/v2/addons/flow-fields/navigation-2.png)
 Green dotted line represents the A\\\* result. 1. Start Position 2. Current smooth segment 3. Current smooth corner 4. Destination
 ## Path Caching
 
@@ -33,44 +33,29 @@ Flows towards each portal are precalculated and reused when needed. Recalculatio
 
 ## Movement
 
-Units movement is not part of this addon. The ```
-FlowFieldPathfinder
-```
-
- provides the direction in which the unit should move to follow calculated path.
+Units movement is not part of this addon. The `FlowFieldPathfinder` provides the direction in which the unit should move to follow calculated path.
 
 There are two movement implementations included in this sample:
 
-1. Simple movement setting the position directly in the Transform2D component - see ```
-   MovementBasic
-   ```
-
-   ;
-2. More advanced movement using the PhysicsBody2D component - see ```
-   MovementAdvanced
-   ```
-
-   .
+1. Simple movement setting the position directly in the Transform2D component - see `MovementBasic`;
+2. More advanced movement using the PhysicsBody2D component - see `MovementAdvanced`.
 
 ### MovementBasic Example
 
 C#
 
-```
 ```csharp
-var pathfinder = frame.GetPointer<FlowFieldPathfinder>(entity);
+var pathfinder  = frame.GetPointer<FlowFieldPathfinder>(entity);
 
-if (pathfinder->HasDestination == false \|\| pathfinder->AtDestination == true)
- return;
+if (pathfinder->HasDestination == false || pathfinder->AtDestination == true)
+    return;
 
 var direction = pathfinder->GetDirection(frame, entity);
 if (direction.Valid == false)
- return;
+    return;
 
-var transform = frame.GetPointer<Transform2D>(entity);
-transform->Position += direction.Direction \* Speed \* frame.DeltaTime;
-
-```
+var transform        = frame.GetPointer<Transform2D>(entity);
+transform->Position += direction.Direction * Speed * frame.DeltaTime;
 
 ```
 
@@ -78,28 +63,25 @@ transform->Position += direction.Direction \* Speed \* frame.DeltaTime;
 
 C#
 
-```
 ```csharp
-var pathfinder = frame.GetPointer<FlowFieldPathfinder>(entity);
+var pathfinder  = frame.GetPointer<FlowFieldPathfinder>(entity);
 var physicsBody = frame.GetPointer<PhysicsBody2D>(entity);
 
-if (pathfinder->HasDestination == false \|\| pathfinder->AtDestination == true)
+if (pathfinder->HasDestination == false || pathfinder->AtDestination == true)
 {
- physicsBody->Velocity = default;
- return;
+    physicsBody->Velocity = default;
+    return;
 }
 
 var direction = pathfinder->GetRotationDirection(frame, entity);
 if (direction.Valid == false)
 {
- physicsBody->Velocity = default;
- return;
+    physicsBody->Velocity = default;
+    return;
 }
 
-physicsBody->Velocity = FPVector2.Rotate(FPVector2.Up, direction.Rotation) \* Speed;
+physicsBody->Velocity = FPVector2.Rotate(FPVector2.Up, direction.Rotation) * Speed;
 physicsBody->WakeUp();
-
-```
 
 ```
 

@@ -64,33 +64,33 @@ It showcases AI systems present in Bot SDK in conjunction to other auxilliary im
 
 Game Start - Players and Bots joining
 
-![Game Start](/docs/img/quantum/v2/game-samples/twin-stick-shooter/Game Start - Player and Bot joining.jpg)
+![Game Start](https://doc.photonengine.com/docs/img/quantum/v2/game-samples/twin-stick-shooter/Game Start - Player and Bot joining.jpg)
 
 Input Polling - Includes player replacement
 
-![Input Polling](/docs/img/quantum/v2/game-samples/twin-stick-shooter/Polling Input.jpg)
+![Input Polling](https://doc.photonengine.com/docs/img/quantum/v2/game-samples/twin-stick-shooter/Polling Input.jpg)
 
 Applying the Input to characters
 
-![Applying the Input to characters](/docs/img/quantum/v2/game-samples/twin-stick-shooter/Applying the Input.jpg)
+![Applying the Input to characters](https://doc.photonengine.com/docs/img/quantum/v2/game-samples/twin-stick-shooter/Applying the Input.jpg)
 
 AI Building Blocks
 
-![AI Building Blocks](/docs/img/quantum/v2/game-samples/twin-stick-shooter/The AI building blocks.jpg)
+![AI Building Blocks](https://doc.photonengine.com/docs/img/quantum/v2/game-samples/twin-stick-shooter/The AI building blocks.jpg)
 
 AI Strategy and Tactics
 
-![AI Strategy and Tactics](/docs/img/quantum/v2/game-samples/twin-stick-shooter/Strategy and Tactics.jpg)
+![AI Strategy and Tactics](https://doc.photonengine.com/docs/img/quantum/v2/game-samples/twin-stick-shooter/Strategy and Tactics.jpg)
 
 The Game Manager
 
-![The Game Manager](/docs/img/quantum/v2/game-samples/twin-stick-shooter/Game Management.jpg)## Screenshots
+![The Game Manager](https://doc.photonengine.com/docs/img/quantum/v2/game-samples/twin-stick-shooter/Game Management.jpg)## Screenshots
 
-![](/docs/img/quantum/v2/game-samples/twin-stick-shooter/gameplay.png)
+![](https://doc.photonengine.com/docs/img/quantum/v2/game-samples/twin-stick-shooter/gameplay.png)
 
-![](/docs/img/quantum/v2/game-samples/twin-stick-shooter/gameplay.gif)
+![](https://doc.photonengine.com/docs/img/quantum/v2/game-samples/twin-stick-shooter/gameplay.gif)
 
-![](/docs/img/quantum/v2/game-samples/twin-stick-shooter/hfsm-debug.gif)
+![](https://doc.photonengine.com/docs/img/quantum/v2/game-samples/twin-stick-shooter/hfsm-debug.gif)
 
 ## Third Party Assets
 

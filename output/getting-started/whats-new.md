@@ -8,55 +8,15 @@ _Source: https://doc.photonengine.com/quantum/current/getting-started/whats-new_
 
 Moving to a Unitypackage makes the initial setup and upgrades easier for everyone, and lays the groundwork for future distribution of Quantum via the Asset Store and/or UPM.
 
-- The source for ```
-QuantumGame
-```
-
-(formerly known as the quantum.code project) now resides in the Unity Assets folder: ```
-Assets/QuantumUser/Simulation/
-```
-
-.
+- The source for `QuantumGame` (formerly known as the quantum.code project) now resides in the Unity Assets folder: `Assets/QuantumUser/Simulation/`.
 - Unity CodeGen step has been removed, all the code generation is now done by the Qtn/DSL CodeGen and inside Unity Editor.
-- To clean up the Unity integration, a significant number of Quantum types and scripts have been moved, renamed and merged. During migration, script GUIDs are preserved and to reduce the number of compilation errors, obsolete scripts with legacy names are provided with ```
-QUANTUM\_ENABLED\_MIGRATION
-```
+- To clean up the Unity integration, a significant number of Quantum types and scripts have been moved, renamed and merged. During migration, script GUIDs are preserved and to reduce the number of compilation errors, obsolete scripts with legacy names are provided with `QUANTUM\_ENABLED\_MIGRATION`.
+- Unity/Odin property attributes can be used at will. This includes `\[SerializeReference\]` and Odin-specific serialization extensions. Any use of non-deterministic Unity API is still strongly discouraged.
+- New assets are given a deterministic `AssetGuid`. This allows all possible Quantum assets to be collected without loading their contents, dramatically speeding up the process.
+- `AssetBase` is no longer needed: `AssetObject`s are already `ScriptableObjects`. This makes asset hierarchies more flexible and no longer limited to partial extensions model for Unity-only properties.
+- The minimum Unity Version was increased to `2021 LTS` to reduce the amount of legacy code.
 
-.
-- Unity/Odin property attributes can be used at will. This includes ```
-\[SerializeReference\]
-```
-
-and Odin-specific serialization extensions. Any use of non-deterministic Unity API is still strongly discouraged.
-- New assets are given a deterministic ```
-AssetGuid
-```
-
-. This allows all possible Quantum assets to be collected without loading their contents, dramatically speeding up the process.
-- ```
-AssetBase
-```
-
-is no longer needed: ```
-AssetObject
-```
-
-s are already ```
-ScriptableObjects
-```
-
-. This makes asset hierarchies more flexible and no longer limited to partial extensions model for Unity-only properties.
-- The minimum Unity Version was increased to ```
-2021 LTS
-```
-
-to reduce the amount of legacy code.
-
-It's still possible to compile a simulation dll without Unity dependencies for example to run on a .Net console application or on a custom server plugin. Use the ```
-QuantumDotnetBuildSettings
-```
-
-to generate and compile it.
+It's still possible to compile a simulation dll without Unity dependencies for example to run on a .Net console application or on a custom server plugin. Use the `QuantumDotnetBuildSettings` to generate and compile it.
 
 See the [Quantum Project](/quantum/current/manual/quantum-project) for details about the SDK content.
 
@@ -64,30 +24,9 @@ See the [Quantum Project](/quantum/current/manual/quantum-project) for details a
 
 The following Quantum libraries have been renamed:
 
-- ```
-PhotonDeterministic.dll
-```
-
-   -\> ```
-Quantum.Deterministic.dll
-```
-
-- ```
-quantum.core.dll
-```
-
-   -\> ```
-Quantum.Engine.dll
-```
-
-- ```
-quantum.code.dll
-```
-
-   -\> ```
-Quantum.Simulation.dll
-```
-
+- `PhotonDeterministic.dll` -\> `Quantum.Deterministic.dll`
+- `quantum.core.dll` -\> `Quantum.Engine.dll`
+- `quantum.code.dll` -\> `Quantum.Simulation.dll`
 
 ## Input Delta Compression
 
@@ -101,79 +40,19 @@ Replays also store delta-compressed input and are now significantly smaller.
 
 The Quantum startup protocol has been modified to allow players to be added and removed at run time without having to reserve seats at the start.
 
-```
-AddPlayer()
-```
+`AddPlayer()` and `RemovePlayer()` replace the method `SendPlayerData()`. Unlike SendPlayerData(), AddPlayer() can only be sent once per player slot.
 
-and ```
-RemovePlayer()
-```
+The simulation can react to added and removed players with the `ISignalOnPlayerAdded` and `ISignalOnPlayerRemoved` signals.
 
-replace the method ```
-SendPlayerData()
-```
+The view can react to local player slots being added with `CallbackLocalPlayerAddConfirmed` and `OnLocalPlayerRemoveConfirmed` as well as errors by listening for `OnLocalPlayerAddFailed` and `OnLocalPlayerRemoveFailed`.
 
-. Unlike SendPlayerData(), AddPlayer() can only be sent once per player slot.
-
-The simulation can react to added and removed players with the ```
-ISignalOnPlayerAdded
-```
-
-and ```
-ISignalOnPlayerRemoved
-```
-
-signals.
-
-The view can react to local player slots being added with ```
-CallbackLocalPlayerAddConfirmed
-```
-
-and ```
-OnLocalPlayerRemoveConfirmed
-```
-
-as well as errors by listening for ```
-OnLocalPlayerAddFailed
-```
-
-and ```
-OnLocalPlayerRemoveFailed
-```
-
-.
-
-```
-AddPlayer()
-```
-
-has a rate limit on the server and cannot be spammed.
+`AddPlayer()` has a rate limit on the server and cannot be spammed.
 
 Throughout the API, the wording of parameters has been slightly changed to better differentiate between players (PlayerRef) and player slots (local players).
 
-A ```
-Player
-```
+A `Player` always refers to the actual global player index, while `PlayerSlot` always refers to a local player slot, used for example when controlling multiple players from one client. If only one local player slot is used, it will be slot \`0'.
 
-always refers to the actual global player index, while ```
-PlayerSlot
-```
-
-always refers to a local player slot, used for example when controlling multiple players from one client. If only one local player slot is used, it will be slot \`0'.
-
-The input callback ```
-CallbackPollInput
-```
-
-for example now uses the ```
-PlayerSlot
-```
-
-property. ```
-QuantumGame.AddPlayer(Int32 playerSlot, RuntimePlayer data)
-```
-
-explicitly names the parameter to identify as a local player slot.
+The input callback `CallbackPollInput` for example now uses the `PlayerSlot` property. `QuantumGame.AddPlayer(Int32 playerSlot, RuntimePlayer data)` explicitly names the parameter to identify as a local player slot.
 
 More information in the [Player](/quantum/current/manual/player/player) Manual
 
@@ -207,27 +86,20 @@ The new major version of Realtime includes .Net async extensions to improve writ
 
 Be sure to read the Photon Realtime release notes found under:
 
-To start a Photon client connection and join a Photon room, just call one method and ```
-awaited
-```
-
-:
+To start a Photon client connection and join a Photon room, just call one method and `awaited`:
 
 C#
 
-```
 ```csharp
 MatchmakingArguments connectionArguments = new MatchmakingArguments {
-PhotonSettings = PhotonServerSettings.Default.AppSettings,
-PluginName = "QuantumPlugin",
-MaxPlayers = 8,
-UserId = Guid.NewGuid().ToString(),
-NetworkClient = new RealtimeClient { ClientType = ClientAppType.Quantum }
+    PhotonSettings = PhotonServerSettings.Default.AppSettings,
+    PluginName = &#34;QuantumPlugin&#34;,
+    MaxPlayers = 8,
+    UserId = Guid.NewGuid().ToString(),
+    NetworkClient = new RealtimeClient { ClientType = ClientAppType.Quantum }
 };
 
 RealtimeClient client = await MatchmakingExtensions.ConnectToRoomAsync(connectionArguments);
-
-```
 
 ```
 
@@ -237,55 +109,32 @@ More information about the Realtime extensions are found in the [Photon Async Ex
 
 ## The SessionRunner Class
 
-```
-QuantumRunner
-```
-
-and ```
-SessionContainer
-```
-
-have been merged into the ```
-SessionRunner
-```
-
-class which is located in the Quantum Game project. It uses the new Photon Realtime 5 library.
+`QuantumRunner` and `SessionContainer` have been merged into the `SessionRunner` class which is located in the Quantum Game project. It uses the new Photon Realtime 5 library.
 
 Quantum game sessions can be started in an async and non-async mode:
 
 C#
 
-```
 ```csharp
 SessionRunner.Arguments sessionRunnerArguments = new SessionRunner.Arguments {
-RunnerFactory = QuantumRunnerUnityFactory.DefaultFactory,
-GameParameters = QuantumRunnerUnityFactory.CreateGameParameters,
-ClientId = client.UserId,
-RuntimeConfig = runtimeConfig,
-SessionConfig = QuantumDeterministicSessionConfigAsset.DefaultConfig,
-GameMode = DeterministicGameMode.Multiplayer,
-PlayerCount = 8,
-StartGameTimeoutInSeconds = 10,
-Communicator = new QuantumNetworkCommunicator(client),
+    RunnerFactory = QuantumRunnerUnityFactory.DefaultFactory,
+    GameParameters = QuantumRunnerUnityFactory.CreateGameParameters,
+    ClientId = client.UserId,
+    RuntimeConfig = runtimeConfig,
+    SessionConfig = QuantumDeterministicSessionConfigAsset.DefaultConfig,
+    GameMode = DeterministicGameMode.Multiplayer,
+    PlayerCount = 8,
+    StartGameTimeoutInSeconds = 10,
+    Communicator = new QuantumNetworkCommunicator(client),
 };
 
 QuantumRunner runner = (QuantumRunner)await SessionRunner.StartAsync(sessionRunnerArguments);
 
 ```
 
-```
+`Awaiting` the start will resume when the Quantum start protocol has finished and any snapshots have been received.
 
-```
-Awaiting
-```
-
-the start will resume when the Quantum start protocol has finished and any snapshots have been received.
-
-Try out the ```
-QuantumSampleConnection.unity
-```
-
-scene for the simplest way to connect and start an online Quantum simulation.
+Try out the `QuantumSampleConnection.unity` scene for the simplest way to connect and start an online Quantum simulation.
 
 ## New SDK Sample
 
@@ -301,20 +150,12 @@ It has been designed to be extensible and to handle the complexity of the connec
 
 |     |     |     |
 | --- | --- | --- |
-| ![Quantum 3 Demo Menu](/docs/img/quantum/v3/getting-started/whats-new/demo-menu-main.png) | ![Quantum 3 Demo Menu](/docs/img/quantum/v3/getting-started/whats-new/demo-menu-settings.png) | ![Quantum 3 Demo Menu](/docs/img/quantum/v3/getting-started/whats-new/demo-menu-party.png) |
-| ![Quantum 3 Demo Menu](/docs/img/quantum/v3/getting-started/whats-new/demo-menu-loading.png) | ![Quantum 3 Demo Menu](/docs/img/quantum/v3/getting-started/whats-new/demo-menu-ingame.png) |
+| ![Quantum 3 Demo Menu](https://doc.photonengine.com/docs/img/quantum/v3/getting-started/whats-new/demo-menu-main.png) | ![Quantum 3 Demo Menu](https://doc.photonengine.com/docs/img/quantum/v3/getting-started/whats-new/demo-menu-settings.png) | ![Quantum 3 Demo Menu](https://doc.photonengine.com/docs/img/quantum/v3/getting-started/whats-new/demo-menu-party.png) |
+| ![Quantum 3 Demo Menu](https://doc.photonengine.com/docs/img/quantum/v3/getting-started/whats-new/demo-menu-loading.png) | ![Quantum 3 Demo Menu](https://doc.photonengine.com/docs/img/quantum/v3/getting-started/whats-new/demo-menu-ingame.png) |
 
 The demo scene uses TextMeshPro. When the demo scene is opened for the first time, the TMP installation popup is displayed.
 
-The Quantum menu scripts will compile even if TMP is disabled: The Quantum.Unity assembly definition will set the ```
-QUANTUM\_ENABLE\_TEXTMESHPRO
-```
-
-when the TMP Unity package (```
-com.unity.textmeshpro
-```
-
-) is found.
+The Quantum menu scripts will compile even if TMP is disabled: The Quantum.Unity assembly definition will set the `QUANTUM\_ENABLE\_TEXTMESHPRO` when the TMP Unity package (`com.unity.textmeshpro`) is found.
 
 Read here for information on how to customize the menu: [Sample Menu Customization](/quantum/current/manual/sample-menu/sample-menu-customization)
 
@@ -324,25 +165,12 @@ Manual serialization of these files has been replaced by Json. The configs are s
 
 The original serialization always required manual maintenance, which was cumbersome and a source of errors. In addition, when passing the configs via HTTP requests for webhooks, the receiving backend would need to have the original C# code to deserialize it correctly.
 
-The ```
-SerializeUserData()
-```
+The `SerializeUserData()` method is now deprecated.
 
-method is now deprecated.
-
-To serialize the configs to a byte array, the ```
-QuantumGame.RuntimePlayerSerializer
-```
-
-is required, which is set when starting a runner with ```
-SessionRunner.Arguments
-```
-
-and is usually set to the default Quantum Json serializer \`QuantumJsonSerializer'.
+To serialize the configs to a byte array, the `QuantumGame.RuntimePlayerSerializer` is required, which is set when starting a runner with `SessionRunner.Arguments` and is usually set to the default Quantum Json serializer \`QuantumJsonSerializer'.
 
 C#
 
-```
 ```csharp
 var runtimeConfig = new RuntimeConfig();
 var runtimeConfigBinary = RuntimePlayer.ToByteArray(runtimeConfig, new QuantumJsonSerializer());
@@ -351,108 +179,60 @@ var runtimeConfigOther = RuntimePlayer.FromByteArray(runtimeConfigBinary, new Qu
 
 ```
 
-```
-
-The maximum size for a serialized binary RuntimePlayer (or commands) is ```
-24 kB
-```
-
-. Additionally, if multiple clients send large chunks of data this way and they do not fit into one input message, they will be accepted by the server in successive ticks.
+The maximum size for a serialized binary RuntimePlayer (or commands) is `24 kB`. Additionally, if multiple clients send large chunks of data this way and they do not fit into one input message, they will be accepted by the server in successive ticks.
 
 ## Quantum Hub
 
 The Quantum Hub pops up when critical configuration files cannot be found. The Fusion SDK has proven that using a Hub window is the most convenient way to install and generate user files (which are not included in the package). This setup only needs to be done once, and the resulting files are kept in version control with the rest of the project.
 
-![Quantum 3 Hub](/docs/img/quantum/v3/getting-started/whats-new/quantum-hub.png)## Quantum CodeDoc Inspectors
+![Quantum 3 Hub](https://doc.photonengine.com/docs/img/quantum/v3/getting-started/whats-new/quantum-hub.png)## Quantum CodeDoc Inspectors
 
 The Quantum Unity inspectors got a visual upgrade and will include toggle-able help text which is generated from inline XML code comments.
 
-![Quantum 3 Code Doc](/docs/img/quantum/v3/getting-started/whats-new/code-doc.png)## Data-Driven System Setup
+![Quantum 3 Code Doc](https://doc.photonengine.com/docs/img/quantum/v3/getting-started/whats-new/code-doc.png)## Data-Driven System Setup
 
-The selection of Quantum systems to start can vary depending on the game mode or map selection. A data-driven approach is introduced using the ```
-SystemsConfig
-```
+The selection of Quantum systems to start can vary depending on the game mode or map selection. A data-driven approach is introduced using the `SystemsConfig` asset. Different combinations of systems and subsystems combined in a Quantum asset can now be referenced by the `RuntimeConfig` asset.
 
-asset. Different combinations of systems and subsystems combined in a Quantum asset can now be referenced by the ```
-RuntimeConfig
-```
+![System Configs Asset](https://doc.photonengine.com/docs/img/quantum/v3/getting-started/whats-new/systems-config.png)
 
-asset.
+The Quantum 2.1 static `SystemSetup.CreateSystems()` still works, but is considered deprecated and will log a warning. The class can be deleted after upgrading a Quantum 2.1 project and migrating the content.
 
-![System Configs Asset](/docs/img/quantum/v3/getting-started/whats-new/systems-config.png)
+Systems get created in this order (see `DeterministicSystemSetup.CreateSystems()`):
 
-The Quantum 2.1 static ```
-SystemSetup.CreateSystems()
-```
+- The old `SystemSetup.CreateSystems()` class and method exists (checked by reflection) -> call and and skip the rest
+- Provided `SystemsConfig` has entries -> create and add systems and continue
+- Provided `SystemConfig` is invalid or has no entries -> create and add default systems and continue
+- Finally the partial user method is called `DeterministicSystemSetup.AddSystemsUser()` to allow final touches
 
-still works, but is considered deprecated and will log a warning. The class can be deleted after upgrading a Quantum 2.1 project and migrating the content.
-
-Systems get created in this order (see ```
-DeterministicSystemSetup.CreateSystems()
-```
-
-):
-
-- The old ```
-SystemSetup.CreateSystems()
-```
-
-class and method exists (checked by reflection) -> call and and skip the rest
-- Provided ```
-SystemsConfig
-```
-
-has entries -> create and add systems and continue
-- Provided ```
-SystemConfig
-```
-
-is invalid or has no entries -> create and add default systems and continue
-- Finally the partial user method is called ```
-DeterministicSystemSetup.AddSystemsUser()
-```
-
-to allow final touches
-
-Old: ```
-file: quantum\_code/quantum.code/SystemSetup.cs
-```
+Old: `file: quantum\_code/quantum.code/SystemSetup.cs`
 
 C#
 
-```
 ```csharp
 namespace Quantum {
-public static class SystemSetup {
-public static SystemBase\[\] CreateSystems(RuntimeConfig gameConfig, SimulationConfig simulationConfig) {
-return new SystemBase\[\] {
-// ..
-}
-}
-}
+  public static class SystemSetup {
+    public static SystemBase[] CreateSystems(RuntimeConfig gameConfig, SimulationConfig simulationConfig) {
+      return new SystemBase[] {
+          // ..
+      }
+    }
+  }
 }
 
 ```
 
-```
-
-New: ```
-file: Assets/QuantumUser/Simulation/SystemSetup.User.cs
-```
+New: `file: Assets/QuantumUser/Simulation/SystemSetup.User.cs`
 
 C#
 
-```
 ```csharp
 namespace Quantum {
-using System.Collections.Generic;
+  using System.Collections.Generic;
 
-public static partial class DeterministicSystemSetup {
-static partial void AddSystemsUser(ICollection<SystemBase> systems, RuntimeConfig gameConfig, SimulationConfig simulationConfig, SystemsConfig systemsConfig) {
-systems.Add(new TestSystemMainThreadGroup("TestSystemsGroup", new SystemMainThread\[\] { new TestSystemImmediateRemoveDestroy(), }));
-systems.Add(new TasksTestSystem());
-
-```
+  public static partial class DeterministicSystemSetup {
+    static partial void AddSystemsUser(ICollection<SystemBase> systems, RuntimeConfig gameConfig, SimulationConfig simulationConfig, SystemsConfig systemsConfig) {
+      systems.Add(new TestSystemMainThreadGroup(&#34;TestSystemsGroup&#34;, new SystemMainThread[] { new TestSystemImmediateRemoveDestroy(), }));
+      systems.Add(new TasksTestSystem());
 
 ```
 
@@ -465,30 +245,19 @@ Finally Quantum physics supports for 2D and 3D capsule shapes.
 Increasing the max component count to 512 can be now configued inside a qtn-file:
 
 ```
-```
-#pragma max\_components 512
-
-```
+#pragma max_components 512
 
 ```
 
 ## Entity View Framework
 
-Use the Unity script ```
-EntityViewComponent
-```
-
-to quickly add view code that can quickly inspect and react to the game state.
+Use the Unity script `EntityViewComponent` to quickly add view code that can quickly inspect and react to the game state.
 
 [Entity View Component](/quantum/current/manual/entity-view-component)
 
 ## Entity View Pool
 
-Entity view can be easily pooled using the ```
-QuantumEntityViewPool
-```
-
-.
+Entity view can be easily pooled using the `QuantumEntityViewPool`.
 
 [Entity View](/quantum/current/manual/entityview)
 
@@ -508,148 +277,56 @@ Navmesh baking has been moved from Unity to the simulation code in QuantumGame (
 
 By default, Quantum3 applications block non-protocol messages and player properties. Leaving these legacy features open could potentially allow malicious actors to disrupt the matchmaking and gameplay flow of Quantum apps, even if the actual gameplay cannot be disrupted. To unlock these features, they must be explicitly set in the dashboard properties for individual AppIds.
 
-- ```
-BlockNonProtocolMessages
-```
-
-(```
-true
-```
-
-/```
-false
-```
-
-)
-- ```
-BlockPlayerProperties
-```
-
-(```
-true
-```
-
-/```
-false
-```
-
-)
+- `BlockNonProtocolMessages` (`true`/`false`)
+- `BlockPlayerProperties` (`true`/`false`)
 
 ### BlockRoomProperties (New)
 
-Type: ```
-boolean
-```
+Type: `boolean` (`true`/`false`)
 
-(```
-true
-```
+The plugin will cancel all room properties set by clients after the room creation. With the exception of a property named `StartQuantum`. Initial room properties can also be retrieved with a webhook.
 
-/```
-false
-```
-
-)
-
-The plugin will cancel all room properties set by clients after the room creation. With the exception of a property named ```
-StartQuantum
-```
-
-. Initial room properties can also be retrieved with a webhook.
-
-Caveat: This affects ```
-Open
-```
-
-and ```
-IsVisible
-```
-
-as well.
+Caveat: This affects `Open` and `IsVisible` as well.
 
 ### AllowedLobbyProperties (New)
 
-Type: ```
-string
-```
-
-(Allowed separators: , or ; or space)
+Type: `string` (Allowed separators: , or ; or space)
 
 Maximum number of properties: 3
 
-Maximum ```
-string
-```
+Maximum `string` property length: 64
 
-property length: 64
+Set a list of properties that the client is allowed to send as lobby properties to protect the matchmaking performance on the master servers. If this property is set, non-listed properties sent by clients will be stripped. The plugin logs `Restricted LobbyProperty` once found.
 
-Set a list of properties that the client is allowed to send as lobby properties to protect the matchmaking performance on the master servers. If this property is set, non-listed properties sent by clients will be stripped. The plugin logs ```
-Restricted LobbyProperty
-```
-
-once found.
-
-Additionally by default the property types are restricted to: ```
-bool
-```
-
-, ```
-byte
-```
-
-, ```
-short
-```
-
-, ```
-int
-```
-
-, ```
-long
-```
-
-, ```
-string
-```
+Additionally by default the property types are restricted to: `bool`, `byte`, `short`, `int`, `long`, `string`
 
 ### MaxPlayerSlots (New)
 
-Type: ```
-int
-```
+Type: `int`
 
 By default, clients can create as many local players as the game supports. Setting this value will limit this for all games running under this AppId. This value can also be set by the webhooks.
 
 ### StartPropertyBlockedTimeSec (New)
 
-Type: ```
-int
-```
+Type: `int`
 
 If set to a number greater than zero, Quantum will be blocked from starting in a room until the minimum number of seconds has passed since the room was created. This can be used to ensure that players have enough time to join before the game starts.
 
 ### StartPropertyForcedTimeSec (New)
 
-Type: ```
-int
-```
+Type: `int`
 
 If set to a number greater than zero, this is the maximum number of seconds that can elapse after the room is created before Quantum is started in the room. If the specified time is exceeded, the game will set the StartQuantum property in the room's game properties to true if it hasn't already been set.
 
 ### HideRoomAfterStartSec (New)
 
-Type: ```
-int
-```
+Type: `int`
 
 If set to a number greater than zero, it defines the number of seconds after which the room will be hidden from public or search listings once Quantum is started in the room. This can help manage room visibility and ensure that new players do not join games already in progress.
 
 ### CloseRoomAfterStartSec (New)
 
-Type: ```
-int
-```
+Type: `int`
 
 If set to a number greater than zero, it determines the number of seconds after which the room will be closed after Quantum is started in the room. Closing a room prevents new players from joining and can be used to manage the lifecycle of the game session.
 

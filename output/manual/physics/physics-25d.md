@@ -14,9 +14,8 @@ When using 2.5D Physics it is possible to add Height (or thickness) while still 
 
 _StaticCollider2D_ can have 'thickness' in the 3rd dimension using Quantum's 2.5D physics; simply set the _Height_:
 
-![Adding Height to a Static Collider](/docs/img/quantum/v3/manual/physics/physics-25d-static-collider-height.png)
+![Adding Height to a Static Collider](https://doc.photonengine.com/docs/img/quantum/v3/manual/physics/physics-25d-static-collider-height.png)
 Adding Height to a Static Collider.
-
 
 For Entities, just add the _Transform2DVertical_ component and set its _Height_ and _Position Offset_. On a Quantum XZ-oriented game, this adds height on the Y axis, for example.
 
@@ -24,21 +23,17 @@ For Entities, just add the _Transform2DVertical_ component and set its _Height_ 
 
 C#
 
-```
 ```csharp
-var transform2dVertical = new Transform2DVertical();
-transform2dVertical.Height = FP.\_1;
-transform2dVertical.Position = FP.\_1;
+    var transform2dVertical = new Transform2DVertical();
+    transform2dVertical.Height = FP._1;
+    transform2dVertical.Position = FP._1;
 
-f.Set(entity, transform2dVertical);
-
-```
+    f.Set(entity, transform2dVertical);
 
 ```
 
-![Adding Height to an Entity Prototype](/docs/img/quantum/v3/manual/physics/physics-25d-entityprototype-transform2dvertical-height.png)
+![Adding Height to an Entity Prototype](https://doc.photonengine.com/docs/img/quantum/v3/manual/physics/physics-25d-entityprototype-transform2dvertical-height.png)
 Adding Height to an Entity Prototype.
-
 
 If entities or statics have a 3rd dimension, the physics engine will take into consideration when solving collisions. This allows for 'aerial' entities to fly over 'ground-based' ones, etc.
 

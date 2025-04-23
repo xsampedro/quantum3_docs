@@ -16,7 +16,7 @@ _Source: https://doc.photonengine.com/quantum/current/technical-samples/flow-fie
 
 The simple example showcases only one moving unit in a static predefined map.
 
-![Example Basic](/docs/img/quantum/v2/addons/flow-fields/example-basic-1.png)## Where to look?
+![Example Basic](https://doc.photonengine.com/docs/img/quantum/v2/addons/flow-fields/example-basic-1.png)## Where to look?
 
 - The example is implemented in the 'ExampleBasic' scene;
 - \\quantum\_unity\\Assets\\Photon\\FlowFields\\ExampleBasic;
@@ -27,17 +27,13 @@ The simple example showcases only one moving unit in a static predefined map.
 
 ## Map Definition
 
-- ```
-FlowFieldMap
-```
-
-is created when simulation starts from static data (ExampleBasicSystem.cs)
+- `FlowFieldMap` is created when simulation starts from static data (ExampleBasicSystem.cs)
 
 ## Advanced Example
 
 The advanced example showcases multiple units with avoidance and final destination grouping.
 
-![Example Advanced](/docs/img/quantum/v2/addons/flow-fields/example-advanced-1.png)## Where to look?
+![Example Advanced](https://doc.photonengine.com/docs/img/quantum/v2/addons/flow-fields/example-advanced-1.png)## Where to look?
 
 - The example is implemented 'ExampleAdvanced' scene;
 - \\quantum\_unity\\Assets\\Photon\\FlowFields\\ExampleAdvanced;
@@ -54,49 +50,17 @@ The advanced example showcases multiple units with avoidance and final destinati
 
 ## Map Definition
 
-- The Map parameters are defined in ```
-TileMapSetup
-```
-
-(\\Assets\\Photon\\FlowFields\\ExampleAdvanced\\Resources\\DB\\ExampleAdvancedTileMapSetup);
-- The Map cost field is baked via ```
-TileMapBaker
-```
-
-\- based on Static Box and Circle colliders placed in scene;
-- ```
-FlowFieldMap
-```
-
-is created when the simulation starts (TileMapSystem.cs)
+- The Map parameters are defined in `TileMapSetup` (\\Assets\\Photon\\FlowFields\\ExampleAdvanced\\Resources\\DB\\ExampleAdvancedTileMapSetup);
+- The Map cost field is baked via `TileMapBaker` \- based on Static Box and Circle colliders placed in scene;
+- `FlowFieldMap` is created when the simulation starts (TileMapSystem.cs)
 
 ## Movement
 
-Units are moved by setting their velocity based on data provided by ```
-FlowFieldPathfinder
-```
-
-.
+Units are moved by setting their velocity based on data provided by `FlowFieldPathfinder`.
 
 ## Avoidance
 
-Avoidance between units is done with physics. The ```
-Physics Solver Iterations
-```
-
-are set to 0. To tweak the behaviour you can play with ```
-Penetration Allowance
-```
-
-and ```
-Penetration Correction
-```
-
-in ```
-Simulation Config
-```
-
-.
+Avoidance between units is done with physics. The `Physics Solver Iterations` are set to 0. To tweak the behaviour you can play with `Penetration Allowance` and `Penetration Correction` in `Simulation Config`.
 
 - Penetration Allowance - Allow a certain degree of penetration to improve the stability of the physics simulation.
 - Penetration Correction - How much of the exceeding penetration (above allowance) should be corrected in a single frame. 0 = no correction, 1 = full correction.

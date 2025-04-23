@@ -15,41 +15,18 @@ KCC supports two interaction types:
   - Regular colliders and triggers are supported.
   - Triggered when KCC starts/stops colliding with a scene object.
     - _Static collider_ \- The processor asset must be linked as User Asset on Quantum static collider component.
-    - _Entity_ \- The ```
-      KCC Processor Link
-      ```
-
-       component must be added to entity prototype and Processor asset assigned.
+    - _Entity_ \- The `KCC Processor Link` component must be added to entity prototype and Processor asset assigned.
 - **Modifier**
-  - Manually registered ```
-    KCCProcessor
-    ```
-
-     asset via ```
-    KCC.AddModifier()
-    ```
-
-     and ```
-    KCC.RemoveModifier()
-    ```
-
-    .
+  - Manually registered `KCCProcessor` asset via `KCC.AddModifier()` and `KCC.RemoveModifier()`.
 
 * * *
 
-The ```
-KCCProcessor
-```
-
- declares two important methods:
+The `KCCProcessor` declares two important methods:
 
 C#
 
-```
 ```csharp
 public virtual bool OnEnter(KCCContext context, KCCProcessorInfo processorInfo, KCCOverlapHit overlapHit) => true;
-
-```
 
 ```
 
@@ -60,11 +37,8 @@ public virtual bool OnEnter(KCCContext context, KCCProcessorInfo processorInfo, 
 
 C#
 
-```
 ```csharp
 public virtual bool OnExit(KCCContext context, KCCProcessorInfo processorInfo) => true;
-
-```
 
 ```
 
@@ -79,44 +53,21 @@ Stage is a sequence of specific method calls executed on processors. It is uniqu
 
 KCC supports these stages executed during update:
 
-- ```
-  IBeforeMove
-  ```
-
-   \- executed at the beginning of the move. Used to configure KCC, enable/disable features, add forces, …
-- ```
-  IAfterMoveStep
-  ```
-
-   \- executed after each move step (physics query + depenetration from colliders) and before updating collision hits and firing ```
-  OnEnter()
-  ```
-
-  /```
-  OnExit()
-  ```
-
-   callbacks. Used for minor position corrections, vector projections, … This method can be called multiple times in a row if the KCC moves too fast (CCD is applied).
-- ```
-  IAfterMove
-  ```
-
-   \- executed on the end of the move. Use to apply any post processing.
+- `IBeforeMove` \- executed at the beginning of the move. Used to configure KCC, enable/disable features, add forces, …
+- `IAfterMoveStep` \- executed after each move step (physics query + depenetration from colliders) and before updating collision hits and firing `OnEnter()`/`OnExit()` callbacks. Used for minor position corrections, vector projections, … This method can be called multiple times in a row if the KCC moves too fast (CCD is applied).
+- `IAfterMove` \- executed on the end of the move. Use to apply any post processing.
 
 C#
 
-```
 ```csharp
 public unsafe class StepUpProcessor : KCCProcessor, IAfterMoveStep
 {
- public void AfterMoveStep(KCCContext context, KCCProcessorInfo processorInfo, KCCOverlapInfo overlapInfo)
- {
- // 1\. Detect blocking geometry
- // 2\. Push character upwards based on unapplied movement.
- }
+    public void AfterMoveStep(KCCContext context, KCCProcessorInfo processorInfo, KCCOverlapInfo overlapInfo)
+    {
+        // 1. Detect blocking geometry
+        // 2. Push character upwards based on unapplied movement.
+    }
 }
-
-```
 
 ```
 
@@ -132,37 +83,12 @@ Following features have separate implementation which makes them very easy to st
 - Simple acceleration and friction model.
 - Custom Gravity.
 - Jump multiplier.
-- Implements ```
-  IBeforeMove
-  ```
+- Implements `IBeforeMove` stage - used to calculate desired `KCCData.DynamicVelocity` and `KCCData.KinematicVelocity`.
+- Implements `IAfterMoveStep` stage - used to recalculate properties after each move step (for example projection of kinematic velocity on ground).
+- The `EnvironmentProcessor` asset is located at `Assets\\Photon\\QuantumAddons\\KCC\\AssetDB\\Processors`.
 
-   stage - used to calculate desired ```
-  KCCData.DynamicVelocity
-  ```
-
-   and ```
-  KCCData.KinematicVelocity
-  ```
-
-  .
-- Implements ```
-  IAfterMoveStep
-  ```
-
-   stage - used to recalculate properties after each move step (for example projection of kinematic velocity on ground).
-- The ```
-  EnvironmentProcessor
-  ```
-
-   asset is located at ```
-  Assets\\Photon\\QuantumAddons\\KCC\\AssetDB\\Processors
-  ```
-
-  .
-
-![Environment Processor](/docs/img/quantum/v3/addons/kcc/environment-processor.jpg)
- Environment Processor.
-
+![Environment Processor](https://doc.photonengine.com/docs/img/quantum/v3/addons/kcc/environment-processor.jpg)
+Environment Processor.
 
 Speed of the character is defined by this processor and can be used on scene objects to simulate behavior in various environments like water, mud, ice.
 
@@ -170,41 +96,19 @@ Speed of the character is defined by this processor and can be used on scene obj
 
 - Allows detection of steps (geometry which blocks horizontal movement, with walkable surface at some height).
 - If a step is detected, the KCC moves upwards until it gets grounded.
-- Maximum step height is defined by ```
-  Step Height
-  ```
-
-  .
-- Forward step check distance is controlled by ```
-  Step Depth
-  ```
-
-  .
+- Maximum step height is defined by `Step Height`.
+- Forward step check distance is controlled by `Step Depth`.
 - The upward movement is equal to unapplied horizontal movement.
-- The speed of upward movement is multiplied by ```
-  Step Speed
-  ```
+- The speed of upward movement is multiplied by `Step Speed` to compensate for loss of horizontal velocity.
+- The `StepUpProcessor` prefab is located at `Assets\\Photon\\QuantumAddons\\KCC\\AssetDB\\Processors`.
 
-   to compensate for loss of horizontal velocity.
-- The ```
-  StepUpProcessor
-  ```
-
-   prefab is located at ```
-  Assets\\Photon\\QuantumAddons\\KCC\\AssetDB\\Processors
-  ```
-
-  .
-
-![Step-Up processor](/docs/img/quantum/v3/addons/kcc/step-up-processor.jpg)
- Step-Up processor.
-
+![Step-Up processor](https://doc.photonengine.com/docs/img/quantum/v3/addons/kcc/step-up-processor.jpg)
+Step-Up processor.
 
 Following image shows process of detecting steps:
 
-![Step up process](/docs/img/quantum/v3/addons/kcc/step-up-feature.jpg)
- Step up process.
-
+![Step up process](https://doc.photonengine.com/docs/img/quantum/v3/addons/kcc/step-up-feature.jpg)
+Step up process.
 
 1. Upward check when the character is blocked by an obstacle in horizontal direction.
 2. Forward check to detect if the space in front of the character is collision free.
@@ -215,45 +119,23 @@ Following image shows process of detecting steps:
 
 - Allows keeping grounded state when the contact with ground is lost (stairs, uneven terrain).
 - Pushes character closer to ground if gravity is not enough.
-- Maximum snap distance is defined by ```
-  Snap Distance
-  ```
+- Maximum snap distance is defined by `Snap Distance`.
+- The movement speed towards ground is defined by `Snap Speed`.
+- The `GroundSnapProcessor` prefab is located at `Assets\\Photon\\QuantumAddons\\KCC\\AssetDB\\Processors`.
 
-  .
-- The movement speed towards ground is defined by ```
-  Snap Speed
-  ```
-
-  .
-- The ```
-  GroundSnapProcessor
-  ```
-
-   prefab is located at ```
-  Assets\\Photon\\QuantumAddons\\KCC\\AssetDB\\Processors
-  ```
-
-  .
-
-![Ground snap processor](/docs/img/quantum/v3/addons/kcc/ground-snap-processor.jpg)
- Ground snap processor.
-
+![Ground snap processor](https://doc.photonengine.com/docs/img/quantum/v3/addons/kcc/ground-snap-processor.jpg)
+Ground snap processor.
 
 Following image shows process of ground snapping:
 
-![Ground snap process](/docs/img/quantum/v3/addons/kcc/ground-snap-feature.jpg)
- Ground snap process.
-
+![Ground snap process](https://doc.photonengine.com/docs/img/quantum/v3/addons/kcc/ground-snap-feature.jpg)
+Ground snap process.
 
 The character is **virtually** pushed downwards until one of following conditions are met:
 
 1. The character hits walkable ground => KCC keeps grounded and moves towards the ground.
 2. The character hits non-walkable surface and cannot slide along it => KCC loses grounded state.
-3. ```
-   Snap Distance
-   ```
-
-    is reached => KCC loses grounded state.
+3. `Snap Distance` is reached => KCC loses grounded state.
 
 Back to top
 

@@ -35,11 +35,7 @@ When a collision pair is composed of two entities A and B, these are the possibl
 
 ### Entity vs Static Collider
 
-Static colliders, on the other hand, can be either Trigger or Non-Trigger, according to their ```
-IsTrigger
-```
-
- property.
+Static colliders, on the other hand, can be either Trigger or Non-Trigger, according to their `IsTrigger` property.
 
 These are the possible combinations when the collision pair is composed of an entity and a static collider:
 
@@ -57,19 +53,14 @@ It is possible to control which callback types (and against which kinds of other
 
 The physics callbacks can be set on any _Entity Prototype_ with a _PhysicsCollider_ (2D/3D).
 
-![Setting Physics Callbacks via the Entity Prototype's Physics Properties in the Unity Editor](/docs/img/quantum/v3/manual/physics/physics-entityprototype-callbacks.png)
- Setting Physics Callbacks via the Quantum Entity Prototype's Physics Properties in the Unity Editor.
-
+![Setting Physics Callbacks via the Entity Prototype's Physics Properties in the Unity Editor](https://doc.photonengine.com/docs/img/quantum/v3/manual/physics/physics-entityprototype-callbacks.png)
+Setting Physics Callbacks via the Quantum Entity Prototype's Physics Properties in the Unity Editor.
 
 Each entity can have several callbacks enabled.
 
 **N.B.:** Enabling the callbacks on a _Quantum Entity Prototype_ only **sets the callbacks** for that particular entity. It is **still needed to implement** the corresponding _signals_ in code. See the section on _Callback Signals_ below for more information.
 
-Also, when activating collisions, make sure that the layers are properly matched in the layer matrix. By default, colliders will have layers corresponding to the Game Object layer, but it can be changed to be explicitly defined in the field ```
-Layer Source
-```
-
-.
+Also, when activating collisions, make sure that the layers are properly matched in the layer matrix. By default, colliders will have layers corresponding to the Game Object layer, but it can be changed to be explicitly defined in the field `Layer Source`.
 
 ### Via Code
 
@@ -79,19 +70,16 @@ The following snippet enables the full set of OnTrigger callbacks against anothe
 
 C#
 
-```
 ```csharp
 CallbackFlags flags = CallbackFlags.OnDynamicTrigger;
-flags \|= CallbackFlags.OnDynamicTriggerEnter;
-flags \|= CallbackFlags.OnDynamicTriggerExit;
+flags |= CallbackFlags.OnDynamicTriggerEnter;
+flags |= CallbackFlags.OnDynamicTriggerExit;
 
 // for 2D
 f.Physics2D.SetCallbacks(entity, flags);
 
 // for 3D
 f.Physics3D.SetCallbacks(entity, flags);
-
-```
 
 ```
 
@@ -119,7 +107,6 @@ And these are the corresponding Enter/Exit callbacks (that can be enabled indepe
 
 - CallbackFlags.OnStaticTriggerExit
 
-
 Having to enable callbacks on a per-entity basis is an intentional design choice to make the default simulation as fast as possible. Also notice that Enter/Exit callbacks incur in a bit more memory and more CPU usage (compared to basic callbacks), so for the leanest possible simulation, avoid these whenever possible.
 
 ## Callback Signals
@@ -130,30 +117,27 @@ These are the 2D Physics signals:
 
 C#
 
-```
 ```csharp
 namespace Quantum {
-public interface ISignalOnCollision2D : ISignal {
-void OnCollision2D(Frame frame, CollisionInfo2D info);
+  public interface ISignalOnCollision2D : ISignal {
+    void OnCollision2D(Frame frame, CollisionInfo2D info);
+  }
+  public interface ISignalOnCollisionEnter2D : ISignal {
+    void OnCollisionEnter2D(Frame frame, CollisionInfo2D info);
+  }
+  public interface ISignalOnCollisionExit2D : ISignal {
+    void OnCollisionExit2D(Frame frame, ExitInfo2D info);
+  }
+  public interface ISignalOnTrigger2D : ISignal {
+    void OnTrigger2D(Frame frame, TriggerInfo2D info);
+  }
+  public interface ISignalOnTriggerEnter2D : ISignal {
+    void OnTriggerEnter2D(Frame frame, TriggerInfo2D info);
+  }
+  public interface ISignalOnTriggerExit2D : ISignal {
+    void OnTriggerExit2D(Frame frame, ExitInfo2D info);
+  }
 }
-public interface ISignalOnCollisionEnter2D : ISignal {
-void OnCollisionEnter2D(Frame frame, CollisionInfo2D info);
-}
-public interface ISignalOnCollisionExit2D : ISignal {
-void OnCollisionExit2D(Frame frame, ExitInfo2D info);
-}
-public interface ISignalOnTrigger2D : ISignal {
-void OnTrigger2D(Frame frame, TriggerInfo2D info);
-}
-public interface ISignalOnTriggerEnter2D : ISignal {
-void OnTriggerEnter2D(Frame frame, TriggerInfo2D info);
-}
-public interface ISignalOnTriggerExit2D : ISignal {
-void OnTriggerExit2D(Frame frame, ExitInfo2D info);
-}
-}
-
-```
 
 ```
 
@@ -161,30 +145,27 @@ And the 3D Physics signals:
 
 C#
 
-```
 ```csharp
 namespace Quantum {
-public interface ISignalOnCollision3D : ISignal {
-void OnCollision3D(Frame frame, CollisionInfo3D info);
+  public interface ISignalOnCollision3D : ISignal {
+    void OnCollision3D(Frame frame, CollisionInfo3D info);
+  }
+  public interface ISignalOnCollisionEnter3D : ISignal {
+    void OnCollisionEnter3D(Frame frame, CollisionInfo3D info);
+  }
+  public interface ISignalOnCollisionExit3D : ISignal {
+    void OnCollisionExit3D(Frame frame, ExitInfo3D info);
+  }
+  public interface ISignalOnTrigger3D : ISignal {
+    void OnTrigger3D(Frame frame, TriggerInfo3D info);
+  }
+  public interface ISignalOnTriggerEnter3D : ISignal {
+    void OnTriggerEnter3D(Frame frame, TriggerInfo3D info);
+  }
+  public interface ISignalOnTriggerExit3D : ISignal {
+    void OnTriggerExit3D(Frame frame, ExitInfo3D info);
+  }
 }
-public interface ISignalOnCollisionEnter3D : ISignal {
-void OnCollisionEnter3D(Frame frame, CollisionInfo3D info);
-}
-public interface ISignalOnCollisionExit3D : ISignal {
-void OnCollisionExit3D(Frame frame, ExitInfo3D info);
-}
-public interface ISignalOnTrigger3D : ISignal {
-void OnTrigger3D(Frame frame, TriggerInfo3D info);
-}
-public interface ISignalOnTriggerEnter3D : ISignal {
-void OnTriggerEnter3D(Frame frame, TriggerInfo3D info);
-}
-public interface ISignalOnTriggerExit3D : ISignal {
-void OnTriggerExit3D(Frame frame, ExitInfo3D info);
-}
-}
-
-```
 
 ```
 
@@ -192,24 +173,21 @@ To react to the callback, implement the corresponding signal interface in at lea
 
 C#
 
-```
 ```csharp
 public class PickUpSystem : SystemSignalsOnly, ISignalOnTriggerEnter3D
 {
-public void OnTriggerEnter3D(Frame frame, TriggerInfo3D info)
-{
-if (!frame.Has<PickUpSlot>(info.Entity)) return;
-if (!frame.Has<PlayerID>(info.Other)) return;
+    public void OnTriggerEnter3D(Frame frame, TriggerInfo3D info)
+    {
+        if (!frame.Has<PickUpSlot>(info.Entity)) return;
+        if (!frame.Has<PlayerID>(info.Other)) return;
 
-var item = frame.Get<PickUpSlot>(info.Entity).Item;
-var itemAsset = frame.FindAsset<ItemBase>(item.Id);
-itemAsset.OnPickUp(frame, info.Other, itemAsset);
+        var item = frame.Get<PickUpSlot>(info.Entity).Item;
+        var itemAsset = frame.FindAsset<ItemBase>(item.Id);
+        itemAsset.OnPickUp(frame, info.Other, itemAsset);
 
-frame.Destroy(info.Entity);
+        frame.Destroy(info.Entity);
+    }
 }
-}
-
-```
 
 ```
 
@@ -217,136 +195,50 @@ The code above exemplifies yet another optimization one can use when implementin
 
 ## CollisionInfo
 
-The signals for ```
-OnCollisionEnter
-```
-
- and ```
-OnCollision
-```
-
-offer up additional information on the colliding entities via the ```
-CollisionInfo
-```
-
- struct.
+The signals for `OnCollisionEnter` and `OnCollision` offer up additional information on the colliding entities via the `CollisionInfo` struct.
 
 ### Contact Points
 
-The information on the contact points can be accessed through the ```
-ContactPoints
-```
+The information on the contact points can be accessed through the `ContactPoints` API.
 
-API.
+- `Average` : the average of all contact points
+- `Count` : the number of contact points
+- `Length` : a buffer with all contact points
+- `First` : returns the first contact point of the first Triangle
 
-- ```
-Average
-```
+`First` can help saving computations if only one/any contact point is needed, and it does not have to be an averaged one.
 
-: the average of all contact points
-- ```
-Count
-```
-
-: the number of contact points
-- ```
-Length
-```
-
-: a buffer with all contact points
-- ```
-First
-```
-
-: returns the first contact point of the first Triangle
-
-```
-First
-```
-
-can help saving computations if only one/any contact point is needed, and it does not have to be an averaged one.
-
-```
-ContactPoints
-```
-
-is also an iterator. When colliding with a mesh, it can be used to iterate through all triangle collisions contact points.
+`ContactPoints` is also an iterator. When colliding with a mesh, it can be used to iterate through all triangle collisions contact points.
 
 C#
 
-```
 ```csharp
 while(info.ContactPoints.Next(out var cp)) {
-Draw.Sphere(cp, radius);
+  Draw.Sphere(cp, radius);
 }
 
 ```
 
-```
-
-_Sphere-Triangle_ collisions have a single contact point; therefore, both ```
-Average
-```
-
- and ```
-ContactPoints\[0\]
-```
-
-will return the same contact. Other types of collision can have more contact points.
+_Sphere-Triangle_ collisions have a single contact point; therefore, both `Average` and `ContactPoints\[0\]` will return the same contact. Other types of collision can have more contact points.
 
 ### Mesh Collision
 
-When an entity is colliding with a mesh, ```
-Count
-```
+When an entity is colliding with a mesh, `Count` and `Average` take all triangle collisions belonging to that specific mesh into account.
 
- and ```
-Average
-```
+Instead of receiving a callback for each triangle an entity collides with, these colliding triangles are grouped into a single `CollisionInfo` struct.
 
-take all triangle collisions belonging to that specific mesh into account.
+In the case of a mesh collision, `info.ContactNormal` and `info.Penetration` will return the average value of that mesh's triangle collisions; the same data available through `info.MeshTriangleCollisions.AverageNormal` and `info.MeshTriangleCollisions.AveragePenetration`.
 
-Instead of receiving a callback for each triangle an entity collides with, these colliding triangles are grouped into a single ```
-CollisionInfo
-```
-
- struct.
-
-In the case of a mesh collision, ```
-info.ContactNormal
-```
-
-and ```
-info.Penetration
-```
-
-will return the average value of that mesh's triangle collisions; the same data available through ```
-info.MeshTriangleCollisions.AverageNormal
-```
-
-and ```
-info.MeshTriangleCollisions.AveragePenetration
-```
-
-.
-
-In addition to the average normal an penetration, it is possible to iterate through each triangle collision and access specific info such as the triangle data itself. ```
-MeshTriangleCollisions
-```
-
-is also an iterator; it can be used to iterate through each triangle's collision data and retrieve mesh-specific collision data.
+In addition to the average normal an penetration, it is possible to iterate through each triangle collision and access specific info such as the triangle data itself. `MeshTriangleCollisions` is also an iterator; it can be used to iterate through each triangle's collision data and retrieve mesh-specific collision data.
 
 C#
 
-```
 ```csharp
 if (info.IsMeshCollision) {
-while(info.MeshTriangleCollisions.Next(out var triCollision)) {
-Draw.Ray(triCollision.Triangle->Center, triCollision.ContactNormal \* triCollision.Penetration);
+  while(info.MeshTriangleCollisions.Next(out var triCollision)) {
+    Draw.Ray(triCollision.Triangle->Center, triCollision.ContactNormal * triCollision.Penetration);
+  }
 }
-}
-
-```
 
 ```
 
@@ -356,11 +248,7 @@ Useful information when working with collision callbacks:
 
 - If 2 entities have the same callback set, the callback will be called twice - once per entity it is associated with. The only difference between the two calls are the values for _Entity_ and _Other_ which will be swapped.
 - Collisions with triggers and static colliders do not compute the Normal/Point/Penetration data.
-- Static Colliders on Unity can have a Quantum DB asset attached to their ```
-Asset
-```
-
-field. Casting it to the expected custom asset type is a good way to add arbitrary data to your static collision callbacks.
+- Static Colliders on Unity can have a Quantum DB asset attached to their `Asset` field. Casting it to the expected custom asset type is a good way to add arbitrary data to your static collision callbacks.
 
 Back to top
 

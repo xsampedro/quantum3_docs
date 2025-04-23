@@ -12,7 +12,7 @@ To access the counters, [open the Photon Dashboard](https://dashboard.photonengi
 
 Initially, the analytics page opens with a single counter: CCU, showing the data for "All Regions" in the past week.
 
-![Initial look of the Analytics page.](/docs/img/photon-app-counter_sample.png)
+![Initial look of the Analytics page.](https://doc.photonengine.com/docs/img/photon-app-counter_sample.png)
 
 Clicking below **Counters**, **Regions** or **Timespan** will reveal more options to customize the view. Changing the selection refreshes the view and stores it in your browser.
 
@@ -24,7 +24,7 @@ Independent of the regional timezones, all values use UTC timestamps.
 
 Within the loaded timespan, you can zoom into the data per graph: Click and drag with the mouse, doubleclick to reset.
 
-![Several counters, one zoomed in.](/docs/img/photon-app-counter_sample-zoom.png)
+![Several counters, one zoomed in.](https://doc.photonengine.com/docs/img/photon-app-counter_sample-zoom.png)
 
 To get an overview of billable values (CCUs, Traffic, etc.) make sure to include "All Regions" and select a month as timespan.
 

@@ -4,7 +4,7 @@ _Source: https://doc.photonengine.com/quantum/current/manual/navigation/overview
 
 # Overview
 
-![Navigation Intro](/docs/img/quantum/v3/manual/navigation/navigation-intro.png)
+![Navigation Intro](https://doc.photonengine.com/docs/img/quantum/v3/manual/navigation/navigation-intro.png)
 
 The Quantum navigation system provides a deterministic **Navigation Mesh** and a set of **Navigation Agent** components to navigate and steer entities through the game worlds.
 

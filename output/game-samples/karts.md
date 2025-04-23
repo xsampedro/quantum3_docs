@@ -12,13 +12,13 @@ Quantum Karts demonstrates how to build an arcade racing game with a full race l
 
 The sample supports up to 12 karts, has 2 tracks, 4 different powerups, 3 kart types and 3 kart looks.
 
-![](/docs/img/quantum/v3/game-samples/karts/karts-1.png)
+![](https://doc.photonengine.com/docs/img/quantum/v3/game-samples/karts/karts-1.png)
 
-![](/docs/img/quantum/v3/game-samples/karts/karts-2.png)
+![](https://doc.photonengine.com/docs/img/quantum/v3/game-samples/karts/karts-2.png)
 
-![](/docs/img/quantum/v3/game-samples/karts/karts-3.png)
+![](https://doc.photonengine.com/docs/img/quantum/v3/game-samples/karts/karts-3.png)
 
-![](/docs/img/quantum/v3/game-samples/karts/karts-4.png)
+![](https://doc.photonengine.com/docs/img/quantum/v3/game-samples/karts/karts-4.png)
 
 ## Download
 
@@ -33,25 +33,9 @@ The sample supports up to 12 karts, has 2 tracks, 4 different powerups, 3 kart t
 
 ## Before You Start
 
-To run the sample in online multiplayer mode, first create a Quantum AppId in the [PhotonEngine Dashboard](https://dashboard.photonengine.com) and paste it into the ```
-AppId
-```
+To run the sample in online multiplayer mode, first create a Quantum AppId in the [PhotonEngine Dashboard](https://dashboard.photonengine.com) and paste it into the `AppId` field in `PhotonServerSettings` asset.
 
- field in ```
-PhotonServerSettings
-```
-
-asset.
-
-Then load the ```
-Menu
-```
-
- scene in the Scenes menu and press ```
-Play
-```
-
-.
+Then load the `Menu` scene in the Scenes menu and press `Play`.
 
 ## Highlights
 

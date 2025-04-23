@@ -10,156 +10,36 @@ Systems are the entry points for all gameplay logic in Quantum.
 
 They are implemented as normal C# classes, although there are a few restrictions for a System to be compliant with the predict/rollback model. Systems must:
 
-- Be stateless: no mutable fields should be declared in systems. All the mutable game data has to be declared in .qtn files which then becomes part of the rollbackable game state inside the ```
-Frame
-```
-
-class;
+- Be stateless: no mutable fields should be declared in systems. All the mutable game data has to be declared in .qtn files which then becomes part of the rollbackable game state inside the `Frame` class;
 - Implement and/or use only deterministic libraries and algorithms (Quantum comes with libraries for fixed point math, vector math, physics, random number generation, path finding, etc);
 
 There are a few base system classes one can inherit from:
 
-- ```
-SystemMainThread
-```
-
-: has ```
-OnInit
-```
-
-and ```
-Update
-```
-
-callbacks. Update is executed once per system and, when needing to iterate thgouth entities and their components, the user has to create their own filters. Can also be used to subscribe and react to Quantum signals;
-- ```
-SystemMainThreadFilter<Filter>
-```
-
-: works similar to ```
-SystemMainThread
-```
-
-, except that it takes a filter that defines components layout and ```
-Update
-```
-
-is called once for every entity which has all the components defined in the Filter;
-- ```
-SystemSignalsOnly
-```
-
-: does _not_ provide an ```
-Update
-```
-
-callback and is commonly used only for reacting to Quantum signals. It has reduced overhead as it does not have task scheduling for it);
-- ```
-SystemBase
-```
-
-: advanced uses only, for scheduling parallel jobs into the task graph (not covered in this basic manual).
+- `SystemMainThread`: has `OnInit` and `Update` callbacks. Update is executed once per system and, when needing to iterate thgouth entities and their components, the user has to create their own filters. Can also be used to subscribe and react to Quantum signals;
+- `SystemMainThreadFilter<Filter>`: works similar to `SystemMainThread`, except that it takes a filter that defines components layout and `Update` is called once for every entity which has all the components defined in the Filter;
+- `SystemSignalsOnly`: does _not_ provide an `Update` callback and is commonly used only for reacting to Quantum signals. It has reduced overhead as it does not have task scheduling for it);
+- `SystemBase`: advanced uses only, for scheduling parallel jobs into the task graph (not covered in this basic manual).
 
 ## Core Systems
 
-The Quantum SDK includes all _Core_ systems in the default ```
-SystemsConfig
-```
+The Quantum SDK includes all _Core_ systems in the default `SystemsConfig`.
 
-.
+- `Core.CullingSystem2D()`: Culls entities with a `Transform2D` component in predicted frames.
+- `Core.CullingSystem3D()`: Culls entities with a `Transform3D` component in predicted frames.
+- `Core.PhysicsSystem2D()`: Runs physics on all entities with a `Transform2D` AND a `PhysicsCollider2D` component.
+- `Core.PhysicsSystem3D()`: Runs physics on all entities with a `Transform3D` AND a `PhysicsCollider3D` component.
+- `Core.NavigationSystem()`: Used for all NavMesh related components.
+- `Core.EntityPrototypeSystem()`: Creates, Materializes and Initializes `EntityPrototypes`.
+- `Core.PlayerConnectedSystem()`: Used to trigger the `ISignalOnPlayerConnected` and `ISignalOnPlayerDisconnected` signals.
+- `Core.DebugCommand.CreateSystem()`: Used by the state inspector to send data to instantiate/remove/modify entities on the fly ( _Only available in the Editor!_).
 
-- ```
-  Core.CullingSystem2D()
-  ```
-
-  : Culls entities with a ```
-  Transform2D
-  ```
-
-   component in predicted frames.
-- ```
-  Core.CullingSystem3D()
-  ```
-
-  : Culls entities with a ```
-  Transform3D
-  ```
-
-   component in predicted frames.
-- ```
-  Core.PhysicsSystem2D()
-  ```
-
-  : Runs physics on all entities with a ```
-  Transform2D
-  ```
-
-   AND a ```
-  PhysicsCollider2D
-  ```
-
-   component.
-- ```
-  Core.PhysicsSystem3D()
-  ```
-
-  : Runs physics on all entities with a ```
-  Transform3D
-  ```
-
-   AND a ```
-  PhysicsCollider3D
-  ```
-
-   component.
-- ```
-  Core.NavigationSystem()
-  ```
-
-  : Used for all NavMesh related components.
-- ```
-  Core.EntityPrototypeSystem()
-  ```
-
-  : Creates, Materializes and Initializes ```
-  EntityPrototypes
-  ```
-
-  .
-- ```
-  Core.PlayerConnectedSystem()
-  ```
-
-  : Used to trigger the ```
-  ISignalOnPlayerConnected
-  ```
-
-   and ```
-  ISignalOnPlayerDisconnected
-  ```
-
-   signals.
-- ```
-  Core.DebugCommand.CreateSystem()
-  ```
-
-  : Used by the state inspector to send data to instantiate/remove/modify entities on the fly ( _Only available in the Editor!_).
-
-All systems are included by default for the user's convenience. Core systems can be selectively added/removed based on the game's required functionalities; e.g. only keep the ```
-PhysicsSystem2D
-```
-
-or ```
-PhysicsSystem3D
-```
-
-based on what the game needs.
+All systems are included by default for the user's convenience. Core systems can be selectively added/removed based on the game's required functionalities; e.g. only keep the `PhysicsSystem2D` or `PhysicsSystem3D` based on what the game needs.
 
 ## Basic Systems
 
 On Unity, it is possible to create Quantum systems using script templates using the right-click menu:
 
-![System Templates](/docs/img/quantum/v3/manual/quantum-system-templates.png)
+![System Templates](https://doc.photonengine.com/docs/img/quantum/v3/manual/quantum-system-templates.png)
 
 The corresponding code snippets generated are:
 
@@ -167,158 +47,82 @@ The corresponding code snippets generated are:
 
 C#
 
-```
 ```csharp
 namespace Quantum {
- using Photon.Deterministic;
- using UnityEngine.Scripting;
+  using Photon.Deterministic;
+  using UnityEngine.Scripting;
 
- \[Preserve\]
- public unsafe class NewQuantumSystem : SystemMainThread {
- public override void Update(Frame frame) {
- }
- }
+  [Preserve]
+  public unsafe class NewQuantumSystem : SystemMainThread {
+    public override void Update(Frame frame) {
+    }
+  }
 }
-
-```
 
 ```
 
 Overridable API:
 
-- ```
-  OnInit(Frame frame)
-  ```
-
-  ;
-- ```
-  Update(Frame frame)
-  ```
-
-  ;
-- ```
-  OnDisabled(Frame frame)
-  ```
-
-  /```
-  OnEnabled(Frame frame)
-  ```
-
-- ```
-  StartEnabled
-  ```
-
-  ;
+- `OnInit(Frame frame)`;
+- `Update(Frame frame)`;
+- `OnDisabled(Frame frame)`/`OnEnabled(Frame frame)`
+- `StartEnabled`;
 
 **System Filter**
 
 C#
 
-```
 ```csharp
 namespace Quantum {
- using Photon.Deterministic;
- using UnityEngine.Scripting;
+  using Photon.Deterministic;
+  using UnityEngine.Scripting;
 
- \[Preserve\]
- public unsafe class NewQuantumSystem : SystemMainThreadFilter<NewQuantumSystem.Filter> {
- public override void Update(Frame frame, ref Filter filter) {
- }
+  [Preserve]
+  public unsafe class NewQuantumSystem : SystemMainThreadFilter<NewQuantumSystem.Filter> {
+    public override void Update(Frame frame, ref Filter filter) {
+    }
 
- public struct Filter {
- public EntityRef Entity;
- }
- }
+    public struct Filter {
+      public EntityRef Entity;
+    }
+  }
 }
 
 ```
 
-```
+Overridable API is the same `SystemMainThread`, plus:
 
-Overridable API is the same ```
-SystemMainThread
-```
-
-, plus:
-
-- ```
-Any
-```
-
-;
-- ```
-Without
-```
-
-;
+- `Any`;
+- `Without`;
 
 **System Signals Only**
 
 C#
 
-```
 ```csharp
 namespace Quantum {
-using Photon.Deterministic;
-using UnityEngine.Scripting;
+  using Photon.Deterministic;
+  using UnityEngine.Scripting;
 
-\[Preserve\]
-public unsafe class NewQuantumSystem : SystemSignalsOnly {
+  [Preserve]
+  public unsafe class NewQuantumSystem : SystemSignalsOnly {
+  }
 }
-}
 
 ```
 
-```
-
-Overridable API is the same ```
-SystemMainThread
-```
-
-, except for ```
-Update
-```
-
-;
+Overridable API is the same `SystemMainThread`, except for `Update`;
 
 These are some of the main callbacks that can be overridden in a System class:
 
-- ```
-OnInit
-```
+- `OnInit`: executed only once, when game starts. Commonly used to setup initial game data;
+- `Update`: used to advance the game state;
+- `OnDisabled(Frame frame)` and `OnEnabled(Frame frame)`: called when a system is directly disabled/enabled or when a parent system state is toggled;
+- `UseCulling` defines if the System should excluded culled entities.
 
-: executed only once, when game starts. Commonly used to setup initial game data;
-- ```
-Update
-```
+**PS:** it is mandatory for any Quantum system to use the Attribute `\[UnityEngine.Scripting.Preserve\]`.
 
-: used to advance the game state;
-- ```
-OnDisabled(Frame frame)
-```
-
-and ```
-OnEnabled(Frame frame)
-```
-
-: called when a system is directly disabled/enabled or when a parent system state is toggled;
-- ```
-UseCulling
-```
-
-defines if the System should excluded culled entities.
-
-**PS:** it is mandatory for any Quantum system to use the Attribute ```
-\[UnityEngine.Scripting.Preserve\]
-```
-
-.
-
-Notice that all available callbacks include an instance of ```
-Frame
-```
-
-. The Frame class is the container for all the mutable and static game state data, including entities, physics, navigation and others like immutable asset objects (which will be covered in a separate chapter).
+Notice that all available callbacks include an instance of `Frame`. The Frame class is the container for all the mutable and static game state data, including entities, physics, navigation and others like immutable asset objects (which will be covered in a separate chapter).
 
 The reason for this is that Systems must be _stateless_ to comply with Quantum's predict/rollback model. Quantum only guarantees determinism if all (mutable) game state data is fully contained in the Frame instance.
 
@@ -328,46 +132,35 @@ The following code snippet shows some basic examples of valid and not valid (vio
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
 
-public unsafe class MySystem : SystemMainThread
-{
-// This is ok
-private const int \_readOnlyData = 10;
-// This is NOT ok (this data will not be rolled back, so it would lead to instant drifts between game clients during rollbacks)
-private int \_mutableData = 10;
+  public unsafe class MySystem : SystemMainThread
+  {
+    // This is ok
+    private const int _readOnlyData = 10;
+    // This is NOT ok (this data will not be rolled back, so it would lead to instant drifts between game clients during rollbacks)
+    private int _mutableData = 10;
 
-public override void Update(Frame frame)
-{
-// it is ok to use a constant to compute something here
-var temporaryData = \_readOnlyData + 5;
+    public override void Update(Frame frame)
+    {
+        // it is ok to use a constant to compute something here
+        var temporaryData = _readOnlyData + 5;
 
-// it is NOT ok to modify transient data that lives outside of the Frame object:
-\_transientData = 5;
+        // it is NOT ok to modify transient data that lives outside of the Frame object:
+        _transientData = 5;
+    }
+  }
 }
-}
-}
-
-```
 
 ```
 
 ## SystemsConfig
 
-In Quantum 3, the way systems configuration is handled has changed. Instead of embedding configurations directly within the code, configuration is encapsulated within an asset named ```
-SystemsConfig
-```
+In Quantum 3, the way systems configuration is handled has changed. Instead of embedding configurations directly within the code, configuration is encapsulated within an asset named `SystemsConfig`.
 
-.
-
-This config is passed into the ```
-RuntimeConfig
-```
-
-and Quantum will automatically instantiate the requested systems.
+This config is passed into the `RuntimeConfig` and Quantum will automatically instantiate the requested systems.
 
 Notice that Quantum includes a few pre-built Systems (entry point for the physics engine updates, navmesh and entity prototype instantiations).
 
@@ -375,35 +168,28 @@ To guarantee determinism, the order in which Systems are inserted will be the or
 
 ### Creating a new SystemsConfig
 
-A ```
-SystemsConfig
-```
-
-is a normal Quantum asset. Meaning, you can create a new one by right clicking the project window -> Quantum -> SystemsConfig.
+A `SystemsConfig` is a normal Quantum asset. Meaning, you can create a new one by right clicking the project window -> Quantum -> SystemsConfig.
 
 The asset has a serialized list of systems. You can interact with it like any normal unity list.
 
-![Systems Config](/docs/img/quantum/v3/manual/config-files/systems-config.png)### Activating and Deactivating Systems
+![Systems Config](https://doc.photonengine.com/docs/img/quantum/v3/manual/config-files/systems-config.png)### Activating and Deactivating Systems
 
 All injected systems are active by default, but it is possible to control their status in runtime by calling these generic functions from any place in the simulation (they are available in the Frame object):
 
 C#
 
-```
 ```csharp
 public override void OnInit(Frame frame)
 {
-// deactivates MySystem, so no updates (or signals) are called in it
-frame.SystemDisable<MySystem>();
+  // deactivates MySystem, so no updates (or signals) are called in it
+  frame.SystemDisable<MySystem>();
 
-// (re)activates MySystem
-frame.SystemEnable<MySystem>();
+  // (re)activates MySystem
+  frame.SystemEnable<MySystem>();
 
-// possible to query if a System is currently enabled
-var enabled = frame.SystemIsEnabled<MySystem>();
+  // possible to query if a System is currently enabled
+  var enabled = frame.SystemIsEnabled<MySystem>();
 }
-
-```
 
 ```
 
@@ -413,11 +199,8 @@ To make a system start disabled by default override this property:
 
 C#
 
-```
 ```csharp
 public override bool StartEnabled => false;
-
-```
 
 ```
 
@@ -425,43 +208,24 @@ public override bool StartEnabled => false;
 
 Systems can be grouped, which allows them to be enabled and disabled together.
 
-Select the ```
-SystemsConfig
-```
+Select the `SystemsConfig`, add a new system of type `SystemGroup`, then append child systems to it.
 
-, add a new system of type ```
-SystemGroup
-```
+![System Group](https://doc.photonengine.com/docs/img/quantum/v3/manual/ecs/system-setup-groups.png)
 
-, then append child systems to it.
-
-![System Group](/docs/img/quantum/v3/manual/ecs/system-setup-groups.png)
-
-**N.B.:** The ```
-Frame.SystemEnable<T>()
-```
-
-and ```
-Frame.SystemDisable<T>()
-```
-
-methods identify systems by type; thus if there are to be several system groups, they each need their own implementation to allow enabling / disabling multiple system groups independently. In this case, it is possible to declare a new system group type as shown below, which can then be used in the systems config asset.
+**N.B.:** The `Frame.SystemEnable<T>()` and `Frame.SystemDisable<T>()` methods identify systems by type; thus if there are to be several system groups, they each need their own implementation to allow enabling / disabling multiple system groups independently. In this case, it is possible to declare a new system group type as shown below, which can then be used in the systems config asset.
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
-public class MySystemGroup : SystemMainThreadGroup
-{
-public MySystemGroup(string update, params SystemMainThread\[\] children) : base(update, children)
-{
+  public class MySystemGroup : SystemMainThreadGroup
+  {
+    public MySystemGroup(string update, params SystemMainThread[] children) : base(update, children)
+    {
+    }
+  }
 }
-}
-}
-
-```
 
 ```
 
@@ -473,11 +237,8 @@ To create a new entity instance, just use this (method returns an EntityRef):
 
 C#
 
-```
 ```csharp
 var e = frame.Create();
-
-```
 
 ```
 
@@ -485,15 +246,12 @@ Entities do not have pre-defined components any more, to add a Transform3D and a
 
 C#
 
-```
 ```csharp
 var t = Transform3D.Create();
 frame.Set(e, t);
 
-var c = PhysicsCollider3D.Create(f, Shape3D.CreateSphere(1));
+var c =  PhysicsCollider3D.Create(f, Shape3D.CreateSphere(1));
 frame.Set(e, c);
-
-```
 
 ```
 
@@ -501,17 +259,14 @@ These two methods are also useful:
 
 C#
 
-```
 ```csharp
 // destroys the entity, including any component that was added to it.
 frame.Destroy(e);
 
 // checks if an EntityRef is still valid (good for when you store it as a reference inside other components):
 if (frame.Exists(e)) {
-// safe to do stuff, Get/Set components, etc
+  // safe to do stuff, Get/Set components, etc
 }
-
-```
 
 ```
 
@@ -519,13 +274,10 @@ Also possible to check dynamically if an entity contains a certain component typ
 
 C#
 
-```
 ```csharp
 if (frame.Has<Transform3D>(e)) {
-var t = frame.Unsafe.GetPointer<Transform3D>(e);
+    var t = frame.Unsafe.GetPointer<Transform3D>(e);
 }
-
-```
 
 ```
 
@@ -533,14 +285,11 @@ With ComponentSet, you can do a single check if an entity has multiple component
 
 C#
 
-```
 ```csharp
 var components = ComponentSet.Create<CharacterController3D, PhysicsBody3D>();
 if (frame.Has(e, components)) {
-// do something
+  // do something
 }
-
-```
 
 ```
 
@@ -548,11 +297,8 @@ Removing components dynamically is as easy as:
 
 C#
 
-```
 ```csharp
 frame.Remove<Transform3D>(e);
-
-```
 
 ```
 
@@ -573,22 +319,19 @@ Therefore, instead of iterating over a collection of entities, filters are used 
 
 C#
 
-```
 ```csharp
 public unsafe class MySystem : SystemMainThread
 {
-public override void Update(Frame frame)
-{
-var filtered = rame.Filter<Transform3D, PhysicsBody3D>();
+    public override void Update(Frame frame)
+    {
+        var filtered = rame.Filter<Transform3D, PhysicsBody3D>();
 
-while (filtered.Next(out var e, out var t, out var b)) {
-t.Position += FPVector3.Forward \* frame.DeltaTime;
-frame.Set(e, t);
+        while (filtered.Next(out var e, out var t, out var b)) {
+          t.Position += FPVector3.Forward * frame.DeltaTime;
+          frame.Set(e, t);
+        }
+    }
 }
-}
-}
-
-```
 
 ```
 
@@ -600,41 +343,18 @@ Quantum contains a few pre-built data assets that are always passed into Systems
 
 These are the most important pre-built asset objects (from Quantum's Asset DB):
 
-- ```
-Map
-```
-
-and ```
-NavMesh
-```
-
-: data about the playable area, static physics colliders, navigation meshes, etc... . Custom player data can be added from a data asset slot (will be covered in the data assets chapter);
-- ```
-SimulationConfig
-```
-
-: general configuration data for physics engine, navmesh system, etc.
-- default ```
-PhysicsMaterial
-```
-
-and ```
-agent configs
-```
-
-(KCC, navmesh, etc):
+- `Map` and `NavMesh`: data about the playable area, static physics colliders, navigation meshes, etc... . Custom player data can be added from a data asset slot (will be covered in the data assets chapter);
+- `SimulationConfig`: general configuration data for physics engine, navmesh system, etc.
+- default `PhysicsMaterial` and `agent configs` (KCC, navmesh, etc):
 
 The following snippets show how to access current Map and NavMesh instances from the Frame object:
 
 C#
 
-```
 ```csharp
 // Map is the container for several static data, such as navmeshes, etc
 Map map = f.Map;
-var navmesh = map.NavMeshes\["MyNavmesh"\];
-
-```
+var navmesh = map.NavMeshes[&#34;MyNavmesh&#34;];
 
 ```
 
@@ -650,11 +370,8 @@ The following example in a DSL file (from the previous chapter):
 
 C#
 
-```
 ```csharp
-signal OnDamage(FP damage, entity\_ref entity);
-
-```
+signal OnDamage(FP damage, entity_ref entity);
 
 ```
 
@@ -662,12 +379,9 @@ Would lead to this trigger signal being generated on the Frame class (f variable
 
 C#
 
-```
 ```csharp
 // any System can trigger the generated signal, not leading to coupling with a specific implementation
 f.Signals.OnDamage(10, entity)
-
-```
 
 ```
 
@@ -675,21 +389,18 @@ A "subscriber" System would implement the generated "ISignalOnDamage" interface,
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
-class CallbacksSystem : SystemSignalsOnly, ISignalOnDamage
-{
-public void OnDamage(Frame frame, FP damage, EntityRef entity)
-{
-// this will be called everytime any other system calls the OnDamage signal
-}
+  class CallbacksSystem : SystemSignalsOnly, ISignalOnDamage
+  {
+    public void OnDamage(Frame frame, FP damage, EntityRef entity)
+    {
+      // this will be called everytime any other system calls the OnDamage signal
+    }
 
+  }
 }
-}
-
-```
 
 ```
 
@@ -701,20 +412,8 @@ Besides explicit signals defined directly in the DSL, Quantum also includes some
 
 The collision callback signals will be covered in the specific chapter about the physics engine, so here's a brief description of other pre-built signals:
 
-- ```
-ISignalOnPlayerDataSet
-```
-
-: called when a game client sends an instance of RuntimePlayer to server (and the data is confirmed/attached to one tick).
-- ```
-ISignalOnAdd<T>
-```
-
-, ```
-ISignalOnRemove<T>
-```
-
-: called when a component type T is added/removed to/from an entity.
+- `ISignalOnPlayerDataSet`: called when a game client sends an instance of RuntimePlayer to server (and the data is confirmed/attached to one tick).
+- `ISignalOnAdd<T>`, `ISignalOnRemove<T>`: called when a component type T is added/removed to/from an entity.
 
 ## Triggering Events
 
@@ -722,16 +421,13 @@ Similar to what happens to signals, the entry point for triggering events is the
 
 C#
 
-```
 ```csharp
 // taking this DSL event definition as a basis
 event TriggerSound
 {
-FPVector2 Position;
-FP Volume;
+    FPVector2 Position;
+    FP Volume;
 }
-
-```
 
 ```
 
@@ -739,12 +435,9 @@ This can be called from a System to trigger an instance of this event (processin
 
 C#
 
-```
 ```csharp
-// any System can trigger the generated events (FP.\_0\_5 means fixed point value for 0.5)
-f.Events.TriggerSound(FPVector2.Zero, FP.\_0\_5);
-
-```
+// any System can trigger the generated events (FP._0_5 means fixed point value for 0.5)
+f.Events.TriggerSound(FPVector2.Zero, FP._0_5);
 
 ```
 
@@ -758,7 +451,6 @@ The following snippet shows the most important ones:
 
 C#
 
-```
 ```csharp
 // RNG is a pointer.
 // Next gives a random FP between 0 and 1.
@@ -773,57 +465,32 @@ var i = f.GetPlayerInput(0);
 
 ```
 
-```
-
 ## Optimization By Scheduling
 
 To optimize systems identified as performance hotspots a simple modulo-based entity scheduling can help. Using this only a subset of entities are updated while iterating through them each tick.
 
 C#
 
-```
 ```csharp
 public override void Update(Frame frame) {
-foreach (var (entity, c) in f.GetComponentIterator<Component>()) {
-const int schedulePeriod = 5;
-if (entity.Index % schedulePeriod == frame.Number % schedulePeriod) {
-// it is time to update this entity
+  foreach (var (entity, c) in f.GetComponentIterator<Component>()) {
+    const int schedulePeriod = 5;
+    if (entity.Index % schedulePeriod == frame.Number % schedulePeriod) {
+      // it is time to update this entity
+    }
 }
-}
 
 ```
 
-```
+Choosing a `schedulePeriod` of `5` will make the entity only be updated every 5th tick. Choosing `2` would mean every other tick.
 
-Choosing a ```
-schedulePeriod
-```
-
-of ```
-5
-```
-
-will make the entity only be updated every 5th tick. Choosing ```
-2
-```
-
-would mean every other tick.
-
-This way the total number of updates is significantly reduced. To avoid updating all entities in **one** tick adding ```
-entity.Index
-```
-
-will make the load be spread over multiple frames.
+This way the total number of updates is significantly reduced. To avoid updating all entities in **one** tick adding `entity.Index` will make the load be spread over multiple frames.
 
 Deferring the entity update like this has requirements on the user code:
 
 - The deferred update code has to be able to handle different delta times.
 - The entity lazy "responsiveness" may be visually noticeable.
-- Using ```
-entity.Index
-```
-
-may add to the laziness because new information is processed sooner or later for different entities.
+- Using `entity.Index` may add to the laziness because new information is processed sooner or later for different entities.
 
 The [Quantum Navigation system](/quantum/current/manual/navigation/workflow-agents#update_interval "Quantum Navigation system") has this feature build-in.
 

@@ -12,7 +12,7 @@ This is the Quantum version of Simple FPS which is recommended for casual or mob
 
 The gameplay revolves around intense deathmatch battles, where players engage in fast-paced combat within a realistic warehouse environment. With its simplistic design and clear code organization, the **Simple FPS** game offers an accessible starting point for understanding the fundamentals of creating multiplayer games with Quantum.
 
-![Quantum Simple FPS](/docs/img/quantum/v3/game-samples/simple-fps/overview.jpg)## Features
+![Quantum Simple FPS](https://doc.photonengine.com/docs/img/quantum/v3/game-samples/simple-fps/overview.jpg)## Features
 
 - First-person shooter set in a warehouse environment.
 - Deathmatch mode: Players respawn after a short time after death. The player with the most kills wins.

@@ -26,11 +26,7 @@ Here is a list of pros and cons to consider when using Bot SDK HFSM:
 - **Pros**:
 
   - **Performance**: due to its fixed structure nature and simplicity on its internal mechanism, the HFSM is very fast. Then most of the performance depends on how the user implements their specific AI logic, such as the Actions and Decisions;
-  - **Memory Consumption**: the ```
-    HFSMAgent
-    ```
-
-     component is quite simple and only needs to cache a small set of data in order to work. Due to this, having lots of HFSM agents does not increase too much the memory usage;
+  - **Memory Consumption**: the `HFSMAgent` component is quite simple and only needs to cache a small set of data in order to work. Due to this, having lots of HFSM agents does not increase too much the memory usage;
   - **Ease of expression**: the concept of States, Actions and Transitions are quite simple to understand. That's one reason why state machines are often mentioned in the game development area. Both coders and game designers can understand its concepts pretty fast and start developing right away;
   - **Tight control**: its fixed structure allow users to know with more precision what is happening in one State and what can happen in terms of transitions.
 - **Cons**:
@@ -43,31 +39,23 @@ When using Bot SDK, the HFSM is, in general, an interesting approach, specially 
 
 ## Creating a State Machine document
 
-In the Bot SDK window, click on the ```
-New Document
-```
+In the Bot SDK window, click on the `New Document` button and choose `Hierarchical Finite State Machine (HFSM)`:
 
- button and choose ```
-Hierarchical Finite State Machine (HFSM)
-```
-
-:
-
-![Create new HFSM Document](/docs/img/quantum/v3/addons/bot-sdk/new-document-button.png)
+![Create new HFSM Document](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/new-document-button.png)
 
 Choose a name for the AI document. This document is a Scriptable Object which has the XML that is needed on the editor side only, which is not revelant to the Quantum simulation. It does not need to be shipped in builds.
 
 The name chosen for this AI document will also be the name of the Quantum asset created, that is used on the simulation to actually update entities AI, so it is nice to already pick a suggestive name.
 
-![HFSM file](/docs/img/quantum/v3/addons/bot-sdk/hfsm-ai-document.png)
+![HFSM file](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/hfsm-ai-document.png)
 
 Creating a new HFSM document already populates it with a very basic State which doesn perform any action, nor has any transition:
 
-![Initial State](/docs/img/quantum/v3/addons/bot-sdk/initial-state.png)
+![Initial State](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/initial-state.png)
 
 The characteristics of a State:
 
-![State analysis](/docs/img/quantum/v3/addons/bot-sdk/state-analysis.png)
+![State analysis](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/state-analysis.png)
 
 1. Indicates that this is the initial state for this hierarchy level;
 2. The State's name;
@@ -80,11 +68,11 @@ The characteristics of a State:
 
 To create a new State, right click on any empty space on the Editor window and select _Create New State_
 
-![Create New State](/docs/img/quantum/v3/addons/bot-sdk/create-new-state.png)## Editing a State
+![Create New State](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/create-new-state.png)## Editing a State
 
 To edit a State, right click the target state and select _Edit This State_ or select it and press _F2_.
 
-![Edit State](/docs/img/quantum/v3/addons/bot-sdk/edit-state.png)
+![Edit State](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/edit-state.png)
 
 1. Define the State name;
 2. Delete the transition;
@@ -98,17 +86,17 @@ It is common to see HFSMs increasing a lot in terms of the amount of States and 
 
 In any State node, click on the _Collapse_ button to hide the transitions slots and change the way that the lines are drawn from/to it, thus enabling a simplified view.
 
-![Minimized State View](/docs/img/quantum/v3/addons/bot-sdk/state-collapse-button.png)
+![Minimized State View](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/state-collapse-button.png)
 
 Let's analyse the _before_ and _after_.
 
 Before:
 
-![Maximized Sample](/docs/img/quantum/v3/addons/bot-sdk/state-uncollapsed.png)
+![Maximized Sample](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/state-uncollapsed.png)
 
 After:
 
-![Minimized Sample](/docs/img/quantum/v3/addons/bot-sdk/state-collapsed.png)## Creating a Transition between two States
+![Minimized Sample](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/state-collapsed.png)## Creating a Transition between two States
 
 To start creating a Transition between two states, first click any of the small circles on the left/right borders of a State.
 
@@ -116,7 +104,7 @@ Then, click on another state and a new transition will be created.
 
 It is also possible to click on an empty space instead and the editor will display the nodes creation panel from which a new State can be created right away.
 
-![New Transition](/docs/img/quantum/v3/addons/bot-sdk/new-transition.png)
+![New Transition](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/new-transition.png)
 
 Whenever a new transition is created, it will have a dark color, indicating that the transition's condition is **not yet defined**.
 
@@ -129,7 +117,7 @@ There are some ways of interacting with a transition:
 
 Every Transition sub-graph has a fixed node. Let's take a analyze it:
 
-![Transition Node](/docs/img/quantum/v3/addons/bot-sdk/transition-node.png)
+![Transition Node](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/transition-node.png)
 
 This is the node that defines a Transition.
 
@@ -144,65 +132,49 @@ Let's define a simple Decision for this transition.
 
 To do that, right click in any blank space and a panel will show all the possible nodes that can be created. Look for the .
 
-![Initial Decisions](/docs/img/quantum/v3/addons/bot-sdk/initial-decisions.png)
+![Initial Decisions](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/initial-decisions.png)
 
-For simplicity sake, let's select the _TrueDecision_, which always returns ```
-True
-```
+For simplicity sake, let's select the _TrueDecision_, which always returns `True` (meaning that the transition shall happen).
 
- (meaning that the transition shall happen).
-
-![New Decision](/docs/img/quantum/v3/addons/bot-sdk/true-decision.png)
+![New Decision](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/true-decision.png)
 
 There is an output slot which defines where the result of this Decision will be driven to.
 
 Left click the slot and connect it to the Decision slot:
 
-![Connected Decision](/docs/img/quantum/v3/addons/bot-sdk/connected-decision.png)
+![Connected Decision](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/connected-decision.png)
 
-With this setup, whenever the Bot is in ```
-NewState
-```
-
-and the HFSM is updated, the state machine will make a transition to ```
-NewState1
-```
-
-.
+With this setup, whenever the Bot is in `NewState` and the HFSM is updated, the state machine will make a transition to `NewState1`.
 
 **It is possible to edit the value of most slots** by clicking on it's value field.
 
-![Decision Fields](/docs/img/quantum/v3/addons/bot-sdk/decision-fields.png)
+![Decision Fields](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/decision-fields.png)
 
 **Press Enter** to apply the changes or **press Esc** to discard the changes.
 
 To navigate back to the upper level, either use the breadcrumb buttons on the top bar or **press Ecs**.
 
-![Root on Breadcrumb](/docs/img/quantum/v3/addons/bot-sdk/root-breadcrumb.png)
+![Root on Breadcrumb](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/root-breadcrumb.png)
 
-Alternatively, it is possible to navigate through the States by using the left side panel, in the ```
-States
-```
+Alternatively, it is possible to navigate through the States by using the left side panel, in the `States` section:
 
-section:
-
-![Root on Hierarchy](/docs/img/quantum/v3/addons/bot-sdk/root-hierarchy.png)
+![Root on Hierarchy](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/root-hierarchy.png)
 
 As the Transition is now defined, it has a brighter color, so whether the Transition is taken depends on the conditions coded in the chosen Decision.
 
 When no Decision nor Event is provided, the Transition is always taken.
 
-![Valid Transition](/docs/img/quantum/v3/addons/bot-sdk/valid-transition.png)## Defining the transitions Priorities
+![Valid Transition](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/valid-transition.png)## Defining the transitions Priorities
 
 On states that has more than one transition, it is possible to define which ones will be evaluated first.
 
 To define such order, use the _Priority_ slot on the Transition node.
 
-![Transition Priority](/docs/img/quantum/v3/addons/bot-sdk/transition-priority.png)
+![Transition Priority](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/transition-priority.png)
 
 It is possible to see the Transition's priority on the State node:
 
-![Transition Priority on State node](/docs/img/quantum/v3/addons/bot-sdk/transition-priority-top-view.png)
+![Transition Priority on State node](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/transition-priority-top-view.png)
 
 The order in which the Transitions are evaluated is **Descending Order** (from the highest to the lowest priority values).
 
@@ -210,31 +182,27 @@ The order in which the Transitions are evaluated is **Descending Order** (from t
 
 In order to create a new Transition, hover the cursor on the bottom part of a State and a **(+)** button will appear. Click on it.
 
-![New Transition](/docs/img/quantum/v3/addons/bot-sdk/add-transition.png)## Special Transition Types
+![New Transition](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/add-transition.png)## Special Transition Types
 
 ### Transition Sets
 
 These types of node can be used to group up multiple transitions, which can be handy for reusability and organization.
 
-To create a new Transition Set, right click in the empty space and select ```
-Create New Transition Set
-```
-
-. Notice that this kind of node can also be renamed.
+To create a new Transition Set, right click in the empty space and select `Create New Transition Set`. Notice that this kind of node can also be renamed.
 
 This will create a node very similar to the State node: it begins with a single undefined Transition, with the possibility of adding multiple transitions from the bottom corner button:
 
-![Transition Set](/docs/img/quantum/v3/addons/bot-sdk/transition-set.png)
+![Transition Set](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/transition-set.png)
 
 Then, create the links between the Transition Set and other states.
 
 Here is an example:
 
-![Maximized Transition Set](/docs/img/quantum/v3/addons/bot-sdk/maximized-transition-set.png)
+![Maximized Transition Set](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/maximized-transition-set.png)
 
 It is also possible to collpase Transition Sets using its top-right corner button:
 
-![Minimized Transition Set](/docs/img/quantum/v3/addons/bot-sdk/minimized-transition-set.png)### ANY Transition
+![Minimized Transition Set](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/minimized-transition-set.png)### ANY Transition
 
 This type of Transition can be used to quickly create transitions to a target State, from all other States, without having to add such transition on all of them.
 
@@ -244,27 +212,15 @@ Create new ANY Transitions from the right click menu.
 
 Now, define the target state(s).
 
-![Any Transition](/docs/img/quantum/v3/addons/bot-sdk/any-transition.png)
+![Any Transition](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/any-transition.png)
 
 In the example above, every State on that specific level of the hierarchy will consider ANY node's transition.
 
 It is possible though to define a list of States which should _ignore_ the ANY Transition, or a list of the only ones which _should_ consider it.
 
-These are called the ```
-Excluded List
-```
+These are called the `Excluded List` or `Included List`. Use the diamond shaped button to switch the list type, and pick States from the `+` button:
 
-or ```
-Included List
-```
-
-. Use the diamond shaped button to switch the list type, and pick States from the ```
-+
-```
-
-button:
-
-![Any Transition Excluded List](/docs/img/quantum/v3/addons/bot-sdk/any-transition-excluded-list.png)
+![Any Transition Excluded List](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/any-transition-excluded-list.png)
 
 **PS**: the target node is _also_ included by the ANY Transition, so it can make a State transition to itself.
 
@@ -274,11 +230,11 @@ This type of transition is meant to force the HFSM to go from a State to any oth
 
 Create new Portal Transitions from the right click menu and use the dropdown menu in order to define the target state:
 
-![Portal Transition](/docs/img/quantum/v3/addons/bot-sdk/portal-transition.png)
+![Portal Transition](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/portal-transition.png)
 
 Now, define which States should consider taking the Portal:
 
-![Transition to Portal](/docs/img/quantum/v3/addons/bot-sdk/transition-to-portal.png)
+![Transition to Portal](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/transition-to-portal.png)
 
 PS: it is also possible to right click on any of the states in the left panel hierarchy in ordero to create a new Portal to such state on the current graph view.
 
@@ -290,7 +246,7 @@ Bot SDK comes with 3 logical Decision nodes ready to use.
 
 Here is an example showcasing composed decisions based on the _AND_, _OR_ and _NOT_:
 
-![Composed Decision 1](/docs/img/quantum/v3/addons/bot-sdk/composed-decision.png)## Events
+![Composed Decision 1](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/composed-decision.png)## Events
 
 It is possible to set up transitions in a way that they can be triggered in an event-like manner, defined by a name, and not necessarily via a Decision.
 
@@ -304,11 +260,8 @@ Here is how an HFSM Event is triggered (from _simulation code_):
 
 C#
 
-```
 ```csharp
-HFSMManager.TriggerEvent(frame, entityRef, "FooEvent");
-
-```
+HFSMManager.TriggerEvent(frame, entityRef, &#34;FooEvent&#34;);
 
 ```
 
@@ -316,7 +269,7 @@ This can not only be added to Bot SDK related classes, but also to custom user s
 
 In order to create a new event, click on the **(+)** button on the left side panel, in the Events session:
 
-![Create Event](/docs/img/quantum/v3/addons/bot-sdk/create-event.png)
+![Create Event](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/create-event.png)
 
 Type the Event name. It is also possible to double click on an Event to _edit the event name or delete it_.
 
@@ -324,7 +277,7 @@ In order to place an event on the Transition's sub-graph, drag and drop it.
 
 Then link the Event's outbound slot to the Transition's Event slot:
 
-![Linked Event](/docs/img/quantum/v3/addons/bot-sdk/linked-event.png)
+![Linked Event](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/linked-event.png)
 
 **Note:** Differently from the decisions, there are no composite Events and a transition does not accept more than one event connected.
 
@@ -334,7 +287,7 @@ It is also possible to define a transition by setting **both an Event and a Deci
 
 In this case, that Transition only happens if both the Event is triggered and the Decision conditions pass, on the same frame.
 
-![Event and Decision](/docs/img/quantum/v3/addons/bot-sdk/event-and-decision.png)## Defining Actions
+![Event and Decision](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/event-and-decision.png)## Defining Actions
 
 Other than defining the _flow_ of a State Machine (with States and Transitions), it is very important to implement AI Actions which will make the State Machine actually do something, like changing the game state.
 
@@ -358,7 +311,7 @@ To create a child State, enter in any State's sub-graph, and create a new State 
 
 The states hierarchy can be observed on the left side menu:
 
-![HFSM Hierarchy](/docs/img/quantum/v3/addons/bot-sdk/hfsm-hierarchy.png)
+![HFSM Hierarchy](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/hfsm-hierarchy.png)
 
 **Note:** it is possible to navigate on the hierarchy by clicking on those buttons.
 
@@ -370,143 +323,78 @@ In order to actually use the HFSM in the simulation, it is necessary to compile 
 
 To compile, there are two options:
 
-![Compile Buttons](/docs/img/quantum/v3/addons/bot-sdk/compile-buttons.png)
+![Compile Buttons](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/compile-buttons.png)
 
 - The left button is used to compile only the currently opened document;
 - The right button is used to compile every AI document on the project.
 
-By default, the HFSM files will be located at: ```
-Assets/QuantumUser/Resources/DB/CircuitExport/HFSM\_Assets
-```
+By default, the HFSM files will be located at: `Assets/QuantumUser/Resources/DB/CircuitExport/HFSM\_Assets`.
 
-.
+The type of the main asset created by this process is `HFSMRoot`.
 
-The type of the main asset created by this process is ```
-HFSMRoot
-```
+![HFSM Asset](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/hfsm-asset.png)## Using the HFSMRoot asset
 
-.
-
-![HFSM Asset](/docs/img/quantum/v3/addons/bot-sdk/hfsm-asset.png)## Using the HFSMRoot asset
-
-To use the created HFSM root asset, make a reference to it using a field of type ```
-AssetRef<HFSMRoot>
-```
-
- and load it via ```
-frame.FindAsset()
-```
-
-.
+To use the created HFSM root asset, make a reference to it using a field of type `AssetRef<HFSMRoot>` and load it via `frame.FindAsset()`.
 
 ## HFSM Coding
 
-The HFSM has a main component named ```
-HFSMAgent
-```
-
-, which can be used basically in two different ways:
+The HFSM has a main component named `HFSMAgent`, which can be used basically in two different ways:
 
 - Add the component into entities, either via code or directly in an Entity Prototype on Unity;
-- Or, declare instances of the ```
-  HFSMAgent
-  ```
+- Or, declare instances of the `HFSMAgent` in the frame's Globals;
 
-   in the frame's Globals;
-
-The most common usage is to add the component into entities. But having it decoupled from entities can also be useful to create things such as a Game Manager HFSM which lies in ```
-frame.Global
-```
-
-and has the logic for the start of a game match, update of game rules, match end, etc.
+The most common usage is to add the component into entities. But having it decoupled from entities can also be useful to create things such as a Game Manager HFSM which lies in `frame.Global` and has the logic for the start of a game match, update of game rules, match end, etc.
 
 ### Initializing an HFSMAgent
 
-When not added directly into an Entity Prototype, the ```
-HFSMAgent
-```
-
- component can be added to entities directly via code. It can be useful for, in runtime, turning an entity into an AI agent, such as when a player disconnects, etc.
+When not added directly into an Entity Prototype, the `HFSMAgent` component can be added to entities directly via code. It can be useful for, in runtime, turning an entity into an AI agent, such as when a player disconnects, etc.
 
 Here is a code snippet for adding the component (only if not already added to the Entity Prototype):
 
 C#
 
-```
 ```csharp
 var hfsmAgent = new HFSMAgent();
 f.Set(myEntity, hfsmAgent);
 
 ```
 
-```
+The `HFSMManager` class has lots of utility methods which are the main entry points for initializing and updating an HFSM agent.
 
-The ```
-HFSMManager
-```
-
-class has lots of utility methods which are the main entry points for initializing and updating an HFSM agent.
-
-Call ```
-HFSMManager.Init()
-```
-
-in order to initialize an agent, making it store its initial State (as defined in the editor) and already calling ```
-OnEnter
-```
-
-on that state and all of it's Default children hierarchy.
+Call `HFSMManager.Init()` in order to initialize an agent, making it store its initial State (as defined in the editor) and already calling `OnEnter` on that state and all of it's Default children hierarchy.
 
 The initialization step below needs to be done \*whether EntityPrototypes are used or not:
 
 C#
 
-```
 ```csharp
 var hfsmRootAsset = f.FindAsset<HFSMRoot>(hfsmRoot.Id);
 HFSMManager.Init(frame, entityRef, hfsmRootAsset);
 
 ```
 
-```
-
 ### Initializing using the "OnComponentAdded" callback
 
-It is also possible to setup the reference to the ```
-HFSMRoot
-```
+It is also possible to setup the reference to the `HFSMRoot` asset directly on the EntityPrototype, and use the `OnComponentAdded` signal to initialize the agent with that information.
 
- asset directly on the EntityPrototype, and use the ```
-OnComponentAdded
-```
-
-signal to initialize the agent with that information.
-
-It is what the ```
-BotSDKSystem
-```
-
- showcases. Here is an example:
+It is what the `BotSDKSystem` showcases. Here is an example:
 
 C#
 
-```
 ```csharp
 // At any system...
- public unsafe class AISystem : SystemMainThread, ISignalOnComponentAdded<HFSMAgent>
- {
- public void OnAdded(Frame frame, EntityRef entity, HFSMAgent\* component)
- {
- // Get the HFSMRoot from the component set on the Entity Prototype
- HFSMRoot hfsmRoot = frame.FindAsset<HFSMRoot>(component->Data.Root.Id);
+  public unsafe class AISystem : SystemMainThread, ISignalOnComponentAdded<HFSMAgent>
+  {
+    public void OnAdded(Frame frame, EntityRef entity, HFSMAgent* component)
+    {
+      // Get the HFSMRoot from the component set on the Entity Prototype
+      HFSMRoot hfsmRoot = frame.FindAsset<HFSMRoot>(component->Data.Root.Id);
 
- // Initialize
- HFSMManager.Init(frame, entityRef, hfsmRoot);
- }
- // ...
- }
-
-```
+      // Initialize
+      HFSMManager.Init(frame, entityRef, hfsmRoot);
+    }
+  // ...
+  }
 
 ```
 
@@ -516,11 +404,8 @@ After initializing the agent, update it:
 
 C#
 
-```
 ```csharp
 HFSMManager.Update(frame, frame.DeltaTime, entityRef);
-
-```
 
 ```
 
@@ -530,32 +415,29 @@ This starts the entire HFSM mechanism: the current state will be updated, it's A
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
- public unsafe class AISystem : SystemMainThreadFilter<AISystem.Filter>, ISignalOnComponentAdded<HFSMAgent>
- {
- public struct Filter
- {
- public EntityRef Entity;
- public HFSMAgent\* HFSMAgent;
- }
+  public unsafe class AISystem : SystemMainThreadFilter<AISystem.Filter>, ISignalOnComponentAdded<HFSMAgent>
+  {
+    public struct Filter
+    {
+      public EntityRef Entity;
+      public HFSMAgent* HFSMAgent;
+    }
 
- public void OnAdded(Frame frame, EntityRef entity, HFSMAgent\* component)
- {
- HFSMRoot hfsmRoot = frame.FindAsset<HFSMRoot>(component->Data.Root.Id);
- HFSMManager.Init(frame, entity, hfsmRoot);
- }
+    public void OnAdded(Frame frame, EntityRef entity, HFSMAgent* component)
+    {
+      HFSMRoot hfsmRoot = frame.FindAsset<HFSMRoot>(component->Data.Root.Id);
+      HFSMManager.Init(frame, entity, hfsmRoot);
+    }
 
- public override void Update(Frame frame, ref Filter filter)
- {
- HFSMManager.Update(frame, frame.DeltaTime, filter.Entity);
- }
- }
+    public override void Update(Frame frame, ref Filter filter)
+    {
+    HFSMManager.Update(frame, frame.DeltaTime, filter.Entity);
+    }
+  }
 }
-
-```
 
 ```
 
@@ -565,57 +447,26 @@ namespace Quantum
 
 **Creating new HFSM Decisions** is done in a very similar way.
 
-Create a class which inherits from ```
-HFSMDecision
-```
+Create a class which inherits from `HFSMDecision` and override the `Decide` method, returning `true` or `false` depending on which condition should make the decision pass or not.
 
-and override the ```
-Decide
-```
-
-method, returning ```
-true
-```
-
-or ```
-false
-```
-
-depending on which condition should make the decision pass or not.
-
-**Important**: always mark the ```
-AIAction
-```
-
-and ```
-HFSMDecision
-```
-
-classes with the ```
-\[System.Serializable\]
-```
-
-attribute.
+**Important**: always mark the `AIAction` and `HFSMDecision` classes with the `\[System.Serializable\]` attribute.
 
 Here is an example of the most basic HFSM decision provided in the SDK:
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
-\[System.Serializable\]
-public partial class TrueDecision : HFSMDecision
-{
-public override unsafe bool Decide(Frame frame, EntityRef entity)
-{
-return true;
+  [System.Serializable]
+  public partial class TrueDecision : HFSMDecision
+  {
+    public override unsafe bool Decide(Frame frame, EntityRef entity)
+    {
+      return true;
+    }
+  }
 }
-}
-}
-
-```
 
 ```
 
@@ -625,11 +476,7 @@ Find here more information on the alternatives for settings values to nodes fiel
 
 ## AIParam
 
-Find here more information on using the ```
-AIParam
-```
-
- type, which is useful for having flexible fields that can be defined in different ways: setting it by hand or from Blackboard/Constant/Config Nodes: [AIParam](/quantum/current/addons/bot-sdk/shared-concepts#aiparam).
+Find here more information on using the `AIParam` type, which is useful for having flexible fields that can be defined in different ways: setting it by hand or from Blackboard/Constant/Config Nodes: [AIParam](/quantum/current/addons/bot-sdk/shared-concepts#aiparam).
 
 ## AIContext
 
@@ -641,85 +488,44 @@ There is a class which is used to automate some processes such as initializing a
 
 ## The Debugger
 
-Bot SDK comes with its own debugging tool. It makes it possible for the developer to select any ```
-HFSMAgent
-```
+Bot SDK comes with its own debugging tool. It makes it possible for the developer to select any `HFSMAgent` in runtime and see the most recent agent's flow highlighted on the Visual Editor. Here is an example of the debugging tool in the Bot SDK Sample project:
 
-in runtime and see the most recent agent's flow highlighted on the Visual Editor. Here is an example of the debugging tool in the Bot SDK Sample project:
-
-![Debugger Graph](/docs/img/quantum/v3/addons/bot-sdk/hfsm-debugger.gif)
+![Debugger Graph](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/hfsm-debugger.gif)
 
 As shown in the gif above, it is possible to see what is the current state in which the agent is, and which were the most recent three transitions taken which led to that state. The blue transition is the most recent one. It also has more circles going through the line than the previous transitions, that are colored black.
 
 In addition, it is also possible to inspect the current states on the hierarchy view. The states with an arrow represents that the HFSM is currently on that state. It is useful to quickly check the current state with no need to find it in the nodes.
 
-![Debugger Hierarchy](/docs/img/quantum/v3/addons/bot-sdk/hfsm-debugger-hierarchy.gif)### Using the Debugger
+![Debugger Hierarchy](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/hfsm-debugger-hierarchy.gif)### Using the Debugger
 
 This is the step-by-step necessary in order to use the debugger:
 
-1. Enable the ```
-BotSDKDebuggerSystem
-```
-
-    in the Systems Config file. Using this specific system is optional as the same API it uses can be called from user custom logic: call ```
-BotSDKDebuggerSystemCallbacks.OnVerifiedFrame?.Invoke(frame);
-```
-
-    in verified frames;
+1. Enable the `BotSDKDebuggerSystem` in the Systems Config file. Using this specific system is optional as the same API it uses can be called from user custom logic: call `BotSDKDebuggerSystemCallbacks.OnVerifiedFrame?.Invoke(frame);` in verified frames;
 2. In the visual editor, click on the little bug icon on the top panel. The debugger is _active_ when the icon is colored as green;
 
-![Debug Active](/docs/img/quantum/v3/addons/bot-sdk/debug-active.png)
+![Debug Active](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/debug-active.png)
 
 There are two ways of choosing which entity will be debugged:
 
 **Debugging using a Game Object:**
 
-1. Select the prefab/entity prototype which represents a Quantum entity which has the ```
-HFSMAgent
-```
-
-    component;
-2. Add the ```
-BotSDKDebugger
-```
-
-    Unity component to it;
-3. In runtime, with the Bot SDK window opened and the debugger enabled, select the game objects which has the ```
-BotSDKDebugger
-```
-
-. The debugging shall already be working;
+1. Select the prefab/entity prototype which represents a Quantum entity which has the `HFSMAgent` component;
+2. Add the `BotSDKDebugger` Unity component to it;
+3. In runtime, with the Bot SDK window opened and the debugger enabled, select the game objects which has the `BotSDKDebugger`. The debugging shall already be working;
 
 **Debugging using the Debugger Window:**
 
 1. On the simulation side, register the Agent entity to the Debugger Window. It can be done by calling:
 
-```
-BotSDKDebuggerSystem.AddToDebugger(frame, collectorEntity, hfsmAgent, (optional) customLabel);
-```
+`BotSDKDebuggerSystem.AddToDebugger(frame, collectorEntity, hfsmAgent, (optional) customLabel);`
 
+The default name that is shown for the debugged entities follow this pattern: `Entity XX \| AI Document Name`. But it is possible to assign specific labels using the `customLabel` parameter.
 
-
-The default name that is shown for the debugged entities follow this pattern: ```
-Entity XX \| AI Document Name
-```
-
-. But it is possible to assign specific labels using the ```
-customLabel
-```
-
-    parameter.
-
-It is also possible to create naming hierarchies. Use the separator ```
-/
-```
-
-    on the custom label and it will create the hierarchies on the Debugger Window, which can be collapsed and expanded;
+It is also possible to create naming hierarchies. Use the separator `/` on the custom label and it will create the hierarchies on the Debugger Window, which can be collapsed and expanded;
 
 2. On Unity, click on the button next to the debugger activation one. It opens a new window which shows all registered agents. Select the one to be debugged.
 
-
-![Debug Window](/docs/img/quantum/v3/addons/bot-sdk/debug-window.png)![Debug Hierarchy](/docs/img/quantum/v3/addons/bot-sdk/debugger-hierarchy.gif)
+![Debug Window](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/debug-window.png)![Debug Hierarchy](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/debugger-hierarchy.gif)
 
 **Important:** when the Debugger is enabled, it increases the memory and CPU usage in order to process the agents data.
 
@@ -737,35 +543,19 @@ Find here more information on how to create comments on the Visual Editor: [Visu
 
 ## Changing the compilation export folder
 
-By default, assets generated by Bot SDK's compilation process will be placed into the folder ```
-Assets/Resources/DB/CircuitExport
-```
-
-. Check here how to change the export folder: [Changing the export folder](/quantum/current/addons/bot-sdk/shared-concepts#changing_the_compilation_export_folder).
+By default, assets generated by Bot SDK's compilation process will be placed into the folder `Assets/Resources/DB/CircuitExport`. Check here how to change the export folder: [Changing the export folder](/quantum/current/addons/bot-sdk/shared-concepts#changing_the_compilation_export_folder).
 
 ## What Happens in a Frame
 
 On Bot SDK, the main entry points are:
 
-- ```
-  HFSMManager.Init
-  ```
-
-  , which is used to initialize the agent and already make it run initial actions of the Default State;
-- ```
-  HFSMManager.Update
-  ```
-
-  , which should be called constantly to update the agents;
-- ```
-  HFSMManager.TriggerEvent
-  ```
-
-  , which forces transition checks specific to an event key.
+- `HFSMManager.Init`, which is used to initialize the agent and already make it run initial actions of the Default State;
+- `HFSMManager.Update`, which should be called constantly to update the agents;
+- `HFSMManager.TriggerEvent`, which forces transition checks specific to an event key.
 
 In order to better visualize what happens during a frame when these methods are executed, here is a flow graph:
 
-![HFSM In A Frame](/docs/img/quantum/v3/addons/bot-sdk/what-happens-frame.png)Back to top
+![HFSM In A Frame](https://doc.photonengine.com/docs/img/quantum/v3/addons/bot-sdk/what-happens-frame.png)Back to top
 
 - [Introduction](#introduction)
 - [Pros and Cons](#pros-and-cons)

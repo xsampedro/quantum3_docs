@@ -10,9 +10,9 @@ _Source: https://doc.photonengine.com/quantum/current/game-samples/racer-25d_
 
 This sample is provided with full source code and demonstrates how Quantum can be used to create an online retro racer 2.5D with capacity for 99 players.
 
-![](/docs/img/quantum/v3/game-samples/racer25d/racer1.png)
+![](https://doc.photonengine.com/docs/img/quantum/v3/game-samples/racer25d/racer1.png)
 
-![](/docs/img/quantum/v3/game-samples/racer25d/racer2.png)
+![](https://doc.photonengine.com/docs/img/quantum/v3/game-samples/racer25d/racer2.png)
 
 ## Download
 
@@ -22,25 +22,9 @@ This sample is provided with full source code and demonstrates how Quantum can b
 
 ## Before You Start
 
-To run the sample in online multiplayer mode, first create a Quantum AppId in the [PhotonEngine Dashboard](https://dashboard.photonengine.com) and paste it into the ```
-AppId
-```
+To run the sample in online multiplayer mode, first create a Quantum AppId in the [PhotonEngine Dashboard](https://dashboard.photonengine.com) and paste it into the `AppId` field in `PhotonServerSettings` asset.
 
- field in ```
-PhotonServerSettings
-```
-
-asset.
-
-Then load the ```
-Menu
-```
-
- scene in the Scenes menu and press ```
-Play
-```
-
-.
+Then load the `Menu` scene in the Scenes menu and press `Play`.
 
 ## Technical Info
 
@@ -64,39 +48,7 @@ Play
 
 ### Controls
 
-Use ```
-W
-```
-
- to acelerate ```
-S
-```
-
-to break, ```
-A
-```
-
- and ```
-D
-```
-
-to turn, ```
-J
-```
-
- and ```
-L
-```
-
-to lean sideways, ```
-I
-```
-
- and ```
-K
-```
-
-to lean front and back during flights.
+Use `W` to acelerate `S` to break, `A` and `D` to turn, `J` and `L` to lean sideways, `I` and `K` to lean front and back during flights.
 
 ## Third Party Assets
 

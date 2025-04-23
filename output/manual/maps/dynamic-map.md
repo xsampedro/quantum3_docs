@@ -4,18 +4,13 @@ _Source: https://doc.photonengine.com/quantum/current/manual/maps/dynamic-map_
 
 # Dynamic Map
 
-Quantum 3 comes with a new map type called ```
-Dynamic Map
-```
-
- in order to make the customization process of maps at runtime easier.
+Quantum 3 comes with a new map type called `Dynamic Map` in order to make the customization process of maps at runtime easier.
 
 ## Features
 
 - Provides an API for adding and removing static colliders at runtime.
   - Example:
   - C#
-    ```
     ```csharp
     // add
     var meshColliderIndex = dynamicMap.AddMeshCollider(frame, meshCollider);
@@ -24,38 +19,27 @@ Dynamic Map
     dynamicMap.RemoveMeshCollider(frame, meshColliderIndex);
 
     ```
-
-
-    ```
 - Clone existing maps and modify them safely.
   - Example:
   - C#
-    ```
     ```csharp
     var dynamicMap = DynamicMap.FromStaticMap(f.Map);
-
-    ```
-
 
     ```
 - Modify static collider triangles at runtime.
   - Example:
   - C#
-    ```
     ```csharp
     using (var scope = dynamicMap.EditMeshTriangles(frame, colliderIndex)) {
-     TriangleCCW triangle = new TriangleCCW { A = v0, B = v1, C = v2 };
+      TriangleCCW triangle = new TriangleCCW { A = v0, B = v1, C = v2 };
 
-     if(scope.TryAddTriangle(ref triangle)) {
-     Log.Info("Triangle added successfully.");
-     }
-     else {
-     Log.Error("Failed to add triangle.");
-     }
+      if(scope.TryAddTriangle(ref triangle)) {
+        Log.Info(&#34;Triangle added successfully.&#34;);
+      }
+      else {
+        Log.Error(&#34;Failed to add triangle.&#34;);
+      }
     }
-
-    ```
-
 
     ```
 - Optimizes Triangle data for late joiners.

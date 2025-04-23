@@ -14,7 +14,7 @@ It also provides some level of customization, allowing you to create the perfect
 
 ⚠️ It is recommended to start by exploring [Sample Project](/quantum/current/addons/kcc/sample-project) which implements basic player logic, input processing and includes several gameplay oriented examples.
 
-![KCC](/docs/img/quantum/v3/addons/kcc/overview.jpg)## Features
+![KCC](https://doc.photonengine.com/docs/img/quantum/v3/addons/kcc/overview.jpg)## Features
 
 Following list contains features implemented in KCC.
 

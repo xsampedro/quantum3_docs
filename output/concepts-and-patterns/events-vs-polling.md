@@ -8,19 +8,7 @@ _Source: https://doc.photonengine.com/quantum/current/concepts-and-patterns/even
 
 Reading information from the Frame when writing view code on Unity, to display relevant data to the user, is a common practice in Quantum games.
 
-To do this, there are two approaches that can be taken. The first approach is ```
-polling
-```
-
-, which involves requesting information from view code at regular intervals, such as inside the ```
-Update
-```
-
-loop or in the callbacks from ```
-QuantumEntityViewComponent
-```
-
-. The second approach is using Quantum events, which involves subscribing methods to Quantum's event system and using them to update the view.
+To do this, there are two approaches that can be taken. The first approach is `polling`, which involves requesting information from view code at regular intervals, such as inside the `Update` loop or in the callbacks from `QuantumEntityViewComponent`. The second approach is using Quantum events, which involves subscribing methods to Quantum's event system and using them to update the view.
 
 ## Polling
 
@@ -28,38 +16,31 @@ A simple approach to polling could look like this:
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
- using UnityEngine;
+  using UnityEngine;
 
- public class CharacterAnimations : QuantumEntityViewComponent
- {
- private Animator \_animator;
+  public class CharacterAnimations : QuantumEntityViewComponent
+  {
+    private Animator _animator;
 
- public override void OnInitialize()
- {
- \_animator = GetComponentInChildren<Animator>();
- }
+    public override void OnInitialize()
+    {
+      _animator = GetComponentInChildren<Animator>();
+    }
 
- public override void OnUpdateView()
- {
- var kcc = PredictedFrame.Get<CharacterController3D>(EntityRef);
- \_animator.SetFloat("Speed", kcc.Velocity.Magnitude.AsFloat);
- }
- }
+    public override void OnUpdateView()
+    {
+      var kcc = PredictedFrame.Get<CharacterController3D>(EntityRef);
+      _animator.SetFloat(&#34;Speed&#34;, kcc.Velocity.Magnitude.AsFloat);
+    }
+  }
 }
 
 ```
 
-```
-
-This snippet implements a callback for when the view is updated, which happens after the frames simulation has finished, then uses the ```
-PredictedFrame
-```
-
-available from its parent class, from which the game state can be polled and applied in the view (in the snippet, specifically to animation).
+This snippet implements a callback for when the view is updated, which happens after the frames simulation has finished, then uses the `PredictedFrame` available from its parent class, from which the game state can be polled and applied in the view (in the snippet, specifically to animation).
 
 Make sure to only use the Frame API for **ready only** operations, as writing to it from Unity would be non-deterministic.
 
@@ -69,34 +50,31 @@ A simple approach to event based could look like this:
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
-using UnityEngine;
+  using UnityEngine;
 
-public class CharacterAnimations : QuantumEntityViewComponent
-{
-private ParticleSystem \_particles;
+  public class CharacterAnimations : QuantumEntityViewComponent
+  {
+    private ParticleSystem _particles;
 
-public override void OnInitialize()
-{
-\_particles = GetComponent<ParticleSystem>();
+    public override void OnInitialize()
+    {
+      _particles = GetComponent<ParticleSystem>();
 
-QuantumEvent.Subscribe<EventOnDamaged>(this, OnDamaged);
-}
+      QuantumEvent.Subscribe<EventOnDamaged>(this, OnDamaged);
+    }
 
-private void OnDamaged(EventOnDamaged e)
-{
-if (e.EntityRef == EntityRef)
-{
-\_particles.Play();
+    private void OnDamaged(EventOnDamaged e)
+    {
+      if (e.EntityRef == EntityRef)
+      {
+        _particles.Play();
+      }
+    }
+  }
 }
-}
-}
-}
-
-```
 
 ```
 
@@ -114,15 +92,7 @@ Polling code is generally simpler to write and easier to understand, and is usua
 
 ## Predicted Vs Verified
 
-While using both of these techniques, you have the option of using either ```
-Predicted
-```
-
- or ```
-Verified
-```
-
-frames. Both have their own drawbacks and benefits. While predicted frames will give you more immediate feedback, they may be susceptible to being inaccurate due to rollbacks. Whereas verified frames are concrete, but they will take a moment to take effect as it includes a round trip to the server to verify them. Generally a developer would use a mix of these, for example, they could use verified frames to display game score and predicted frames for effects such as jump clouds or hit particles.
+While using both of these techniques, you have the option of using either `Predicted` or `Verified` frames. Both have their own drawbacks and benefits. While predicted frames will give you more immediate feedback, they may be susceptible to being inaccurate due to rollbacks. Whereas verified frames are concrete, but they will take a moment to take effect as it includes a round trip to the server to verify them. Generally a developer would use a mix of these, for example, they could use verified frames to display game score and predicted frames for effects such as jump clouds or hit particles.
 
 Back to top
 

@@ -10,15 +10,7 @@ This tutorial established a foundation for creating a game in Quantum. However, 
 
 ### Asteroids Sample
 
-Quantum comes with a more complete asteroids sample project. This sample is included in the Quantum SDK download. To explore it, create a new Unity project, import the Quantum SDK and then import the ```
-Quantum-Asteroids
-```
-
- package in ```
-Assets/Photon/QuantumAsteroids
-```
-
-.
+Quantum comes with a more complete asteroids sample project. This sample is included in the Quantum SDK download. To explore it, create a new Unity project, import the Quantum SDK and then import the `Quantum-Asteroids` package in `Assets/Photon/QuantumAsteroids`.
 
 The sample comes with many additional features that are not present in the tutorial such as:
 

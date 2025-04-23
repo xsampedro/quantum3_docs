@@ -6,7 +6,7 @@ _Source: https://doc.photonengine.com/quantum/current/game-samples/platform-shoo
 
 ![Level 4](/v2/img/docs/levels/level03-intermediate_1.5x.png)
 
-![](/docs/img/quantum/v3/game-samples/platform-shooter-2d/platform-shooter-2d-banner.jpg)
+![](https://doc.photonengine.com/docs/img/quantum/v3/game-samples/platform-shooter-2d/platform-shooter-2d-banner.jpg)
 
 [Go to the download page and download the Platform Shooter 2D game sample Unity project](/quantum/current/game-samples/platform-shooter-2d/getting-started#download-table) [Step-by-step guide to explore the sample gameplay and online modes](/quantum/current/game-samples/platform-shooter-2d/getting-started)
 
@@ -21,4 +21,4 @@ Technical highlights and features are:
 - Respawn points with [entity prototypes](/quantum/current/manual/entity-prototypes)
 - Players entering the character selection while the simulation is already running
 
-![](/docs/img/quantum/v3/game-samples/platform-shooter-2d/gif-gameplay.gif)Back to top
+![](https://doc.photonengine.com/docs/img/quantum/v3/game-samples/platform-shooter-2d/gif-gameplay.gif)Back to top

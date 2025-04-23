@@ -6,7 +6,7 @@ _Source: https://doc.photonengine.com/quantum/current/gaming-circle/circle-stack
 
 The Circle Stack Overflow is a private area for Circle members to post queries.
 
-| It works just like regular Stack Overflow, but it's exclusive to Photon Circle members and Photonians. It complements the Circle Discord. | ![Circle Stack Overflow](/docs/img/gamingcircle/circle-stack-overflow.jpg) |
+| It works just like regular Stack Overflow, but it's exclusive to Photon Circle members and Photonians. It complements the Circle Discord. | ![Circle Stack Overflow](https://doc.photonengine.com/docs/img/gamingcircle/circle-stack-overflow.jpg) |
 | :-- | :-: |
 
 While Circle Discord is great for real-time chats, Stack Overflow is a Q&A platform where you're guaranteed detailed, prompt answers from experts.

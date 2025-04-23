@@ -20,22 +20,18 @@ The PhysicsMaterial holds the parameters for:
 
 If no _PhysicsMaterial_ asset is slotted, the default physics material will be assigned; the default physics material is the one linked in the _SimulationConfig_ physics settings.
 
-![Adjusting Properties to Physics Materials](/docs/img/quantum/v3/manual/physics/physics-material-asset.png)
+![Adjusting Properties to Physics Materials](https://doc.photonengine.com/docs/img/quantum/v3/manual/physics/physics-material-asset.png)
 Adjusting Properties to Physics Materials.
-
 
 A _PhysicsMaterial_ asset can be assigned to a _PhysicsCollider_ directly:
 
 C#
 
-```
 ```csharp
-var material = f.FindAsset<PhysicsMaterial>("steel");
+var material = f.FindAsset<PhysicsMaterial>(&#34;steel&#34;);
 collider.Material = material;
 
 f.Set(entity, collider);
-
-```
 
 ```
 
@@ -47,16 +43,13 @@ _PhysicsMaterial_ s follow the same rules as other data-assets.
 
 C#
 
-```
 ```csharp
 // this is NOT safe and cannot be rolled-back:
-collider->Material.Restitution = FP.\_0;
+collider->Material.Restitution = FP._0;
 
 // switching a reference is safe and can be rolled back:
-var newMaterial = f.FindAsset<PhysicsMaterial>("ice");
+var newMaterial = f.FindAsset<PhysicsMaterial>(&#34;ice&#34;);
 collider->Material = newMaterial;
-
-```
 
 ```
 
