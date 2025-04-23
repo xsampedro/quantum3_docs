@@ -45,7 +45,6 @@ We previously recommended Quantum Asset Injection and DynamicAssets as a tool to
 
 C#
 
-```
 ```csharp
 // Make sure to dispose the UnityDB after each game
 UnityDB.Dispose();
@@ -61,8 +60,6 @@ var newNavmeshData = UnityEngine.Resources.Load<BinaryDataAsset>("NewNavmeshData
 navmeshData.Data = newNavmeshData.Settings.Data;
 
 // QuantumRunner.StartGame()
-
-```
 
 ```
 
@@ -84,12 +81,9 @@ The completed BakeData will be used to generate a Quantum navmesh.
 
 C#
 
-```
 ```csharp
 // Bake navmesh asset
 var navmesh = NavmeshBaker.BakeNavMesh(f.Map, bakeData);
-
-```
 
 ```
 
@@ -125,7 +119,6 @@ asset) when it is finally loaded by Quantum.
 
 C#
 
-```
 ```csharp
 // BakeData needs to be procedurally generated
 var bakeData = default(NavmeshBakeData);
@@ -144,8 +137,6 @@ navmeshAsset.Settings.DataAsset.Id = AssetGuid.Invalid;
 navmeshAsset.Settings.Name = "MyNavmesh";
 
 // QuantumRunner.StartGame()
-
-```
 
 ```
 
@@ -168,7 +159,6 @@ Replacing a navmesh during the game is also possible this way:
 
 C#
 
-```
 ```csharp
 namespace Quantum {
 using Quantum.Experimental;
@@ -213,8 +203,6 @@ public class BakeDataSO : ScriptableObject {
 public NavmeshBakeData BakeData;
 }
 }
-
-```
 
 ```
 
@@ -317,7 +305,6 @@ respectively in SDK 2.2.
 
 C#
 
-```
 ```csharp
 // Generate simple navmesh BakeData
 var bakeData = new MapNavMesh.BakeData() {
@@ -338,8 +325,6 @@ new MapNavMeshTriangle { VertexIds2 = new int\[\] { 0, 1, 2}, Cost = FP.\_1 },
 new MapNavMeshTriangle { VertexIds2 = new int\[\] { 0, 2, 3}, Cost = FP.\_1 }
 }
 };
-
-```
 
 ```
 

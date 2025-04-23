@@ -38,15 +38,12 @@ Components are special structs that can be attached to entities, and used for fi
 
 Qtn
 
-```
 ```cs
 component Action
 {
-FP Cooldown;
-FP Power;
+ FP Cooldown;
+ FP Power;
 }
-
-```
 
 ```
 
@@ -68,16 +65,13 @@ The Quantum DSL also allows the definition of regular structs (just like compone
 
 Qtn
 
-```
 ```cs
 struct ResourceItem
 {
-FP Value;
-FP MaxValue;
-FP RegenRate;
+ FP Value;
+ FP MaxValue;
+ FP RegenRate;
 }
-
-```
 
 ```
 
@@ -87,16 +81,13 @@ This would let you use the "Resources" struct as a type in all other parts of th
 
 Qtn
 
-```
 ```cs
 component Resources
 {
-ResourceItem Health;
-ResourceItem Strength;
-ResourceItem Mana;
+ ResourceItem Health;
+ ResourceItem Strength;
+ ResourceItem Mana;
 }
-
-```
 
 ```
 
@@ -120,41 +111,35 @@ function.
 
 C#
 
-```
 ```csharp
 \[StructLayout(LayoutKind.Explicit)\]
 public struct Foo {
-public const int SIZE = 12; // the size in bytes of all members in bytes.
+ public const int SIZE = 12; // the size in bytes of all members in bytes.
 
-\[FieldOffset(0)\]
-public int A;
+ \[FieldOffset(0)\]
+ public int A;
 
-\[FieldOffset(4)\]
-public int B;
+ \[FieldOffset(4)\]
+ public int B;
 
-\[FieldOffset(8)\]
-public int C;
+ \[FieldOffset(8)\]
+ public int C;
 
-public static unsafe void Serialize(void\* ptr, FrameSerializer serializer)
-{
-var foo = (Foo\*)ptr;
-serializer.Stream.Serialize(&foo->A);
-serializer.Stream.Serialize(&foo->B);
-serializer.Stream.Serialize(&foo->C);
+ public static unsafe void Serialize(void\* ptr, FrameSerializer serializer)
+ {
+ var foo = (Foo\*)ptr;
+ serializer.Stream.Serialize(&foo->A);
+ serializer.Stream.Serialize(&foo->B);
+ serializer.Stream.Serialize(&foo->C);
+ }
 }
-}
-
-```
 
 ```
 
 When using C# defined structs in the DSL (e.g. inside components), you will have to manually import the struct definition.
 
 ```
-```
 import struct Foo(12);
-
-```
 
 ```
 
@@ -239,13 +224,10 @@ list<T> MyList
 
 Qtn
 
-```
 ```cs
 component Targets {
 list<EntityRef> Enemies;
 }
-
-```
 
 ```
 
@@ -270,7 +252,6 @@ To use the list in the component of type _Targets_ defined in the code snippet a
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
@@ -308,8 +289,6 @@ component->Enemies = default;
 
 ```
 
-```
-
 ### Dictionaries
 
 Dictionaries can be declared in the DSL like so ```
@@ -320,13 +299,10 @@ dictionary<key, value> MyDictionary
 
 Qtn
 
-```
 ```cs
 component Hazard {
 dictionary<EntityRef, Int32> DamageDealt;
 }
-
-```
 
 ```
 
@@ -357,13 +333,10 @@ hash\_set<T> MyHashSet
 
 Qtn
 
-```
 ```cs
 component Nodes {
 hash\_set<FP> ProcessedNodes;
 }
-
-```
 
 ```
 
@@ -396,7 +369,6 @@ EDamageType
 
 Qtn
 
-```
 ```cs
 enum EDamageType {
 None, Physical, Magic
@@ -408,8 +380,6 @@ EDamageType DamageType;
 
 ```
 
-```
-
 Enums are treated as integer constants on CodeGen by default, starting from 0. However, it is possible to explicitly assign integer values to Enum members if needed. Also, in scenarios where memory usage is a concern, it is possible to reduce the memory footprint of enum values by using a diffrent type as the underlying type, such as ```
 byte
 ```
@@ -418,7 +388,6 @@ byte
 
 Qtn
 
-```
 ```cs
 enum EModifierOperation : Byte
 {
@@ -426,8 +395,6 @@ None = 0,
 Add = 1,
 Subtract = 2
 }
-
-```
 
 ```
 
@@ -439,7 +406,6 @@ keyword is used with Enum types to indicate that each value in the Enum represen
 
 Qtn
 
-```
 ```cs
 flags ETeamStatus : Byte
 {
@@ -450,8 +416,6 @@ LowHealth,
 MidHealth,
 HighHealth,
 }
-
-```
 
 ```
 
@@ -479,7 +443,6 @@ C-like unions can be generated as well. The union type overlaps in memory the da
 
 Qtn
 
-```
 ```cs
 struct DataA
 {
@@ -499,19 +462,14 @@ DataB B;
 
 ```
 
-```
-
 Unions can be declared as part of a component:
 
 Qtn
 
-```
 ```cs
 component ComponentWithUnion {
 Data ComponentData;
 }
-
-```
 
 ```
 
@@ -523,7 +481,6 @@ contains the logic necessary for switching between the union types as they are a
 
 C#
 
-```
 ```csharp
 private void UseWarriorAttack(Frame frame)
 {
@@ -539,8 +496,6 @@ character->Data.Spellcaster->Mana = FP.\_10;
 
 ```
 
-```
-
 When using unions, it is possible to use only one of the multiple internal types it contains, or it can be switched dynamically, in runtime, by simply accessing specific internal types. In the code snippets above, accessing the Warrior and Spellcaster pointers already changed the union type internally.
 
 It is also possible to check what is the currently used union type by using the ```
@@ -551,14 +506,11 @@ property and some of code-gen'd constants:
 
 C#
 
-```
 ```csharp
 private bool IsWarrior(CharacterData data)
 {
 return data.Field == CharacterData.WARRIOR;
 }
-
-```
 
 ```
 
@@ -568,14 +520,11 @@ Bitsets can be used to declared fixed-size memory blocks for any desired purpose
 
 Qtn
 
-```
 ```cs
 struct FOWData
 {
 bitset\[256\] Map;
 }
-
-```
 
 ```
 
@@ -585,15 +534,12 @@ In Quantum, the runtime input exchanged between clients is also declared in the 
 
 Qtn
 
-```
 ```cs
 input
 {
 FPVector2 Movement;
 button Fire;
 }
-
-```
 
 ```
 
@@ -607,11 +553,8 @@ Signals are function signatures used as a decoupled inter-system communication A
 
 Qtn
 
-```
 ```cs
 signal OnDamage(FP damage, entity\_ref entity);
-
-```
 
 ```
 
@@ -619,7 +562,6 @@ This would generate the following interface (that can be implemented by any Syst
 
 C#
 
-```
 ```csharp
 public interface ISignalOnDamage
 {
@@ -628,17 +570,12 @@ public void OnDamage(Frame frame, FP damage, EntityRef entity);
 
 ```
 
-```
-
 Signals are the only concept which allows the direct declaration of a pointer in Quantum's DSL, so passing data by reference can be used to modify the original data directly in their concrete implementations:
 
 Qtn
 
-```
 ```cs
 signal OnBeforeDamage(FP damage, Resources\* resources);
-
-```
 
 ```
 
@@ -654,7 +591,6 @@ Define an event using the Quantum DSL
 
 Qtn
 
-```
 ```cs
 event MyEvent{
 int Foo;
@@ -662,17 +598,12 @@ int Foo;
 
 ```
 
-```
-
 Trigger the event from the simulation
 
 C#
 
-```
 ```csharp
 f.Events.MyEvent(2022);
-
-```
 
 ```
 
@@ -680,11 +611,8 @@ And subscribe and consume the event in Unity
 
 C#
 
-```
 ```csharp
 QuantumEvent.Subscribe(listener: this, handler: (MyEvent e) => Debug.Log($"MyEvent {e.Foo}"));
-
-```
 
 ```
 
@@ -698,14 +626,11 @@ scope.
 
 Qtn
 
-```
 ```cs
 global {
 // Any type that is valid in the DSL can also be used.
 FP MyGlobalValue;
 }
-
-```
 
 ```
 
@@ -755,11 +680,8 @@ Assets are a special feature of Quantum that let the developer define data-drive
 
 Qtn
 
-```
 ```cs
 asset CharacterData; // the CharacterData class is partially defined in a normal C# file by the developer
-
-```
 
 ```
 
@@ -767,7 +689,6 @@ The following struct show some valid examples of the types above (sometimes refe
 
 Qtn
 
-```
 ```cs
 struct SpecialData
 {
@@ -777,8 +698,6 @@ entity\_ref AnotherEntity;
 asset\_ref<CharacterData> CharacterData;
 array<FP>\[10\] TenNumbers;
 }
-
-```
 
 ```
 
@@ -837,7 +756,6 @@ To import types defined in other namespaces and use them directly in components 
 
 Qtn
 
-```
 ```cs
 import MyInterface;
 or
@@ -845,20 +763,15 @@ import MyNameSpace.Utils;
 
 ```
 
-```
-
 For an enum the syntax is as follows:
 
 Qtn
 
-```
 ```cs
 import enum MyEnum(underlying\_type);
 
 // This syntax is identical for Quantum specific enums
 import enum Shape3DType(byte);
-
-```
 
 ```
 
@@ -876,7 +789,6 @@ When importing a Quantum built-in type or a custom type, the struct size is pred
 
 C#
 
-```
 ```csharp
 namespace Quantum {
 \[StructLayout(LayoutKind.Explicit)\]
@@ -891,16 +803,11 @@ public Int32 B;
 
 ```
 
-```
-
 Qtn
 
-```
 ```cs
 #define FOO\_SIZE 8 // Define a constant value with the known size of the struct
 import struct Foo(8);
-
-```
 
 ```
 
@@ -912,7 +819,6 @@ as shown below in one of your systems.
 
 C#
 
-```
 ```csharp
 public unsafe class MyStructSizeCheckingSystem : SystemMainThread{
 public override void OnInit(Frame frame)
@@ -920,8 +826,6 @@ public override void OnInit(Frame frame)
 Assert.Check(Constants.FOO\_SIZE == Foo.SIZE);
 }
 }
-
-```
 
 ```
 
@@ -971,7 +875,6 @@ In C# files, attributes can be used and concatenated like any other attribute.
 
 C#
 
-```
 ```csharp
 // Multiple single attributes
 \[Header("Example Array")\]\[Tooltip("min = 1\\nmax = 20")\] public FP\[\] TestArray = new FP\[20\];
@@ -981,19 +884,14 @@ C#
 
 ```
 
-```
-
 ### Use in qtn
 
 In qtn files, the usage of single attributes remains the same as in C#.
 
 Qtn
 
-```
 ```cs
 \[Header("Example Array")\] array<FP>\[20\] TestArray;
-
-```
 
 ```
 
@@ -1001,11 +899,8 @@ When combining multiple attributes, they **have** to be concatenated.
 
 Qtn
 
-```
 ```cs
 \[Header("Example Array"), Tooltip("min = 1\\nmax = 20")\] array<FP>\[20\] TestArray;
-
-```
 
 ```
 
@@ -1015,7 +910,6 @@ The following compiler options are currently available to be used inside Quantum
 
 Qtn
 
-```
 ```cs
 // pre defining max number of players (default is 6, absolute max is 64)
 #pragma max\_players 16
@@ -1031,8 +925,6 @@ Qtn
 
 ```
 
-```
-
 ## Custom FP Constants
 
 You can also define custom ```
@@ -1043,12 +935,9 @@ constants inside Quantum's DSL files. ex:
 
 Qtn
 
-```
 ```cs
 // in a DSL file
 #define Pi 3.14
-
-```
 
 ```
 
@@ -1060,12 +949,9 @@ struct:
 
 Qtn
 
-```
 ```cs
 // 3.14
 FP constant = Constants.Pi;
-
-```
 
 ```
 
@@ -1073,12 +959,9 @@ It will also generate the corresponding raw value as well:
 
 Qtn
 
-```
 ```cs
 // 3.14 Raw
 var rawConstant = Constants.Raw.Pi;
-
-```
 
 ```
 

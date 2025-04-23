@@ -28,16 +28,13 @@ Usage:
 
 C#
 
-```
 ```csharp
 
 // inside of a system
 public override void OnInit(Frame frame)
 {
- int randomNum = frame.RNG->Next(0, 100);
+int randomNum = frame.RNG->Next(0, 100);
 }
-
-```
 
 ```
 
@@ -63,17 +60,14 @@ If required, the seed can be changed at runtime by overwriting the session with 
 
 C#
 
-```
 ```csharp
 
 // inside of simulation
 public void ResetSeed(Frame frame)
 {
-int newSeed = 100;
-frame.Global->RngSession = new Photon.Deterministic.RNGSession(newSeed);
+ int newSeed = 100;
+ frame.Global->RngSession = new Photon.Deterministic.RNGSession(newSeed);
 }
-
-```
 
 ```
 
@@ -85,15 +79,12 @@ In development, it may be favorable to have your RNG on a per-component basis, i
 
 C#
 
-```
 ```csharp
 // DSL component
 component MyComponent
 {
-RNGSession Session;
+ RNGSession Session;
 }
-
-```
 
 ```
 
@@ -101,15 +92,12 @@ You can also set the seed in the same way as the global session:
 
 C#
 
-```
 ```csharp
 public void InitComponentWithSeed(MyComponent\* component)
 {
-int newSeed = 100;
-component->Session = new RNGSession(newSeed);
+ int newSeed = 100;
+ component->Session = new RNGSession(newSeed);
 }
-
-```
 
 ```
 

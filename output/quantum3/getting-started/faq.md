@@ -80,10 +80,7 @@ Or use an external network throttling tool for example like Clumsy (Windows) and
 - TCP 4531
 
 ```
-```
 Clumsy Filter: (udp.DstPort == 5056 or udp.SrcPort == 5056) or (tcp.DstPort == 4531 or tcp.SrcPort == 4531)
-
-```
 
 ```
 
@@ -105,15 +102,12 @@ EngineDeltaTime
 
 C#
 
-```
 ```csharp
 public enum SimulationUpdateTime {
- Default = 0, // internal clock
- EngineDeltaTime = 1, // Time.deltaTime (Unity)
- EngineUnscaledDeltaTime = 2 // Time.unscaledDeltaTime
+Default = 0, // internal clock
+EngineDeltaTime = 1, // Time.deltaTime (Unity)
+EngineUnscaledDeltaTime = 2 // Time.unscaledDeltaTime
 }
-
-```
 
 ```
 
@@ -168,16 +162,13 @@ ConnectionHandler
 
 C#
 
-```
 ```csharp
- // Before starting loading the scene
- if (\_connectionHandler != null)
- {
- \_connectionHandler.Client = UIMain.Client;
- \_connectionHandler.StartFallbackSendAckThread();
- }
-
-```
+// Before starting loading the scene
+if (\_connectionHandler != null)
+{
+\_connectionHandler.Client = UIMain.Client;
+\_connectionHandler.StartFallbackSendAckThread();
+}
 
 ```
 
@@ -249,29 +240,26 @@ was used.
 
 Qtn
 
-```
 ```cs
 struct Bar {
- public bool Foo;
+public bool Foo;
 }
 
 static unsafe void Main(string\[\] args) {
- for (int i = 0; i < 2; i++) {
+for (int i = 0; i < 2; i++) {
 
- Bar bar;
- //Bar bar = default(Bar); // <---- Fixes the stale data
+Bar bar;
+//Bar bar = default(Bar); // <---- Fixes the stale data
 
- Bar\* barPt = &bar;
- if (barPt->Foo)
- Console.WriteLine("Stuff and Things");
+Bar\* barPt = &bar;
+if (barPt->Foo)
+Console.WriteLine("Stuff and Things");
 
- barPt->Foo = true;
- }
-
- Console.ReadKey();
+barPt->Foo = true;
 }
 
-```
+Console.ReadKey();
+}
 
 ```
 
@@ -289,12 +277,9 @@ Most common causes are:
 
 C#
 
-```
 ```csharp
 var characterSpecAsset = frame.FindAsset<CharacterSpec>("WhiteFacedBarghast");
 characterSpecAsset.RemainigLifetime = 21;
-
-```
 
 ```
 
@@ -310,19 +295,16 @@ The code snippet presented below will desync eventually when the simulation is r
 
 C#
 
-```
 ```csharp
 public class CleaningSystem : SystemBase {
-public Boolean HasShoweredToday; // <----- Error
-public override void Update(Frame frame) {
-if (!HasShoweredToday && frame.Global->ElapsedTime > 100) {
-Shower();
-HasShoweredToday = true;
+ public Boolean HasShoweredToday; // <----- Error
+ public override void Update(Frame frame) {
+ if (!HasShoweredToday && frame.Global->ElapsedTime > 100) {
+ Shower();
+ HasShoweredToday = true;
+ }
+ }
 }
-}
-}
-
-```
 
 ```
 
@@ -330,26 +312,23 @@ Instead save non-transient data on the Frame or on Entity Components.
 
 C#
 
-```
 ```csharp
 // Frame
 unsafe partial class Frame {
-public Boolean HasShoweredToday;
-partial void CopyFromUser(Frame frame) {
-// Implement copy of the custom parameters.
-}
+ public Boolean HasShoweredToday;
+ partial void CopyFromUser(Frame frame) {
+ // Implement copy of the custom parameters.
+ }
 }
 
 public class CleaningSystem : SystemBase {
-public override void Update(Frame frame) {
-if (!frame.HasShoweredToday && frame.Global->ElapsedTime > 100) {
-Shower();
-frame.HasShoweredToday = true;
+ public override void Update(Frame frame) {
+ if (!frame.HasShoweredToday && frame.Global->ElapsedTime > 100) {
+ Shower();
+ frame.HasShoweredToday = true;
+ }
+ }
 }
-}
-}
-
-```
 
 ```
 
@@ -379,26 +358,23 @@ If your assets are loaded from Resources and you are either restarting the Unity
 
 C#
 
-```
 ```csharp
 public partial class FooAsset {
-public Foo Settings;
-public int RawData;
+ public Foo Settings;
+ public int RawData;
 
-\[NonSerialized\]
-public List<int> Bar = new List<int>();
+ \[NonSerialized\]
+ public List<int> Bar = new List<int>();
 
-public override AssetObject AssetObject => Settings;
+ public override AssetObject AssetObject => Settings;
 
-public override void Loaded(IResourceManager resourceManager, Native.Allocator allocator)
-{
-base.Loaded(resourceManager, allocator);
-// This will break on the second run (see above) because Bar needs to be reset by either Bar.Clear() or Bar = new List<int>()
-Bar.Add(RawData);
+ public override void Loaded(IResourceManager resourceManager, Native.Allocator allocator)
+ {
+ base.Loaded(resourceManager, allocator);
+ // This will break on the second run (see above) because Bar needs to be reset by either Bar.Clear() or Bar = new List<int>()
+ Bar.Add(RawData);
+ }
 }
-}
-
-```
 
 ```
 
@@ -449,12 +425,9 @@ union
 
 C#
 
-```
 ```csharp
 UnionName result = default;
 prototype.Materialize(frame, ref result, default);
-
-```
 
 ```
 

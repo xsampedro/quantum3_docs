@@ -16,21 +16,18 @@ Every Physics query can be customized with optional flags which makes them very 
 
 C#
 
-```
 ```csharp
 // For 2D
 var hits = f.Physics2D.LinecastAll(FPVector2.Zero, FPVector2.One);
 for (int i = 0; i < hits.Count; i++) {
-var hit = hits\[i\];
+ var hit = hits\[i\];
 }
 
 // For 3D
 var hits = f.Physics3D.LinecastAll(FPVector3.Zero, FPVector3.One);
 for (int i = 0; i < hits.Count; i++){
-var hit = hits\[i\];
+ var hit = hits\[i\];
 }
-
-```
 
 ```
 
@@ -78,7 +75,6 @@ returns a _HitCollection_. The required parameters are:
 
 C#
 
-```
 ```csharp
 // For 2D
 var hits = f.Physics2D.OverlapShape(FPVector2.Zero, FP.\_0, Shape2D.CreateCircle(FP.\_1));
@@ -91,8 +87,6 @@ var hits = f.Physics3D.OverlapShape(FPVector3.Zero, FPQuaternion.Identity, Shape
 for (int i = 0; i < hits.Count; i++){
 var hit = hits\[i\];
 }
-
-```
 
 ```
 
@@ -111,7 +105,6 @@ returns a _HitCollection_. The required parameters are:
 
 C#
 
-```
 ```csharp
 // For 2D
 var shape = Shape2D.CreateCircle(FP.\_1);
@@ -126,8 +119,6 @@ var hits = f.Physics3D.ShapeCastAll(FPVector3.Zero, FPQuaternion.Identity, &shap
 for (int i = 0; i < hits.Count; i++){
 var hit = hits\[i\];
 }
-
-```
 
 ```
 
@@ -301,44 +292,41 @@ can be stored anywhere - including outside the rollback-able frame data.
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
- public unsafe struct ProjectileFilter
- {
- public EntityRef EntityRef;
- public Transform3D\* Transform;
- public Projectile\* Component;
- }
-
- public unsafe class ProjectileHitQueryInjectionSystem : SystemMainThread
- {
- public override void Update(Frame frame)
- {
- var projectileFilter = frame.Unsafe.FilterStruct<ProjectileFilter>();
- var projectile = default(ProjectileFilter);
-
- while (projectileFilter.Next(&projectile))
- {
- projectile.Component->PathQueryRef = frame.Physics3D.AddRaycastQuery(
- projectile.Transform->Position,
- projectile.Transform->Forward,
- projectile.Component->Speed \* frame.DeltaTime);
-
- var spec = frame.FindAsset<WeaponSpec>(projectile.Component->WeaponSpec.Id);
-
- projectile.Component->DamageZoneQueryRef = frame.Physics3D.AddOverlapShapeQuery(
- projectile.Transform->Position,
- projectile.Transform->Rotation,
- spec.AttackShape.CreateShape(frame),
- spec.AttackLayers);
- }
- }
- }
+public unsafe struct ProjectileFilter
+{
+public EntityRef EntityRef;
+public Transform3D\* Transform;
+public Projectile\* Component;
 }
 
-```
+public unsafe class ProjectileHitQueryInjectionSystem : SystemMainThread
+{
+public override void Update(Frame frame)
+{
+var projectileFilter = frame.Unsafe.FilterStruct<ProjectileFilter>();
+var projectile = default(ProjectileFilter);
+
+while (projectileFilter.Next(&projectile))
+{
+projectile.Component->PathQueryRef = frame.Physics3D.AddRaycastQuery(
+projectile.Transform->Position,
+projectile.Transform->Forward,
+projectile.Component->Speed \* frame.DeltaTime);
+
+var spec = frame.FindAsset<WeaponSpec>(projectile.Component->WeaponSpec.Id);
+
+projectile.Component->DamageZoneQueryRef = frame.Physics3D.AddOverlapShapeQuery(
+projectile.Transform->Position,
+projectile.Transform->Rotation,
+spec.AttackShape.CreateShape(frame),
+spec.AttackLayers);
+}
+}
+}
+}
 
 ```
 
@@ -380,43 +368,40 @@ TryGetQueryHits
 
 C#
 
-```
 ```csharp
 using Photon.Deterministic;
 
 namespace Quantum
 {
-public unsafe class ProjectileHitRetrievalSystem : SystemMainThread
-{
-public override void Update(Frame frame)
-{
-var projectileFilter = frame.Unsafe.FilterStruct<ProjectileFilter>();
-var projectile = default(ProjectileFilter);
+ public unsafe class ProjectileHitRetrievalSystem : SystemMainThread
+ {
+ public override void Update(Frame frame)
+ {
+ var projectileFilter = frame.Unsafe.FilterStruct<ProjectileFilter>();
+ var projectile = default(ProjectileFilter);
 
-while (projectileFilter.Next(&projectile))
-{
-if (frame.Physics3D.TryGetQueryHits(projectile.Component->PathQueryRef, out var hitsOnTrajectory) == false \|\| hitsOnTrajectory.Count <= 0)
-{
-projectile.Transform->Position =
-projectile.Transform->Rotation \*
-projectile.Transform->Forward \*
-projectile.Component->Speed \* frame.DeltaTime;
-continue;
-}
+ while (projectileFilter.Next(&projectile))
+ {
+ if (frame.Physics3D.TryGetQueryHits(projectile.Component->PathQueryRef, out var hitsOnTrajectory) == false \|\| hitsOnTrajectory.Count <= 0)
+ {
+ projectile.Transform->Position =
+ projectile.Transform->Rotation \*
+ projectile.Transform->Forward \*
+ projectile.Component->Speed \* frame.DeltaTime;
+ continue;
+ }
 
-if (frame.Physics3D.TryGetQueryHits(projectile.Component->DamageZoneQueryRef, out var damageZoneHits))
-{
-for (int i = 0; i < damageZoneHits.Count; i++)
-{
-// Apply damage logic
+ if (frame.Physics3D.TryGetQueryHits(projectile.Component->DamageZoneQueryRef, out var damageZoneHits))
+ {
+ for (int i = 0; i < damageZoneHits.Count; i++)
+ {
+ // Apply damage logic
+ }
+ }
+ }
+ }
+ }
 }
-}
-}
-}
-}
-}
-
-```
 
 ```
 

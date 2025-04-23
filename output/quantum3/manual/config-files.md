@@ -144,15 +144,12 @@ During the Quantum Unity project initialization by the Quantum Hub the following
 
 C#
 
-```
 ```csharp
 namespace Quantum {
- public partial class SimulationConfig : AssetObject {
- public int Foo;
- }
+public partial class SimulationConfig : AssetObject {
+public int Foo;
 }
-
-```
+}
 
 ```
 
@@ -184,22 +181,19 @@ when starting the session.
 
 C#
 
-```
 ```csharp
 var map = new AssetRef<Map>(QuantumUnityDB.GetGlobalAssetGuid("Photon/Quantum/Samples/SampleScenes/Resources/SampleMap"));
 var simulationConfig = new AssetRef<SimulationConfig>(QuantumUnityDB.GetGlobalAssetGuid("QuantumUser/Resources/QuantumDefaultConfigs\|DefaultConfigSimulation"));
 var systemsConfig = new AssetRef<SystemsConfig>(QuantumUnityDB.GetGlobalAssetGuid("Photon/QuantumUser/Resources/DefaultSystemsConfig"));
 
 var sessionRunnerArguments = new SessionRunner.Arguments {
-RuntimeConfig = new RuntimeConfig() {
-Map = map,
-Seed = DateTime.Now.Millisecond
-SimulationConfig = simulationConfig,
-SystemsConfig = systemsConfig },
-// ..
+ RuntimeConfig = new RuntimeConfig() {
+ Map = map,
+ Seed = DateTime.Now.Millisecond
+ SimulationConfig = simulationConfig,
+ SystemsConfig = systemsConfig },
+ // ..
 };
-
-```
 
 ```
 
@@ -215,20 +209,17 @@ QuantumUser/Game/RuntimeConfig.User.cs
 
 C#
 
-```
 ```csharp
 namespace Quantum {
- public partial class RuntimeConfig {
- // Add your own fields (don't use properties).
- public int Foo;
+public partial class RuntimeConfig {
+// Add your own fields (don't use properties).
+public int Foo;
 
- // Implement DumpUserData() to add information to a debug string that is returned when using Dump().
- partial void DumpUserData(ref String dump) {
- }
- }
+// Implement DumpUserData() to add information to a debug string that is returned when using Dump().
+partial void DumpUserData(ref String dump) {
 }
-
-```
+}
+}
 
 ```
 
@@ -236,11 +227,8 @@ Create a copy of a RuntimeConfig, for example, to test the serialization.
 
 C#
 
-```
 ```csharp
 var copy = RuntimeConfig.Copy(runtimeConfig, new QuantumUnityJsonSerializer());
-
-```
 
 ```
 
@@ -252,14 +240,11 @@ script does.
 
 C#
 
-```
 ```csharp
 public class QuantumRunnerLocalDebug : QuantumMonoBehaviour {
-public RuntimeConfig RuntimeConfig;
-// ..
+ public RuntimeConfig RuntimeConfig;
+ // ..
 }
-
-```
 
 ```
 
@@ -284,20 +269,17 @@ QuantumUser/Game/RuntimePlayer.User.cs
 
 C#
 
-```
 ```csharp
 namespace Quantum {
- public partial class RuntimePlayer {
- // Add your own fields (don't use properties).
- public int Foo;
+public partial class RuntimePlayer {
+// Add your own fields (don't use properties).
+public int Foo;
 
- // Implement DumpUserData() to add information to a debug string that is returned when using Dump().
- partial void DumpUserData(ref String dump) {
- }
- }
+// Implement DumpUserData() to add information to a debug string that is returned when using Dump().
+partial void DumpUserData(ref String dump) {
 }
-
-```
+}
+}
 
 ```
 
@@ -307,16 +289,13 @@ The default RuntimePlayer already contains two fields that can be used as a star
 
 C#
 
-```
 ```csharp
 public partial class RuntimePlayer {
- // This is a proposal how to let players select an avatar prototype using RuntimePlayer. Can be ignored.
- public AssetRefEntityPrototype PlayerAvatar;
- // This is a proposal how to assign a nickname to players using RuntimePlayer. Can be ignored.
- public string PlayerNickname;
+// This is a proposal how to let players select an avatar prototype using RuntimePlayer. Can be ignored.
+public AssetRefEntityPrototype PlayerAvatar;
+// This is a proposal how to assign a nickname to players using RuntimePlayer. Can be ignored.
+public string PlayerNickname;
 }
-
-```
 
 ```
 

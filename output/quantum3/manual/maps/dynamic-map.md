@@ -15,7 +15,6 @@ Dynamic Map
 - Provides an API for adding and removing static colliders at runtime.
   - Example:
   - C#
-    ```
     ```csharp
     // add
     var meshColliderIndex = dynamicMap.AddMeshCollider(frame, meshCollider);
@@ -24,24 +23,16 @@ Dynamic Map
     dynamicMap.RemoveMeshCollider(frame, meshColliderIndex);
 
     ```
-
-
-    ```
 - Clone existing maps and modify them safely.
   - Example:
   - C#
-    ```
     ```csharp
     var dynamicMap = DynamicMap.FromStaticMap(f.Map);
-
-    ```
-
 
     ```
 - Modify static collider triangles at runtime.
   - Example:
   - C#
-    ```
     ```csharp
     using (var scope = dynamicMap.EditMeshTriangles(frame, colliderIndex)) {
      TriangleCCW triangle = new TriangleCCW { A = v0, B = v1, C = v2 };
@@ -53,9 +44,6 @@ Dynamic Map
      Log.Error("Failed to add triangle.");
      }
     }
-
-    ```
-
 
     ```
 - Optimizes Triangle data for late joiners.

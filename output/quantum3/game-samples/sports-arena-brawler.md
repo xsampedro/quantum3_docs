@@ -65,7 +65,6 @@ SqlLobbyFilter
 
 C#
 
-```
 ```csharp
 public const string LOCAL\_PLAYERS\_PROP\_KEY = "LP";
 public const string TOTAL\_PLAYERS\_PROP\_KEY = "C0";
@@ -74,21 +73,16 @@ public static readonly TypedLobby SQL\_LOBBY = new TypedLobby("customSqlLobby", 
 
 ```
 
-```
-
 C#
 
-```
 ```csharp
 protected override void OnConnect(QuantumMenuConnectArgs connectArgs, ref MatchmakingArguments args)
 {
- args.RandomMatchingType = MatchmakingMode.FillRoom;
- args.Lobby = LocalPlayerCountManager.SQL\_LOBBY;
- args.CustomLobbyProperties = new string\[\] { LocalPlayerCountManager.TOTAL\_PLAYERS\_PROP\_KEY };
- args.SqlLobbyFilter = $"{LocalPlayerCountManager.TOTAL\_PLAYERS\_PROP\_KEY} <= {Input.MAX\_COUNT - \_localPlayersCountSelector.GetLastSelectedLocalPlayersCount()}";
+args.RandomMatchingType = MatchmakingMode.FillRoom;
+args.Lobby = LocalPlayerCountManager.SQL\_LOBBY;
+args.CustomLobbyProperties = new string\[\] { LocalPlayerCountManager.TOTAL\_PLAYERS\_PROP\_KEY };
+args.SqlLobbyFilter = $"{LocalPlayerCountManager.TOTAL\_PLAYERS\_PROP\_KEY} <= {Input.MAX\_COUNT - \_localPlayersCountSelector.GetLastSelectedLocalPlayersCount()}";
 }
-
-```
 
 ```
 
@@ -96,29 +90,26 @@ After connecting to a room the master client keeps a custom property up to date 
 
 C#
 
-```
 ```csharp
 private void UpdateRoomTotalPlayers()
 {
- if (\_connection != null && \_connection.Client.InRoom && \_connection.Client.LocalPlayer.IsMasterClient)
- {
- int totalPlayers = 0;
- foreach (var player in \_connection.Client.CurrentRoom.Players.Values)
- {
- if (player.CustomProperties.TryGetValue(LOCAL\_PLAYERS\_PROP\_KEY, out var localPlayersCount))
- {
- totalPlayers += (int)localPlayersCount;
- }
- }
-
- \_connection.Client.CurrentRoom.SetCustomProperties(new PhotonHashtable
- {
- { TOTAL\_PLAYERS\_PROP\_KEY, totalPlayers }
- });
- }
+if (\_connection != null && \_connection.Client.InRoom && \_connection.Client.LocalPlayer.IsMasterClient)
+{
+int totalPlayers = 0;
+foreach (var player in \_connection.Client.CurrentRoom.Players.Values)
+{
+if (player.CustomProperties.TryGetValue(LOCAL\_PLAYERS\_PROP\_KEY, out var localPlayersCount))
+{
+totalPlayers += (int)localPlayersCount;
+}
 }
 
-```
+\_connection.Client.CurrentRoom.SetCustomProperties(new PhotonHashtable
+{
+{ TOTAL\_PLAYERS\_PROP\_KEY, totalPlayers }
+});
+}
+}
 
 ```
 
@@ -158,21 +149,18 @@ asset reference.
 
 Qtn
 
-```
 ```cs
 struct Ability
 {
- \[ExcludeFromPrototype\] AbilityType AbilityType;
+\[ExcludeFromPrototype\] AbilityType AbilityType;
 
- \[ExcludeFromPrototype\] CountdownTimer InputBufferTimer;
- \[ExcludeFromPrototype\] CountdownTimer DelayTimer;
- \[ExcludeFromPrototype\] CountdownTimer DurationTimer;
- \[ExcludeFromPrototype\] CountdownTimer CooldownTimer;
+\[ExcludeFromPrototype\] CountdownTimer InputBufferTimer;
+\[ExcludeFromPrototype\] CountdownTimer DelayTimer;
+\[ExcludeFromPrototype\] CountdownTimer DurationTimer;
+\[ExcludeFromPrototype\] CountdownTimer CooldownTimer;
 
- asset\_ref<AbilityData> AbilityData;
+asset\_ref<AbilityData> AbilityData;
 }
-
-```
 
 ```
 
@@ -188,18 +176,15 @@ component.
 
 Qtn
 
-```
 ```cs
 component AbilityInventory
 {
- \[ExcludeFromPrototype\] ActiveAbilityInfo ActiveAbilityInfo;
+\[ExcludeFromPrototype\] ActiveAbilityInfo ActiveAbilityInfo;
 
- // Same order as AbilityType enum also used for activation priority
- \[Header("Ability Order: Block, Dash, Attack, ThrowShort, ThrowLong, Jump")\]
- array<Ability>\[6\] Abilities;
+// Same order as AbilityType enum also used for activation priority
+\[Header("Ability Order: Block, Dash, Attack, ThrowShort, ThrowLong, Jump")\]
+array<Ability>\[6\] Abilities;
 }
-
-```
 
 ```
 
@@ -215,25 +200,22 @@ assets.
 
 C#
 
-```
 ```csharp
 public override void Update(Frame frame, ref Filter filter)
 {
- QuantumDemoInputTopDown input = \*frame.GetPlayerInput(filter.PlayerStatus->PlayerRef);
+QuantumDemoInputTopDown input = \*frame.GetPlayerInput(filter.PlayerStatus->PlayerRef);
 
- for (int i = 0; i < filter.AbilityInventory->Abilities.Length; i++)
- {
- AbilityType abilityType = (AbilityType)i;
- ref Ability ability = ref filter.AbilityInventory->Abilities\[i\];
- AbilityData abilityData = frame.FindAsset<AbilityData>(ability.AbilityData.Id);
+for (int i = 0; i < filter.AbilityInventory->Abilities.Length; i++)
+{
+AbilityType abilityType = (AbilityType)i;
+ref Ability ability = ref filter.AbilityInventory->Abilities\[i\];
+AbilityData abilityData = frame.FindAsset<AbilityData>(ability.AbilityData.Id);
 
- abilityData.UpdateAbility(frame, filter.EntityRef, ref ability);
- abilityData.UpdateInput(frame, ref ability, input.GetAbilityInputWasPressed(abilityType));
- abilityData.TryActivateAbility(frame, filter.EntityRef, filter.PlayerStatus, ref ability);
- }
+abilityData.UpdateAbility(frame, filter.EntityRef, ref ability);
+abilityData.UpdateInput(frame, ref ability, input.GetAbilityInputWasPressed(abilityType));
+abilityData.TryActivateAbility(frame, filter.EntityRef, filter.PlayerStatus, ref ability);
 }
-
-```
+}
 
 ```
 
@@ -289,25 +271,22 @@ Dashing allows for rapid movement driven by an animation curve. Any custom movem
 
 C#
 
-```
 ```csharp
 if (abilityState.IsActive)
 {
-AbilityInventory\* abilityInventory = frame.Unsafe.GetPointer<AbilityInventory>(entityRef);
-Transform3D\* transform = frame.Unsafe.GetPointer<Transform3D>(entityRef);
-CharacterController3D\* kcc = frame.Unsafe.GetPointer<CharacterController3D>(entityRef);
+ AbilityInventory\* abilityInventory = frame.Unsafe.GetPointer<AbilityInventory>(entityRef);
+ Transform3D\* transform = frame.Unsafe.GetPointer<Transform3D>(entityRef);
+ CharacterController3D\* kcc = frame.Unsafe.GetPointer<CharacterController3D>(entityRef);
 
-FP lastNormalizedPosition = DashMovementCurve.Evaluate(lastNormalizedTime);
-FPVector3 lastRelativePosition = abilityInventory->ActiveAbilityInfo.CastDirection \* DashDistance \* lastNormalizedPosition;
+ FP lastNormalizedPosition = DashMovementCurve.Evaluate(lastNormalizedTime);
+ FPVector3 lastRelativePosition = abilityInventory->ActiveAbilityInfo.CastDirection \* DashDistance \* lastNormalizedPosition;
 
-FP newNormalizedTime = ability.DurationTimer.NormalizedTime;
-FP newNormalizedPosition = DashMovementCurve.Evaluate(newNormalizedTime);
-FPVector3 newRelativePosition = abilityInventory->ActiveAbilityInfo.CastDirection \* DashDistance \* newNormalizedPosition;
+ FP newNormalizedTime = ability.DurationTimer.NormalizedTime;
+ FP newNormalizedPosition = DashMovementCurve.Evaluate(newNormalizedTime);
+ FPVector3 newRelativePosition = abilityInventory->ActiveAbilityInfo.CastDirection \* DashDistance \* newNormalizedPosition;
 
-transform->Position += newRelativePosition - lastRelativePosition;
+ transform->Position += newRelativePosition - lastRelativePosition;
 }
-
-```
 
 ```
 
@@ -327,33 +306,30 @@ KCC->Move()
 
 C#
 
-```
 ```csharp
 public unsafe void UpdateKCCSettings(Frame frame, EntityRef playerEntityRef)
 {
- PlayerStatus\* playerStatus = frame.Unsafe.GetPointer<PlayerStatus>(playerEntityRef);
- AbilityInventory\* abilityInventory = frame.Unsafe.GetPointer<AbilityInventory>(playerEntityRef);
- CharacterController3D\* kcc = frame.Unsafe.GetPointer<CharacterController3D>(playerEntityRef);
+PlayerStatus\* playerStatus = frame.Unsafe.GetPointer<PlayerStatus>(playerEntityRef);
+AbilityInventory\* abilityInventory = frame.Unsafe.GetPointer<AbilityInventory>(playerEntityRef);
+CharacterController3D\* kcc = frame.Unsafe.GetPointer<CharacterController3D>(playerEntityRef);
 
- CharacterController3DConfig config;
+CharacterController3DConfig config;
 
- if (playerStatus->IsKnockbacked \|\| abilityInventory->HasActiveAbility)
- {
- config = frame.FindAsset<CharacterController3DConfig>(NoMovementKCCSettings.Id);
- }
- else if (playerStatus->IsHoldingBall)
- {
- config = frame.FindAsset<CharacterController3DConfig>(CarryingBallKCCSettings.Id);
- }
- else
- {
- config = frame.FindAsset<CharacterController3DConfig>(DefaultKCCSettings.Id);
- }
-
- kcc->SetConfig(frame, config);
+if (playerStatus->IsKnockbacked \|\| abilityInventory->HasActiveAbility)
+{
+config = frame.FindAsset<CharacterController3DConfig>(NoMovementKCCSettings.Id);
+}
+else if (playerStatus->IsHoldingBall)
+{
+config = frame.FindAsset<CharacterController3DConfig>(CarryingBallKCCSettings.Id);
+}
+else
+{
+config = frame.FindAsset<CharacterController3DConfig>(DefaultKCCSettings.Id);
 }
 
-```
+kcc->SetConfig(frame, config);
+}
 
 ```
 
@@ -377,43 +353,40 @@ While the ball is held its real position is in the center of the player, its phy
 
 C#
 
-```
 ```csharp
 public unsafe class BallEntityView : QuantumEntityView
 {
- private float \_interpolationSpaceAlpha;
+private float \_interpolationSpaceAlpha;
 
- public void UpdateSpaceInterpolation()
- {
- // . . .
- UpdateInterpolationSpaceAlpha(isBallHeldByPlayer);
+public void UpdateSpaceInterpolation()
+{
+// . . .
+UpdateInterpolationSpaceAlpha(isBallHeldByPlayer);
 
- if (\_interpolationSpaceAlpha > 0f)
- {
- Vector3 interpolatedPosition = Vector3.Lerp(\_lastBallRealPosition, \_lastBallAnimationPosition, \_interpolationSpaceAlpha);
- Quaternion interpolatedRotation = Quaternion.Slerp(\_lastBallRealRotation, \_lastBallAnimationRotation, \_interpolationSpaceAlpha);
+if (\_interpolationSpaceAlpha > 0f)
+{
+Vector3 interpolatedPosition = Vector3.Lerp(\_lastBallRealPosition, \_lastBallAnimationPosition, \_interpolationSpaceAlpha);
+Quaternion interpolatedRotation = Quaternion.Slerp(\_lastBallRealRotation, \_lastBallAnimationRotation, \_interpolationSpaceAlpha);
 
- transform.SetPositionAndRotation(interpolatedPosition, interpolatedRotation);
- }
- }
-
- private void UpdateInterpolationSpaceAlpha(bool isBallHeldByPlayer)
- {
- float deltaChange = \_spaceTransitionSpeed \* Time.deltaTime;
- if (isBallHeldByPlayer)
- {
- \_interpolationSpaceAlpha += deltaChange;
- }
- else
- {
- \_interpolationSpaceAlpha -= deltaChange;
- }
-
- \_interpolationSpaceAlpha = Mathf.Clamp(\_interpolationSpaceAlpha, 0f, 1f);
- }
+transform.SetPositionAndRotation(interpolatedPosition, interpolatedRotation);
+}
 }
 
-```
+private void UpdateInterpolationSpaceAlpha(bool isBallHeldByPlayer)
+{
+float deltaChange = \_spaceTransitionSpeed \* Time.deltaTime;
+if (isBallHeldByPlayer)
+{
+\_interpolationSpaceAlpha += deltaChange;
+}
+else
+{
+\_interpolationSpaceAlpha -= deltaChange;
+}
+
+\_interpolationSpaceAlpha = Mathf.Clamp(\_interpolationSpaceAlpha, 0f, 1f);
+}
+}
 
 ```
 
@@ -427,24 +400,21 @@ quickly gets interpolated from 0 to 1 using a curve in order to give the control
 
 C#
 
-```
 ```csharp
 private void UpdateBallGravityScale(Frame frame, ref Filter filter, BallHandlingData ballHandlingData)
 {
-if (filter.BallStatus->GravityChangeTimer.IsRunning)
-{
-FP gravityScale = ballHandlingData.ThrowGravityChangeCurve.Evaluate(filter.BallStatus->GravityChangeTimer.NormalizedTime);
-filter.PhysicsBody->GravityScale = gravityScale;
+ if (filter.BallStatus->GravityChangeTimer.IsRunning)
+ {
+ FP gravityScale = ballHandlingData.ThrowGravityChangeCurve.Evaluate(filter.BallStatus->GravityChangeTimer.NormalizedTime);
+ filter.PhysicsBody->GravityScale = gravityScale;
 
-filter.BallStatus->GravityChangeTimer.Tick(frame.DeltaTime);
-if (filter.BallStatus->GravityChangeTimer.IsDone)
-{
-ResetBallGravity(frame, filter.EntityRef);
+ filter.BallStatus->GravityChangeTimer.Tick(frame.DeltaTime);
+ if (filter.BallStatus->GravityChangeTimer.IsDone)
+ {
+ ResetBallGravity(frame, filter.EntityRef);
+ }
+ }
 }
-}
-}
-
-```
 
 ```
 
@@ -454,48 +424,45 @@ Additional lateral friction is applied to the ball when it is bouncing / rolling
 
 C#
 
-```
 ```csharp
 public void OnCollisionEnter3D(Frame frame, CollisionInfo3D info)
 {
-if (frame.Unsafe.TryGetPointer(info.Entity, out BallStatus\* ballStatus))
-{
-ballStatus->HasCollisionEnter = true;
-}
+ if (frame.Unsafe.TryGetPointer(info.Entity, out BallStatus\* ballStatus))
+ {
+ ballStatus->HasCollisionEnter = true;
+ }
 }
 
 public void OnCollision3D(Frame frame, CollisionInfo3D info)
 {
-if (frame.Unsafe.TryGetPointer(info.Entity, out BallStatus\* ballStatus))
-{
-ballStatus->HasCollision = true;
-}
+ if (frame.Unsafe.TryGetPointer(info.Entity, out BallStatus\* ballStatus))
+ {
+ ballStatus->HasCollision = true;
+ }
 }
 
 private void HandleBallCollisions(Frame frame, ref Filter filter, BallHandlingData ballHandlingData)
 {
-if (!filter.PhysicsBody->IsKinematic)
-{
-if (filter.BallStatus->HasCollisionEnter)
-{
-filter.PhysicsBody->Velocity.X \*= ballHandlingData.LateralBounceFriction;
-filter.PhysicsBody->Velocity.Z \*= ballHandlingData.LateralBounceFriction;
+ if (!filter.PhysicsBody->IsKinematic)
+ {
+ if (filter.BallStatus->HasCollisionEnter)
+ {
+ filter.PhysicsBody->Velocity.X \*= ballHandlingData.LateralBounceFriction;
+ filter.PhysicsBody->Velocity.Z \*= ballHandlingData.LateralBounceFriction;
 
-frame.Events.OnBallBounced(filter.EntityRef);
-}
+ frame.Events.OnBallBounced(filter.EntityRef);
+ }
 
-if (filter.BallStatus->HasCollision)
-{
-filter.PhysicsBody->Velocity.X \*= ballHandlingData.LateralGroundFriction;
-filter.PhysicsBody->Velocity.Z \*= ballHandlingData.LateralGroundFriction;
-}
-}
+ if (filter.BallStatus->HasCollision)
+ {
+ filter.PhysicsBody->Velocity.X \*= ballHandlingData.LateralGroundFriction;
+ filter.PhysicsBody->Velocity.Z \*= ballHandlingData.LateralGroundFriction;
+ }
+ }
 
-filter.BallStatus->HasCollisionEnter = false;
-filter.BallStatus->HasCollision = false;
+ filter.BallStatus->HasCollisionEnter = false;
+ filter.BallStatus->HasCollision = false;
 }
-
-```
 
 ```
 
@@ -509,40 +476,34 @@ QuantumDemoInputTopDown
 
 C#
 
-```
 ```csharp
 // DSL Definition
 \[ExcludeFromPrototype\]
 struct QuantumDemoInputTopDown {
- FPVector2 MoveDirection;
- FPVector2 AimDirection;
- button Left;
- button Right;
- button Up;
- button Down;
- button Jump;
- button Dash;
- button Fire;
- button AltFire;
- button Use;
+FPVector2 MoveDirection;
+FPVector2 AimDirection;
+button Left;
+button Right;
+button Up;
+button Down;
+button Jump;
+button Dash;
+button Fire;
+button AltFire;
+button Use;
 }
-
-```
 
 ```
 
 C#
 
-```
 ```csharp
 // Example use case
 public override void Update(Frame frame, ref Filter filter)
 {
- QuantumDemoInputTopDown input = \*frame.GetPlayerInput(filter.PlayerStatus->PlayerRef);
- // . . .
+QuantumDemoInputTopDown input = \*frame.GetPlayerInput(filter.PlayerStatus->PlayerRef);
+// . . .
 }
-
-```
 
 ```
 

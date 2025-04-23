@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"sync"
 
@@ -72,6 +73,12 @@ func New(config Config) *Scraper {
 					lang = strings.Replace(lang, "language-", "", 1)
 				} else {
 					lang = ""
+				}
+				
+				// Check if content already contains triple backticks
+				if strings.Contains(content, "```") {
+					// If the content already has backticks, we need to ensure it's not wrapped again
+					return &content
 				}
 				
 				result := "```" + lang + "\n" + content + "\n```\n\n"
@@ -265,7 +272,67 @@ func (s *Scraper) Run() error {
 	
 	// Wait for all concurrent requests to finish
 	s.collector.Wait()
+	
+	// If we're saving files, let's clean up any markdown issues
+	if !s.config.ListOnly {
+		s.cleanupMarkdownFiles()
+	}
+	
 	return nil
+}
+
+// cleanupMarkdownFiles fixes common issues in generated markdown files
+func (s *Scraper) cleanupMarkdownFiles() error {
+	// Walk through the output directory
+	return filepath.Walk(s.config.OutputDir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		
+		// Only process markdown files
+		if !info.IsDir() && strings.HasSuffix(path, ".md") {
+			// Read file
+			content, err := os.ReadFile(path)
+			if err != nil {
+				return err
+			}
+			
+			// Fix nested code blocks - replace triple backticks inside code blocks
+			markdown := string(content)
+			
+			// Replace pattern: ```(language)\n```(language2)\n with just the inner block
+			markdown = cleanNestedCodeBlocks(markdown)
+			
+			// Save the cleaned content
+			if err := os.WriteFile(path, []byte(markdown), 0644); err != nil {
+				return err
+			}
+			
+			fmt.Printf("Cleaned: %s\n", path)
+		}
+		
+		return nil
+	})
+}
+
+// cleanNestedCodeBlocks fixes nested code blocks in markdown
+func cleanNestedCodeBlocks(content string) string {
+	// Replace pattern like: "```language\n```language2\n" with "```language2\n"
+	nestedCodeBlockRegex := regexp.MustCompile("```(.+?)\n```(.+?)\n")
+	for nestedCodeBlockRegex.MatchString(content) {
+		content = nestedCodeBlockRegex.ReplaceAllString(content, "```$2\n")
+	}
+	
+	// Replace pattern like: "```\n```language\n" with "```language\n"
+	nestedEmptyCodeBlockRegex := regexp.MustCompile("```\n```(.+?)\n")
+	for nestedEmptyCodeBlockRegex.MatchString(content) {
+		content = nestedEmptyCodeBlockRegex.ReplaceAllString(content, "```$1\n")
+	}
+	
+	// Replace any `````` double backticks with single ```
+	content = strings.ReplaceAll(content, "``````", "```")
+	
+	return content
 }
 
 // GetVisitedURLs returns a list of all visited URLs

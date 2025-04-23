@@ -41,12 +41,9 @@ disconnection after 10 seconds.
 - Use an external network tool (for example clumsy) to block the game server ports.
 
 ```
-```
 Clumsy:
 Filter (udp.DstPort == 5056 or udp.SrcPort == 5056) or (tcp.DstPort == 4531 or tcp.SrcPort == 4531)
 Drop 100%
-
-```
 
 ```
 
@@ -60,11 +57,8 @@ can be used to reconnect and rejoin:
 
 C#
 
-```
 ```csharp
 RealtimeClient Client = await MatchmakingExtensions.ReconnectToRoomAsync(arguments);
-
-```
 
 ```
 
@@ -88,15 +82,12 @@ Rejoining a room can also be performed after reconnecting or connecting to the m
 
 C#
 
-```
 ```csharp
 RealtimeClient.ReconnectToMaster()
 // ..
 public void IConnectionCallbacks.OnConnectedToMaster() {
 \_client.OpReJoinRoom(roomName);
 }
-
-```
 
 ```
 
@@ -279,16 +270,13 @@ The authentication ticket expires after 1 hour. It will be refreshed automatical
 
 C#
 
-```
 ```csharp
 public void OnDisconnected(DisconnectCause cause) {
- switch (cause) {
- case DisconnectCause.AuthenticationTicketExpired:
- case DisconnectCause.InvalidAuthentication:
- // Restart with your default connection sequence
- break;
-
-```
+switch (cause) {
+case DisconnectCause.AuthenticationTicketExpired:
+case DisconnectCause.InvalidAuthentication:
+// Restart with your default connection sequence
+break;
 
 ```
 
@@ -416,15 +404,12 @@ is a secret between the client and the server. Other clients never know it. It i
 
 C#
 
-```
 ```csharp
 var sessionRunnerArguments = new SessionRunner.Arguments {
-ClientId = Client.UserId,
-//Other arguments are needed
-};
+ ClientId = Client.UserId,
+ //Other arguments are needed
+ };
 var runner = (QuantumRunner)await SessionRunner.StartAsync(sessionRunnerArguments);
-
-```
 
 ```
 
@@ -447,10 +432,7 @@ ClientId
 is inside the room and waits for the disconnect timeout (10 seconds):
 
 ```
-```
 DISCONNECTED: Error #5: Duplicate client id
-
-```
 
 ```
 
@@ -492,11 +474,8 @@ To stop and destroy the QuantumSession call:
 
 C#
 
-```
 ```csharp
 QuantumRunner.ShutdownAll(true);
-
-```
 
 ```
 
@@ -579,11 +558,8 @@ DeterministicSession.IsPaused
 and a snapshot will be requested. Successful late joins will log the following messages:
 
 ```
-```
 Waiting for snapshot. Clock paused.
 Detected Resync. Verified tick: 6541
-
-```
 
 ```
 

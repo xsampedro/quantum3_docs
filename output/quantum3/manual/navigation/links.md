@@ -228,35 +228,32 @@ The sample code performs a teleport when an agent steps on the link start waypoi
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
- using Photon.Deterministic;
- using UnityEngine.Scripting;
+using Photon.Deterministic;
+using UnityEngine.Scripting;
 
- \[Preserve\]
- public unsafe class NewQuantumSystem : SystemMainThread, ISignalOnNavMeshWaypointReached
- {
- public override void Update(Frame frame)
- {
- }
-
- public void OnNavMeshWaypointReached(Frame frame, EntityRef entity, FPVector3 waypoint, Navigation.WaypointFlag waypointFlags, ref bool resetAgent)
- {
- var agent = frame.Get<NavMeshPathfinder>(entity);
- var waypointIndex = agent.WaypointIndex;
- if ((waypointFlags & Navigation.WaypointFlag.LinkStart) == Navigation.WaypointFlag.LinkStart)
- {
- // There always is another waypoint after the LinkStart
- var linkDestination = agent.GetWaypoint(frame, waypointIndex + 1);
- f.Unsafe.GetPointer<Transform2D>(entity)->Position = linkDestination.XZ;
- }
- }
- }
+\[Preserve\]
+public unsafe class NewQuantumSystem : SystemMainThread, ISignalOnNavMeshWaypointReached
+{
+public override void Update(Frame frame)
+{
 }
 
-```
+public void OnNavMeshWaypointReached(Frame frame, EntityRef entity, FPVector3 waypoint, Navigation.WaypointFlag waypointFlags, ref bool resetAgent)
+{
+var agent = frame.Get<NavMeshPathfinder>(entity);
+var waypointIndex = agent.WaypointIndex;
+if ((waypointFlags & Navigation.WaypointFlag.LinkStart) == Navigation.WaypointFlag.LinkStart)
+{
+// There always is another waypoint after the LinkStart
+var linkDestination = agent.GetWaypoint(frame, waypointIndex + 1);
+f.Unsafe.GetPointer<Transform2D>(entity)->Position = linkDestination.XZ;
+}
+}
+}
+}
 
 ```
 

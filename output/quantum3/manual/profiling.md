@@ -26,11 +26,8 @@ Quantum performance stats are integrated into the Unity Profiler and are started
 
 C#
 
-```
 ```csharp
 Quantum.Profiling.HostProfiler.Init(..)
-
-```
 
 ```
 
@@ -38,7 +35,6 @@ You can add custom sections in your Quantum simulation code by this know Unity P
 
 C#
 
-```
 ```csharp
 HostProfiler.Start("Foo");
 {
@@ -51,8 +47,6 @@ HostProfiler.Start("Bar2");
 HostProfiler.End();
 }
 HostProfiler.End();
-
-```
 
 ```
 

@@ -60,14 +60,11 @@ folder and add the following code to it:
 
 Qtn
 
-```
 ```cs
 component PlayerLink
 {
- player\_ref PlayerRef;
+player\_ref PlayerRef;
 }
-
-```
 
 ```
 
@@ -153,34 +150,31 @@ class. Add the following code:
 
 C#
 
-```
 ```csharp
 using UnityEngine.Scripting;
 
 namespace Quantum.Asteroids
 {
-\[Preserve\]
-public unsafe class ShipSpawnSystem : SystemSignalsOnly, ISignalOnPlayerAdded
-{
-public void OnPlayerAdded(Frame frame, PlayerRef player, bool firstTime)
-{
-{
-RuntimePlayer data = frame.GetPlayerData(player);
+ \[Preserve\]
+ public unsafe class ShipSpawnSystem : SystemSignalsOnly, ISignalOnPlayerAdded
+ {
+ public void OnPlayerAdded(Frame frame, PlayerRef player, bool firstTime)
+ {
+ {
+ RuntimePlayer data = frame.GetPlayerData(player);
 
-// resolve the reference to the avatar prototype.
-var entityPrototypAsset = frame.FindAsset<EntityPrototype>(data.PlayerAvatar);
+ // resolve the reference to the avatar prototype.
+ var entityPrototypAsset = frame.FindAsset<EntityPrototype>(data.PlayerAvatar);
 
-// Create a new entity for the player based on the prototype.
-var shipEntity = frame.Create(entityPrototypAsset);
+ // Create a new entity for the player based on the prototype.
+ var shipEntity = frame.Create(entityPrototypAsset);
 
-// Create a PlayerLink component. Initialize it with the player. Add the component to the player entity.
-frame.Add(shipEntity, new PlayerLink { PlayerRef = player });
+ // Create a PlayerLink component. Initialize it with the player. Add the component to the player entity.
+ frame.Add(shipEntity, new PlayerLink { PlayerRef = player });
+ }
+ }
+ }
 }
-}
-}
-}
-
-```
 
 ```
 
@@ -218,11 +212,8 @@ AsteroidsShipSystem
 
 C#
 
-```
 ```csharp
 var input = f.GetPlayerInput(0);
-
-```
 
 ```
 
@@ -230,15 +221,12 @@ Replace it with the following code to get the input from the linked player:
 
 C#
 
-```
 ```csharp
 Input\* input = default;
 if(f.Unsafe.TryGetPointer(filter.Entity, out PlayerLink\* playerLink))
 {
- input = f.GetPlayerInput(playerLink->PlayerRef);
+input = f.GetPlayerInput(playerLink->PlayerRef);
 }
-
-```
 
 ```
 

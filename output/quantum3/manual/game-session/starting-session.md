@@ -18,27 +18,24 @@ This is the simplest way to establish a connection to the Photon cloud and match
 
 C#
 
-```
 ```csharp
 var connectionArguments = new MatchmakingArguments {
-// The Photon application settings include information about the app.
-PhotonSettings = PhotonServerSettings.Global.AppSettings,
-// The plugin to request from the Photon cloud set to the Quantum plugin.
-PluginName = "QuantumPlugin"
-// Setting an explicit room name will try to create or join the room based on how CanOnlyJoin is set. The RoomName can be null to create a unique name on create.
-RoomName = "My Room Name",
-// The maximum number of clients that can connect to the room, it most cases this is equal to the max number of players in the Quantum simulation.
-MaxPlayers = Input.MAX\_COUNT,
-// Configure if the connect request can also create rooms or if it only tries to join
-CanOnlyJoin = false,
-// This sets the AuthValues and should be replaced with custom authentication and setting AuthValues explicitly
-UserId = Guid.NewGuid().ToString(),
+ // The Photon application settings include information about the app.
+ PhotonSettings = PhotonServerSettings.Global.AppSettings,
+ // The plugin to request from the Photon cloud set to the Quantum plugin.
+ PluginName = "QuantumPlugin"
+ // Setting an explicit room name will try to create or join the room based on how CanOnlyJoin is set. The RoomName can be null to create a unique name on create.
+ RoomName = "My Room Name",
+ // The maximum number of clients that can connect to the room, it most cases this is equal to the max number of players in the Quantum simulation.
+ MaxPlayers = Input.MAX\_COUNT,
+ // Configure if the connect request can also create rooms or if it only tries to join
+ CanOnlyJoin = false,
+ // This sets the AuthValues and should be replaced with custom authentication and setting AuthValues explicitly
+ UserId = Guid.NewGuid().ToString(),
 };
 
 // This line connects to the Photon cloud and performs matchmaking based on the arguments to finally enter a room.
 RealtimeClient Client = await MatchmakingExtensions.ConnectToRoomAsync(connectionArguments);
-
-```
 
 ```
 
@@ -58,18 +55,15 @@ Try Catch
 
 C#
 
-```
 ```csharp
 var client = default(RealtimeClient);
 try {
- client = await MatchmakingExtensions.ConnectToRoomAsync(connectionArguments);
+client = await MatchmakingExtensions.ConnectToRoomAsync(connectionArguments);
 } catch (Exception e) {
- // Something unexpected happened.
- // In nearly all cases it's not worth to create detailed error handling. Log out the error, show generic feedback to the user and let him/her retry.
- Debug.LogException(e);
+// Something unexpected happened.
+// In nearly all cases it's not worth to create detailed error handling. Log out the error, show generic feedback to the user and let him/her retry.
+Debug.LogException(e);
 }
-
-```
 
 ```
 
@@ -188,11 +182,8 @@ asset in Unity Editor.
 
 C#
 
-```
 ```csharp
 var appSettings = new AppSettings(PhotonServerSettings.Global.AppSettings);
-
-```
 
 ```
 
@@ -234,33 +225,30 @@ The snippet below shows the basic operation start an online Quantum session.
 
 C#
 
-```
 ```csharp
 var sessionRunnerArguments = new SessionRunner.Arguments {
- // The runner factory is the glue between the Quantum.Runner and Unity
- RunnerFactory = QuantumRunnerUnityFactory.DefaultFactory,
- // Creates a default version of \`QuantumGameStartParameters\`
- GameParameters = QuantumRunnerUnityFactory.CreateGameParameters,
- // A secret user id that is for example used to reserved player slots to reconnect into a running session
- ClientId = Client.UserId,
- // The player data
- RuntimeConfig = runtimeConfig,
- // The session config loaded from the Unity asset tagged as \`QuantumDefaultGlobal\`
- SessionConfig = QuantumDeterministicSessionConfigAsset.DefaultConfig,
- // GameMode has to be multiplayer for online sessions
- GameMode = DeterministicGameMode.Multiplayer,
- // The number of player that the session is running for, in this case we use the code-generated max possible players for the Quantum simulation
- PlayerCount = Input.MAX\_COUNT,
- // A timeout to fail the connection logic and Quantum protocol
- StartGameTimeoutInSeconds = 10,
- // The communicator will take over the network handling after the simulation has started
- Communicator = new QuantumNetworkCommunicator(Client),
+// The runner factory is the glue between the Quantum.Runner and Unity
+RunnerFactory = QuantumRunnerUnityFactory.DefaultFactory,
+// Creates a default version of \`QuantumGameStartParameters\`
+GameParameters = QuantumRunnerUnityFactory.CreateGameParameters,
+// A secret user id that is for example used to reserved player slots to reconnect into a running session
+ClientId = Client.UserId,
+// The player data
+RuntimeConfig = runtimeConfig,
+// The session config loaded from the Unity asset tagged as \`QuantumDefaultGlobal\`
+SessionConfig = QuantumDeterministicSessionConfigAsset.DefaultConfig,
+// GameMode has to be multiplayer for online sessions
+GameMode = DeterministicGameMode.Multiplayer,
+// The number of player that the session is running for, in this case we use the code-generated max possible players for the Quantum simulation
+PlayerCount = Input.MAX\_COUNT,
+// A timeout to fail the connection logic and Quantum protocol
+StartGameTimeoutInSeconds = 10,
+// The communicator will take over the network handling after the simulation has started
+Communicator = new QuantumNetworkCommunicator(Client),
 };
 
 // This method completes when the client has successfully joined the online session
 QuantumRunner runner = (QuantumRunner)await SessionRunner.StartAsync(sessionRunnerArguments);
-
-```
 
 ```
 
@@ -324,12 +312,9 @@ RuntimePlayer
 
 C#
 
-```
 ```csharp
 // Will add the player to player slot 0
 QuantumRunner.Default.Game.AddPlayer(runtimePlayer);
-
-```
 
 ```
 
@@ -341,12 +326,9 @@ QuantumGame.AddPlayer(int playerSlot, RuntimePlayer data)
 
 C#
 
-```
 ```csharp
 // Will add the player to player slot 1
 QuantumRunner.Default.Game.AddPlayer(1, runtimePlayer);
-
-```
 
 ```
 
@@ -390,14 +372,11 @@ CallbackLocalPlayerRemoveFailed
 
 C#
 
-```
 ```csharp
 QuantumCallback.Subscribe(this, (CallbackLocalPlayerAddConfirmed c) => OnLocalPlayerAddConfirmed(c));
 QuantumCallback.Subscribe(this, (CallbackLocalPlayerRemoveConfirmed c) => OnLocalPlayerRemoveConfirmed(c));
 QuantumCallback.Subscribe(this, (CallbackLocalPlayerAddFailed c) => OnLocalPlayerAddFailed(c));
 QuantumCallback.Subscribe(this, (CallbackLocalPlayerRemoveFailed c) => OnLocalPlayerRemoveFailed(c));
-
-```
 
 ```
 
@@ -445,17 +424,14 @@ Considering that players also close their app or Alt+F4 their games there might 
 
 C#
 
-```
 ```csharp
 async void Disconnect() {
-// Signal all runners to shutdown and wait until each one has disconnected
-await QuantumRunner.ShutdownAllAsync();
+ // Signal all runners to shutdown and wait until each one has disconnected
+ await QuantumRunner.ShutdownAllAsync();
 
-// OR just signal their shutdown
-QuantumRunner.ShutdownAll();
+ // OR just signal their shutdown
+ QuantumRunner.ShutdownAll();
 }
-
-```
 
 ```
 

@@ -26,16 +26,13 @@ PlayerConnectedSystem
 
 C#
 
-```
 ```csharp
 public enum DeterministicInputFlags : byte {
-Repeatable = 1 << 0,
-PlayerNotPresent = 1 << 1,
-ReplacedByServer = 1 << 2,
-Command = 1 << 3
+ Repeatable = 1 << 0,
+ PlayerNotPresent = 1 << 1,
+ ReplacedByServer = 1 << 2,
+ Command = 1 << 3
 }
-
-```
 
 ```
 
@@ -71,7 +68,6 @@ provided in the SDK.
 
 C#
 
-```
 ```csharp
 public unsafe class PlayerConnectedSystem : SystemMainThread {
 public override void Update(Frame frame) {
@@ -87,8 +83,6 @@ var isPlayerConnected = (frame.GetPlayerInputFlags(p) & Photon.Deterministic.Det
 }
 }
 }
-
-```
 
 ```
 

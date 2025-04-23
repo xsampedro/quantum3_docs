@@ -12,14 +12,11 @@ Here is a minimal definition of an asset class (for a character spec) with some 
 
 C#
 
-```
 ```csharp
-public class CharacterSpec : AssetObject {
-public FP Speed;
-public FP MaxHealth;
-}
-
-```
+ public class CharacterSpec : AssetObject {
+ public FP Speed;
+ public FP MaxHealth;
+ }
 
 ```
 
@@ -33,15 +30,12 @@ Asset instances are immutable objects that must be carried as references. Becaus
 
 Qtn
 
-```
 ```cs
 component CharacterData {
-// reference to an immutable instance of CharacterSpec (from the Quantum asset database)
-asset\_ref<CharacterSpec> Spec;
-// other component data
+ // reference to an immutable instance of CharacterSpec (from the Quantum asset database)
+ asset\_ref<CharacterSpec> Spec;
+ // other component data
 }
-
-```
 
 ```
 
@@ -49,7 +43,6 @@ To assign an asset reference when creating a Character entity, one option is to 
 
 C#
 
-```
 ```csharp
 // assuming cd is a pointer to the CharacterData component
 // using the SLOW string path option (fast data driven asset refs will be explained next)
@@ -57,19 +50,14 @@ cd->Spec = frame.FindAsset<CharacterSpec>("path-to-spec");
 
 ```
 
-```
-
 The basic use of assets is to read data in runtime and apply it to any computation inside systems. The following example uses the _Speed_ value from the assigned _CharacterSpec_ to compute the corresponding character velocity (physics engine):
 
 C#
 
-```
 ```csharp
 // consider cd a CharacterData\*, and body a PhysicsBody2D\* (from a component filter, for example)
 var spec = frame.FindAsset(cd->Spec);
 body->Velocity = FPVector2.Right \* spec.Speed;
-
-```
 
 ```
 
@@ -85,7 +73,6 @@ The following snippet shows examples of what is safe (switching refs) and not sa
 
 C#
 
-```
 ```csharp
 // cd is a CharacterData\*
 
@@ -99,8 +86,6 @@ spec.Speed = 10;
 
 ```
 
-```
-
 ## Asset Inheritance
 
 It is possible to use inheritance in data assets, which gives much more flexibility to the developer (specially when used together with polymorphic methods).
@@ -109,14 +94,11 @@ The basic step for inheritance is to create an abstract base asset class (we'll 
 
 C#
 
-```
 ```csharp
-public abstract class CharacterSpec : AssetObject {
-public FP Speed;
-public FP MaxHealth;
-}
-
-```
+ public abstract class CharacterSpec : AssetObject {
+ public FP Speed;
+ public FP MaxHealth;
+ }
 
 ```
 
@@ -124,17 +106,14 @@ Concrete sub-classes of _CharacterSpec_ may add custom data properties of their 
 
 C#
 
-```
 ```csharp
-public class MageSpec : CharacterSpec {
-public FP HealthRegenerationFactor;
-}
+ public class MageSpec : CharacterSpec {
+ public FP HealthRegenerationFactor;
+ }
 
-public class WarriorSpec : CharacterSpec {
-public FP Armour;
-}
-
-```
+ public class WarriorSpec : CharacterSpec {
+ public FP Armour;
+ }
 
 ```
 
@@ -151,27 +130,24 @@ The following example adds a virtual method to the base class, and a custom impl
 
 C#
 
-```
 ```csharp
-public unsafe abstract class CharacterSpec : AssetObject {
-public FP Speed;
-public FP MaxHealth;
-public virtual void UpdateCharacter(Frame frame, EntityRef entity, CharacterData\* data) {
-if (data->Health < 0)
-frame.Destroy(entity);
-}
-}
+ public unsafe abstract class CharacterSpec : AssetObject {
+ public FP Speed;
+ public FP MaxHealth;
+ public virtual void UpdateCharacter(Frame frame, EntityRef entity, CharacterData\* data) {
+ if (data->Health < 0)
+ frame.Destroy(entity);
+ }
+ }
 
-public unsafe class MageSpec : CharacterSpec {
-public FP HealthRegenerationFactor;
-// reads data from own instance and uses it to update transient health of Character pointer passed as param
-public override void UpdateCharacter(Frame frame, EntityRef entity, CharacterData\* data) {
-data->Health += HealthRegenerationFactor \* frame.DeltaTime;
-base.UpdateCharacter(frame, entity, data);
-}
-}
-
-```
+ public unsafe class MageSpec : CharacterSpec {
+ public FP HealthRegenerationFactor;
+ // reads data from own instance and uses it to update transient health of Character pointer passed as param
+ public override void UpdateCharacter(Frame frame, EntityRef entity, CharacterData\* data) {
+ data->Health += HealthRegenerationFactor \* frame.DeltaTime;
+ base.UpdateCharacter(frame, entity, data);
+ }
+ }
 
 ```
 
@@ -179,15 +155,12 @@ To use this flexible method implementation independently of the concrete asset a
 
 C#
 
-```
 ```csharp
 // Assuming data is the pointer to a specific entity's CharacterData component, and entity is the corresponding EntityRef:
 
 var spec = frame.FindAsset(data->Spec);
 // Updating Health using data-driven polymorphism (behavior depends on the data asset type and instance assigned to character
 spec.UpdateCharacter(frame, entity, data);
-
-```
 
 ```
 
@@ -204,13 +177,10 @@ defined in the DSL can also be used on assets. The DSL struct must be annotated 
  attribute, otherwise the data is not inspectable in Unity.
 
 ```
-```
 \[Serializable\]
 struct Foo {
- int Bar;
+int Bar;
 }
-
-```
 
 ```
 
@@ -222,13 +192,10 @@ in a Quantum asset.
 
 C#
 
-```
 ```csharp
-public class FooUser : AssetObject {
-public Foo F;
-}
-
-```
+ public class FooUser : AssetObject {
+ public Foo F;
+ }
 
 ```
 
@@ -240,15 +207,12 @@ If a struct is not ```
 
 C#
 
-```
 ```csharp
 using Quantum.Prototypes;
 
- public class FooUser : AssetObject {
- public FooPrototype F;
- }
-
-```
+public class FooUser : AssetObject {
+public FooPrototype F;
+}
 
 ```
 
@@ -256,12 +220,9 @@ The prototype can be materialized into the simulation struct when needed:
 
 C#
 
-```
 ```csharp
 Foo f = new Foo();
 fooUser.F.Materialize(frame, ref f, default);
-
-```
 
 ```
 
@@ -312,7 +273,6 @@ Usage:
 
 C#
 
-```
 ```csharp
 // create any asset
 var assetObject = AssetObject.Create<MyAssetObjectType>();
@@ -331,8 +291,6 @@ assetObject.Guid = guid;
 
 ```
 
-```
-
 After the asset is added to the asset database, it is effectively the same as if the asset was created and added in the editor. However, this is only valid if the game has not started yet. Once the game has started, the static asset database should not be mutated.
 
 If you need to add or mutate assets during gameplay, you must use the ```
@@ -347,7 +305,6 @@ Assets can be created at runtime, by the simulation. This feature is called _Dyn
 
 C#
 
-```
 ```csharp
 var mageSpec = AssetObject.Create<MageSpec>();
 mageSpec.Speed = 1;
@@ -356,18 +313,13 @@ frame.AddAsset(mageSpec);
 
 ```
 
-```
-
 Such asset can be loaded and disposed of just like any other asset:
 
 C#
 
-```
 ```csharp
 MageSpec asset = frame.FindAsset<MageSpec>(assetGuid);
 frame.DisposeAsset(assetGuid);
-
-```
 
 ```
 
@@ -395,14 +347,11 @@ needs to be created and filled with assets:
 
 C#
 
-```
 ```csharp
 var initialAssets = new DynamicAssetDB();
 initialAssets.AddAsset(mageSpec);
 initialAssets.AddAsset(warriorSpec);
 ...
-
-```
 
 ```
 

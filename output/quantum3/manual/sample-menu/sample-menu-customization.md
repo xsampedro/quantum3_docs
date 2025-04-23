@@ -176,20 +176,17 @@ PhotonMenuViewGameplay
 
 C#
 
-```
 ```csharp
 public class QuantumMenuScreenPluginFoo : QuantumMenuScreenPlugin {
 
- public override void Show(QuantumMenuUIScreen screen) {
- base.Show(screen);
- }
-
- public override void Hide(QuantumMenuUIScreen screen) {
- base.Hide(screen);
- }
+public override void Show(QuantumMenuUIScreen screen) {
+base.Show(screen);
 }
 
-```
+public override void Hide(QuantumMenuUIScreen screen) {
+base.Hide(screen);
+}
+}
 
 ```
 
@@ -247,24 +244,21 @@ In order to add more player-specific data and have custom Menu logic that fills 
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
- using Photon.Deterministic;
+using Photon.Deterministic;
 
- public partial class RuntimePlayer
- {
- public int TeamId;
+public partial class RuntimePlayer
+{
+public int TeamId;
 
- partial void SerializeUserData(BitStream stream)
- {
- stream.Serialize(ref TeamId);
- }
- }
+partial void SerializeUserData(BitStream stream)
+{
+stream.Serialize(ref TeamId);
 }
-
-```
+}
+}
 
 ```
 
@@ -280,24 +274,21 @@ namespace Quantum
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
- using Quantum.Menu;
- using System.Threading.Tasks;
+using Quantum.Menu;
+using System.Threading.Tasks;
 
- public class CustomQuantumConnectionBehaviour : QuantumMenuConnectionBehaviourSDK
- {
- protected override Task<ConnectResult> ConnectAsyncInternal(QuantumMenuConnectArgs connectArgs)
- {
- connectArgs.RuntimePlayers\[0\].TeamId = 1; // Add any game-specific logic for getting the desired team id here
- return base.ConnectAsyncInternal(connectArgs);
- }
- }
+public class CustomQuantumConnectionBehaviour : QuantumMenuConnectionBehaviourSDK
+{
+protected override Task<ConnectResult> ConnectAsyncInternal(QuantumMenuConnectArgs connectArgs)
+{
+connectArgs.RuntimePlayers\[0\].TeamId = 1; // Add any game-specific logic for getting the desired team id here
+return base.ConnectAsyncInternal(connectArgs);
 }
-
-```
+}
+}
 
 ```
 

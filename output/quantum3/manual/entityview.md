@@ -87,11 +87,8 @@ EntityViews that subscribe to Quantum callbacks or events must make sure to eith
 
 C#
 
-```
 ```csharp
 QuantumEvent.Subscribe<EventPlayerKilled>(this, OnKilled, onlyIfActiveAndEnabled: true);
-
-```
 
 ```
 
@@ -166,113 +163,110 @@ The sample implements a basic culling algorithm using a sphere check while also 
 
 C#
 
-```
 ```csharp
 namespace Quantum {
- using System.Collections.Generic;
- using Photon.Deterministic;
- using UnityEngine;
+using System.Collections.Generic;
+using Photon.Deterministic;
+using UnityEngine;
 
- /// <summary>
- /// Sample implementation of entity view culling using a sphere.
- /// Add this script to the same GameObject that has the <see cref="QuantumEntityViewUpdater"/>.
- /// </summary>
- public class QuantumEntityViewCulling : QuantumMonoBehaviour, IQuantumEntityViewCulling {
- /// <summary>
- /// The culling sphere center.
- /// </summary>
- public FPVector3 ViewCullingCenter;
- /// <summary>
- /// The culling radius.
- /// </summary>
- public FP ViewCullingRadius = 20;
+/// <summary>
+/// Sample implementation of entity view culling using a sphere.
+/// Add this script to the same GameObject that has the <see cref="QuantumEntityViewUpdater"/>.
+/// </summary>
+public class QuantumEntityViewCulling : QuantumMonoBehaviour, IQuantumEntityViewCulling {
+/// <summary>
+/// The culling sphere center.
+/// </summary>
+public FPVector3 ViewCullingCenter;
+/// <summary>
+/// The culling radius.
+/// </summary>
+public FP ViewCullingRadius = 20;
 
- List<(EntityRef, View)> \_dynamicEntities = new List<(EntityRef, View)>();
- List<(EntityRef, MapEntityLink)> \_mapEntities = new List<(EntityRef, MapEntityLink)>();
+List<(EntityRef, View)> \_dynamicEntities = new List<(EntityRef, View)>();
+List<(EntityRef, MapEntityLink)> \_mapEntities = new List<(EntityRef, MapEntityLink)>();
 
- /// <summary>
- /// Only return dynamic entities inside the culling sphere.
- /// </summary>
- public unsafe IEnumerable<(EntityRef, View)> DynamicEntityIterator(QuantumGame game, Frame frame, QuantumEntityViewBindBehaviour createBehaviour) {
- \_dynamicEntities.Clear();
- var radiusSqr = ViewCullingRadius \* ViewCullingRadius;
+/// <summary>
+/// Only return dynamic entities inside the culling sphere.
+/// </summary>
+public unsafe IEnumerable<(EntityRef, View)> DynamicEntityIterator(QuantumGame game, Frame frame, QuantumEntityViewBindBehaviour createBehaviour) {
+\_dynamicEntities.Clear();
+var radiusSqr = ViewCullingRadius \* ViewCullingRadius;
 
- if (createBehaviour == QuantumEntityViewBindBehaviour.NonVerified && frame.IsPredicted) {
- // Use the prediction culling for non-verified bindings (this frame is predicted only in online mode)
- var filter = frame.Filter<View>();
- // Make sure to enabled prediction culling on the filter
- filter.UseCulling = true;
- while (filter.NextUnsafe(out var entity, out var view)) {
- \_dynamicEntities.Add((entity, \*view));
- }
- } else {
- // Use sphere distance check to cull entities
- var filter3D = frame.Filter<Transform3D, View>();
- while (filter3D.NextUnsafe(out var entity, out var transform, out var view)) {
- var distanceSqr = (transform->Position - ViewCullingCenter).SqrMagnitude;
- if (distanceSqr < radiusSqr) {
- \_dynamicEntities.Add((entity, \*view));
- }
- }
-
- var filter2D = frame.Filter<Transform2D, View>();
- while (filter2D.NextUnsafe(out var entity, out var transform, out var view)) {
- var distanceSqr = (transform->Position.XOY - ViewCullingCenter).SqrMagnitude;
- if (distanceSqr < radiusSqr) {
- \_dynamicEntities.Add((entity, \*view));
- }
- }
- }
-
- return \_dynamicEntities;
- }
-
- /// <summary>
- /// Only return map entities inside the culling sphere.
- /// </summary>
- public unsafe IEnumerable<(EntityRef, MapEntityLink)> MapEntityIterator(QuantumGame game, Frame frame, QuantumEntityViewBindBehaviour createBehaviour) {
- \_mapEntities.Clear();
- var radiusSqr = ViewCullingRadius \* ViewCullingRadius;
- if (createBehaviour == QuantumEntityViewBindBehaviour.NonVerified && frame.IsPredicted) {
- // Use the prediction culling for non-verified bindings (this frame is predicted only in online mode)
- var filter = frame.Filter<MapEntityLink>();
- // Make sure to enabled prediction culling on the filter
- filter.UseCulling = true;
- while (filter.NextUnsafe(out var entity, out var link)) {
- \_mapEntities.Add((entity, \*link));
- }
- } else {
- // Use sphere distance check to cull entities
- var filter3D = frame.Filter<Transform3D, MapEntityLink>();
- while (filter3D.NextUnsafe(out var entity, out var transform, out var link)) {
- var distanceSqr = (transform->Position - ViewCullingCenter).SqrMagnitude;
- if (distanceSqr < radiusSqr) {
- \_mapEntities.Add((entity, \*link));
- }
- }
-
- var filter2D = frame.Filter<Transform2D, MapEntityLink>();
- while (filter2D.NextUnsafe(out var entity, out var transform, out var link)) {
- var distanceSqr = (transform->Position.XOY - ViewCullingCenter).SqrMagnitude;
- if (distanceSqr < radiusSqr) {
- \_mapEntities.Add((entity, \*link));
- }
- }
- }
-
- return \_mapEntities;
- }
-
- /// <summary>
- /// Gizmo rendering of view culling sphere.
- /// </summary>
- public void OnDrawGizmosSelected() {
- Gizmos.DrawWireSphere(ViewCullingCenter.ToUnityVector3(), ViewCullingRadius.AsFloat);
- }
- }
+if (createBehaviour == QuantumEntityViewBindBehaviour.NonVerified && frame.IsPredicted) {
+// Use the prediction culling for non-verified bindings (this frame is predicted only in online mode)
+var filter = frame.Filter<View>();
+// Make sure to enabled prediction culling on the filter
+filter.UseCulling = true;
+while (filter.NextUnsafe(out var entity, out var view)) {
+\_dynamicEntities.Add((entity, \*view));
+}
+} else {
+// Use sphere distance check to cull entities
+var filter3D = frame.Filter<Transform3D, View>();
+while (filter3D.NextUnsafe(out var entity, out var transform, out var view)) {
+var distanceSqr = (transform->Position - ViewCullingCenter).SqrMagnitude;
+if (distanceSqr < radiusSqr) {
+\_dynamicEntities.Add((entity, \*view));
+}
 }
 
-```
+var filter2D = frame.Filter<Transform2D, View>();
+while (filter2D.NextUnsafe(out var entity, out var transform, out var view)) {
+var distanceSqr = (transform->Position.XOY - ViewCullingCenter).SqrMagnitude;
+if (distanceSqr < radiusSqr) {
+\_dynamicEntities.Add((entity, \*view));
+}
+}
+}
+
+return \_dynamicEntities;
+}
+
+/// <summary>
+/// Only return map entities inside the culling sphere.
+/// </summary>
+public unsafe IEnumerable<(EntityRef, MapEntityLink)> MapEntityIterator(QuantumGame game, Frame frame, QuantumEntityViewBindBehaviour createBehaviour) {
+\_mapEntities.Clear();
+var radiusSqr = ViewCullingRadius \* ViewCullingRadius;
+if (createBehaviour == QuantumEntityViewBindBehaviour.NonVerified && frame.IsPredicted) {
+// Use the prediction culling for non-verified bindings (this frame is predicted only in online mode)
+var filter = frame.Filter<MapEntityLink>();
+// Make sure to enabled prediction culling on the filter
+filter.UseCulling = true;
+while (filter.NextUnsafe(out var entity, out var link)) {
+\_mapEntities.Add((entity, \*link));
+}
+} else {
+// Use sphere distance check to cull entities
+var filter3D = frame.Filter<Transform3D, MapEntityLink>();
+while (filter3D.NextUnsafe(out var entity, out var transform, out var link)) {
+var distanceSqr = (transform->Position - ViewCullingCenter).SqrMagnitude;
+if (distanceSqr < radiusSqr) {
+\_mapEntities.Add((entity, \*link));
+}
+}
+
+var filter2D = frame.Filter<Transform2D, MapEntityLink>();
+while (filter2D.NextUnsafe(out var entity, out var transform, out var link)) {
+var distanceSqr = (transform->Position.XOY - ViewCullingCenter).SqrMagnitude;
+if (distanceSqr < radiusSqr) {
+\_mapEntities.Add((entity, \*link));
+}
+}
+}
+
+return \_mapEntities;
+}
+
+/// <summary>
+/// Gizmo rendering of view culling sphere.
+/// </summary>
+public void OnDrawGizmosSelected() {
+Gizmos.DrawWireSphere(ViewCullingCenter.ToUnityVector3(), ViewCullingRadius.AsFloat);
+}
+}
+}
 
 ```
 
@@ -432,21 +426,18 @@ QuantumEntityView.AssetGuid
 
 C#
 
-```
 ```csharp
 protected override QuantumEntityView CreateEntityViewInstance(Quantum.EntityView asset, Vector3? position = null, Quaternion? rotation = null) {
- Debug.Assert(asset.View != null);
+Debug.Assert(asset.View != null);
 
- // view pooling can also be customized by using IQuantumEntityViewPool
- EntityView view = \_myObjectPool.GetInstance(asset);
+// view pooling can also be customized by using IQuantumEntityViewPool
+EntityView view = \_myObjectPool.GetInstance(asset);
 
- view.transform.position = position ?? default;
- view.transform.rotation = rotation ?? Quaternion.identity;
+view.transform.position = position ?? default;
+view.transform.rotation = rotation ?? Quaternion.identity;
 
- return view;
+return view;
 }
-
-```
 
 ```
 
@@ -470,13 +461,10 @@ DestroyEntityViewInstance()
 
 C#
 
-```
 ```csharp
 protected virtual void DestroyEntityViewInstance(QuantumEntityView instance) {
-\_myObjectPool.ReturnInstance(instance);
+ \_myObjectPool.ReturnInstance(instance);
 }
-
-```
 
 ```
 

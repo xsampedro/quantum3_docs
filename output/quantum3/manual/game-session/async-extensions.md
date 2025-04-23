@@ -14,7 +14,6 @@ Establishing a connection and sending operations is, by itself, an asynchronous 
 
 C#
 
-```
 ```csharp
 var appSettings = new new AppSettings();
 var client = new RealtimeClient();
@@ -25,8 +24,6 @@ var joinRandomRoomParams = new JoinRandomRoomArgs();
 var enterRoomArgs = new EnterRoomArgs();
 
 var result = await client.JoinRandomOrCreateRoomAsync(joinRandomRoomParams, enterRoomArgs);
-
-```
 
 ```
 
@@ -56,30 +53,24 @@ It's a bit unfortunate to pollute the code with try/catch blocks but it makes th
 
 C#
 
-```
 ```csharp
 try {
- await client.ConnectUsingSettingsAsync(appSettings);
+await client.ConnectUsingSettingsAsync(appSettings);
 } catch (Exception e) {
- Debug.LogException(e);
+Debug.LogException(e);
 }
-
-```
 
 ```
 
 C#
 
-```
 ```csharp
 try {
- // Disconnecting can also fail
- await client.DisconnectAsync();
+// Disconnecting can also fail
+await client.DisconnectAsync();
 } catch (Exception e) {
- Debug.LogException(e);
+Debug.LogException(e);
 }
-
-```
 
 ```
 
@@ -126,15 +117,12 @@ _are ran on the thread pool (which in most cases is very undesirable in Unity) i
 
 C#
 
-```
 ```csharp
 var taskFactory = new TaskFactory(
- CancellationToken.None,
- TaskCreationOptions.DenyChildAttach,
- TaskContinuationOptions.DenyChildAttach \| TaskContinuationOptions.ExecuteSynchronously,
- TaskScheduler.FromCurrentSynchronizationContext());
-
-```
+CancellationToken.None,
+TaskCreationOptions.DenyChildAttach,
+TaskContinuationOptions.DenyChildAttach \| TaskContinuationOptions.ExecuteSynchronously,
+TaskScheduler.FromCurrentSynchronizationContext());
 
 ```
 
@@ -181,47 +169,44 @@ _can be suppressed by Unity under some circumstances._
 
 C#
 
-```
 ```csharp
 // Does NOT log exception.
 // Why? Because Unity does not handle exception inside tasks by design.
 public Task Update1() {
- return Task.Run(() => throw new Exception("peng"));
+return Task.Run(() => throw new Exception("peng"));
 }
 ​
 // Does NOT log exception.
 // Why? Because we return at await and continue as a task object and Unity swallows the exception.
 public async Task Update3() {
- await Task.Delay(100);
- throw new Exception("peng");
+await Task.Delay(100);
+throw new Exception("peng");
 }
 ​
 // Logs exception.
 // Why? because we unwrap the task and run it synchronously with .Wait().
 public void Update2() {
- Task.Run(() => throw new Exception("peng")).Wait();
+Task.Run(() => throw new Exception("peng")).Wait();
 }
 
 // Logs exception.
 // Why? Because we resume the execution in this method and not return a task.
 public async void Update4() {
- await Task.Delay(100);
- throw new Exception("peng");
+await Task.Delay(100);
+throw new Exception("peng");
 }
 ​
 // Logs exception.
 // Why? We add a continuation task that logs (in any thread) when the task faulted.
 public Task Update5() {
- var task = Task.Run(() => throw new Exception("peng")).ContinueWith(t => {
- if (t.IsFaulted) {
- Debug.LogException(t.Exception.Flatten().InnerException);
- };
- });
+var task = Task.Run(() => throw new Exception("peng")).ContinueWith(t => {
+if (t.IsFaulted) {
+Debug.LogException(t.Exception.Flatten().InnerException);
+};
+});
 ​
- return task;
+return task;
 }
-
-```
 
 ```
 
@@ -245,11 +230,8 @@ RealtimeClient
 
 C#
 
-```
 ```csharp
 public Task<RealtimeClient> ConnectToRoomAsync(MatchmakingArguments arguments)
-
-```
 
 ```
 
@@ -343,11 +325,8 @@ UserId
 
 C#
 
-```
 ```csharp
 public Task<RealtimeClient> ReconnectToRoomAsync(MatchmakingArguments arguments)
-
-```
 
 ```
 
@@ -427,11 +406,8 @@ can be overwritten if needed.
 
 C#
 
-```
 ```csharp
 virtual void Set(RealtimeClient client)
-
-```
 
 ```
 

@@ -24,15 +24,12 @@ For Entities, just add the _Transform2DVertical_ component and set its _Height_ 
 
 C#
 
-```
 ```csharp
-var transform2dVertical = new Transform2DVertical();
-transform2dVertical.Height = FP.\_1;
-transform2dVertical.Position = FP.\_1;
+ var transform2dVertical = new Transform2DVertical();
+ transform2dVertical.Height = FP.\_1;
+ transform2dVertical.Position = FP.\_1;
 
-f.Set(entity, transform2dVertical);
-
-```
+ f.Set(entity, transform2dVertical);
 
 ```
 

@@ -79,7 +79,6 @@ The following snippet enables the full set of OnTrigger callbacks against anothe
 
 C#
 
-```
 ```csharp
 CallbackFlags flags = CallbackFlags.OnDynamicTrigger;
 flags \|= CallbackFlags.OnDynamicTriggerEnter;
@@ -90,8 +89,6 @@ f.Physics2D.SetCallbacks(entity, flags);
 
 // for 3D
 f.Physics3D.SetCallbacks(entity, flags);
-
-```
 
 ```
 
@@ -130,30 +127,27 @@ These are the 2D Physics signals:
 
 C#
 
-```
 ```csharp
 namespace Quantum {
-public interface ISignalOnCollision2D : ISignal {
-void OnCollision2D(Frame frame, CollisionInfo2D info);
+ public interface ISignalOnCollision2D : ISignal {
+ void OnCollision2D(Frame frame, CollisionInfo2D info);
+ }
+ public interface ISignalOnCollisionEnter2D : ISignal {
+ void OnCollisionEnter2D(Frame frame, CollisionInfo2D info);
+ }
+ public interface ISignalOnCollisionExit2D : ISignal {
+ void OnCollisionExit2D(Frame frame, ExitInfo2D info);
+ }
+ public interface ISignalOnTrigger2D : ISignal {
+ void OnTrigger2D(Frame frame, TriggerInfo2D info);
+ }
+ public interface ISignalOnTriggerEnter2D : ISignal {
+ void OnTriggerEnter2D(Frame frame, TriggerInfo2D info);
+ }
+ public interface ISignalOnTriggerExit2D : ISignal {
+ void OnTriggerExit2D(Frame frame, ExitInfo2D info);
+ }
 }
-public interface ISignalOnCollisionEnter2D : ISignal {
-void OnCollisionEnter2D(Frame frame, CollisionInfo2D info);
-}
-public interface ISignalOnCollisionExit2D : ISignal {
-void OnCollisionExit2D(Frame frame, ExitInfo2D info);
-}
-public interface ISignalOnTrigger2D : ISignal {
-void OnTrigger2D(Frame frame, TriggerInfo2D info);
-}
-public interface ISignalOnTriggerEnter2D : ISignal {
-void OnTriggerEnter2D(Frame frame, TriggerInfo2D info);
-}
-public interface ISignalOnTriggerExit2D : ISignal {
-void OnTriggerExit2D(Frame frame, ExitInfo2D info);
-}
-}
-
-```
 
 ```
 
@@ -161,30 +155,27 @@ And the 3D Physics signals:
 
 C#
 
-```
 ```csharp
 namespace Quantum {
-public interface ISignalOnCollision3D : ISignal {
-void OnCollision3D(Frame frame, CollisionInfo3D info);
+ public interface ISignalOnCollision3D : ISignal {
+ void OnCollision3D(Frame frame, CollisionInfo3D info);
+ }
+ public interface ISignalOnCollisionEnter3D : ISignal {
+ void OnCollisionEnter3D(Frame frame, CollisionInfo3D info);
+ }
+ public interface ISignalOnCollisionExit3D : ISignal {
+ void OnCollisionExit3D(Frame frame, ExitInfo3D info);
+ }
+ public interface ISignalOnTrigger3D : ISignal {
+ void OnTrigger3D(Frame frame, TriggerInfo3D info);
+ }
+ public interface ISignalOnTriggerEnter3D : ISignal {
+ void OnTriggerEnter3D(Frame frame, TriggerInfo3D info);
+ }
+ public interface ISignalOnTriggerExit3D : ISignal {
+ void OnTriggerExit3D(Frame frame, ExitInfo3D info);
+ }
 }
-public interface ISignalOnCollisionEnter3D : ISignal {
-void OnCollisionEnter3D(Frame frame, CollisionInfo3D info);
-}
-public interface ISignalOnCollisionExit3D : ISignal {
-void OnCollisionExit3D(Frame frame, ExitInfo3D info);
-}
-public interface ISignalOnTrigger3D : ISignal {
-void OnTrigger3D(Frame frame, TriggerInfo3D info);
-}
-public interface ISignalOnTriggerEnter3D : ISignal {
-void OnTriggerEnter3D(Frame frame, TriggerInfo3D info);
-}
-public interface ISignalOnTriggerExit3D : ISignal {
-void OnTriggerExit3D(Frame frame, ExitInfo3D info);
-}
-}
-
-```
 
 ```
 
@@ -192,24 +183,21 @@ To react to the callback, implement the corresponding signal interface in at lea
 
 C#
 
-```
 ```csharp
 public class PickUpSystem : SystemSignalsOnly, ISignalOnTriggerEnter3D
 {
-public void OnTriggerEnter3D(Frame frame, TriggerInfo3D info)
-{
-if (!frame.Has<PickUpSlot>(info.Entity)) return;
-if (!frame.Has<PlayerID>(info.Other)) return;
+ public void OnTriggerEnter3D(Frame frame, TriggerInfo3D info)
+ {
+ if (!frame.Has<PickUpSlot>(info.Entity)) return;
+ if (!frame.Has<PlayerID>(info.Other)) return;
 
-var item = frame.Get<PickUpSlot>(info.Entity).Item;
-var itemAsset = frame.FindAsset<ItemBase>(item.Id);
-itemAsset.OnPickUp(frame, info.Other, itemAsset);
+ var item = frame.Get<PickUpSlot>(info.Entity).Item;
+ var itemAsset = frame.FindAsset<ItemBase>(item.Id);
+ itemAsset.OnPickUp(frame, info.Other, itemAsset);
 
-frame.Destroy(info.Entity);
+ frame.Destroy(info.Entity);
+ }
 }
-}
-
-```
 
 ```
 
@@ -274,13 +262,10 @@ is also an iterator. When colliding with a mesh, it can be used to iterate throu
 
 C#
 
-```
 ```csharp
 while(info.ContactPoints.Next(out var cp)) {
-Draw.Sphere(cp, radius);
+ Draw.Sphere(cp, radius);
 }
-
-```
 
 ```
 
@@ -338,15 +323,12 @@ is also an iterator; it can be used to iterate through each triangle's collision
 
 C#
 
-```
 ```csharp
 if (info.IsMeshCollision) {
-while(info.MeshTriangleCollisions.Next(out var triCollision)) {
-Draw.Ray(triCollision.Triangle->Center, triCollision.ContactNormal \* triCollision.Penetration);
+ while(info.MeshTriangleCollisions.Next(out var triCollision)) {
+ Draw.Ray(triCollision.Triangle->Center, triCollision.ContactNormal \* triCollision.Penetration);
+ }
 }
-}
-
-```
 
 ```
 

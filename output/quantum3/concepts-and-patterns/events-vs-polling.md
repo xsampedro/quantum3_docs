@@ -28,30 +28,27 @@ A simple approach to polling could look like this:
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
- using UnityEngine;
+using UnityEngine;
 
- public class CharacterAnimations : QuantumEntityViewComponent
- {
- private Animator \_animator;
+public class CharacterAnimations : QuantumEntityViewComponent
+{
+private Animator \_animator;
 
- public override void OnInitialize()
- {
- \_animator = GetComponentInChildren<Animator>();
- }
-
- public override void OnUpdateView()
- {
- var kcc = PredictedFrame.Get<CharacterController3D>(EntityRef);
- \_animator.SetFloat("Speed", kcc.Velocity.Magnitude.AsFloat);
- }
- }
+public override void OnInitialize()
+{
+\_animator = GetComponentInChildren<Animator>();
 }
 
-```
+public override void OnUpdateView()
+{
+var kcc = PredictedFrame.Get<CharacterController3D>(EntityRef);
+\_animator.SetFloat("Speed", kcc.Velocity.Magnitude.AsFloat);
+}
+}
+}
 
 ```
 
@@ -69,34 +66,31 @@ A simple approach to event based could look like this:
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
-using UnityEngine;
+ using UnityEngine;
 
-public class CharacterAnimations : QuantumEntityViewComponent
-{
-private ParticleSystem \_particles;
+ public class CharacterAnimations : QuantumEntityViewComponent
+ {
+ private ParticleSystem \_particles;
 
-public override void OnInitialize()
-{
-\_particles = GetComponent<ParticleSystem>();
+ public override void OnInitialize()
+ {
+ \_particles = GetComponent<ParticleSystem>();
 
-QuantumEvent.Subscribe<EventOnDamaged>(this, OnDamaged);
-}
+ QuantumEvent.Subscribe<EventOnDamaged>(this, OnDamaged);
+ }
 
-private void OnDamaged(EventOnDamaged e)
-{
-if (e.EntityRef == EntityRef)
-{
-\_particles.Play();
+ private void OnDamaged(EventOnDamaged e)
+ {
+ if (e.EntityRef == EntityRef)
+ {
+ \_particles.Play();
+ }
+ }
+ }
 }
-}
-}
-}
-
-```
 
 ```
 

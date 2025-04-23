@@ -56,21 +56,18 @@ There are two movement implementations included in this sample:
 
 C#
 
-```
 ```csharp
 var pathfinder = frame.GetPointer<FlowFieldPathfinder>(entity);
 
 if (pathfinder->HasDestination == false \|\| pathfinder->AtDestination == true)
- return;
+return;
 
 var direction = pathfinder->GetDirection(frame, entity);
 if (direction.Valid == false)
- return;
+return;
 
 var transform = frame.GetPointer<Transform2D>(entity);
 transform->Position += direction.Direction \* Speed \* frame.DeltaTime;
-
-```
 
 ```
 
@@ -78,28 +75,25 @@ transform->Position += direction.Direction \* Speed \* frame.DeltaTime;
 
 C#
 
-```
 ```csharp
 var pathfinder = frame.GetPointer<FlowFieldPathfinder>(entity);
 var physicsBody = frame.GetPointer<PhysicsBody2D>(entity);
 
 if (pathfinder->HasDestination == false \|\| pathfinder->AtDestination == true)
 {
- physicsBody->Velocity = default;
- return;
+physicsBody->Velocity = default;
+return;
 }
 
 var direction = pathfinder->GetRotationDirection(frame, entity);
 if (direction.Valid == false)
 {
- physicsBody->Velocity = default;
- return;
+physicsBody->Velocity = default;
+return;
 }
 
 physicsBody->Velocity = FPVector2.Rotate(FPVector2.Up, direction.Rotation) \* Speed;
 physicsBody->WakeUp();
-
-```
 
 ```
 

@@ -50,11 +50,7 @@ options. Then press **Bake All**. A navmesh imported message will be logged on t
 
 
 ```
-```
 Imported Unity NavMesh 'Navmesh', cleaned up 7 vertices, found 1 region(s), found 0 link(s)
-
-```
-
 
 ```
 
@@ -209,44 +205,41 @@ QuantumMapBakeAssembly
 
 C#
 
-```
 ```csharp
 \[assembly: Quantum.QuantumMapBakeAssembly\]
 
 namespace Quantum.Editor
 {
- using System.Collections.Generic;
- using UnityEngine;
+using System.Collections.Generic;
+using UnityEngine;
 
- public class NavmeshBakeCallback : MapDataBakerCallback
- {
- public override void OnBeforeBakeNavMesh(QuantumMapData data)
- {
- // Before any navmesh baking takes place.
- }
-
- public override void OnCollectNavMeshBakeData(QuantumMapData data, List<NavMeshBakeData> navMeshBakeData)
- {
- // Unity navmesh surfaces have been imported and bake data is already filled out.
- Debug.Log($"Found {navMeshBakeData.Count} navmesh bake data");
- }
-
- public override void OnCollectNavMeshes(QuantumMapData data, List<NavMesh> navmeshes)
- {
- // Quantum navmesh have been baked.
- }
-
- public override void OnBakeNavMesh(QuantumMapData data) {
- // Quantum navmeshes have been saved to assets.
- }
-
- // abstract methods have to be implemented but not needed here
- public override void OnBake(QuantumMapData data) { }
- public override void OnBeforeBake(QuantumMapData data) { }
- }
+public class NavmeshBakeCallback : MapDataBakerCallback
+{
+public override void OnBeforeBakeNavMesh(QuantumMapData data)
+{
+// Before any navmesh baking takes place.
 }
 
-```
+public override void OnCollectNavMeshBakeData(QuantumMapData data, List<NavMeshBakeData> navMeshBakeData)
+{
+// Unity navmesh surfaces have been imported and bake data is already filled out.
+Debug.Log($"Found {navMeshBakeData.Count} navmesh bake data");
+}
+
+public override void OnCollectNavMeshes(QuantumMapData data, List<NavMesh> navmeshes)
+{
+// Quantum navmesh have been baked.
+}
+
+public override void OnBakeNavMesh(QuantumMapData data) {
+// Quantum navmeshes have been saved to assets.
+}
+
+// abstract methods have to be implemented but not needed here
+public override void OnBake(QuantumMapData data) { }
+public override void OnBeforeBake(QuantumMapData data) { }
+}
+}
 
 ```
 

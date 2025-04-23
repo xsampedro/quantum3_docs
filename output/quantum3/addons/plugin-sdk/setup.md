@@ -23,7 +23,7 @@ right-click > Properties > Unblock
 
 |     |     |     |
 | --- | --- | --- |
-| ```<br>```<br>MyQuantumProject<br>├─Assets<br>├─Library<br>├─..<br>└─PluginSDK<br> <br>```<br>``` | Or | ```<br>```<br>MyQuantumProject<br>├─Assets<br>├─Library<br>└─..<br>PluginSDK<br> <br>```<br>``` |
+| ```<br>MyQuantumProject<br>├─Assets<br>├─Library<br>├─..<br>└─PluginSDK<br> <br>``` | Or | ```<br>MyQuantumProject<br>├─Assets<br>├─Library<br>└─..<br>PluginSDK<br> <br>``` |
 
 3. _(Running local Photon Server)_ Download and copy a Photon Server license from the [Photon dashboard](https://dashboard.photonengine.com/selfhosted) into the ```
 Photon.Server/deploy\_win/bin
@@ -269,13 +269,10 @@ DeterministicPlugin
 
 C#
 
-```
 ```csharp
 public override DeterministicPlugin CreateDeterministicPlugin(IPluginHost gameHost, String pluginName, Dictionary<String, String> config, IPluginLogger logger, ref String errorMsg) {
- return new DeterministicPlugin();
+return new DeterministicPlugin();
 }
-
-```
 
 ```
 
@@ -309,17 +306,14 @@ class is a simple wrapper around the PluginHost's HTTP calls.
 
 C#
 
-```
 ```csharp
 HttpExample.SendAsync(host, result => {
-if (result) {
-Log.Info("HTTP Asyncronous Response: Success");
-} else {
-Log.Info("HTTP Asyncronous Response: FAILED");
-}
+ if (result) {
+ Log.Info("HTTP Asyncronous Response: Success");
+ } else {
+ Log.Info("HTTP Asyncronous Response: FAILED");
+ }
 });
-
-```
 
 ```
 
@@ -341,17 +335,14 @@ To compile this project all steps from the section _Testing Server Simulation_ h
 
 C#
 
-```
 ```csharp
 public override DeterministicPlugin CreateDeterministicPlugin(IPluginHost gameHost, String pluginName, Dictionary<String, String> config, IPluginLogger logger, ref String errorMsg) {
-var sessionRunner = new DotNetSessionRunner {
-AssetSerializer = new QuantumJsonSerializer()
-};
+ var sessionRunner = new DotNetSessionRunner {
+ AssetSerializer = new QuantumJsonSerializer()
+ };
 
-return new DeterministicPlugin(new DeterministicServer(sessionRunner));
+ return new DeterministicPlugin(new DeterministicServer(sessionRunner));
 }
-
-```
 
 ```
 
@@ -391,33 +382,27 @@ and subscribing to the desired events and callbacks.
 
 C#
 
-```
 ```csharp
 private void SubscribeToEvents(DotNetSessionRunner sessionRunner) {
-var eventDispatcher = (EventDispatcher)sessionRunner.EventDispatcher;
+ var eventDispatcher = (EventDispatcher)sessionRunner.EventDispatcher;
 
-eventDispatcher.Subscribe<EventFoo>(this, OnEventFoo);
+ eventDispatcher.Subscribe<EventFoo>(this, OnEventFoo);
 }
 
 private void OnEventFoo(EventFoo foo) {
-// Do something with the event
+ // Do something with the event
 }
-
-```
 
 ```
 
 C#
 
-```
 ```csharp
 private void SubscribeToCallbacks(DotNetSessionRunner sessionRunner) {
-var callbackDispatcher = (CallbackDispatcher)sessionRunner.CallbackDispatcher;
+ var callbackDispatcher = (CallbackDispatcher)sessionRunner.CallbackDispatcher;
 
-callbackDispatcher.Subscribe<CallbackGameStarted>(this, c => Log.Info("Game Started"));
+ callbackDispatcher.Subscribe<CallbackGameStarted>(this, c => Log.Info("Game Started"));
 }
-
-```
 
 ```
 

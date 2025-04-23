@@ -108,25 +108,22 @@ void PollInput(CallbackPollInput c)
 
 C#
 
-```
 ```csharp
-public void PollInput(CallbackPollInput callback)
-{
-Quantum.Input i = new Quantum.Input();
+ public void PollInput(CallbackPollInput callback)
+ {
+ Quantum.Input i = new Quantum.Input();
 
-var direction = new Vector3();
-direction.x = UnityEngine.Input.GetAxisRaw("Horizontal");
-direction.y = UnityEngine.Input.GetAxisRaw("Vertical");
+ var direction = new Vector3();
+ direction.x = UnityEngine.Input.GetAxisRaw("Horizontal");
+ direction.y = UnityEngine.Input.GetAxisRaw("Vertical");
 
-i.Jump = UnityEngine.Input.GetKeyDown(KeyCode.Space);
+ i.Jump = UnityEngine.Input.GetKeyDown(KeyCode.Space);
 
-// convert to fixed point.
-i.Direction = direction.ToFPVector3();
+ // convert to fixed point.
+ i.Direction = direction.ToFPVector3();
 
-callback.SetInput(i, DeterministicInputFlags.Repeatable);
-}
-
-```
+ callback.SetInput(i, DeterministicInputFlags.Repeatable);
+ }
 
 ```
 
@@ -184,7 +181,6 @@ The Multi-Client Runner's methods can also be controlled via user code.
 
 C#
 
-```
 ```csharp
 public void CreateNewLocalClient()
 {
@@ -202,8 +198,6 @@ var player = FindObjectOfType<QuantumMultiClientPlayer>();
 // stops the local player instance
 player.Stop();
 }
-
-```
 
 ```
 

@@ -143,23 +143,20 @@ To use incremental raycasts for bullets is a good approach to prevent fast bulle
 
 C#
 
-```
 ```csharp
 Physics2D.HitCollection hits = frame.Physics2D.LinecastAll(bulletTransform->Position, futurePosition, -1, QueryOptions.HitAll \| QueryOptions.ComputeDetailedInfo);
 for (int i = 0; i < hits.Count; i++)
 {
-var entity = hits\[i\].Entity;
-...
-if (entity == EntityRef.None)
-{
-bulletTransform->Position = hits\[i\].Point;
-// Applies polymorphic behavior on the bullet action
-data.BulletAction(frame, bullet, EntityRef.None);
-return true;
+ var entity = hits\[i\].Entity;
+ ...
+ if (entity == EntityRef.None)
+ {
+ bulletTransform->Position = hits\[i\].Point;
+ // Applies polymorphic behavior on the bullet action
+ data.BulletAction(frame, bullet, EntityRef.None);
+ return true;
+ }
 }
-}
-
-```
 
 ```
 
@@ -187,7 +184,6 @@ RuntimePlayer
 
 C#
 
-```
 ```csharp
 // Create player data with the selected character.
 RuntimePlayer playerData = new RuntimePlayer();
@@ -198,13 +194,11 @@ var menu =
 FindAnyObjectByType(typeof(Quantum.Menu.QuantumMenuUIController)) as Quantum.Menu.QuantumMenuUIController;
 if (menu != null)
 {
- playerData.PlayerNickname = menu.ConnectArgs.Username;
+playerData.PlayerNickname = menu.ConnectArgs.Username;
 }
 
 // Add the player to the game.
 runner.Game.AddPlayer(playerData);
-
-```
 
 ```
 
@@ -220,14 +214,11 @@ signal to create the player avatar after the add player request was confirmed by
 
 C#
 
-```
 ```csharp
 EntityRef character = frame.Create(prototypeAsset);
 PlayerLink\* playerLink = frame.Unsafe.GetPointer<PlayerLink>(character);
 playerLink->PlayerRef = player;
 RespawnHelper.RespawnRobot(frame, character);
-
-```
 
 ```
 

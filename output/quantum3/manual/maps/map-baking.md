@@ -130,25 +130,22 @@ MapDataBakerCallback
 
 C#
 
-```
 ```csharp
 \[assembly: Quantum.QuantumMapBakeAssemblyAttribute\]
 
 namespace Quantum
 {
- public class ExampleMapDataBaker : MapDataBakerCallback
- {
- public override void OnBeforeBake(QuantumMapData data)
- {
- }
-
- public override void OnBake(QuantumMapData data)
- {
- }
- }
+public class ExampleMapDataBaker : MapDataBakerCallback
+{
+public override void OnBeforeBake(QuantumMapData data)
+{
 }
 
-```
+public override void OnBake(QuantumMapData data)
+{
+}
+}
+}
 
 ```
 
@@ -166,12 +163,9 @@ Here's an example:
 
 C#
 
-```
 ```csharp
 \[MapDataBakerCallback(invokeOrder:5)\]
 public class ExampleMapDataBaker : MapDataBakerCallback
-
-```
 
 ```
 
@@ -229,11 +223,8 @@ In a DSL file add an asset declaration:
 
 C#
 
-```
 ```csharp
 asset MapCustomData;
-
-```
 
 ```
 
@@ -245,37 +236,34 @@ Quantum
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
- using System;
- using Photon.Deterministic;
+using System;
+using Photon.Deterministic;
 
- public unsafe partial class MapCustomData
- {
- \[Serializable\]
- public struct SpawnPointData
- {
- public FPVector3 Position;
+public unsafe partial class MapCustomData
+{
+\[Serializable\]
+public struct SpawnPointData
+{
+public FPVector3 Position;
 
- public FPQuaternion Rotation;
- }
-
- public SpawnPointData DefaultSpawnPoint;
- public SpawnPointData\[\] SpawnPoints;
-
- public void SetEntityToSpawnPoint(Frame frame, EntityRef entity, Int32? index)
- {
- var transform = frame.Unsafe.GetPointer<Transform3D>(entity);
- var spawnPoint = index.HasValue && index.Value < SpawnPoints.Length ? SpawnPoints\[index.Value\] : DefaultSpawnPoint;
- transform->Position = spawnPoint.Position;
- transform->Rotation = spawnPoint.Rotation;
- }
- }
+public FPQuaternion Rotation;
 }
 
-```
+public SpawnPointData DefaultSpawnPoint;
+public SpawnPointData\[\] SpawnPoints;
+
+public void SetEntityToSpawnPoint(Frame frame, EntityRef entity, Int32? index)
+{
+var transform = frame.Unsafe.GetPointer<Transform3D>(entity);
+var spawnPoint = index.HasValue && index.Value < SpawnPoints.Length ? SpawnPoints\[index.Value\] : DefaultSpawnPoint;
+transform->Position = spawnPoint.Position;
+transform->Rotation = spawnPoint.Rotation;
+}
+}
+}
 
 ```
 
@@ -283,51 +271,48 @@ Then, create a new class that will handle the baking of spawn points:
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
- using UnityEditor;
- using UnityEngine;
+using UnityEditor;
+using UnityEngine;
 
- public class SpawnPointBaker : MapDataBakerCallback
- {
- public override void OnBeforeBake(QuantumMapData data)
- {
- }
-
- public override void OnBake(QuantumMapData data)
- {
- var customData = QuantumUnityDB.GetGlobalAssetEditorInstance<Map>(data.Asset.UserAsset.Id);
- var spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
-
- if (customData == null \|\| spawnPoints.Length == 0)
- {
- return;
- }
-
- var defaultSpawnPoint = spawnPoints\[0\];
- if (customData.DefaultSpawnPoint.Equals(default(MapCustomData.SpawnPointData)))
- {
- customData.DefaultSpawnPoint.Position = defaultSpawnPoint.transform.position.ToFPVector3();
- customData.DefaultSpawnPoint.Rotation = defaultSpawnPoint.transform.rotation.ToFPQuaternion();
- }
-
- customData.SpawnPoints = new MapCustomData.SpawnPointData\[spawnPoints.Length\];
- for (var i = 0; i < spawnPoints.Length; i++)
- {
- customData.SpawnPoints\[i\].Position = spawnPoints\[i\].transform.position.ToFPVector3();
- customData.SpawnPoints\[i\].Rotation = spawnPoints\[i\].transform.rotation.ToFPQuaternion();
- }
-
-#if UNITY\_EDITOR
- EditorUtility.SetDirty(customData);
-#endif
- }
- }
+public class SpawnPointBaker : MapDataBakerCallback
+{
+public override void OnBeforeBake(QuantumMapData data)
+{
 }
 
-```
+public override void OnBake(QuantumMapData data)
+{
+var customData = QuantumUnityDB.GetGlobalAssetEditorInstance<Map>(data.Asset.UserAsset.Id);
+var spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
+
+if (customData == null \|\| spawnPoints.Length == 0)
+{
+return;
+}
+
+var defaultSpawnPoint = spawnPoints\[0\];
+if (customData.DefaultSpawnPoint.Equals(default(MapCustomData.SpawnPointData)))
+{
+customData.DefaultSpawnPoint.Position = defaultSpawnPoint.transform.position.ToFPVector3();
+customData.DefaultSpawnPoint.Rotation = defaultSpawnPoint.transform.rotation.ToFPQuaternion();
+}
+
+customData.SpawnPoints = new MapCustomData.SpawnPointData\[spawnPoints.Length\];
+for (var i = 0; i < spawnPoints.Length; i++)
+{
+customData.SpawnPoints\[i\].Position = spawnPoints\[i\].transform.position.ToFPVector3();
+customData.SpawnPoints\[i\].Rotation = spawnPoints\[i\].transform.rotation.ToFPQuaternion();
+}
+
+#if UNITY\_EDITOR
+EditorUtility.SetDirty(customData);
+#endif
+}
+}
+}
 
 ```
 
@@ -349,12 +334,9 @@ field of the map. To make use of the spawn points in the simulation, employ the 
 
 C#
 
-```
 ```csharp
 var data = frame.FindAsset<MapCustomData>(frame.Map.UserAsset);
 data.SetEntityToSpawnPoint(f, entity, spawnPointIndex);
-
-```
 
 ```
 
@@ -383,7 +365,6 @@ QuantumUnityDB
 
 C#
 
-```
 ```csharp
 var generatedMap = new Map();
 
@@ -392,8 +373,6 @@ var generatedMap = new Map();
 // add the map to the QuantumUnityDB
 
 QuantumUnityDB.Global.AddAsset(generatedMap);
-
-```
 
 ```
 

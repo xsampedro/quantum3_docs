@@ -43,17 +43,14 @@ All
 
 C#
 
-```
 ```cs
- \[Flags\]
- public enum RecordingFlags {
- None = 0, // records nothing, default setting
- Input = 1 << 0, // records input
- Checksums = 1 << 1, // records checksums (must be enabled)
- All = Input \| Checksums // recorded input and checksum
- }
-
-```
+\[Flags\]
+public enum RecordingFlags {
+None = 0, // records nothing, default setting
+Input = 1 << 0, // records input
+Checksums = 1 << 1, // records checksums (must be enabled)
+All = Input \| Checksums // recorded input and checksum
+}
 
 ```
 
@@ -123,12 +120,9 @@ Alternatively, create and save the replay file manually in code:
 
 C#
 
-```
 ```cs
 var replay = quantumGame.GetRecordedReplay(includeChecksums: true, includeDb: false))
 File.WriteAllText("replay.json", JsonUtility.ToJson(replay));
-
-```
 
 ```
 
@@ -136,13 +130,10 @@ Alternatively export the asset db in code:
 
 C#
 
-```
 ```cs
 using (var file = File.Create("db.json")) {
- quantumGame.AssetSerializer.SerializeAssets(file, quantumGame.ResourceManager.LoadAllAssets().ToArray());
+quantumGame.AssetSerializer.SerializeAssets(file, quantumGame.ResourceManager.LoadAllAssets().ToArray());
 }
-
-```
 
 ```
 
@@ -207,11 +198,8 @@ Step 1: Deserialize the replay file.
 
 C#
 
-```
 ```cs
 var replayFile = JsonUtility.FromJson<QuantumReplayFile>(ReplayFile.text);
-
-```
 
 ```
 
@@ -219,11 +207,8 @@ Step 2: Create an input provider from the replay file. It will automatically cre
 
 C#
 
-```
 ```cs
 \_replayInputProvider = replayFile.CreateInputProvider();
-
-```
 
 ```
 
@@ -251,26 +236,23 @@ FrameData
 
 C#
 
-```
 ```cs
 var serializer = new QuantumUnityJsonSerializer();
 var runtimeConfig = serializer.ConfigFromByteArray<RuntimeConfig>(replayFile.RuntimeConfigData.Decode(), compressed: true);
 
 var arguments = new SessionRunner.Arguments {
- RunnerFactory = QuantumRunnerUnityFactory.DefaultFactory,
- RuntimeConfig = runtimeConfig,
- SessionConfig = replayFile.DeterministicConfig,
- ReplayProvider = \_replayInputProvider,
- GameMode = DeterministicGameMode.Replay,
- RunnerId = "LOCALREPLAY",
- PlayerCount = replayFile.DeterministicConfig.PlayerCount,
- InstantReplaySettings = InstantReplayConfig,
- InitialTick = replayFile.InitialTick,
- FrameData = replayFile.InitialFrameData,
- DeltaTimeType = DeltaTypeType
+RunnerFactory = QuantumRunnerUnityFactory.DefaultFactory,
+RuntimeConfig = runtimeConfig,
+SessionConfig = replayFile.DeterministicConfig,
+ReplayProvider = \_replayInputProvider,
+GameMode = DeterministicGameMode.Replay,
+RunnerId = "LOCALREPLAY",
+PlayerCount = replayFile.DeterministicConfig.PlayerCount,
+InstantReplaySettings = InstantReplayConfig,
+InitialTick = replayFile.InitialTick,
+FrameData = replayFile.InitialFrameData,
+DeltaTimeType = DeltaTypeType
 };
-
-```
 
 ```
 
@@ -282,22 +264,19 @@ at all.
 
 C#
 
-```
 ```cs
 var assets = replayFile.AssetDatabaseData?.Decode();
 if (DatabaseFile != null) {
-assets = DatabaseFile.bytes;
+ assets = DatabaseFile.bytes;
 }
 
 var serializer = new QuantumUnityJsonSerializer();
 
 if (assets?.Length > 0) {
-\_resourceAllocator = new QuantumUnityNativeAllocator();
-\_resourceManager = new ResourceManagerStatic(serializer.AssetsFromByteArray(assets), new QuantumUnityNativeAllocator());
-arguments.ResourceManager = \_resourceManager;
+ \_resourceAllocator = new QuantumUnityNativeAllocator();
+ \_resourceManager = new ResourceManagerStatic(serializer.AssetsFromByteArray(assets), new QuantumUnityNativeAllocator());
+ arguments.ResourceManager = \_resourceManager;
 }
-
-```
 
 ```
 
@@ -305,11 +284,8 @@ Step 5: Finally, start the game.
 
 C#
 
-```
 ```cs
 \_runner = QuantumRunner.StartGame(arguments);
-
-```
 
 ```
 
@@ -317,11 +293,8 @@ Optionally start verifying a list of checksums and log out checksum mismatches.
 
 C#
 
-```
 ```cs
 \_runner.Game.StartVerifyingChecksums(replayFile.Checksums);
-
-```
 
 ```
 
@@ -346,13 +319,12 @@ Assets/../Quantum.Dotnet/Quantum.Dotnet.sln
 Start the runner from the command line accordingly.
 
 ```
-```
 Quantum.Dotnet\\Quantum.Runner.Dotnet\\bin\\Debug> .\\Quantum.Runner.exe --help
 Description:
- Main method to start a Quantum runner.
+Main method to start a Quantum runner.
 
 Usage:
- Quantum.Runner \[options\]
+Quantum.Runner \[options\]
 
 Options:
  --replay-path <replay-path> Path to the Quantum replay json file.
@@ -364,17 +336,12 @@ Options:
 
 ```
 
-```
-
 For example:
 
-```
 ```
 Quantum.Dotnet\\Quantum.Runner.Dotnet\\bin\\Debug>.\\Quantum.Runner.exe
  --replay-path ..\\..\\..\\..\\Assets\\QuantumUser\\Replays\\MapTestNavMeshAgents-2024-06-17-14-19-46.json
  --lut-path ..\\..\\..\\..\\Assets\\Photon\\Quantum\\Resources\\LUT
-
-```
 
 ```
 
@@ -398,24 +365,21 @@ To support replays it is better to always wrap the PlayerIsLocal-check into chec
 
 C#
 
-```
 ```csharp
 public class CustomViewContext : MonoBehaviour, IQuantumViewContext
 {
- private PlayerRef \_focusedPlayer;
+private PlayerRef \_focusedPlayer;
 
- public bool IsFocusedPlayer(QuantumGame game, PlayerRef player)
- {
- if (game.Session.GameMode == DeterministicGameMode.Replay)
- {
- return player == \_focusedPlayer;
- }
-
- return game.PlayerIsLocal(player);
- }
+public bool IsFocusedPlayer(QuantumGame game, PlayerRef player)
+{
+if (game.Session.GameMode == DeterministicGameMode.Replay)
+{
+return player == \_focusedPlayer;
 }
 
-```
+return game.PlayerIsLocal(player);
+}
+}
 
 ```
 
@@ -459,50 +423,44 @@ QuantumJsonFriendlyDataBlob
 
 C#
 
-```
 ```cs
 public class QuantumReplayFile {
- // Delta compressed binary input history, this is the same that is send over replay webhooks for example.
- public QuantumJsonFriendlyDataBlob InputHistoryDeltaCompressed;
- // Full verbose input used in Quantum 2.1, which is still functional, but has only fringe use cases.
- public DeterministicTickInputSet\[\] InputHistoryLegacy;
- // Binary serialized RuntimeConfig.
- // Use AssetSerializer.ConfigToByteArray(runtimeConfig, compress: true)
- /// </summary>
- public QuantumJsonFriendlyDataBlob RuntimeConfigData;
- /// The session config.
- public DeterministicSessionConfig DeterministicConfig;
- /// The last tick of the input.
- public int LastTick;
- /// The initial tick to start from, requires <see cref="InitialFrameData"/> to be set.
- public int InitialTick;
- /// Optional frame data to start the replay with. This is used for save games for example.
- public byte\[\] InitialFrameData;
- /// Optional checksums. Omit this for replays in production environments.
- public ChecksumFile Checksums;
- /// Optional serialized asset database. Omit this for replays in production environments.
- /// Use AssetSerializer.SerializeAssets(stream, ResourceManager.LoadAllAssets().ToArray()
- public QuantumJsonFriendlyDataBlob AssetDatabaseData;
+// Delta compressed binary input history, this is the same that is send over replay webhooks for example.
+public QuantumJsonFriendlyDataBlob InputHistoryDeltaCompressed;
+// Full verbose input used in Quantum 2.1, which is still functional, but has only fringe use cases.
+public DeterministicTickInputSet\[\] InputHistoryLegacy;
+// Binary serialized RuntimeConfig.
+// Use AssetSerializer.ConfigToByteArray(runtimeConfig, compress: true)
+/// </summary>
+public QuantumJsonFriendlyDataBlob RuntimeConfigData;
+/// The session config.
+public DeterministicSessionConfig DeterministicConfig;
+/// The last tick of the input.
+public int LastTick;
+/// The initial tick to start from, requires <see cref="InitialFrameData"/> to be set.
+public int InitialTick;
+/// Optional frame data to start the replay with. This is used for save games for example.
+public byte\[\] InitialFrameData;
+/// Optional checksums. Omit this for replays in production environments.
+public ChecksumFile Checksums;
+/// Optional serialized asset database. Omit this for replays in production environments.
+/// Use AssetSerializer.SerializeAssets(stream, ResourceManager.LoadAllAssets().ToArray()
+public QuantumJsonFriendlyDataBlob AssetDatabaseData;
 }
-
-```
 
 ```
 
 C#
 
-```
 ```cs
 public class QuantumJsonFriendlyDataBlob {
- /// The byte array is saved as is.
- public byte\[\] Binary;
- /// The byte array is saved as Base64 text.
- public string Base64;
- /// Both Binary and Base64 can be GZip compressed.
- public bool IsCompressed;
+/// The byte array is saved as is.
+public byte\[\] Binary;
+/// The byte array is saved as Base64 text.
+public string Base64;
+/// Both Binary and Base64 can be GZip compressed.
+public bool IsCompressed;
 }
-
-```
 
 ```
 

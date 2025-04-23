@@ -196,11 +196,8 @@ to be set on the Photon dashboard.
 
 JavaScript
 
-```
 ```javascript
 POST https://{WebHookBaseUrl}/game/create
-
-```
 
 ```
 
@@ -222,28 +219,25 @@ Json Example:
 
 JSON
 
-```
 ```json
 {
- "AppId": "d1f67eec-51fb-45c1",
- "AppVersion": "1.0-live",
- "Region": "eu",
- "Cloud": "1",
- "UserId": "db757806-8570-45aa",
- "AuthCookie": {
- "Secret": "\*\*\*\*\*\*\*\*\*\*"
- }
- "RoomName": "e472a861-a1e2-49f7",
- "GameId": "0:eu:e472a861-a1e2-49f7",
- "EnterRoomParams": {
- "RoomOptions": {
- "IsVisible": true,
- "IsOpen": true
- }
- }
+"AppId": "d1f67eec-51fb-45c1",
+"AppVersion": "1.0-live",
+"Region": "eu",
+"Cloud": "1",
+"UserId": "db757806-8570-45aa",
+"AuthCookie": {
+"Secret": "\*\*\*\*\*\*\*\*\*\*"
 }
-
-```
+"RoomName": "e472a861-a1e2-49f7",
+"GameId": "0:eu:e472a861-a1e2-49f7",
+"EnterRoomParams": {
+"RoomOptions": {
+"IsVisible": true,
+"IsOpen": true
+}
+}
+}
 
 ```
 
@@ -277,37 +271,34 @@ Json Example:
 
 JSON
 
-```
 ```json
 {
- "AppId": "d1f67eec-51fb-45c1",
- "GameId": "0:eu:db757806-8570-45aa",
- "EnterRoomParams": {
- "RoomOptions": {
- "IsVisible": true,
- "IsOpen": true
- }
- },
- "SessionConfig": {
- "PlayerCount": 8,
- "ChecksumCrossPlatformDeterminism": false,
- "UpdateFPS": 30
- },
- "RuntimeConfig": {
- "Map": {
- "Id": {
- "Value": 94358348534
- }
- }
- },
- "RuntimePlayer": {
- "Name": "player1"
- },
- "MaxPlayerSlots": 2,
- "SnapshotsBlocked": true
+"AppId": "d1f67eec-51fb-45c1",
+"GameId": "0:eu:db757806-8570-45aa",
+"EnterRoomParams": {
+"RoomOptions": {
+"IsVisible": true,
+"IsOpen": true
 }
-
-```
+},
+"SessionConfig": {
+"PlayerCount": 8,
+"ChecksumCrossPlatformDeterminism": false,
+"UpdateFPS": 30
+},
+"RuntimeConfig": {
+"Map": {
+"Id": {
+"Value": 94358348534
+}
+}
+},
+"RuntimePlayer": {
+"Name": "player1"
+},
+"MaxPlayerSlots": 2,
+"SnapshotsBlocked": true
+}
 
 ```
 
@@ -339,11 +330,8 @@ to be set on the Photon AppId Dashboard.
 
 JavaScript
 
-```
 ```javascript
 POST https://{WebHookBaseUrl}/game/join
-
-```
 
 ```
 
@@ -360,18 +348,15 @@ Json Example:
 
 JSON
 
-```
 ```json
 {
-"AppId": "\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*",
-"GameId": "0:eu:db757806-8570-45aa",
-"UserId": "db757806-8570-45aa",
-"AuthCookie": {
-"Secret": "\*\*\*\*\*\*\*\*\*\*"
+ "AppId": "\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*",
+ "GameId": "0:eu:db757806-8570-45aa",
+ "UserId": "db757806-8570-45aa",
+ "AuthCookie": {
+ "Secret": "\*\*\*\*\*\*\*\*\*\*"
+ }
 }
-}
-
-```
 
 ```
 
@@ -393,16 +378,13 @@ Json Example:
 
 JSON
 
-```
 ```json
 {
-"RuntimePlayer": {
-"Name": "player1"
-},
-"MaxPlayerSlots": 1
+ "RuntimePlayer": {
+ "Name": "player1"
+ },
+ "MaxPlayerSlots": 1
 }
-
-```
 
 ```
 
@@ -448,11 +430,8 @@ to be set on the Photon AppId Dashboard.
 
 JavaScript
 
-```
 ```javascript
 POST https://{WebHookBaseUrl}/game/leave
-
-```
 
 ```
 
@@ -471,20 +450,17 @@ Json Example:
 
 JSON
 
-```
 ```json
 {
- "AppId": "\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*",
- "GameId": "0:eu:db757806-8570-45aa",
- "UserId": "db757806-8570-45aa",
- "ActorNr": 1,
- "AuthCookie": {
- "Secret": "\*\*\*\*\*\*\*\*\*\*"
- },
- "IsInactive": false
+"AppId": "\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*\*",
+"GameId": "0:eu:db757806-8570-45aa",
+"UserId": "db757806-8570-45aa",
+"ActorNr": 1,
+"AuthCookie": {
+"Secret": "\*\*\*\*\*\*\*\*\*\*"
+},
+"IsInactive": false
 }
-
-```
 
 ```
 
@@ -501,13 +477,10 @@ Json Example:
 
 JSON
 
-```
 ```json
 {
- // empty
+// empty
 }
-
-```
 
 ```
 
@@ -531,11 +504,8 @@ to be set on the Photon dashboard.
 
 JavaScript
 
-```
 ```javascript
 POST https://{WebHookBaseUrl}/game/close
-
-```
 
 ```
 
@@ -551,14 +521,11 @@ Json Example:
 
 JSON
 
-```
 ```json
 {
-"GameId": "0:eu:db757806-8570-45aa",
-"CloseReason": 0
+ "GameId": "0:eu:db757806-8570-45aa",
+ "CloseReason": 0
 }
-
-```
 
 ```
 
@@ -609,11 +576,8 @@ to be set on the Photon dashboard.
 
 JavaScript
 
-```
 ```javascript
 POST https://{WebHookBaseUrl}/game/configs
-
-```
 
 ```
 
@@ -633,32 +597,29 @@ Json Example:
 
 JSON
 
-```
 ```json
 {
-"AppId": "d1f67eec-51fb-45c1",
-"GameId": "0:eu:db757806-8570-45aa",
-"UserId": "db757806-8570-45aa",
-"ActorNr": 1,
-"RuntimeConfig": {
-"Map": {
-"Id": {
-"Value": 94358348534
+ "AppId": "d1f67eec-51fb-45c1",
+ "GameId": "0:eu:db757806-8570-45aa",
+ "UserId": "db757806-8570-45aa",
+ "ActorNr": 1,
+ "RuntimeConfig": {
+ "Map": {
+ "Id": {
+ "Value": 94358348534
+ }
+ }
+ },
+ "SessionConfig": {
+ "PlayerCount": 8,
+ "ChecksumCrossPlatformDeterminism": false,
+ "LockstepSimulation": false,
+ //..
+ },
+ "AuthCookie": {
+ "Secret": "\*\*\*\*\*\*\*\*\*\*"
+ }
 }
-}
-},
-"SessionConfig": {
-"PlayerCount": 8,
-"ChecksumCrossPlatformDeterminism": false,
-"LockstepSimulation": false,
-//..
-},
-"AuthCookie": {
-"Secret": "\*\*\*\*\*\*\*\*\*\*"
-}
-}
-
-```
 
 ```
 
@@ -686,25 +647,22 @@ Json Example:
 
 JSON
 
-```
 ```json
 {
- "RuntimeConfig": {
- "Map": {
- "Id": {
- "Value": 94358348534
- }
- }
- },
- "SessionConfig": {
- "PlayerCount": 8,
- "ChecksumCrossPlatformDeterminism": false,
- "LockstepSimulation": false,
- //..
- }
+"RuntimeConfig": {
+"Map": {
+"Id": {
+"Value": 94358348534
 }
-
-```
+}
+},
+"SessionConfig": {
+"PlayerCount": 8,
+"ChecksumCrossPlatformDeterminism": false,
+"LockstepSimulation": false,
+//..
+}
+}
 
 ```
 
@@ -738,11 +696,8 @@ to be set on the Photon dashboard.
 
 JavaScript
 
-```
 ```javascript
 POST https://{WebHookBaseUrl}/player/add
-
-```
 
 ```
 
@@ -762,23 +717,20 @@ Json Example:
 
 JSON
 
-```
 ```json
 {
-"AppId": "d1f67eec-51fb-45c1",
-"GameId": "0:eu:db757806-8570-45aa",
-"UserId": "db757806-8570-45aa",
-"ActorNr": 1,
-"PlayerSlot": 0,
-"RuntimePlayer": {
-"Name": "player1"
-},
-"AuthCookie": {
-"Secret": "\*\*\*\*\*\*\*\*\*\*"
+ "AppId": "d1f67eec-51fb-45c1",
+ "GameId": "0:eu:db757806-8570-45aa",
+ "UserId": "db757806-8570-45aa",
+ "ActorNr": 1,
+ "PlayerSlot": 0,
+ "RuntimePlayer": {
+ "Name": "player1"
+ },
+ "AuthCookie": {
+ "Secret": "\*\*\*\*\*\*\*\*\*\*"
+ }
 }
-}
-
-```
 
 ```
 
@@ -799,15 +751,12 @@ Json Example:
 
 JSON
 
-```
 ```json
 {
-"RuntimePlayer": {
-"Name": "player1"
+ "RuntimePlayer": {
+ "Name": "player1"
+ }
 }
-}
-
-```
 
 ```
 
@@ -831,11 +780,8 @@ to be set on the Photon dashboard.
 
 JavaScript
 
-```
 ```javascript
 POST https://{WebHookBaseUrl}/player/added
-
-```
 
 ```
 
@@ -855,21 +801,18 @@ Json Example:
 
 JSON
 
-```
 ```json
 {
- "AppId": "d1f67eec-51fb-45c1",
- "GameId": "0:eu:db757806-8570-45aa",
- "UserId": "db757806-8570-45aa",
- "ActorNr": 1,
- "PlayerSlot": 0,
- "Player": 21,
- "AuthCookie": {
- "Secret": "\*\*\*\*\*\*\*\*\*\*"
- }
+"AppId": "d1f67eec-51fb-45c1",
+"GameId": "0:eu:db757806-8570-45aa",
+"UserId": "db757806-8570-45aa",
+"ActorNr": 1,
+"PlayerSlot": 0,
+"Player": 21,
+"AuthCookie": {
+"Secret": "\*\*\*\*\*\*\*\*\*\*"
 }
-
-```
+}
 
 ```
 
@@ -899,11 +842,8 @@ to be set on the Photon dashboard.
 
 JavaScript
 
-```
 ```javascript
 POST https://{WebHookBaseUrl}/player/removed
-
-```
 
 ```
 
@@ -924,22 +864,19 @@ Json Example:
 
 JSON
 
-```
 ```json
 {
-"AppId": "d1f67eec-51fb-45c1",
-"GameId": "0:eu:db757806-8570-45aa",
-"UserId": "db757806-8570-45aa",
-"ActorNr": 1,
-"PlayerSlot": 0,
-"Player": 21,
-"Reason": 0,
-"AuthCookie": {
-"Secret": "\*\*\*\*\*\*\*\*\*\*"
+ "AppId": "d1f67eec-51fb-45c1",
+ "GameId": "0:eu:db757806-8570-45aa",
+ "UserId": "db757806-8570-45aa",
+ "ActorNr": 1,
+ "PlayerSlot": 0,
+ "Player": 21,
+ "Reason": 0,
+ "AuthCookie": {
+ "Secret": "\*\*\*\*\*\*\*\*\*\*"
+ }
 }
-}
-
-```
 
 ```
 
@@ -977,11 +914,8 @@ If the server is running the simulation the webhooks are executed immediately fr
 
 JavaScript
 
-```
 ```javascript
 POST https://{WebHookBaseUrl}/game/result
-
-```
 
 ```
 
@@ -997,34 +931,31 @@ Json Example:
 
 JSON
 
-```
 ```json
 {
-"AppId": "d1f67eec-51fb-45c1",
-"GameId": "0:eu:db757806-8570-45aa",
-"Results": \[
-{
-"Clients": \[
-{
-"UserId": "FJEH43FL56FSDR",
-"Players": \[
-0
-\],
-"GameTime": 63.3636703
+ "AppId": "d1f67eec-51fb-45c1",
+ "GameId": "0:eu:db757806-8570-45aa",
+ "Results": \[
+ {
+ "Clients": \[
+ {
+ "UserId": "FJEH43FL56FSDR",
+ "Players": \[
+ 0
+ \],
+ "GameTime": 63.3636703
+ }
+ \],
+ "Result": {
+ "$type": "Quantum.GameResult, Quantum.Simulation",
+ "Frame": 12010
+ "Winner": 2
+ },
+ "IsServerResult": false
+ }
+ \],
+ "UserId": "0"
 }
-\],
-"Result": {
-"$type": "Quantum.GameResult, Quantum.Simulation",
-"Frame": 12010
-"Winner": 2
-},
-"IsServerResult": false
-}
-\],
-"UserId": "0"
-}
-
-```
 
 ```
 
@@ -1078,11 +1009,8 @@ to be set on the Photon dashboard.
 
 JavaScript
 
-```
 ```javascript
 POST https://{WebHookBaseUrl}/replay/start
-
-```
 
 ```
 
@@ -1103,24 +1031,21 @@ Json Example:
 
 JSON
 
-```
 ```json
 {
-"AppId": "d1f67eec-51fb-45c1",
-"AppVersion": "1.0-live",
-"Region": "eu",
-"Cloud": "0:",
-"RoomName": "1.2-party-2349535735",
-"GameId": "0:eu:e472a861-a1e2-49f7",
-"SessionConfig": { },
-"RuntimeConfig": "H4sIAAAAAAAACnWNPQvCMBCG/4ocjkWuye
-X6sXZycNCCe8AogSYtNBlK6X/3UHQR4Zb35X2eW2GflslBC+ds
-Y8rhcMkx+eC6Md79o9h96t6HPNjkxwgF9M7doMUCTnaCdoWjpB
-WudshiUkxYsVHacE11KWe2TZiv4K3+4YjQkECKNJcVMuoXtszJ
-hfkPI1tUVc1sqFGN1g3Kr+0J+3ktedUAAAA="
+ "AppId": "d1f67eec-51fb-45c1",
+ "AppVersion": "1.0-live",
+ "Region": "eu",
+ "Cloud": "0:",
+ "RoomName": "1.2-party-2349535735",
+ "GameId": "0:eu:e472a861-a1e2-49f7",
+ "SessionConfig": { },
+ "RuntimeConfig": "H4sIAAAAAAAACnWNPQvCMBCG/4ocjkWuye
+ X6sXZycNCCe8AogSYtNBlK6X/3UHQR4Zb35X2eW2GflslBC+ds
+ Y8rhcMkx+eC6Md79o9h96t6HPNjkxwgF9M7doMUCTnaCdoWjpB
+ WudshiUkxYsVHacE11KWe2TZiv4K3+4YjQkECKNJcVMuoXtszJ
+ hfkPI1tUVc1sqFGN1g3Kr+0J+3ktedUAAAA="
 }
-
-```
 
 ```
 
@@ -1141,13 +1066,10 @@ Json Example:
 
 JSON
 
-```
 ```json
 {
-"Skip": true
+ "Skip": true
 }
-
-```
 
 ```
 
@@ -1171,11 +1093,8 @@ to be set on the Photon dashboard.
 
 JavaScript
 
-```
 ```javascript
 POST https://{WebHookBaseUrl}/replay/chunk
-
-```
 
 ```
 
@@ -1219,21 +1138,18 @@ Json Example:
 
 JSON
 
-```
 ```json
 {
-"AppId": "d1f67eec-51fb-45c1",
-"GameId": ":eu:e472a861-a1e2-49f7",
-"ChunkNumber": 0,
-"IsLast": false,
-"LastTick": 302,
-"TickCount": 243,
-"TickCountTotal": 243,
-"IsCompressed": false,
-"Input": "JQAAADwAAAAIAAMKFsCUwYDggOB/UCAAAPgfDMhgEoAHA////4PRBwATAAAAPQAAAAgAA2PaSK"
+ "AppId": "d1f67eec-51fb-45c1",
+ "GameId": ":eu:e472a861-a1e2-49f7",
+ "ChunkNumber": 0,
+ "IsLast": false,
+ "LastTick": 302,
+ "TickCount": 243,
+ "TickCountTotal": 243,
+ "IsCompressed": false,
+ "Input": "JQAAADwAAAAIAAMKFsCUwYDggOB/UCAAAPgfDMhgEoAHA////4PRBwATAAAAPQAAAAgAA2PaSK"
 }
-
-```
 
 ```
 
@@ -1255,15 +1171,12 @@ Json example:
 
 JSON
 
-```
 ```json
 {
-"Status": 400,
-"Error": "PlayerNotAllowed",
-"Message": "LoremIpsum"
+ "Status": 400,
+ "Error": "PlayerNotAllowed",
+ "Message": "LoremIpsum"
 }
-
-```
 
 ```
 
@@ -1317,15 +1230,12 @@ property is required for deserialization on the standalone or custom plugin.
 
 C#
 
-```
 ```csharp
 namespace Quantum {
-public partial class RuntimeConfig {
-public int GameMode;
+ public partial class RuntimeConfig {
+ public int GameMode;
+ }
 }
-}
-
-```
 
 ```
 
@@ -1333,30 +1243,27 @@ Json Example:
 
 JSON
 
-```
 ```json
 {
-"$type": "Quantum.RuntimeConfig, Quantum.Simulation",
-"GameMode": 1,
-"Seed": 0,
-"Map": {
-"Id": {
-"Value":2640765235684814815
+ "$type": "Quantum.RuntimeConfig, Quantum.Simulation",
+ "GameMode": 1,
+ "Seed": 0,
+ "Map": {
+ "Id": {
+ "Value":2640765235684814815
+ }
+ },
+ "SimulationConfig": {
+ "Id": {
+ "Value":440543562436170603
+ }
+ },
+ "SystemsConfig": {
+ "Id": {
+ "Value":2430278665492933905
+ }
+ }
 }
-},
-"SimulationConfig": {
-"Id": {
-"Value":440543562436170603
-}
-},
-"SystemsConfig": {
-"Id": {
-"Value":2430278665492933905
-}
-}
-}
-
-```
 
 ```
 
@@ -1364,15 +1271,12 @@ JSON
 
 C#
 
-```
 ```csharp
 namespace Quantum {
-public partial class RuntimePlayer {
-public AssetRef<GearConfig> Loadout;
+ public partial class RuntimePlayer {
+ public AssetRef<GearConfig> Loadout;
+ }
 }
-}
-
-```
 
 ```
 
@@ -1380,24 +1284,21 @@ Json Example:
 
 JSON
 
-```
 ```json
 {
-"$type":"Quantum.RuntimePlayer, Quantum.Simulation",
-"Loadout": {
-"Id": {
-"Value": 440543562436170603
+ "$type":"Quantum.RuntimePlayer, Quantum.Simulation",
+ "Loadout": {
+ "Id": {
+ "Value": 440543562436170603
+ }
+ },
+ "PlayerAvatar": {
+ "Id": {
+ "Value": 2430278665492933905
+ }
+ },
+ "PlayerNickname": "foo"
 }
-},
-"PlayerAvatar": {
-"Id": {
-"Value": 2430278665492933905
-}
-},
-"PlayerNickname": "foo"
-}
-
-```
 
 ```
 
@@ -1426,10 +1327,7 @@ SessionConfig
  asset can be exported in Unity using this menu entry:
 
 ```
-```
 Unity Editor > Quantum > Export > SessionConfig (Json)
-
-```
 
 ```
 
@@ -1459,34 +1357,31 @@ Json Example:
 
 JSON
 
-```
 ```json
 {
-"PlayerCount": 8,
-"ChecksumCrossPlatformDeterminism": false,
-"LockstepSimulation": false,
-"InputDeltaCompression": true,
-"UpdateFPS": 60,
-"ChecksumInterval": 60,
-"RollbackWindow": 60,
-"InputHardTolerance": 8,
-"InputRedundancy": 3,
-"InputRepeatMaxDistance": 10,
-"SessionStartTimeout": 1,
-"TimeCorrectionRate": 4,
-"MinTimeCorrectionFrames": 1,
-"MinOffsetCorrectionDiff": 1,
-"TimeScaleMin": 100,
-"TimeScalePingMin": 100,
-"TimeScalePingMax": 300,
-"InputDelayMin": 0,
-"InputDelayMax": 60,
-"InputDelayPingStart": 100,
-"InputFixedSizeEnabled": true,
-"InputFixedSize": 24
+ "PlayerCount": 8,
+ "ChecksumCrossPlatformDeterminism": false,
+ "LockstepSimulation": false,
+ "InputDeltaCompression": true,
+ "UpdateFPS": 60,
+ "ChecksumInterval": 60,
+ "RollbackWindow": 60,
+ "InputHardTolerance": 8,
+ "InputRedundancy": 3,
+ "InputRepeatMaxDistance": 10,
+ "SessionStartTimeout": 1,
+ "TimeCorrectionRate": 4,
+ "MinTimeCorrectionFrames": 1,
+ "MinOffsetCorrectionDiff": 1,
+ "TimeScaleMin": 100,
+ "TimeScalePingMin": 100,
+ "TimeScalePingMax": 300,
+ "InputDelayMin": 0,
+ "InputDelayMax": 60,
+ "InputDelayPingStart": 100,
+ "InputFixedSizeEnabled": true,
+ "InputFixedSize": 24
 }
-
-```
 
 ```
 
@@ -1504,15 +1399,12 @@ script. It will be Json serialized on the client and send to the Quantum server.
 
 C#
 
-```
 ```csharp
 namespace Quantum {
-public partial class GameResult {
-public int Winner;
+ public partial class GameResult {
+ public int Winner;
+ }
 }
-}
-
-```
 
 ```
 
@@ -1520,15 +1412,12 @@ Json Example:
 
 JSON
 
-```
 ```json
 {
-"$type":"Quantum.GameResult, Quantum.Simulation",
-"Frame": 200,
-"Winner": 2
+ "$type":"Quantum.GameResult, Quantum.Simulation",
+ "Frame": 200,
+ "Winner": 2
 }
-
-```
 
 ```
 
@@ -1536,11 +1425,8 @@ The game result event can be invoked **once** per game by each client, which is 
 
 C#
 
-```
 ```csharp
 f.Events.GameResult(new GameResult { Winner = 3 });
-
-```
 
 ```
 
@@ -1569,38 +1455,35 @@ Json example:
 
 JSON
 
-```
 ```json
 {
-"RoomOptions": {
-"IsVisible": true,
-"IsOpen": true,
-"MaxPlayers": 8,
-"PlayerTtl": null,
-"EmptyRoomTtl": 10000,
-"CustomRoomProperties": {
-"Foo": "bar",
-"PlayerClass": 1
-},
-"CustomRoomPropertiesForLobby": \[
-"Foo"
-\],
-"SuppressRoomEvents": null,
-"SuppressPlayerInfo": null,
-"PublishUserId": null,
-"DeleteNullProperties": null,
-"BroadcastPropsChangeToAll": null,
-"CleanupCacheOnLeave": null,
-"CheckUserOnJoin": null
-},
-"ExpectedUsers": \[
-"A",
-"B",
-"C"
-\]
+ "RoomOptions": {
+ "IsVisible": true,
+ "IsOpen": true,
+ "MaxPlayers": 8,
+ "PlayerTtl": null,
+ "EmptyRoomTtl": 10000,
+ "CustomRoomProperties": {
+ "Foo": "bar",
+ "PlayerClass": 1
+ },
+ "CustomRoomPropertiesForLobby": \[
+ "Foo"
+ \],
+ "SuppressRoomEvents": null,
+ "SuppressPlayerInfo": null,
+ "PublishUserId": null,
+ "DeleteNullProperties": null,
+ "BroadcastPropsChangeToAll": null,
+ "CleanupCacheOnLeave": null,
+ "CheckUserOnJoin": null
+ },
+ "ExpectedUsers": \[
+ "A",
+ "B",
+ "C"
+ \]
 }
-
-```
 
 ```
 
@@ -1619,7 +1502,7 @@ null
 | ```<br>MaxPlayers<br>``` | ```<br>byte<br>``` | Max number of players that can be in the room at any time. 0 means "no limit". |
 | ```<br>PlayerTtl<br>``` | ```<br>int<br>``` | Time To Live (TTL) for an 'actor' in a room. If a client disconnects, this actor is inactive first and removed after this timeout. In milliseconds. |
 | ```<br>EmptyRoomTtl<br>``` | ```<br>int<br>``` | Time To Live (TTL) for a room when the last player leaves. Keeps room in memory for case a player re-joins soon. In milliseconds. |
-| ```<br>CustomRoomProperties<br>``` | ```<br>```<br>Dictionary <string, object><br>```<br>``` | The room's custom properties to set during creation. |
+| ```<br>CustomRoomProperties<br>``` | ```<br>Dictionary <string, object><br>``` | The room's custom properties to set during creation. |
 | ```<br>CustomRoomPropertiesForLobby<br>``` | ```<br>string\[\]<br>``` | Defines which of the custom room properties get listed in the lobby.<br>Value type of the properties has to be ```<br>bool<br>```<br>, ```<br>byte<br>```<br>, ```<br>short<br>```<br>, ```<br>int<br>```<br>, ```<br>long<br>```<br>or ```<br>string<br>```<br>.<br>Max number of properties is **3**.<br>The max length for string value is **64**.<br>Key restrictions can also be enforced by the Photon dashboard property: ```<br>AllowedLobbyProperties<br>```<br>. |
 | ```<br>SuppressRoomEvents<br>``` | ```<br>bool<br>``` | Tells the server to skip room events for joining and leaving players.<br>Default is ```<br>false<br>```<br>. |
 | ```<br>SuppressPlayerInfo<br>``` | ```<br>bool<br>``` | Disables events join and leave from the server as well as property broadcasts in a room (to minimize traffic).<br>Default is ```<br>false<br>```<br>. |
@@ -1678,14 +1561,11 @@ PlayFab
 
 JSON
 
-```
 ```json
 {
- "ResultCode": 0,
- "Message": "success"
+"ResultCode": 0,
+"Message": "success"
 }
-
-```
 
 ```
 

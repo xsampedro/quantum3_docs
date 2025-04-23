@@ -20,33 +20,30 @@ AsteroidsShipConfig
 
 C#
 
-```
 ```csharp
 using Photon.Deterministic;
 using UnityEngine;
 
 namespace Quantum
 {
-public class AsteroidsShipConfig : AssetObject
-{
-\[Tooltip("The speed that the ship turns with added as torque")\]
-public FP ShipTurnSpeed = 8;
+ public class AsteroidsShipConfig : AssetObject
+ {
+ \[Tooltip("The speed that the ship turns with added as torque")\]
+ public FP ShipTurnSpeed = 8;
 
-\[Tooltip("The speed that the ship accelerates using add force")\]
-public FP ShipAceleration = 6;
+ \[Tooltip("The speed that the ship accelerates using add force")\]
+ public FP ShipAceleration = 6;
 
-\[Tooltip("Time interval between ship shots")\]
-public FP FireInterval = FP.\_0\_10;
+ \[Tooltip("Time interval between ship shots")\]
+ public FP FireInterval = FP.\_0\_10;
 
-\[Tooltip("Displacement of the projectile spawn position related to the ship position")\]
-public FP ShotOffset = 1;
+ \[Tooltip("Displacement of the projectile spawn position related to the ship position")\]
+ public FP ShotOffset = 1;
 
-\[Tooltip("Prototype reference to spawn ship projectiles")\]
-public AssetRef<EntityPrototype> ProjectilePrototype;
+ \[Tooltip("Prototype reference to spawn ship projectiles")\]
+ public AssetRef<EntityPrototype> ProjectilePrototype;
+ }
 }
-}
-
-```
 
 ```
 
@@ -58,14 +55,11 @@ AsteroidsShip.qtn
 
 Qtn
 
-```
 ```cs
 component AsteroidsShip
 {
- AssetRef<AsteroidsShipConfig> ShipConfig;
+AssetRef<AsteroidsShipConfig> ShipConfig;
 }
-
-```
 
 ```
 
@@ -95,13 +89,10 @@ to use the values from the config:
 
 C#
 
-```
 ```csharp
 var config = f.FindAsset(filter.AsteroidsShip->ShipConfig);
 FP shipAcceleration = config.ShipAceleration;
 FP turnSpeed = config.ShipTurnSpeed;
-
-```
 
 ```
 
@@ -115,15 +106,12 @@ AsteroidsShip.qtn
 
 Qtn
 
-```
 ```cs
 component AsteroidsShip
 {
- AssetRef<AsteroidsShipConfig> ShipConfig;
- FP FireInterval;
+AssetRef<AsteroidsShipConfig> ShipConfig;
+FP FireInterval;
 }
-
-```
 
 ```
 
@@ -135,24 +123,21 @@ and add a function to handle firing:
 
 C#
 
-```
 ```csharp
 private void UpdateShipFire(Frame frame, ref Filter filter, Input\* input)
 {
-var config = frame.FindAsset(filter.AsteroidsShip->ShipConfig);
+ var config = frame.FindAsset(filter.AsteroidsShip->ShipConfig);
 
-if (input->Fire && filter.AsteroidsShip->FireInterval <= 0)
-{
-filter.AsteroidsShip->FireInterval = config.FireInterval;
-// TODO create projectile
+ if (input->Fire && filter.AsteroidsShip->FireInterval <= 0)
+ {
+ filter.AsteroidsShip->FireInterval = config.FireInterval;
+ // TODO create projectile
+ }
+ else
+ {
+ filter.AsteroidsShip->FireInterval -= frame.DeltaTime;
+ }
 }
-else
-{
-filter.AsteroidsShip->FireInterval -= frame.DeltaTime;
-}
-}
-
-```
 
 ```
 
@@ -174,11 +159,8 @@ UpdateShipMovement
 
 C#
 
-```
 ```csharp
 UpdateShipFire(f, ref filter, input);
-
-```
 
 ```
 
@@ -190,29 +172,26 @@ AsteroidsProjectileSystem
 
 C#
 
-```
 ```csharp
 using Photon.Deterministic;
 using UnityEngine.Scripting;
 
 namespace Quantum.Asteroids
 {
-\[Preserve\]
-public unsafe class AsteroidsProjectileSystem : SystemSignalsOnly
-{
-public void AsteroidsShipShoot(Frame frame, EntityRef owner, FPVector2 spawnPosition, AssetRef<EntityPrototype> projectilePrototype)
-{
-EntityRef projectileEntity = frame.Create(projectilePrototype);
-Transform2D\* projectileTransform = frame.Unsafe.GetPointer<Transform2D>(projectileEntity);
-Transform2D\* ownerTransform = frame.Unsafe.GetPointer<Transform2D>(owner);
+ \[Preserve\]
+ public unsafe class AsteroidsProjectileSystem : SystemSignalsOnly
+ {
+ public void AsteroidsShipShoot(Frame frame, EntityRef owner, FPVector2 spawnPosition, AssetRef<EntityPrototype> projectilePrototype)
+ {
+ EntityRef projectileEntity = frame.Create(projectilePrototype);
+ Transform2D\* projectileTransform = frame.Unsafe.GetPointer<Transform2D>(projectileEntity);
+ Transform2D\* ownerTransform = frame.Unsafe.GetPointer<Transform2D>(owner);
 
-projectileTransform->Rotation = ownerTransform->Rotation;
-projectileTransform->Position = spawnPosition;
+ projectileTransform->Rotation = ownerTransform->Rotation;
+ projectileTransform->Position = spawnPosition;
+ }
+ }
 }
-}
-}
-
-```
 
 ```
 
@@ -230,24 +209,21 @@ c# script to act as a config file for projectiles:
 
 C#
 
-```
 ```csharp
 using Photon.Deterministic;
 using UnityEngine;
 
 namespace Quantum
 {
-public class AsteroidsProjectileConfig : AssetObject
-{
-\[Tooltip("Speed applied to the projectile when spawned")\]
-public FP ProjectileInitialSpeed = 15;
+ public class AsteroidsProjectileConfig : AssetObject
+ {
+ \[Tooltip("Speed applied to the projectile when spawned")\]
+ public FP ProjectileInitialSpeed = 15;
 
-\[Tooltip("Time until destroy the projectile")\]
-public FP ProjectileTTL = 1;
+ \[Tooltip("Time until destroy the projectile")\]
+ public FP ProjectileTTL = 1;
+ }
 }
-}
-
-```
 
 ```
 
@@ -259,16 +235,13 @@ AsteroidsProjectile.qtn
 
 Qtn
 
-```
 ```cs
 component AsteroidsProjectile
 {
- FP TTL;
- EntityRef Owner;
- AssetRef<AsteroidsProjectileConfig> ProjectileConfig;
+FP TTL;
+EntityRef Owner;
+AssetRef<AsteroidsProjectileConfig> ProjectileConfig;
 }
-
-```
 
 ```
 
@@ -284,7 +257,6 @@ by adding the following line to initialize the projectile to the end of it:
 
 C#
 
-```
 ```csharp
 AsteroidsProjectile\* projectile = f.Unsafe.GetPointer<AsteroidsProjectile>(projectileEntity);
 var config = f.FindAsset(projectile->ProjectileConfig);
@@ -293,8 +265,6 @@ projectile->Owner = owner;
 
 PhysicsBody2D\* body = f.Unsafe.GetPointer<PhysicsBody2D>(projectileEntity);
 body->Velocity = ownerTransform->Up \* config.ProjectileInitialSpeed;
-
-```
 
 ```
 
@@ -314,18 +284,15 @@ and add a signal to it like this:
 
 Qtn
 
-```
 ```cs
 component AsteroidsProjectile
 {
-FP TTL;
-EntityRef Owner;
-AssetRef<AsteroidsProjectileConfig> ProjectileConfig;
+ FP TTL;
+ EntityRef Owner;
+ AssetRef<AsteroidsProjectileConfig> ProjectileConfig;
 }
 
 signal AsteroidsShipShoot(EntityRef owner, FPVector2 spawnPosition, AssetRef<EntityPrototype> projectilePrototype);
-
-```
 
 ```
 
@@ -341,11 +308,8 @@ interface.
 
 C#
 
-```
 ```csharp
 public unsafe class AsteroidsProjectileSystem : SystemSignalsOnly, ISignalAsteroidsShipShoot
-
-```
 
 ```
 
@@ -367,13 +331,10 @@ line with the following:
 
 C#
 
-```
 ```csharp
 var relativeOffset = FPVector2.Up \* config.ShotOffset;
 var spawnPosition = filter.Transform->TransformPoint(relativeOffset);
 f.Signals.AsteroidsShipShoot(filter.Entity, spawnPosition, config.ProjectilePrototype);
-
-```
 
 ```
 
@@ -507,24 +468,21 @@ SystemSignalsOnly
 
 C#
 
-```
 ```csharp
 public struct Filter
 {
- public EntityRef Entity;
- public AsteroidsProjectile\* Projectile;
+public EntityRef Entity;
+public AsteroidsProjectile\* Projectile;
 }
 
 public override void Update(Frame frame, ref Filter filter)
 {
- filter.Projectile->TTL -= frame.DeltaTime;
- if (filter.Projectile->TTL <= 0)
- {
- frame.Destroy(filter.Entity);
- }
+filter.Projectile->TTL -= frame.DeltaTime;
+if (filter.Projectile->TTL <= 0)
+{
+frame.Destroy(filter.Entity);
 }
-
-```
+}
 
 ```
 

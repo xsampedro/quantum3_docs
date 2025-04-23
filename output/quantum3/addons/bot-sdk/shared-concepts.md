@@ -90,21 +90,18 @@ method, which is triggered according to how it is used on the different kind of 
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
- \[Serializable\]
- public partial class IdleAction : AIAction
- {
- public override void Execute(Frame frame, EntityRef entity, ref AIContext aiContext)
- {
- // Insert action code here
- }
- }
+\[Serializable\]
+public partial class IdleAction : AIAction
+{
+public override void Execute(Frame frame, EntityRef entity, ref AIContext aiContext)
+{
+// Insert action code here
 }
-
-```
+}
+}
 
 ```
 
@@ -215,11 +212,8 @@ Then, Drag and drop some Config value from the left side panel and link it to th
 ​ Then compile the document. On code, retrieve the value using the AIParam API. This will already retrieve the value for the config accordingly with the Config asset passed as parameter:
 
 ```
-```
 // Considering that the variable "AttackRange" is of type AIParamFP
 FP rangeValue = AttackRange.Resolve(f, blackboard, myConfig);
-
-```
 
 ```
 
@@ -240,7 +234,6 @@ UTAgent
  already comes with a field to reference the Config asset for that specific agent/entity, just for convenience. So you can use it to make your own references:
 
 ```
-```
 // The config to be set can come from any source that you prefer. Some custom asset, RuntimeConfig, RuntimePlayer...it's up to you. Just set it to the component:
 hfsmAgent->Config = config;
 btAgent->Config = config;
@@ -250,8 +243,6 @@ utAgent->Config = config;
 hfsmAgent.GetConfig(frame);
 btAgent.GetConfig(frame);
 utAgent.GetConfig(frame);
-
-```
 
 ```
 
@@ -276,12 +267,9 @@ If some field's value was manually defined on the Visual Editor, or if it was de
 
 C#
 
-```
 ```csharp
 // In this case, the value is directly stored on the field itself, with no need for any extra code
 public Int32 MyInteger;
-
-```
 
 ```
 
@@ -289,12 +277,9 @@ Now, if the value comes from a Blackboard node:
 
 C#
 
-```
 ```csharp
 // Read the value from the blackboard asset
 var value = blackboardComponent->Board.GetValue("someKey");
-
-```
 
 ```
 
@@ -302,12 +287,9 @@ As for a Config node:
 
 C#
 
-```
 ```csharp
 // Read the value from the config asset
 var myBoolean = myConfig.Get("Key").Value.Boolean;
-
-```
 
 ```
 
@@ -325,12 +307,9 @@ AIParam
 
 C#
 
-```
 ```csharp
 public AIParamInt MyAIParam;
 var value = MyAIParam.ResolveResolve(frame, blackboard, aiConfig);
-
-```
 
 ```
 
@@ -338,11 +317,8 @@ var value = MyAIParam.ResolveResolve(frame, blackboard, aiConfig);
 
 C#
 
-```
 ```csharp
 AIParamInt, AIParamBool, AIParamByte, AIParamFP, AIParamFPVector2, AIParamFPVector3, AIParamString, AIParamEntityRef
-
-```
 
 ```
 
@@ -370,23 +346,20 @@ method. Here is a sample AIFunction node which will return the position of some 
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
-\[System.Serializable\]
-public unsafe class GetEntityPosition : AIFunctionFPVector3
-{
-public override FPVector3 Execute(Frame frame, EntityRef entity = default)
-{
-MyComponent myComponent = frame.Unsafe.GetPointer<MyComponent>(entity);
-Transform3D\* targetTransform = frame.Unsafe.GetPointer<Transform3D>(myComponent->TargetEntity);
-return targetTransform->Position;
+ \[System.Serializable\]
+ public unsafe class GetEntityPosition : AIFunctionFPVector3
+ {
+ public override FPVector3 Execute(Frame frame, EntityRef entity = default)
+ {
+ MyComponent myComponent = frame.Unsafe.GetPointer<MyComponent>(entity);
+ Transform3D\* targetTransform = frame.Unsafe.GetPointer<Transform3D>(myComponent->TargetEntity);
+ return targetTransform->Position;
+ }
+ }
 }
-}
-}
-
-```
 
 ```
 
@@ -403,28 +376,25 @@ AIParamFP
 field is needed:
 
 ```
-```
 namespace Quantum
 {
-\[System.Serializable\]
-public unsafe partial class SampleAction : AIAction
-{
-public AIParamFP TargetPosition;
+ \[System.Serializable\]
+ public unsafe partial class SampleAction : AIAction
+ {
+ public AIParamFP TargetPosition;
 
-public override void Update(Frame frame, EntityRef e)
-{
-// If you are not sure if your AIParam's source is a Blackboard/Config/AIFunction node, then use the general Resolve method
-var position = TargetPosition.Resolve(/\*args\*/);
+ public override void Update(Frame frame, EntityRef e)
+ {
+ // If you are not sure if your AIParam's source is a Blackboard/Config/AIFunction node, then use the general Resolve method
+ var position = TargetPosition.Resolve(/\*args\*/);
 
-// If you are sure that the source is an AIFunction node, then you can use the specific Resolve method
-var position = TargetPosition.ResolveFunction(frame, entity);
+ // If you are sure that the source is an AIFunction node, then you can use the specific Resolve method
+ var position = TargetPosition.ResolveFunction(frame, entity);
 
-// Now, do something with the position
+ // Now, do something with the position
+ }
+ }
 }
-}
-}
-
-```
 
 ```
 
@@ -455,30 +425,27 @@ It can be useful to also create AIParams for Enums, besides of the types mention
 
 C#
 
-```
 ```csharp
 // Considering this enum:
 public enum BotType { None, HFSM, BT, UT };
 
 // Create a new AIParam class based on that enum:
 \[System.Serializable\]
- public unsafe sealed class AIParamBotType : AIParam<BotType>
- {
- public static implicit operator AIParamBotType(BotType value) { return new AIParamBotType() { DefaultValue = value }; }
+public unsafe sealed class AIParamBotType : AIParam<BotType>
+{
+public static implicit operator AIParamBotType(BotType value) { return new AIParamBotType() { DefaultValue = value }; }
 
- protected override BotType GetBlackboardValue(BlackboardValue value)
- {
- int enumValue = \*value.IntegerValue;
- return (BotType)enumValue;
- }
+protected override BotType GetBlackboardValue(BlackboardValue value)
+{
+int enumValue = \*value.IntegerValue;
+return (BotType)enumValue;
+}
 
- protected override BotType GetConfigValue(AIConfig.KeyValuePair config)
- {
- return (BotType)config.Value.Integer;
- }
- }
-
-```
+protected override BotType GetConfigValue(AIConfig.KeyValuePair config)
+{
+return (BotType)config.Value.Integer;
+}
+}
 
 ```
 
@@ -531,24 +498,21 @@ That all said, here are a few code snippets needed in order to get it running. _
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
- public unsafe partial struct AIContextUser
- {
- public readonly AIBlackboardComponent\* Blackboard;
- public readonly HFSMAgent\* HFSMAgent;
+public unsafe partial struct AIContextUser
+{
+public readonly AIBlackboardComponent\* Blackboard;
+public readonly HFSMAgent\* HFSMAgent;
 
- public AIContextUser(AIBlackboardComponent\* blackboard, HFSMAgent\* hfsmAgent)
- {
- Blackboard = blackboard;
- HFSMAgent = hfsmAgent;
- }
- }
+public AIContextUser(AIBlackboardComponent\* blackboard, HFSMAgent\* hfsmAgent)
+{
+Blackboard = blackboard;
+HFSMAgent = hfsmAgent;
 }
-
-```
+}
+}
 
 ```
 
@@ -564,7 +528,6 @@ namespace Quantum
 
 C#
 
-```
 ```csharp
 AIContext aiContext = new AIContext();
 AIContextUser userData = new AIContextUser(blackboard, hfsmAgent);
@@ -574,32 +537,27 @@ HFSMManager.Update(frame, frame.DeltaTime, hfsmData, entityRef, ref aiContext);
 
 ```
 
-```
-
 - From the user end points, access the user-specific context using the extension method for easy conversion:
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
- \[System.Serializable\]
- public unsafe class SampleAction : AIAction
- {
- public override void Update(Frame frame, EntityRef entity, ref AIContext aiContext)
- {
- var userContext = aiContext.UserData();
- // either cash the data in local variables
- var agent = userContext.HfsmAgent;
- var blackboard = userContext.Blackboard;
+\[System.Serializable\]
+public unsafe class SampleAction : AIAction
+{
+public override void Update(Frame frame, EntityRef entity, ref AIContext aiContext)
+{
+var userContext = aiContext.UserData();
+// either cash the data in local variables
+var agent = userContext.HfsmAgent;
+var blackboard = userContext.Blackboard;
 
- // or use it right away where needed
- }
- }
+// or use it right away where needed
 }
-
-```
+}
+}
 
 ```
 

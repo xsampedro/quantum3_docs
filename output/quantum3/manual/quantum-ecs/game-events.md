@@ -55,7 +55,6 @@ The simplest Event and its usage looks like this:
 - Define an Event using the Quantum DSL
 
   Qtn
-  ```
   ```cs
   event MyEvent {
    int Foo;
@@ -63,18 +62,11 @@ The simplest Event and its usage looks like this:
 
   ```
 
-
-  ```
-
 - Trigger the Event from the simulation
 
   C#
-  ```
   ```csharp
   f.Events.MyEvent(2023);
-
-  ```
-
 
   ```
 
@@ -84,12 +76,8 @@ The simplest Event and its usage looks like this:
 
 
   C#
-  ```
   ```csharp
   QuantumEvent.Subscribe(listener: this, handler: (EventMyEvent e) => Debug.Log($"MyEvent {e.Foo}"));
-
-  ```
-
 
   ```
 
@@ -104,15 +92,12 @@ API in the simulation.
 
 Qtn
 
-```
 ```cs
 event MyEvent {
-FPVector3 Position;
-FPVector3 Direction;
-FP Length
+ FPVector3 Position;
+ FPVector3 Direction;
+ FP Length
 }
-
-```
 
 ```
 
@@ -120,13 +105,10 @@ Class inheritance allows to share base Events classes and members.
 
 C#
 
-```
 ```csharp
 event MyBaseEvent {}
 event SpecializedEventFoo : MyBaseEvent {}
 event SpecializedEventBar : MyBaseEvent {}
-
-```
 
 ```
 
@@ -140,12 +122,9 @@ Use abstract classes to prevent base-Events to be triggered directly.
 
 C#
 
-```
 ```csharp
 abstract event MyBaseEvent {}
 event MyConcreteEvent : MyBaseEvent {}
-
-```
 
 ```
 
@@ -153,19 +132,16 @@ Reuse DSL generated structs inside the Event.
 
 Qtn
 
-```
 ```cs
 struct FooEventData {
- FP Bar;
- FP Par;
- FP Rap;
+FP Bar;
+FP Par;
+FP Rap;
 }
 
 event FooEvent {
- FooEventData EventData;
+FooEventData EventData;
 }
-
-```
 
 ```
 
@@ -187,11 +163,8 @@ Events will add a delay between the time it is issued in the simulation (during 
 
 Qtn
 
-```
 ```cs
 synced event MyEvent {}
-
-```
 
 ```
 
@@ -220,14 +193,11 @@ nothashed
 
 C#
 
-```
 ```csharp
 abstract event MyEvent {
- nothashed FPVector2 Position;
- Int32 Foo;
+nothashed FPVector2 Position;
+Int32 Foo;
 }
-
-```
 
 ```
 
@@ -261,25 +231,19 @@ remote
 
 Qtn
 
-```
 ```cs
 event LocalPlayerOnly {
- local player\_ref player;
+local player\_ref player;
 }
-
-```
 
 ```
 
 Qtn
 
-```
 ```cs
 event RemotePlayerOnly {
- remote player\_ref player;
+remote player\_ref player;
 }
-
-```
 
 ```
 
@@ -317,15 +281,12 @@ is assigned to different player.
 
 Qtn
 
-```
 ```cs
 event MyEvent {
-local player\_ref LocalPlayer;
-remote player\_ref RemotePlayer;
-player\_ref AnyPlayer;
+ local player\_ref LocalPlayer;
+ remote player\_ref RemotePlayer;
+ player\_ref AnyPlayer;
 }
-
-```
 
 ```
 
@@ -351,21 +312,15 @@ keywords to scope where they will executed. By default all Events will be dispat
 
 Qtn
 
-```
 ```cs
 server synced event MyServerEvent {}
 
 ```
 
-```
-
 Qtn
 
-```
 ```cs
 client event MyClientEvent {}
-
-```
 
 ```
 
@@ -385,13 +340,10 @@ Frame.Events
 
 C#
 
-```
 ```csharp
 public override void Update(Frame frame) {
- frame.Events.MyEvent(2023);
+frame.Events.MyEvent(2023);
 }
-
-```
 
 ```
 
@@ -440,7 +392,6 @@ List
    the arrays do not store the data on the Frame heap but carry it on the value itself.
 
   C#
-  ```
   ```csharp
   struct FooEventData {
    array<FP>\[4\] ArrayOfValues;
@@ -448,9 +399,6 @@ List
   event FooEvent {
    FooEventData EventData;
   }
-
-  ```
-
 
   ```
 
@@ -474,11 +422,8 @@ QuantumEvent
 
 C#
 
-```
 ```csharp
 QuantumEvent.Subscribe(listener: this, handler: (EventPlayerHit e) => Debug.Log($"Player hit in Frame {e.Tick}"));
-
-```
 
 ```
 
@@ -490,15 +435,12 @@ MonoBehaviour
 
 C#
 
-```
 ```csharp
 QuantumEvent.Subscribe<EventPlayerHit>(listener: this, handler: OnEventPlayerHit);
 
 private void OnEventPlayerHit(EventPlayerHit e){
- Debug.Log($"Player hit in Frame {e.Tick}");
+Debug.Log($"Player hit in Frame {e.Tick}");
 }
-
-```
 
 ```
 
@@ -510,7 +452,6 @@ offers a few optional QoL arguments that allow to qualify the subscription in va
 
 C#
 
-```
 ```csharp
 // only invoked once, then removed
 QuantumEvent.Subscribe(this, (EventPlayerHit e) => {}, once: true);
@@ -537,8 +478,6 @@ QuantumEvent.Subscribe(this, (EventPlayerHit e) => {}, gameMode: DeterministicGa
 
 ```
 
-```
-
 #### Unsubscribing From Events
 
 Unity manages the lifetime of ```
@@ -551,7 +490,6 @@ If tighter control is required unsubscribing can be handled manually.
 
 C#
 
-```
 ```csharp
 var subscription = QuantumEvent.Subscribe();
 
@@ -566,8 +504,6 @@ QuantumEvent.UnsubscribeListener<EventPlayerHit>(this);
 
 ```
 
-```
-
 #### Event Subscriptions In CSharp
 
 If an Event is subscribed outside of a ```
@@ -578,13 +514,10 @@ MonoBehaviour
 
 C#
 
-```
 ```csharp
 var disposable = QuantumEvent.SubscribeManual((EventPlayerHit e) => {}); // subscribes to the event
 // ...
 disposable.Dispose(); // disposes the event subscription
-
-```
 
 ```
 
@@ -606,12 +539,9 @@ to react to them.
 
 C#
 
-```
 ```csharp
 QuantumCallback.Subscribe(this, (Quantum.CallbackEventCanceled c) => Debug.Log($"Cancelled event {c.EventKey}"));
 QuantumCallback.Subscribe(this, (Quantum.CallbackEventConfirmed c) => Debug.Log($"Confirmed event {c.EventKey}"));
-
-```
 
 ```
 
@@ -627,14 +557,11 @@ like this.
 
 C#
 
-```
 ```csharp
 public void OnEvent(MyEvent e) {
-EventKey eventKey = (EventKey)e;
-// ...
+ EventKey eventKey = (EventKey)e;
+ // ...
 }
-
-```
 
 ```
 
@@ -656,14 +583,11 @@ EventListEvent
 
 C#
 
-```
 ```csharp
 // Define the event in Quantum DSL.
 event ListEvent {
- EntityRef Entity;
+EntityRef Entity;
 }
-
-```
 
 ```
 
@@ -679,43 +603,40 @@ struct.
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
- using System;
- using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 
- partial class EventListEvent {
- // Add the C# list field to the event object using partial.
- public List<Int32> ListOfFoo;
- }
-
- partial class Frame {
- partial struct FrameEvents {
- public EventListEvent ListEvent(EntityRef entity, List<Int32> listOfFoo) {
- var ev = ListEvent(entity);
- if (ev == null) {
- // Synced or local events can be null for example during predicted frame.
- return null;
- }
-
- // Reuse the list object of the pooled event.
- if (ev.ListOfFoo == null) {
- ev.ListOfFoo = new List<Int32>(listOfFoo.Count);
- }
- ev.ListOfFoo.Clear();
-
- // Copy the content into the event, to be independent from the input list object which can be cached.
- ev.ListOfFoo.AddRange(listOfFoo);
-
- return ev;
- }
- }
- }
+partial class EventListEvent {
+// Add the C# list field to the event object using partial.
+public List<Int32> ListOfFoo;
 }
 
-```
+partial class Frame {
+partial struct FrameEvents {
+public EventListEvent ListEvent(EntityRef entity, List<Int32> listOfFoo) {
+var ev = ListEvent(entity);
+if (ev == null) {
+// Synced or local events can be null for example during predicted frame.
+return null;
+}
+
+// Reuse the list object of the pooled event.
+if (ev.ListOfFoo == null) {
+ev.ListOfFoo = new List<Int32>(listOfFoo.Count);
+}
+ev.ListOfFoo.Clear();
+
+// Copy the content into the event, to be independent from the input list object which can be cached.
+ev.ListOfFoo.AddRange(listOfFoo);
+
+return ev;
+}
+}
+}
+}
 
 ```
 
@@ -723,12 +644,9 @@ Then call the event from the simulation code.
 
 C#
 
-```
 ```csharp
 // The list object can be cached and reused, its content is copied inside the ListEvent() call (see above).
 f.Events.ListEvent(f, 0, new List<FP> {2, 3, 4});.
-
-```
 
 ```
 
@@ -796,14 +714,11 @@ QuantumEvent
 
 C#
 
-```
 ```csharp
 var subscription = QuantumCallback.Subscribe(...);
 QuantumCallback.Unsubscribe(subscription); // cancels this specific subscription
 QuantumCallback.UnsubscribeListener(this); // cancels all subscriptions for this listener
 QuantumCallback.UnsubscribeListener<CallbackPollInput>(this); // cancels all listeners to CallbackPollInput for this listener
-
-```
 
 ```
 
@@ -821,25 +736,22 @@ PollInput
 
 C#
 
-```
 ```csharp
 public class LocalInput : MonoBehaviour {
- private DispatcherSubscription \_pollInputDispatcher;
- private void OnEnable() {
- \_pollInputDispatcher = QuantumCallback.Subscribe(this, (CallbackPollInput callback) => PollInput(callback));
- }
-
- public void PollInput(CallbackPollInput callback) {
- Quantum.Input i = new Quantum.Input();
- callback.SetInput(i, DeterministicInputFlags.Repeatable);
- }
-
- private void OnDisable(){
- QuantumCallback.Unsubscribe(\_pollInputDispatcher);
- }
+private DispatcherSubscription \_pollInputDispatcher;
+private void OnEnable() {
+\_pollInputDispatcher = QuantumCallback.Subscribe(this, (CallbackPollInput callback) => PollInput(callback));
 }
 
-```
+public void PollInput(CallbackPollInput callback) {
+Quantum.Input i = new Quantum.Input();
+callback.SetInput(i, DeterministicInputFlags.Repeatable);
+}
+
+private void OnDisable(){
+QuantumCallback.Unsubscribe(\_pollInputDispatcher);
+}
+}
 
 ```
 
@@ -853,13 +765,10 @@ the subscription has to be handled manually.
 
 C#
 
-```
 ```csharp
 var disposable = QuantumCallback.SubscribeManual((CallbackPollInput pollInput) => {}); // subscribes to the callback
 // ...
 disposable.Dispose(); // disposes the callback subscription
-
-```
 
 ```
 

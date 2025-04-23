@@ -304,11 +304,8 @@ Here is how an HFSM Event is triggered (from _simulation code_):
 
 C#
 
-```
 ```csharp
 HFSMManager.TriggerEvent(frame, entityRef, "FooEvent");
-
-```
 
 ```
 
@@ -432,12 +429,9 @@ Here is a code snippet for adding the component (only if not already added to th
 
 C#
 
-```
 ```csharp
 var hfsmAgent = new HFSMAgent();
 f.Set(myEntity, hfsmAgent);
-
-```
 
 ```
 
@@ -461,12 +455,9 @@ The initialization step below needs to be done \*whether EntityPrototypes are us
 
 C#
 
-```
 ```csharp
 var hfsmRootAsset = f.FindAsset<HFSMRoot>(hfsmRoot.Id);
 HFSMManager.Init(frame, entityRef, hfsmRootAsset);
-
-```
 
 ```
 
@@ -490,23 +481,20 @@ BotSDKSystem
 
 C#
 
-```
 ```csharp
 // At any system...
- public unsafe class AISystem : SystemMainThread, ISignalOnComponentAdded<HFSMAgent>
- {
- public void OnAdded(Frame frame, EntityRef entity, HFSMAgent\* component)
- {
- // Get the HFSMRoot from the component set on the Entity Prototype
- HFSMRoot hfsmRoot = frame.FindAsset<HFSMRoot>(component->Data.Root.Id);
+public unsafe class AISystem : SystemMainThread, ISignalOnComponentAdded<HFSMAgent>
+{
+public void OnAdded(Frame frame, EntityRef entity, HFSMAgent\* component)
+{
+// Get the HFSMRoot from the component set on the Entity Prototype
+HFSMRoot hfsmRoot = frame.FindAsset<HFSMRoot>(component->Data.Root.Id);
 
- // Initialize
- HFSMManager.Init(frame, entityRef, hfsmRoot);
- }
- // ...
- }
-
-```
+// Initialize
+HFSMManager.Init(frame, entityRef, hfsmRoot);
+}
+// ...
+}
 
 ```
 
@@ -516,11 +504,8 @@ After initializing the agent, update it:
 
 C#
 
-```
 ```csharp
 HFSMManager.Update(frame, frame.DeltaTime, entityRef);
-
-```
 
 ```
 
@@ -530,32 +515,29 @@ This starts the entire HFSM mechanism: the current state will be updated, it's A
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
- public unsafe class AISystem : SystemMainThreadFilter<AISystem.Filter>, ISignalOnComponentAdded<HFSMAgent>
- {
- public struct Filter
- {
- public EntityRef Entity;
- public HFSMAgent\* HFSMAgent;
- }
-
- public void OnAdded(Frame frame, EntityRef entity, HFSMAgent\* component)
- {
- HFSMRoot hfsmRoot = frame.FindAsset<HFSMRoot>(component->Data.Root.Id);
- HFSMManager.Init(frame, entity, hfsmRoot);
- }
-
- public override void Update(Frame frame, ref Filter filter)
- {
- HFSMManager.Update(frame, frame.DeltaTime, filter.Entity);
- }
- }
+public unsafe class AISystem : SystemMainThreadFilter<AISystem.Filter>, ISignalOnComponentAdded<HFSMAgent>
+{
+public struct Filter
+{
+public EntityRef Entity;
+public HFSMAgent\* HFSMAgent;
 }
 
-```
+public void OnAdded(Frame frame, EntityRef entity, HFSMAgent\* component)
+{
+HFSMRoot hfsmRoot = frame.FindAsset<HFSMRoot>(component->Data.Root.Id);
+HFSMManager.Init(frame, entity, hfsmRoot);
+}
+
+public override void Update(Frame frame, ref Filter filter)
+{
+HFSMManager.Update(frame, frame.DeltaTime, filter.Entity);
+}
+}
+}
 
 ```
 
@@ -601,21 +583,18 @@ Here is an example of the most basic HFSM decision provided in the SDK:
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
-\[System.Serializable\]
-public partial class TrueDecision : HFSMDecision
-{
-public override unsafe bool Decide(Frame frame, EntityRef entity)
-{
-return true;
+ \[System.Serializable\]
+ public partial class TrueDecision : HFSMDecision
+ {
+ public override unsafe bool Decide(Frame frame, EntityRef entity)
+ {
+ return true;
+ }
+ }
 }
-}
-}
-
-```
 
 ```
 

@@ -167,20 +167,17 @@ The corresponding code snippets generated are:
 
 C#
 
-```
 ```csharp
 namespace Quantum {
- using Photon.Deterministic;
- using UnityEngine.Scripting;
+using Photon.Deterministic;
+using UnityEngine.Scripting;
 
- \[Preserve\]
- public unsafe class NewQuantumSystem : SystemMainThread {
- public override void Update(Frame frame) {
- }
- }
+\[Preserve\]
+public unsafe class NewQuantumSystem : SystemMainThread {
+public override void Update(Frame frame) {
 }
-
-```
+}
+}
 
 ```
 
@@ -214,24 +211,21 @@ Overridable API:
 
 C#
 
-```
 ```csharp
 namespace Quantum {
- using Photon.Deterministic;
- using UnityEngine.Scripting;
+using Photon.Deterministic;
+using UnityEngine.Scripting;
 
- \[Preserve\]
- public unsafe class NewQuantumSystem : SystemMainThreadFilter<NewQuantumSystem.Filter> {
- public override void Update(Frame frame, ref Filter filter) {
- }
-
- public struct Filter {
- public EntityRef Entity;
- }
- }
+\[Preserve\]
+public unsafe class NewQuantumSystem : SystemMainThreadFilter<NewQuantumSystem.Filter> {
+public override void Update(Frame frame, ref Filter filter) {
 }
 
-```
+public struct Filter {
+public EntityRef Entity;
+}
+}
+}
 
 ```
 
@@ -256,18 +250,15 @@ Without
 
 C#
 
-```
 ```csharp
 namespace Quantum {
-using Photon.Deterministic;
-using UnityEngine.Scripting;
+ using Photon.Deterministic;
+ using UnityEngine.Scripting;
 
-\[Preserve\]
-public unsafe class NewQuantumSystem : SystemSignalsOnly {
+ \[Preserve\]
+ public unsafe class NewQuantumSystem : SystemSignalsOnly {
+ }
 }
-}
-
-```
 
 ```
 
@@ -328,7 +319,6 @@ The following code snippet shows some basic examples of valid and not valid (vio
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
@@ -350,8 +340,6 @@ var temporaryData = \_readOnlyData + 5;
 }
 }
 }
-
-```
 
 ```
 
@@ -389,7 +377,6 @@ All injected systems are active by default, but it is possible to control their 
 
 C#
 
-```
 ```csharp
 public override void OnInit(Frame frame)
 {
@@ -405,19 +392,14 @@ var enabled = frame.SystemIsEnabled<MySystem>();
 
 ```
 
-```
-
 Any System can deactivate (and re-activate) another System, so a common pattern is to have a main controller system that manages the active/inactive lifecycle of more specialized Systems using a simple state machine (one example is to have an in-game lobby first, with a countdown to gameplay, then normal gameplay, and finally a score state).
 
 To make a system start disabled by default override this property:
 
 C#
 
-```
 ```csharp
 public override bool StartEnabled => false;
-
-```
 
 ```
 
@@ -449,7 +431,6 @@ methods identify systems by type; thus if there are to be several system groups,
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
@@ -463,8 +444,6 @@ public MySystemGroup(string update, params SystemMainThread\[\] children) : base
 
 ```
 
-```
-
 ## Entity Lifecycle API
 
 This section uses the direct API methods for entity creation and composition. Please refer to the chapter on entity prototypes for the the data-driven approach.
@@ -473,11 +452,8 @@ To create a new entity instance, just use this (method returns an EntityRef):
 
 C#
 
-```
 ```csharp
 var e = frame.Create();
-
-```
 
 ```
 
@@ -485,7 +461,6 @@ Entities do not have pre-defined components any more, to add a Transform3D and a
 
 C#
 
-```
 ```csharp
 var t = Transform3D.Create();
 frame.Set(e, t);
@@ -495,13 +470,10 @@ frame.Set(e, c);
 
 ```
 
-```
-
 These two methods are also useful:
 
 C#
 
-```
 ```csharp
 // destroys the entity, including any component that was added to it.
 frame.Destroy(e);
@@ -513,13 +485,10 @@ if (frame.Exists(e)) {
 
 ```
 
-```
-
 Also possible to check dynamically if an entity contains a certain component type, and get a pointer to the component data directly from frame:
 
 C#
 
-```
 ```csharp
 if (frame.Has<Transform3D>(e)) {
 var t = frame.Unsafe.GetPointer<Transform3D>(e);
@@ -527,13 +496,10 @@ var t = frame.Unsafe.GetPointer<Transform3D>(e);
 
 ```
 
-```
-
 With ComponentSet, you can do a single check if an entity has multiple components:
 
 C#
 
-```
 ```csharp
 var components = ComponentSet.Create<CharacterController3D, PhysicsBody3D>();
 if (frame.Has(e, components)) {
@@ -542,17 +508,12 @@ if (frame.Has(e, components)) {
 
 ```
 
-```
-
 Removing components dynamically is as easy as:
 
 C#
 
-```
 ```csharp
 frame.Remove<Transform3D>(e);
-
-```
 
 ```
 
@@ -573,7 +534,6 @@ Therefore, instead of iterating over a collection of entities, filters are used 
 
 C#
 
-```
 ```csharp
 public unsafe class MySystem : SystemMainThread
 {
@@ -587,8 +547,6 @@ frame.Set(e, t);
 }
 }
 }
-
-```
 
 ```
 
@@ -628,13 +586,10 @@ The following snippets show how to access current Map and NavMesh instances from
 
 C#
 
-```
 ```csharp
 // Map is the container for several static data, such as navmeshes, etc
 Map map = f.Map;
 var navmesh = map.NavMeshes\["MyNavmesh"\];
-
-```
 
 ```
 
@@ -650,11 +605,8 @@ The following example in a DSL file (from the previous chapter):
 
 C#
 
-```
 ```csharp
 signal OnDamage(FP damage, entity\_ref entity);
-
-```
 
 ```
 
@@ -662,12 +614,9 @@ Would lead to this trigger signal being generated on the Frame class (f variable
 
 C#
 
-```
 ```csharp
 // any System can trigger the generated signal, not leading to coupling with a specific implementation
 f.Signals.OnDamage(10, entity)
-
-```
 
 ```
 
@@ -675,7 +624,6 @@ A "subscriber" System would implement the generated "ISignalOnDamage" interface,
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
@@ -688,8 +636,6 @@ public void OnDamage(Frame frame, FP damage, EntityRef entity)
 
 }
 }
-
-```
 
 ```
 
@@ -722,7 +668,6 @@ Similar to what happens to signals, the entry point for triggering events is the
 
 C#
 
-```
 ```csharp
 // taking this DSL event definition as a basis
 event TriggerSound
@@ -733,18 +678,13 @@ FP Volume;
 
 ```
 
-```
-
 This can be called from a System to trigger an instance of this event (processing it from Unity will be covered on the chapter about the bootstrap project):
 
 C#
 
-```
 ```csharp
 // any System can trigger the generated events (FP.\_0\_5 means fixed point value for 0.5)
 f.Events.TriggerSound(FPVector2.Zero, FP.\_0\_5);
-
-```
 
 ```
 
@@ -758,7 +698,6 @@ The following snippet shows the most important ones:
 
 C#
 
-```
 ```csharp
 // RNG is a pointer.
 // Next gives a random FP between 0 and 1.
@@ -773,15 +712,12 @@ var i = f.GetPlayerInput(0);
 
 ```
 
-```
-
 ## Optimization By Scheduling
 
 To optimize systems identified as performance hotspots a simple modulo-based entity scheduling can help. Using this only a subset of entities are updated while iterating through them each tick.
 
 C#
 
-```
 ```csharp
 public override void Update(Frame frame) {
 foreach (var (entity, c) in f.GetComponentIterator<Component>()) {
@@ -790,8 +726,6 @@ if (entity.Index % schedulePeriod == frame.Number % schedulePeriod) {
 // it is time to update this entity
 }
 }
-
-```
 
 ```
 

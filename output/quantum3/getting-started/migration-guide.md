@@ -87,7 +87,6 @@ Final Steps
 
 
 ```
-```
 Quantum3Migration.ps1 -UnityEditorPath <path> -Quantum2MigrationPreparationPackagePath <path> -Quantum3PackagePath <path> -Quantum3MigrationPackagePath <path> \[..\]
 
 Usage:
@@ -96,7 +95,7 @@ Usage:
  -QuantumCodePath <path> The path to the Quantum code project. By default "quantum\_code/quantum.code".
  -AssetDBPath <path> The path to the temporary exported assets. By default "Quantum3MigrationAssets".
  -Quantum2MigrationPreparationPackagePath <path>
-The path to the Quantum 3 Migration Preparation unitypackage.
+ The path to the Quantum 3 Migration Preparation unitypackage.
  -Quantum3PackagePath <path> The path to the Quantum 3 SDK unitypackage.
  -Quantum3MigrationPackagePath <path> The path to the Quantum 3 Migration unitypackage.
  -LogBasePath <path> The folder where the migration logs are stored. If not set logs are created inside the executing directory.
@@ -108,8 +107,6 @@ The path to the Quantum 3 Migration Preparation unitypackage.
  -SkipInitialCodeGen Disable initial CodeGen steps.
  -SkipCompileErrorDetection Disable waiting for compiler error fixes.
  -SkipAssetsUpgrade Disable upgrading the Quantum assets.
-
-```
 
 ```
 
@@ -708,10 +705,7 @@ If you are getting undefined errors, ensure you are updated to latest Quantum 2.
 Projects that use the 512 component count libraries need to add a new pragma to a qtn-file.
 
 ```
-```
 #pragma max\_components 512
-
-```
 
 ```
 

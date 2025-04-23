@@ -81,21 +81,18 @@ events. The event callback is triggered when the specified clip is played at the
 
 C#
 
-```
 ```csharp
 public abstract class AnimatorInstantEventAsset : AnimatorEventAsset, IAnimatorEventAsset
-{
-/// <inheritdoc cref="AnimatorEventAsset.OnBake"/>
-public new AnimatorEvent OnBake(AnimationClip unityAnimationClip, AnimationEvent unityAnimationEvent)
-{
-var quantumAnimatorEvent = new AnimatorInstantEvent();
-quantumAnimatorEvent.AssetRef = Guid;
-quantumAnimatorEvent.Time = FP.FromFloat\_UNSAFE(unityAnimationEvent.time);
-return quantumAnimatorEvent;
-}
-}
-
-```
+ {
+ /// <inheritdoc cref="AnimatorEventAsset.OnBake"/>
+ public new AnimatorEvent OnBake(AnimationClip unityAnimationClip, AnimationEvent unityAnimationEvent)
+ {
+ var quantumAnimatorEvent = new AnimatorInstantEvent();
+ quantumAnimatorEvent.AssetRef = Guid;
+ quantumAnimatorEvent.Time = FP.FromFloat\_UNSAFE(unityAnimationEvent.time);
+ return quantumAnimatorEvent;
+ }
+ }
 
 ```
 
@@ -143,32 +140,29 @@ class:
 
 C#
 
-```
 ```csharp
-/// <summary>
-/// This is a sample of how to use SampleTimeWindowEvent events. Use it as a base to create a new class inheriting from AnimatorInstantEventAsset and
-/// implement a custom logic on Execute method
-/// </summary>
-\[Serializable\]
-public class ExampleTimeWindowEventAsset : AnimatorTimeWindowEventAsset
-{
-public override unsafe void OnEnter(Frame frame, AnimatorComponent\* animatorComponent, LayerData\* layerData)
-{
-Debug.Log($"\[Quantum Animator ({frame.Number})\] OnEnter animator time window event.");
-}
+ /// <summary>
+ /// This is a sample of how to use SampleTimeWindowEvent events. Use it as a base to create a new class inheriting from AnimatorInstantEventAsset and
+ /// implement a custom logic on Execute method
+ /// </summary>
+ \[Serializable\]
+ public class ExampleTimeWindowEventAsset : AnimatorTimeWindowEventAsset
+ {
+ public override unsafe void OnEnter(Frame frame, AnimatorComponent\* animatorComponent, LayerData\* layerData)
+ {
+ Debug.Log($"\[Quantum Animator ({frame.Number})\] OnEnter animator time window event.");
+ }
 
-public override unsafe void Execute(Frame frame, AnimatorComponent\* animatorComponent, LayerData\* layerData)
-{
-Debug.Log($"\[Quantum Animator ({frame.Number})\] Execute animator time window event.");
-}
+ public override unsafe void Execute(Frame frame, AnimatorComponent\* animatorComponent, LayerData\* layerData)
+ {
+ Debug.Log($"\[Quantum Animator ({frame.Number})\] Execute animator time window event.");
+ }
 
-public override unsafe void OnExit(Frame frame, AnimatorComponent\* animatorComponent, LayerData\* layerData)
-{
-Debug.Log($"\[Quantum Animator ({frame.Number})\] OnExit animator time window event.");
-}
-}
-
-```
+ public override unsafe void OnExit(Frame frame, AnimatorComponent\* animatorComponent, LayerData\* layerData)
+ {
+ Debug.Log($"\[Quantum Animator ({frame.Number})\] OnExit animator time window event.");
+ }
+ }
 
 ```
 
@@ -222,7 +216,6 @@ and can be implemented by other systems as well.
 
 C#
 
-```
 ```csharp
 // Called in the first update when the Animator begins entering a state.
 void OnAnimatorStateEnter(Frame frame, EntityRef entity, AnimatorComponent\* animator, AnimatorGraph graph, LayerData\* layerData, AnimatorState state, FP time);
@@ -232,8 +225,6 @@ void OnAnimatorStateUpdate(Frame frame, EntityRef entity, AnimatorComponent\* an
 
 // Called when the Animator updates for the last time, before fading to another state.
 void OnAnimatorStateExit(Frame frame, EntityRef entity, AnimatorComponent\* animator, AnimatorGraph graph, LayerData\* layerData, AnimatorState state, FP time);
-
-```
 
 ```
 
@@ -404,13 +395,10 @@ is abstract, so classes that inherit from it, must implement the following metho
 
 C#
 
-```
 ```csharp
 bool OnStateEnter(Frame frame, EntityRef entity, AnimatorComponent\* animator, AnimatorGraph graph, LayerData\* layerData, AnimatorState state, FP time);
 bool OnStateUpdate(Frame frame, EntityRef entity, AnimatorComponent\* animator, AnimatorGraph graph, LayerData\* layerData, AnimatorState state, FP time, AnimatorStateType stateType);
 bool OnStateExit(Frame frame, EntityRef entity, AnimatorComponent\* animator, AnimatorGraph graph, LayerData\* layerData, AnimatorState state, FP time);
-
-```
 
 ```
 
@@ -466,16 +454,13 @@ to enable this feature.
 
 C#
 
-```
 ```csharp
-// public void FadeTo(Frame frame, AnimatorComponent\* animatorComponent, string stateName, bool setIgnoreTransitions, FP deltaTime)
-//usage example
-if (input->Run.WasPressed)
-{
-graph.FadeTo(frame, filter.AnimatorComponent, "Running", true, 0);
-}
-
-```
+ // public void FadeTo(Frame frame, AnimatorComponent\* animatorComponent, string stateName, bool setIgnoreTransitions, FP deltaTime)
+ //usage example
+ if (input->Run.WasPressed)
+ {
+ graph.FadeTo(frame, filter.AnimatorComponent, "Running", true, 0);
+ }
 
 ```
 
@@ -533,82 +518,79 @@ OnAnimatorRootMotion2D
 
 C#
 
-```
 ```csharp
- // Handles 3D root motion
- public void OnAnimatorRootMotion3D(Frame frame, EntityRef entity, AnimatorFrame deltaFrame, AnimatorFrame currentFrame)
- {
- //Return in case there is no motion delta
- if (deltaFrame.Position == FPVector3.Zero && deltaFrame.RotationY == FP.\_0) return;
+// Handles 3D root motion
+public void OnAnimatorRootMotion3D(Frame frame, EntityRef entity, AnimatorFrame deltaFrame, AnimatorFrame currentFrame)
+{
+//Return in case there is no motion delta
+if (deltaFrame.Position == FPVector3.Zero && deltaFrame.RotationY == FP.\_0) return;
 
- if (frame.Unsafe.TryGetPointer<Transform3D>(entity, out var transform))
- {
- // Create a quaternion representing the inverse of the current frame's Y-axis rotation
- var currentFrameRotation = FPQuaternion.CreateFromYawPitchRoll(currentFrame.RotationY, 0, 0);
- currentFrameRotation = FPQuaternion.Inverse(currentFrameRotation);
+if (frame.Unsafe.TryGetPointer<Transform3D>(entity, out var transform))
+{
+// Create a quaternion representing the inverse of the current frame's Y-axis rotation
+var currentFrameRotation = FPQuaternion.CreateFromYawPitchRoll(currentFrame.RotationY, 0, 0);
+currentFrameRotation = FPQuaternion.Inverse(currentFrameRotation);
 
- // Rotate the delta position by the inverse current rotation to align movement
- var newPosition = currentFrameRotation \* deltaFrame.Position;
+// Rotate the delta position by the inverse current rotation to align movement
+var newPosition = currentFrameRotation \* deltaFrame.Position;
 
- // Apply the transform's rotation to the new position to get the world displacement
- var displacement = transform->Rotation \* newPosition;
+// Apply the transform's rotation to the new position to get the world displacement
+var displacement = transform->Rotation \* newPosition;
 
- var kccSettings = frame.FindAsset<KCCSettings>(frame.Unsafe.GetPointer<KCC>(entity)->Settings);
+var kccSettings = frame.FindAsset<KCCSettings>(frame.Unsafe.GetPointer<KCC>(entity)->Settings);
 
- // Compute an adjusted target hit position for raycasting
- var targetHitPosition =(displacement.XOZ.Normalized \* FP.\_0\_33 \* 2 ) + displacement;
+// Compute an adjusted target hit position for raycasting
+var targetHitPosition =(displacement.XOZ.Normalized \* FP.\_0\_33 \* 2 ) + displacement;
 
- // Perform a raycast in the direction of the intended motion to detect potential collisions with statics
- var hits = frame.Physics3D.RaycastAll(transform->Position, targetHitPosition.XOZ, targetHitPosition.Magnitude, -1,
- QueryOptions.HitStatics);
+// Perform a raycast in the direction of the intended motion to detect potential collisions with statics
+var hits = frame.Physics3D.RaycastAll(transform->Position, targetHitPosition.XOZ, targetHitPosition.Magnitude, -1,
+QueryOptions.HitStatics);
 
- if (hits.Count <= 0)
- {
- // If no collision, disable the character controller temporarily
- if (frame.Unsafe.TryGetPointer<KCC>(entity, out var kcc))
- {
- kcc->SetActive(false);
- }
+if (hits.Count <= 0)
+{
+// If no collision, disable the character controller temporarily
+if (frame.Unsafe.TryGetPointer<KCC>(entity, out var kcc))
+{
+kcc->SetActive(false);
+}
 
- // Apply the motion and rotation to the transform
- transform->Position += displacement;
- transform->Rotate(FPVector3.Up, deltaFrame.RotationY \* FP.Rad2Deg);
- }
- else
- {
- // If there is collision, enable the character controller
- if (frame.Unsafe.TryGetPointer<KCC>(entity, out var kcc))
- {
- kcc->SetActive(true);
- }
- }
- }
- }
+// Apply the motion and rotation to the transform
+transform->Position += displacement;
+transform->Rotate(FPVector3.Up, deltaFrame.RotationY \* FP.Rad2Deg);
+}
+else
+{
+// If there is collision, enable the character controller
+if (frame.Unsafe.TryGetPointer<KCC>(entity, out var kcc))
+{
+kcc->SetActive(true);
+}
+}
+}
+}
 
- public void OnAnimatorRootMotion2D(Frame frame, EntityRef entity, AnimatorFrame deltaFrame, AnimatorFrame currentFrame)
- {
- //Return in case there is no motion delta
- if (deltaFrame.Position == FPVector3.Zero && deltaFrame.RotationY == FP.\_0) return;
+public void OnAnimatorRootMotion2D(Frame frame, EntityRef entity, AnimatorFrame deltaFrame, AnimatorFrame currentFrame)
+{
+//Return in case there is no motion delta
+if (deltaFrame.Position == FPVector3.Zero && deltaFrame.RotationY == FP.\_0) return;
 
- if (frame.Unsafe.TryGetPointer<Transform2D>(entity, out var transform))
- {
- // Calculate new rotation by applying delta
- FP newRotation = transform->Rotation + deltaFrame.RotationY;
+if (frame.Unsafe.TryGetPointer<Transform2D>(entity, out var transform))
+{
+// Calculate new rotation by applying delta
+FP newRotation = transform->Rotation + deltaFrame.RotationY;
 
- // Normalize rotation to keep it within \[-π, π\]
- while (newRotation < -FP.Pi) newRotation += FP.PiTimes2;
- while (newRotation > FP.Pi) newRotation += -FP.PiTimes2;
+// Normalize rotation to keep it within \[-π, π\]
+while (newRotation < -FP.Pi) newRotation += FP.PiTimes2;
+while (newRotation > FP.Pi) newRotation += -FP.PiTimes2;
 
- // Rotate delta movement vector based on new orientation
- var deltaMovement = FPVector2.Rotate(deltaFrame.Position.XZ, newRotation);
+// Rotate delta movement vector based on new orientation
+var deltaMovement = FPVector2.Rotate(deltaFrame.Position.XZ, newRotation);
 
- // Apply movement and rotation to the transform
- transform->Position += deltaMovement;
- transform->Rotation = newRotation;
- }
- }
-
-```
+// Apply movement and rotation to the transform
+transform->Position += deltaMovement;
+transform->Rotation = newRotation;
+}
+}
 
 ```
 

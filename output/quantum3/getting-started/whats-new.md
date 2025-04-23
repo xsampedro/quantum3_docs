@@ -215,7 +215,6 @@ awaited
 
 C#
 
-```
 ```csharp
 MatchmakingArguments connectionArguments = new MatchmakingArguments {
 PhotonSettings = PhotonServerSettings.Default.AppSettings,
@@ -226,8 +225,6 @@ NetworkClient = new RealtimeClient { ClientType = ClientAppType.Quantum }
 };
 
 RealtimeClient client = await MatchmakingExtensions.ConnectToRoomAsync(connectionArguments);
-
-```
 
 ```
 
@@ -255,7 +252,6 @@ Quantum game sessions can be started in an async and non-async mode:
 
 C#
 
-```
 ```csharp
 SessionRunner.Arguments sessionRunnerArguments = new SessionRunner.Arguments {
 RunnerFactory = QuantumRunnerUnityFactory.DefaultFactory,
@@ -270,8 +266,6 @@ Communicator = new QuantumNetworkCommunicator(client),
 };
 
 QuantumRunner runner = (QuantumRunner)await SessionRunner.StartAsync(sessionRunnerArguments);
-
-```
 
 ```
 
@@ -342,14 +336,11 @@ and is usually set to the default Quantum Json serializer \`QuantumJsonSerialize
 
 C#
 
-```
 ```csharp
 var runtimeConfig = new RuntimeConfig();
 var runtimeConfigBinary = RuntimePlayer.ToByteArray(runtimeConfig, new QuantumJsonSerializer());
 var runtimeConfigOther = RuntimePlayer.FromByteArray(runtimeConfigBinary, new QuantumJsonSerializer());
 // make sure to check if runtimeConfig and runtimeConfigOther are equal to validate the json serialization
-
-```
 
 ```
 
@@ -420,7 +411,6 @@ file: quantum\_code/quantum.code/SystemSetup.cs
 
 C#
 
-```
 ```csharp
 namespace Quantum {
 public static class SystemSetup {
@@ -434,15 +424,12 @@ return new SystemBase\[\] {
 
 ```
 
-```
-
 New: ```
 file: Assets/QuantumUser/Simulation/SystemSetup.User.cs
 ```
 
 C#
 
-```
 ```csharp
 namespace Quantum {
 using System.Collections.Generic;
@@ -451,8 +438,6 @@ public static partial class DeterministicSystemSetup {
 static partial void AddSystemsUser(ICollection<SystemBase> systems, RuntimeConfig gameConfig, SimulationConfig simulationConfig, SystemsConfig systemsConfig) {
 systems.Add(new TestSystemMainThreadGroup("TestSystemsGroup", new SystemMainThread\[\] { new TestSystemImmediateRemoveDestroy(), }));
 systems.Add(new TasksTestSystem());
-
-```
 
 ```
 
@@ -465,10 +450,7 @@ Finally Quantum physics supports for 2D and 3D capsule shapes.
 Increasing the max component count to 512 can be now configued inside a qtn-file:
 
 ```
-```
 #pragma max\_components 512
-
-```
 
 ```
 

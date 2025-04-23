@@ -93,15 +93,12 @@ loop where the bot entities will be created:
 
 C#
 
-```
 ```csharp
 for(int i = 0; i < fillAmount; i++)
 {
 // Create a new Entity here
 // Setup it as a Bot as explained earlier on this document
 }
-
-```
 
 ```
 

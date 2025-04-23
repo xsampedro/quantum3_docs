@@ -160,37 +160,34 @@ EnvironmentProcessor
 
 C#
 
-```
 ```csharp
 public unsafe class PlayerSystem : SystemMainThreadFilter<PlayerSystem.Filter>
 {
-public struct Filter
-{
-public EntityRef Entity;
-public Player\* Player;
-public KCC\* KCC;
+ public struct Filter
+ {
+ public EntityRef Entity;
+ public Player\* Player;
+ public KCC\* KCC;
+ }
+
+ public override void Update(Frame frame, ref Filter filter)
+ {
+ Player\* player = filter.Player;
+ if (player->PlayerRef.IsValid == false)
+ return;
+
+ KCC\* kcc = filter.KCC;
+ Input\* input = frame.GetPlayerInput(player->PlayerRef);
+
+ kcc->AddLookRotation(input->LookRotationDelta.X, input->LookRotationDelta.Y);
+ kcc->SetInputDirection(kcc->Data.TransformRotation \* input->MoveDirection.XOY);
+
+ if (input->Jump.WasPressed == true && kcc->IsGrounded == true)
+ {
+ kcc->Jump(FPVector3.Up \* player->JumpForce);
+ }
+ }
 }
-
-public override void Update(Frame frame, ref Filter filter)
-{
-Player\* player = filter.Player;
-if (player->PlayerRef.IsValid == false)
-return;
-
-KCC\* kcc = filter.KCC;
-Input\* input = frame.GetPlayerInput(player->PlayerRef);
-
-kcc->AddLookRotation(input->LookRotationDelta.X, input->LookRotationDelta.Y);
-kcc->SetInputDirection(kcc->Data.TransformRotation \* input->MoveDirection.XOY);
-
-if (input->Jump.WasPressed == true && kcc->IsGrounded == true)
-{
-kcc->Jump(FPVector3.Up \* player->JumpForce);
-}
-}
-}
-
-```
 
 ```
 

@@ -23,7 +23,6 @@ Assets/QuantumUser
 After installing Quantum, the user is presented with following folder structure:
 
 ```
-```
 Assets
 ├───Photon
 │ ├───PhotonLibs
@@ -32,17 +31,15 @@ Assets
 │ ├───QuantumAsteroids
 │ └───QuantumMenu
 └───QuantumUser
- ├───Editor
- │ ├───CodeGen
- \| └───Generated
- ├───Resources
- ├───Scenes
- ├───Simulation
- │ └───Generated
- └───View
- └───Generated
-
-```
+├───Editor
+│ ├───CodeGen
+\| └───Generated
+├───Resources
+├───Scenes
+├───Simulation
+│ └───Generated
+└───View
+└───Generated
 
 ```
 
@@ -305,17 +302,14 @@ class to log from the simulation code and also to produce all its owns log outpu
 
 C#
 
-```
 ```csharp
 namespace Quantum {
-public unsafe class MyQuantumSystem : SystemMainThread
-public override void Update(Frame frame) {
-Log.Debug($"Updating MyQuantumSystem tick {frame.Number}");
+ public unsafe class MyQuantumSystem : SystemMainThread
+ public override void Update(Frame frame) {
+ Log.Debug($"Updating MyQuantumSystem tick {frame.Number}");
+ }
+ }
 }
-}
-}
-
-```
 
 ```
 
@@ -531,11 +525,8 @@ Quantum.Runner.exe
 
 bash
 
-```
 ```bash
 Quantum.Runner.exe --replay-path path/to/replay --lut-path path/to/lut --db-path path/to/db --checksum-path path/to/checksum
-
-```
 
 ```
 
@@ -644,7 +635,6 @@ The \`New File Type\` window in JetBrains Rider.
 
 C#
 
-```
 ```csharp
 #define
 #pragma
@@ -690,8 +680,6 @@ using
 
 ```
 
-```
-
 - **Step 5:** Paste the list below into the keywords level 2 then press ```
 Ok
 ```
@@ -700,7 +688,6 @@ Ok
 
 C#
 
-```
 ```csharp
 (
 )
@@ -715,8 +702,6 @@ C#
 \]
 {
 }
-
-```
 
 ```
 

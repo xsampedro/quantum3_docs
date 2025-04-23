@@ -234,15 +234,12 @@ It consists in setting up a prediction area in front of the user. The radius of 
 
 C#
 
-```
 ```csharp
 if (enablePredictionCulling)
 {
 centerPosition = transform.position + transform.forward \* offset;
 QuantumRunner.Default.Game.SetPredictionArea(centerPosition.ToFPVector3(), radius.ToFP());
 wasCulled = true;
-
-```
 
 ```
 
@@ -326,7 +323,6 @@ The logic of the prediction is to store during verified frame the local rig part
 
 C#
 
-```
 ```csharp
 if (f.IsVerified)
 {
@@ -335,13 +331,10 @@ filter.Head->PositionsBuffer.Insert(headLocalization, f.Number);
 
 ```
 
-```
-
 Then, an average velocity is computed :
 
 C#
 
-```
 ```csharp
 FPVector3 accumulatedDeltaPosition = FPVector3.Zero;
 for (int i = 0; i < (UsedEntries -1); i++)
@@ -354,8 +347,6 @@ var lastInstantSpeed = accumulatedDeltaPosition \* ratio;
 
 ```
 
-```
-
 Then we apply this speed for each frame since the last verified frame, but to take into account that the further we are from the verified frame, the less we can trust the computed speed, the ```
 speedConversionOverTime
 ```
@@ -364,7 +355,6 @@ speedConversionOverTime
 
 C#
 
-```
 ```csharp
 FPVector3 cumulatedMove = FPVector3.Zero;
 var distancePerFrame = lastInstantSpeed;
@@ -375,8 +365,6 @@ cumulatedMove = cumulatedMove + distancePerFrame;
 distancePerFrame = distancePerFrame \* config.speedConversionOverTime / 100;
 remainingFrameToPredict--;
 }
-
-```
 
 ```
 
@@ -397,7 +385,6 @@ settings.
 
 C#
 
-```
 ```csharp
 if (previousSpeed != FPVector3.Zero)
 {
@@ -409,8 +396,6 @@ smoothedPredictedLocation.Position = FPVector3.Lerp(continuationPosition, predic
 smoothedPredictedLocation.Rotation = FPQuaternion.Slerp(currentRotation, predictedLocation.Rotation, config.rotationSmoothingRatio);
 
 previousSpeed = lastInstantSpeed;
-
-```
 
 ```
 
@@ -446,7 +431,6 @@ OnTriggerExit3D
 
 C#
 
-```
 ```csharp
 #region Hovering detection
 public void OnTriggerEnter3D(Frame frame, TriggerInfo3D info)
@@ -474,8 +458,6 @@ grabber->HoveredEntity = EntityRef.None;
 }
 }
 #endregion
-
-```
 
 ```
 
@@ -511,7 +493,6 @@ This configuration file notably change the logic of the PID controller determini
 
 C#
 
-```
 ```csharp
 var error = targetPosition - followingTransform->Position;
 
@@ -531,13 +512,10 @@ followingBody->AddLinearImpulse(impulse);
 
 ```
 
-```
-
 The configuration file also allows to state if we want to artificially increase the ungrab velocity (to simplify launching objects):
 
 C#
 
-```
 ```csharp
 // Release velocity kick
 if (config.applyReleaseVelocityKick)
@@ -548,8 +526,6 @@ if (config.minVelocityTriggeringKick <= velocityMagnitude && velocityMagnitude <
 grabbableBody->Velocity = config.velocityKickFactor \* grabbableBody->Velocity;
 }
 }
-
-```
 
 ```
 
@@ -608,7 +584,6 @@ RightHandIsRayEnabled
 
 C#
 
-```
 ```csharp
 import struct FPVector3RawInt(12);
 import struct FPQuaternionRawInt(16);
@@ -643,8 +618,6 @@ button RightHandIsIndexTouched;
 
 ```
 
-```
-
 The ```
 QuantumXRInput
 ```
@@ -653,7 +626,6 @@ script is responsible for collecting Unity inputs and passing them into the Quan
 
 C#
 
-```
 ```csharp
 
 private void OnEnable()
@@ -708,8 +680,6 @@ callback.SetInput(input, DeterministicInputFlags.Repeatable);
 
 ```
 
-```
-
 #### Quantum teleport request processing
 
 The locomotion QTN file defines the ```
@@ -720,7 +690,6 @@ component.
 
 Qtn
 
-```
 ```cs
 component LocomotionRay{
 FPVector3 PositionOffset;
@@ -744,8 +713,6 @@ AttractingGrabbable
 
 ```
 
-```
-
 This component must be added on each hand entity.
 
 ![Quantum XR hand prototype](/docs/img/quantum/v3/technical-samples/quantum-xr/quantum-xr-hand-prototype.jpg)
@@ -762,7 +729,6 @@ can read the input provided by Unity and update the locomotion ray state.
 
 C#
 
-```
 ```csharp
 public override void Update(Frame frame, ref RayAndLocomotionSystem.Filter filter)
 {
@@ -784,8 +750,6 @@ UpdateRayState(f, ref filter, input->RightHand, rightHandTransform, filter.Rig->
 
 ```
 
-```
-
 If the player requested a teleport and if the target is a valid target, then the event ```
 OnMoveToTargetRequested
 ```
@@ -794,7 +758,6 @@ is raised.
 
 C#
 
-```
 ```csharp
 
 public unsafe void UpdateRayState(Frame frame, ref Filter filter, HandInfo handInfo, Transform3D\* handTransform, EntityRef handEntity, LocomotionRay\* locomotionRay, out EntityRef hitEntity)
@@ -808,8 +771,6 @@ frame.Events.OnMoveToTargetRequested(filter.PlayerLink->Player, locomotionRay->T
 }
 \[...\]
 }
-
-```
 
 ```
 
@@ -837,7 +798,6 @@ command.
 
 C#
 
-```
 ```csharp
 public class RigView : QuantumEntityViewComponent<XRViewContext>
 {
@@ -870,8 +830,6 @@ Game.SendCommand(new CommandReadyForTeleport());
 
 ```
 
-```
-
 #### Quantum teleportation
 
 At each ```
@@ -896,7 +854,6 @@ event.
 
 C#
 
-```
 ```csharp
 public override void Update(Frame frame, ref RayAndLocomotionSystem.Filter filter)
 {
@@ -928,8 +885,6 @@ sourceRay->State = LocomotionRayState.NotPointing;
 
 ```
 
-```
-
 #### Unity end of teleportation
 
 Like for the ```
@@ -948,7 +903,6 @@ event in order to process the fade out and synchronize the hardware rig position
 
 C#
 
-```
 ```csharp
 
 private void MoveToTargetDone(EventOnMoveToTargetDone callback)
@@ -963,8 +917,6 @@ ViewContext.hardwareRig.transform.position = rigTransform3D.Position.ToUnityVect
 // fadeout
 StartCoroutine(TeleportEnd());
 }
-
-```
 
 ```
 
@@ -1076,7 +1028,6 @@ method to generate the visual and audio feedbacks.
 
 C#
 
-```
 ```csharp
 private void Start()
 {
@@ -1096,8 +1047,6 @@ audioSource.Play();
 
 ```
 
-```
-
 ### Boundary System
 
 Some objects of the scene (balls, rackets) can be thrown out of the player's reach.
@@ -1112,7 +1061,6 @@ To do so, a Boundary QTN file contains the datas required for this feature.
 
 Qtn
 
-```
 ```cs
 component Bounded
 {
@@ -1125,8 +1073,6 @@ FPVector3 LimitCenter;
 
 ```
 
-```
-
 In the ```
 BoundarySystem
 ```
@@ -1135,7 +1081,6 @@ BoundarySystem
 
 C#
 
-```
 ```csharp
 public struct Filter
 {
@@ -1143,8 +1088,6 @@ public EntityRef Entity;
 public Bounded\* Bounded;
 public Transform3D\* Transform;
 }
-
-```
 
 ```
 
@@ -1156,7 +1099,6 @@ Update()
 
 C#
 
-```
 ```csharp
 if(filter.Bounded->Initialized == false)
 {
@@ -1167,15 +1109,12 @@ filter.Bounded->InitialRotation = filter.Transform->Rotation;
 
 ```
 
-```
-
 Then, for each frame, the system checks if the entity is out of the bounds defined.
 
 In this case, in addition to reinitialized the object position & rotation, it is also required to reset the velocity of the physics body.
 
 C#
 
-```
 ```csharp
 if (IsOutOfBounds(filter.Transform->Position, filter.Bounded->LimitCenter, extends))
 {
@@ -1186,8 +1125,6 @@ physicsBody3D->AngularVelocity = FPVector3.Zero;
 }
 filter.Transform->Teleport(f, filter.Bounded->InitialPosition, filter.Bounded->InitialRotation);
 }
-
-```
 
 ```
 
@@ -1251,7 +1188,6 @@ QTN file.
 
 Qtn
 
-```
 ```cs
 event OnCollisionDetectedWithStaticCollider {
 EntityRef GrabbableEntity;
@@ -1261,8 +1197,6 @@ LayerMask CollidedEntityLayer;
 String CollidedEntityTag;
 nothashed FP Velocity;
 }
-
-```
 
 ```
 
@@ -1278,7 +1212,6 @@ callback if the grabbable object collides with a static entity.
 
 C#
 
-```
 ```csharp
 public void OnCollisionEnter3D(Frame frame, CollisionInfo3D info)
 {
@@ -1308,8 +1241,6 @@ frame.Events.OnCollisionDetectedWithDynamicCollider(grabbableEntity, grabbablePh
 
 ```
 
-```
-
 On the Unity side, the ```
 GrabbableView
 ```
@@ -1318,7 +1249,6 @@ subscribes to this event and play the audio clip only if the collided entity tag
 
 C#
 
-```
 ```csharp
 private void Awake()
 {
@@ -1344,8 +1274,6 @@ if(callback.Velocity.AsFloat > minVelocityForAudioFeedback)
 PlayAudioFeeback(Mathf.Clamp01(callback.Velocity.AsFloat / 10f));
 }
 }
-
-```
 
 ```
 

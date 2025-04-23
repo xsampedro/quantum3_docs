@@ -95,13 +95,10 @@ To ensure entities are only created on verified frames, you could either wrap th
 
 C#
 
-```
 ```csharp
 if(f.IsVerified) {
- // Do stuff
+// Do stuff
 }
-
-```
 
 ```
 
@@ -109,12 +106,9 @@ Or bail out early on non-verified, i.e. predicted, frames by using:
 
 C#
 
-```
 ```csharp
 if (f.IsPredicted)
- return;
-
-```
+return;
 
 ```
 

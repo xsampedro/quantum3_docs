@@ -40,13 +40,10 @@ on every Unity update:
 
 C#
 
-```
 ```csharp
 // center is either FPVector2 or FPVector3
 // radius is an FP
 QuantumRunner.Default.Game.SetPredictionArea(center, radius);
-
-```
 
 ```
 
@@ -120,13 +117,10 @@ The solution is to store an isolated RNGSession struct in each entity subject to
 
 chsarp
 
-```
 ```chsarp
 struct SomeStruct {
- RNGSession MyRNG;
+RNGSession MyRNG;
 }
-
-```
 
 ```
 

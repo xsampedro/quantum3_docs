@@ -6,6 +6,14 @@ A simple Go application that scrapes API documentation from a vendor's website a
 
 This repository was created to facilitate uploading API documentation to [Context7](https://context7.com/add-library), which requires documentation to be in markdown format and hosted in a GitHub repository.
 
+## Features
+
+- Scrapes Quantum 3 documentation from the official website
+- Converts HTML to clean Markdown format
+- Properly handles and formats code blocks
+- Preserves original document structure
+- Organizes documents in a logical folder structure
+
 ## Prerequisites
 
 - Go 1.21 or later

@@ -59,16 +59,13 @@ Pointer-based C# is used by Quantum, for performance. Complexity and boiler-plat
 
 Qtn
 
-```
 ```cs
 // components define reusable game state data groups
 component Resources
 {
-Int32 Mana;
-FP Health;
+ Int32 Mana;
+ FP Health;
 }
-
-```
 
 ```
 
@@ -78,16 +75,13 @@ The auto-generated API makes it easy to query and modify the game state with com
 
 C#
 
-```
 ```csharp
 var es = frame.Filter<Transform3D, Resources>();
 
 // sets the entity ref and pointers to the components
 while (es.NextUnsafe(out var entity, out var transform, out var resources)) {
-transform->Position += FPVector3.Forward \* frame.DeltaTime;
+ transform->Position += FPVector3.Forward \* frame.DeltaTime;
 }
-
-```
 
 ```
 
@@ -99,18 +93,15 @@ Customer game logic is written by implementing Systems, which are stateless piec
 
 C#
 
-```
 ```csharp
 public unsafe class LogicSystem : SystemMainThread
 {
-public override void Update(Frame frame)
-{
-// customer game logic here
-// (frame is a reference for the generated game state container).
+ public override void Update(Frame frame)
+ {
+ // customer game logic here
+ // (frame is a reference for the generated game state container).
+ }
 }
-}
-
-```
 
 ```
 

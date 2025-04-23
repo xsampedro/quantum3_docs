@@ -110,19 +110,16 @@ Once the file is open remove all code and replace it with:
 
 C#
 
-```
 ```csharp
 using UnityEngine.Scripting;
 
 namespace Quantum.Asteroids
 {
-\[Preserve\]
-public unsafe class AsteroidsShipSystem
-{
+ \[Preserve\]
+ public unsafe class AsteroidsShipSystem
+ {
+ }
 }
-}
-
-```
 
 ```
 
@@ -158,16 +155,13 @@ AsteroidsShipSystem
 
 C#
 
-```
 ```cs
 public struct Filter
 {
- public EntityRef Entity;
- public Transform2D\* Transform;
- public PhysicsBody2D\* Body;
+public EntityRef Entity;
+public Transform2D\* Transform;
+public PhysicsBody2D\* Body;
 }
-
-```
 
 ```
 
@@ -181,12 +175,9 @@ class:
 
 C#
 
-```
 ```csharp
 \[Preserve\]
 public unsafe class AsteroidsShipSystem : SystemMainThreadFilter<AsteroidsShipSystem.Filter>
-
-```
 
 ```
 
@@ -198,15 +189,12 @@ Update
 
 C#
 
-```
 ```csharp
 public override void Update(Frame frame, ref Filter filter)
 {
- // note: pointer property access via -> instead of .
- filter.Body->AddForce(filter.Transform->Up);
+// note: pointer property access via -> instead of .
+filter.Body->AddForce(filter.Transform->Up);
 }
-
-```
 
 ```
 
@@ -361,7 +349,6 @@ Double-click the input file to open it in the IDE then add the following to it:
 
 Qtn
 
-```
 ```cs
 input {
 button Left;
@@ -369,8 +356,6 @@ button Right;
 button Up;
 button Fire;
 }
-
-```
 
 ```
 
@@ -410,7 +395,6 @@ function.
 
 C#
 
-```
 ```csharp
 private void UpdateShipMovement(Frame frame, ref Filter filter, Input\* input)
 {
@@ -437,8 +421,6 @@ filter.Body->AngularVelocity = FPMath.Clamp(filter.Body->AngularVelocity, -turnS
 
 ```
 
-```
-
 The ```
 FP
 ```
@@ -453,7 +435,6 @@ Next, replace the code in the Update function with the following code.
 
 C#
 
-```
 ```csharp
 public override void Update(Frame frame, ref Filter filter)
 {
@@ -462,8 +443,6 @@ var input = frame.GetPlayerInput(0);
 
 UpdateShipMovement(frame, ref filter, input);
 }
-
-```
 
 ```
 
@@ -493,7 +472,6 @@ Open the script in the Unity project. This script is responsible for collecting 
 
 C#
 
-```
 ```csharp
 using Photon.Deterministic;
 using UnityEngine;
@@ -521,8 +499,6 @@ callback.SetInput(i, DeterministicInputFlags.Repeatable);
 }
 }
 }
-
-```
 
 ```
 

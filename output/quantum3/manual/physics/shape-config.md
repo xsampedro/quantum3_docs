@@ -51,20 +51,17 @@ in a custom asset will automatically expose it in the Editor.
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
-public unsafe partial class WeaponSpec
-{
-public Shape3DConfig AttackShape;
-public LayerMask AttackLayers;
-public FP Damage;
-public FP KnockbackForce;
+ public unsafe partial class WeaponSpec
+ {
+ public Shape3DConfig AttackShape;
+ public LayerMask AttackLayers;
+ public FP Damage;
+ public FP KnockbackForce;
+ }
 }
-}
-
-```
 
 ```
 
@@ -82,26 +79,23 @@ CreateShape
 
 C#
 
-```
 ```csharp
 private static void Attack(in Frame frame, in EntityRef entity)
 {
- // A melee attack performed by using an OverlapShape on the attack area.
+// A melee attack performed by using an OverlapShape on the attack area.
 
- var transform = frame.Unsafe.GetPointer<Transform3D>(entity);
- var weapon = frame.Unsafe.GetPointer<Weapon>(entity);
- var weaponSpec = frame.FindAsset<WeaponSpec>(weapon->WeaponSpec.Id);
+var transform = frame.Unsafe.GetPointer<Transform3D>(entity);
+var weapon = frame.Unsafe.GetPointer<Weapon>(entity);
+var weaponSpec = frame.FindAsset<WeaponSpec>(weapon->WeaponSpec.Id);
 
- var hits = frame.Physics3D.OverlapShape(
- transform->Position,
- transform->Rotation,
- weaponSpec.AttackShape.CreateShape(frame),
- weaponSpec.AttackLayers);
+var hits = frame.Physics3D.OverlapShape(
+transform->Position,
+transform->Rotation,
+weaponSpec.AttackShape.CreateShape(frame),
+weaponSpec.AttackLayers);
 
- // Game logic iterating over the hits.
+// Game logic iterating over the hits.
 }
-
-```
 
 ```
 
@@ -133,21 +127,18 @@ on. Here is an example of how the lifetime can be managed, the same applies to 3
 
 C#
 
-```
 ```csharp
-// creating a persistent compound. This does not allocate memory until actually adding shapes
-var compoundShape = Shape2D.CreatePersistentCompound();
+ // creating a persistent compound. This does not allocate memory until actually adding shapes
+ var compoundShape = Shape2D.CreatePersistentCompound();
 
-// adding shapes to a compound (shape1 and 2 can be of any type)
-compoundShape.Compound.AddShape(f, shape1);
-compoundShape.Compound.AddShape(f, shape2);
+ // adding shapes to a compound (shape1 and 2 can be of any type)
+ compoundShape.Compound.AddShape(f, shape1);
+ compoundShape.Compound.AddShape(f, shape2);
 
-(...) // Game logic
+ (...) // Game logic
 
-// this compound persists until it is manually disposed
-compoundShape.Compound.FreePersistent(f);
-
-```
+ // this compound persists until it is manually disposed
+ compoundShape.Compound.FreePersistent(f);
 
 ```
 
@@ -175,14 +166,11 @@ You can also create a new compound shape by copying an existing one.
 
 C#
 
-```
 ```csharp
 // Using the exising compoundShape from the example above.
 
 var newCompoundShape = Shape2D.CreatePersistentCompound();
 newCompoundShape.Compound.CopyFrom(f, ref oldCompoundShape);
-
-```
 
 ```
 
@@ -212,18 +200,15 @@ returned by the method as it is the boundary where the shape pointers are contai
 
 C#
 
-```
 ```csharp
 if (shape->Compound.GetShapes(frame, out Shape3D\* shapesBuffer, out int count))
 {
-for (var i = 0; i < count; i++)
-{
-Shape3D\* currentShape = shapesBuffer + i;
-// do something with the shape
+ for (var i = 0; i < count; i++)
+ {
+ Shape3D\* currentShape = shapesBuffer + i;
+ // do something with the shape
+ }
 }
-}
-
-```
 
 ```
 
@@ -263,12 +248,9 @@ with this:
 
 C#
 
-```
 ```csharp
-var collider = PhysicsCollider2D.Create(f, compoundShape);
-f.Set(entity, collider);
-
-```
+ var collider = PhysicsCollider2D.Create(f, compoundShape);
+ f.Set(entity, collider);
 
 ```
 
@@ -292,24 +274,21 @@ Create()
 
 C#
 
-```
 ```csharp
- var compoundShape = Shape2D.CreatePersistentCompound();
- compoundShape.Compound.AddShape(f, shape1);
- compoundShape.Compound.AddShape(f, shape2);
+var compoundShape = Shape2D.CreatePersistentCompound();
+compoundShape.Compound.AddShape(f, shape1);
+compoundShape.Compound.AddShape(f, shape2);
 
- // collider1 and collider2 each create a copy of the compoundShape buffer.
- // collider1 and collider2 will each dispose of their copy on destroy/remove.
- var collider1 = PhysicsCollider2D.Create(f, compoundShape);
- f.Set(entity1, collider1);
+// collider1 and collider2 each create a copy of the compoundShape buffer.
+// collider1 and collider2 will each dispose of their copy on destroy/remove.
+var collider1 = PhysicsCollider2D.Create(f, compoundShape);
+f.Set(entity1, collider1);
 
- var collider2 = PhysicsCollider2D.Create(f, compoundShape);
- f.Set(entity2, collider2);
+var collider2 = PhysicsCollider2D.Create(f, compoundShape);
+f.Set(entity2, collider2);
 
- // Here we dispose of the compoundShape's buffer as it is no longer needed
- compoundShape.Compound.FreePersistent(f);
-
-```
+// Here we dispose of the compoundShape's buffer as it is no longer needed
+compoundShape.Compound.FreePersistent(f);
 
 ```
 
@@ -329,25 +308,22 @@ will point to the same buffer. Doing this can be dangerous if when having multip
 
 C#
 
-```
 ```csharp
-var compoundShape = Shape2D.CreatePersistentCompound();
-compoundShape.Compound.AddShape(f, shape1);
-compoundShape.Compound.AddShape(f, shape2);
+ var compoundShape = Shape2D.CreatePersistentCompound();
+ compoundShape.Compound.AddShape(f, shape1);
+ compoundShape.Compound.AddShape(f, shape2);
 
-var collider1 = PhysicsCollider2D.Create(f, default(Shape2D));
-collider1.Shape = compoundShape;
-f.Set(entity1, collider1);
+ var collider1 = PhysicsCollider2D.Create(f, default(Shape2D));
+ collider1.Shape = compoundShape;
+ f.Set(entity1, collider1);
 
-var collider2 = PhysicsCollider2D.Create(f, Shape2D.CreateCircle(1));
-collider2.Shape = compoundShape;
-f.Set(entity2, collider2);
+ var collider2 = PhysicsCollider2D.Create(f, Shape2D.CreateCircle(1));
+ collider2.Shape = compoundShape;
+ f.Set(entity2, collider2);
 
-// collider1.Shape, collider2.Shape and compoundShape all point to the same buffer
-// dispose of compoundShape here will break collider1 and collider2
-compoundShape.Compound.FreePersistent(f);
-
-```
+ // collider1.Shape, collider2.Shape and compoundShape all point to the same buffer
+ // dispose of compoundShape here will break collider1 and collider2
+ compoundShape.Compound.FreePersistent(f);
 
 ```
 
@@ -355,20 +331,17 @@ However, when doing it conscientiously this will assign the shape and its memory
 
 C#
 
-```
 ```csharp
-var compoundShape = Shape2D.CreatePersistentCompound();
-compoundShape.Compound.AddShape(f, shape1);
-compoundShape.Compound.AddShape(f, shape2);
+ var compoundShape = Shape2D.CreatePersistentCompound();
+ compoundShape.Compound.AddShape(f, shape1);
+ compoundShape.Compound.AddShape(f, shape2);
 
-var collider1 = PhysicsCollider2D.Create(f, Shape2D.CreateCircle(1));
-collider1.Shape = compoundShape;
-f.Set(entity1, collider1);
+ var collider1 = PhysicsCollider2D.Create(f, Shape2D.CreateCircle(1));
+ collider1.Shape = compoundShape;
+ f.Set(entity1, collider1);
 
-// In this instance we do not need to dispose of the compoundShape buffer because
-// collider1 already points to it and will take care of it on destroy/remove.
-
-```
+ // In this instance we do not need to dispose of the compoundShape buffer because
+ // collider1 already points to it and will take care of it on destroy/remove.
 
 ```
 

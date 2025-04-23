@@ -53,10 +53,7 @@ AvoidanceRange
 .
 
 ```
-```
 inRange = Distance(positionAgentA, positionAgentB) - radiusAgentA - radiusAgentB < AvoidanceRange
-
-```
 
 ```
 
@@ -138,7 +135,6 @@ Or add it in code.
 
 C#
 
-```
 ```csharp
 var c = f.Create();
 f.Set(c, new Transform2D { Position = new FPVector2(8,-2) });
@@ -147,8 +143,6 @@ obstacle.AvoidanceLayer = 0;
 obstacle.Radius = FP.\_0\_50;
 obstacle.Velocity = FPVector2.Zero;
 f.Set(c, obstacle);
-
-```
 
 ```
 
@@ -168,28 +162,25 @@ class and adding blending to the rotation when applying the transforms.
 
 C#
 
-```
 ```csharp
 namespace Quantum {
-using UnityEngine;
+ using UnityEngine;
 
-public class SmoothRotationEntityView : QuantumEntityView {
-public float Blending = 15;
+ public class SmoothRotationEntityView : QuantumEntityView {
+ public float Blending = 15;
 
-private Quaternion rotation;
+ private Quaternion rotation;
 
-protected override void ApplyTransform(ref UpdatePositionParameter param) {
-// Override this in subclass to change how the new position is applied to the transform.
-transform.position = param.NewPosition + param.ErrorVisualVector;
+ protected override void ApplyTransform(ref UpdatePositionParameter param) {
+ // Override this in subclass to change how the new position is applied to the transform.
+ transform.position = param.NewPosition + param.ErrorVisualVector;
 
-// Unity's quaternion multiplication is equivalent to applying rhs then lhs (despite their doc saying the opposite)
-rotation = param.ErrorVisualQuaternion \* param.NewRotation;
-transform.rotation = Quaternion.Lerp(transform.rotation, rotation, Time.deltaTime \* Blending);
+ // Unity's quaternion multiplication is equivalent to applying rhs then lhs (despite their doc saying the opposite)
+ rotation = param.ErrorVisualQuaternion \* param.NewRotation;
+ transform.rotation = Quaternion.Lerp(transform.rotation, rotation, Time.deltaTime \* Blending);
+ }
+ }
 }
-}
-}
-
-```
 
 ```
 

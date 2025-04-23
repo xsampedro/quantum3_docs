@@ -170,7 +170,6 @@ object or as a singleton component.
 
 C#
 
-```
 ```csharp
 singleton component StaticColliderState {
 bitset\[256\] colliders;
@@ -178,13 +177,10 @@ bitset\[256\] colliders;
 
 ```
 
-```
-
 This allows to use the bitset instance with the collider indices to set its bits.
 
 C#
 
-```
 ```csharp
 // loops through the bitset to initialize all bits as "On" to mark all colliders as active
 public override void OnInit(Frame frame)
@@ -209,8 +205,6 @@ collidersState->colliders.Clear(info.StaticData.ColliderIndex);
 
 ```
 
-```
-
 The values can then be read using ```
 IsSet()
 ```
@@ -231,7 +225,6 @@ First, the state of the static colliders representing power-ups needs to be held
 
 C#
 
-```
 ```csharp
 singleton component PowerUps {
 \[ExcludeFromPrototype\] bitset\[256\] IsPowerUp;
@@ -242,13 +235,10 @@ FP SpawnCooldown;
 
 ```
 
-```
-
 Then a system can be created to handled the enabling and disabling of the power-ups.
 
 C#
 
-```
 ```csharp
 public unsafe class MyPowerUpSystem : SystemMainThread {
 public override void OnInit(Frame frame)
@@ -300,8 +290,6 @@ powerUps->Timers\[info.StaticData.ColliderIndex\] = powerUps->SpawnCooldown;
 
 // Remember to communicate the disabled state visually, e.g. trigger a frame event to disable the GameObject in Unity
 }
-
-```
 
 ```
 

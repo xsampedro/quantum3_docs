@@ -82,7 +82,6 @@ Window > Bot SDK > Open Editor
 
 Plain Old Text
 
-```
 ```plain
 Nov 05, 2024
 Bot SDK 3.6.0 A1
@@ -1817,8 +1816,6 @@ custom Blackboards are created and from where you can drag and drop the Blackboa
 
 Jul 1, 2019
 \- Bot SDK 1.0.0 Release Candidate 1
-
-```
 
 ```
 

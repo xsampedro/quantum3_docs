@@ -28,18 +28,15 @@ asset as an example.
 
 C#
 
-```
 ```csharp
 public class CharacterSpec : AssetObject {
 #if QUANTUM\_UNITY
-\[Header("Unity")\]
-public Sprite Icon;
-public Color Color;
-public string DisplayName;
+ \[Header("Unity")\]
+ public Sprite Icon;
+ public Color Color;
+ public string DisplayName;
 #endif
 }
-
-```
 
 ```
 
@@ -55,12 +52,9 @@ QuantumUnityDB.GetGlobalAsset
 
 C#
 
-```
 ```csharp
 CharacterSpec characterSpec = QuantumUnityDB.GetGlobalAsset(assetRef);
 Debug.Log(characterSpec.DisplayName);
-
-```
 
 ```
 
@@ -72,13 +66,10 @@ can be used.
 
 C#
 
-```
 ```csharp
 if (QuantumUnityDB.TryGetGlobalAsset(assetPath, out CharacterSpec characterSpec)) {
-Debug.Log(characterSpec.DisplayName);
+ Debug.Log(characterSpec.DisplayName);
 }
-
-```
 
 ```
 
@@ -94,12 +85,9 @@ UnityEditor.AssetDataBase.LoadAssetAtPath<T>()
 
 C#
 
-```
 ```csharp
 CharacterSpecAsset characterSpecAsset = UnityEditor.AssetDatabase.LoadAssetAtPath<CharacterSpecAsset>(path);
 Debug.Log(characterSpecAsset.DisplayName);
-
-```
 
 ```
 
@@ -115,12 +103,9 @@ method.
 
 C#
 
-```
 ```csharp
 CharacterSpec characterSpec = QuantumUnityDB.GetGlobalAssetEditorInstance<CharacterSpec>(guid);
 Debug.Log(characterSpec.DisplayName);
-
-```
 
 ```
 

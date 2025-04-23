@@ -179,17 +179,14 @@ The files relevant to the game state system are:
 
 pre
 
-```
 ```pre
 quantum.code
 └ Game
-├ Game State
-│ ├ gameState.qtn
-│ └ IGameStates.cs
-└ Systems
-└ GameStateSystem.cs
-
-```
+ ├ Game State
+ │ ├ gameState.qtn
+ │ └ IGameStates.cs
+ └ Systems
+ └ GameStateSystem.cs
 
 ```
 
@@ -400,7 +397,6 @@ may be serialized. Note that the alpha is not used, and so does not need to be s
 
 C#
 
-```
 ```cs
 partial void SerializeUserData(BitStream stream)
 {
@@ -410,8 +406,6 @@ stream.Serialize(ref primaryColor.G);
 stream.Serialize(ref primaryColor.B);
 /\\* ... \*/
 }
-
-```
 
 ```
 

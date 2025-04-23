@@ -524,12 +524,9 @@ Here is a code snippet for adding the component (only if not already added to th
 
 C#
 
-```
 ```csharp
 var btAgent = new BTAgent();
 f.Set(myEntity, brAgent);
-
-```
 
 ```
 
@@ -537,12 +534,9 @@ The initialization step below needs to be done \*whether EntityPrototypes are us
 
 C#
 
-```
 ```csharp
 var btRootAsset = f.FindAsset<BTRoot>(btReference.Id);
 BTManager.Init(f, myEntity, btRoot);
-
-```
 
 ```
 
@@ -566,7 +560,6 @@ showcases. Here is an example:
 
 C#
 
-```
 ```csharp
 // At any system...
 public unsafe class AISystem : SystemMainThread, ISignalOnComponentAdded<BTAgent>
@@ -584,19 +577,14 @@ BTManager.Init(frame, entity, btRoot);
 
 ```
 
-```
-
 ### Updating the BTAgent
 
 After initializing the agent, update it:
 
 C#
 
-```
 ```csharp
 BTManager.Update(frame, filter.Entity);
-
-```
 
 ```
 
@@ -604,7 +592,6 @@ This starts the entire BT mechanism: the root node will execute its child node a
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
@@ -628,8 +615,6 @@ BTManager.Update(frame, filter.Entity);
 }
 }
 }
-
-```
 
 ```
 
@@ -849,7 +834,6 @@ OnEnter
 method of a Decorator class, register the Decorator on the Blackboard entries which should be observed:
 
 ```
-```
 // --\> Sample from BTBlackboardCompare
 
 // We let the user define, on the Visual Editor, which Blackboard entries
@@ -869,8 +853,6 @@ p.Blackboard->RegisterReactiveDecorator(p.Frame, BlackboardKeyB.Key, this);
 
 ```
 
-```
-
 - On the ```
 OnExit
 ```
@@ -878,20 +860,17 @@ OnExit
 , unregister the Decorator:
 
 ```
-```
 // --\> Sample from BTBlackboardCompare
 
-public override void OnExit(BTParams p)
-{
-base.OnExit(p);
+ public override void OnExit(BTParams p)
+ {
+ base.OnExit(p);
 
-// When exiting the Decorator, it means that it isn't in the current subtree anymore
-// So, unregister it from the blackboard entry so it is not being watched anymore
-p.Blackboard->UnregisterReactiveDecorator(p.Frame, BlackboardKeyA.Key, this);
-p.Blackboard->UnregisterReactiveDecorator(p.Frame, BlackboardKeyB.Key, this);
-}
-
-```
+ // When exiting the Decorator, it means that it isn't in the current subtree anymore
+ // So, unregister it from the blackboard entry so it is not being watched anymore
+ p.Blackboard->UnregisterReactiveDecorator(p.Frame, BlackboardKeyA.Key, this);
+ p.Blackboard->UnregisterReactiveDecorator(p.Frame, BlackboardKeyB.Key, this);
+ }
 
 ```
 
@@ -902,10 +881,7 @@ TriggerDecorators()
 whenever it fits. It can be anytime the blackboard variable changes, or only when some specific range of values is set, or at some pre-defined interval, etc:
 
 ```
-```
 blackboard->Set(f, "VariableKey", value)->TriggerDecorators(p);
-
-```
 
 ```
 

@@ -75,14 +75,11 @@ and vice-versa.
 
 C#
 
-```
 ```csharp
 // DeterministicCommand GetPlayerCommand(PlayerRef player);
 for (int p = 0; p < f.PlayerCount; p++) {
-var command = f.GetPlayerCommand(p);
+ var command = f.GetPlayerCommand(p);
 }
-
-```
 
 ```
 
@@ -218,7 +215,6 @@ and await the return.
 
 C#
 
-```
 ```csharp
 // this will return once the connection logic is complete (e.g. received snapshot if needed)
 var runner = (QuantumRunner)await SessionRunner.StartAsync(sessionRunnerArguments);
@@ -226,8 +222,6 @@ var runner = (QuantumRunner)await SessionRunner.StartAsync(sessionRunnerArgument
 // adding player to the online simulation
 var runtimePlayer = new RuntimePlayer { PlayerNickname = "whiskeyjack29" };
 runner.Game.AddPlayer(runtimePlayer);
-
-```
 
 ```
 
@@ -247,23 +241,20 @@ QuantumRunnerLocalDebug.cs
 
 C#
 
-```
 ```csharp
- public class QuantumAddRuntimePlayers : QuantumMonoBehaviour {
- public RuntimePlayer\[\] Players;
+public class QuantumAddRuntimePlayers : QuantumMonoBehaviour {
+public RuntimePlayer\[\] Players;
 
- public void Awake() {
- QuantumCallback.Subscribe(this, (CallbackGameStarted c) => OnGameStarted(c.Game, c.IsResync), game => game == QuantumRunner.Default.Game);
- }
+public void Awake() {
+QuantumCallback.Subscribe(this, (CallbackGameStarted c) => OnGameStarted(c.Game, c.IsResync), game => game == QuantumRunner.Default.Game);
+}
 
- public void OnGameStarted(QuantumGame game, bool isResync) {
- for (int i = 0; i < Players.Length; i++) {
- game.AddPlayer(i, Players\[i\]);
- }
- }
- }
-
-```
+public void OnGameStarted(QuantumGame game, bool isResync) {
+for (int i = 0; i < Players.Length; i++) {
+game.AddPlayer(i, Players\[i\]);
+}
+}
+}
 
 ```
 
@@ -285,22 +276,19 @@ The following API sends player related operations:
 
 C#
 
-```
 ```csharp
 class QuantumGame {
- // Sends player data to the server and request adding a player (using player slot 0)
- void AddPlayer(RuntimePlayer data);
- // Sends player data a certain for player slot to the server
- void AddPlayer(int playerSlot, RuntimePlayer data);
- // Request removing player slot 0
- void RemovePlayer();
- // Removing certain player float
- void RemovePlayer(int playerSlot);
- // Remove all players that belong to this client
- void RemoveAllPlayers();
+// Sends player data to the server and request adding a player (using player slot 0)
+void AddPlayer(RuntimePlayer data);
+// Sends player data a certain for player slot to the server
+void AddPlayer(int playerSlot, RuntimePlayer data);
+// Request removing player slot 0
+void RemovePlayer();
+// Removing certain player float
+void RemovePlayer(int playerSlot);
+// Remove all players that belong to this client
+void RemoveAllPlayers();
 }
-
-```
 
 ```
 
@@ -308,28 +296,27 @@ The following Quantum Callbacks can be listed to and used in the view:
 
 C#
 
-```
 ```csharp
 CallbackLocalPlayerAddConfirmed {
- public Frame Frame;
- public int PlayerSlot;
- public PlayerRef Player;
+public Frame Frame;
+public int PlayerSlot;
+public PlayerRef Player;
 }
 
 CallbackLocalPlayerAddFailed {
- public int PlayerSlot;
- public string Message;
+public int PlayerSlot;
+public string Message;
 }
 
 CallbackLocalPlayerRemoveConfirmed {
- public Frame Frame;
- public int PlayerSlot;
- public PlayerRef Player;
+public Frame Frame;
+public int PlayerSlot;
+public PlayerRef Player;
 }
 
 CallbackLocalPlayerRemoveFailed {
- public int PlayerSlot;
- public string Message;
+public int PlayerSlot;
+public string Message;
 }
 
 // for example
@@ -338,21 +325,16 @@ private void OnLocalPlayerAddConfirmed(CallbackLocalPlayerAddConfirmed c) { }
 
 ```
 
-```
-
 The following Quantum signals can be listed to and used in the simulation. The information is missing the player slot, as this is information only available for the local player.
 
 C#
 
-```
 ```csharp
 // The first time that this player ref was assigned to a player at all.
 // When firstTime is false the player ref is being reused by a different player.
 ISignalOnPlayerAdded(Frame frame, PlayerRef player, bool firstTime)
 ISignalOnPlayerRemoved
 (Frame frame, PlayerRef player)
-
-```
 
 ```
 
@@ -420,13 +402,10 @@ PlayerRef
 
 C#
 
-```
 ```csharp
 public void OnPlayerDataSet(Frame frame, PlayerRef player){
- var data = frame.GetPlayerData(player);
+var data = frame.GetPlayerData(player);
 }
-
-```
 
 ```
 
@@ -468,13 +447,10 @@ To recap, in the simulation there is no such thing as "local" or "remote" player
 
 C#
 
-```
 ```csharp
 Photon.Deterministic.DeterministicGameMode.Local
 Photon.Deterministic.DeterministicGameMode.Multiplayer
 Photon.Deterministic.DeterministicGameMode.Replay
-
-```
 
 ```
 
@@ -493,11 +469,8 @@ qtn
 -files:
 
 ```
-```
 #define PLAYER\_COUNT 8
 #pragma max\_players PLAYER\_COUNT
-
-```
 
 ```
 

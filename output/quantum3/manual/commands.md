@@ -18,29 +18,26 @@ Photon.Deterministic.DeterministicCommand
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
- using Photon.Deterministic;
+using Photon.Deterministic;
 
- public class CommandSpawnEnemy : DeterministicCommand
- {
- public AssetRefEntityPrototype EnemyPrototype;
+public class CommandSpawnEnemy : DeterministicCommand
+{
+public AssetRefEntityPrototype EnemyPrototype;
 
- public override void Serialize(BitStream stream)
- {
- stream.Serialize(ref EnemyPrototype);
- }
-
- public void Execute(Frame frame)
- {
- frame.Create(EnemyPrototype);
- }
- }
+public override void Serialize(BitStream stream)
+{
+stream.Serialize(ref EnemyPrototype);
 }
 
-```
+public void Execute(Frame frame)
+{
+frame.Create(EnemyPrototype);
+}
+}
+}
 
 ```
 
@@ -62,27 +59,24 @@ CommandSetup.User.cs
 
 C#
 
-```
 ```csharp
 // CommandSetup.User.cs
 
 namespace Quantum {
-using System.Collections.Generic;
-using Photon.Deterministic;
+ using System.Collections.Generic;
+ using Photon.Deterministic;
 
-public static partial class DeterministicCommandSetup {
-static partial void AddCommandFactoriesUser(ICollection<IDeterministicCommandFactory> factories, RuntimeConfig gameConfig, SimulationConfig simulationConfig) {
-// user commands go here
-// new instances will be created when a FooCommand is received (de-serialized)
-factories.Add(new FooCommand());
+ public static partial class DeterministicCommandSetup {
+ static partial void AddCommandFactoriesUser(ICollection<IDeterministicCommandFactory> factories, RuntimeConfig gameConfig, SimulationConfig simulationConfig) {
+ // user commands go here
+ // new instances will be created when a FooCommand is received (de-serialized)
+ factories.Add(new FooCommand());
 
-// BazCommand instances will be acquired from/disposed back to a pool automatically
-factories.Add(new DeterministicCommandPool<BazCommand>());
+ // BazCommand instances will be acquired from/disposed back to a pool automatically
+ factories.Add(new DeterministicCommandPool<BazCommand>());
+ }
+ }
 }
-}
-}
-
-```
 
 ```
 
@@ -92,28 +86,25 @@ Commands can be sent from anywhere inside Unity.
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
-using UnityEngine;
+ using UnityEngine;
 
-public class EnemySpawnerUI : MonoBehaviour
-{
-\[SerializeField\] private AssetRefEntityPrototype \_enemyPrototype;
+ public class EnemySpawnerUI : MonoBehaviour
+ {
+ \[SerializeField\] private AssetRefEntityPrototype \_enemyPrototype;
 
-public void SpawnEnemy()
-{
-CommandSpawnEnemy command = new CommandSpawnEnemy()
-{
-EnemyPrototype = \_enemyPrototype,
-};
-QuantumRunner.Default.Game.SendCommand(command);
+ public void SpawnEnemy()
+ {
+ CommandSpawnEnemy command = new CommandSpawnEnemy()
+ {
+ EnemyPrototype = \_enemyPrototype,
+ };
+ QuantumRunner.Default.Game.SendCommand(command);
+ }
+ }
 }
-}
-}
-
-```
 
 ```
 
@@ -127,12 +118,9 @@ has two overloads.
 
 C#
 
-```
 ```csharp
 void SendCommand(DeterministicCommand command);
 void SendCommand(Int32 player, DeterministicCommand command);
-
-```
 
 ```
 
@@ -144,25 +132,22 @@ To receive and handle Commands inside the simulation poll the frame for a specif
 
 C#
 
-```
 ```csharp
 using Photon.Deterministic;
 namespace Quantum
 {
-public class PlayerCommandsSystem : SystemMainThread
-{
-public override void Update(Frame frame)
-{
-for (int i = 0; i < f.PlayerCount; i++)
-{
-var command = frame.GetPlayerCommand(i) as CommandSpawnEnemy;
-command?.Execute(frame);
+ public class PlayerCommandsSystem : SystemMainThread
+ {
+ public override void Update(Frame frame)
+ {
+ for (int i = 0; i < f.PlayerCount; i++)
+ {
+ var command = frame.GetPlayerCommand(i) as CommandSpawnEnemy;
+ command?.Execute(frame);
+ }
+ }
+ }
 }
-}
-}
-}
-
-```
 
 ```
 
@@ -176,45 +161,42 @@ The API does neither enforce, nor implement, a specific callback mechanism or de
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
-using System.Collections.Generic;
-using Photon.Deterministic;
+ using System.Collections.Generic;
+ using Photon.Deterministic;
 
-public class ExampleCommand : DeterministicCommand
-{
-public List<EntityRef> Entities = new List<EntityRef>();
+ public class ExampleCommand : DeterministicCommand
+ {
+ public List<EntityRef> Entities = new List<EntityRef>();
 
-public override void Serialize(BitStream stream)
-{
-var count = Entities.Count;
-stream.Serialize(ref count);
-if (stream.Writing)
-{
-foreach (var e in Entities)
-{
-var copy = e;
-stream.Serialize(ref copy.Index);
-stream.Serialize(ref copy.Version);
+ public override void Serialize(BitStream stream)
+ {
+ var count = Entities.Count;
+ stream.Serialize(ref count);
+ if (stream.Writing)
+ {
+ foreach (var e in Entities)
+ {
+ var copy = e;
+ stream.Serialize(ref copy.Index);
+ stream.Serialize(ref copy.Version);
+ }
+ }
+ else
+ {
+ for (int i = 0; i < count; i++)
+ {
+ EntityRef readEntity = default;
+ stream.Serialize(ref readEntity.Index);
+ stream.Serialize(ref readEntity.Version);
+ Entities.Add(readEntity);
+ }
+ }
+ }
+ }
 }
-}
-else
-{
-for (int i = 0; i < count; i++)
-{
-EntityRef readEntity = default;
-stream.Serialize(ref readEntity.Index);
-stream.Serialize(ref readEntity.Version);
-Entities.Add(readEntity);
-}
-}
-}
-}
-}
-
-```
 
 ```
 
@@ -222,31 +204,28 @@ Entities.Add(readEntity);
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
-using Photon.Deterministic;
+ using Photon.Deterministic;
 
-public class ExampleCommand : DeterministicCommand
-{
-public EntityRef\[\] Entities;
+ public class ExampleCommand : DeterministicCommand
+ {
+ public EntityRef\[\] Entities;
 
-public override void Serialize(BitStream stream)
-{
-stream.SerializeArrayLength(ref Entities);
-for (int i = 0; i < Cars.Length; i++)
-{
-EntityRef e = Entities\[i\];
-stream.Serialize(ref e.Index);
-stream.Serialize(ref e.Version);
-Entities\[i\] = e;
+ public override void Serialize(BitStream stream)
+ {
+ stream.SerializeArrayLength(ref Entities);
+ for (int i = 0; i < Cars.Length; i++)
+ {
+ EntityRef e = Entities\[i\];
+ stream.Serialize(ref e.Index);
+ stream.Serialize(ref e.Version);
+ Entities\[i\] = e;
+ }
+ }
+ }
 }
-}
-}
-}
-
-```
 
 ```
 
@@ -262,15 +241,12 @@ Instantiating and sending compound commands from the View:
 
 C#
 
-```
 ```csharp
- var compound = new Quantum.Core.CompoundCommand();
- compound.Commands.Add(new FooCommand());
- compound.Commands.Add(new BazCommand());
+var compound = new Quantum.Core.CompoundCommand();
+compound.Commands.Add(new FooCommand());
+compound.Commands.Add(new BazCommand());
 
- QuantumRunner.Default.Game.SendCommand(compound);
-
-```
+QuantumRunner.Default.Game.SendCommand(compound);
 
 ```
 
@@ -278,20 +254,17 @@ Intercepting compound commands:
 
 C#
 
-```
 ```csharp
 public override void Update(Frame frame) {
- for (var i = 0; i < frame.PlayerCount; i++) {
- var compoundCommand = frame.GetPlayerCommand(i) as CompoundCommand;
- if (compoundCommand != null) {
- foreach (var cmd in compoundCommand.Commands) {
- // execute individual commands logic
- }
- }
- }
+for (var i = 0; i < frame.PlayerCount; i++) {
+var compoundCommand = frame.GetPlayerCommand(i) as CompoundCommand;
+if (compoundCommand != null) {
+foreach (var cmd in compoundCommand.Commands) {
+// execute individual commands logic
 }
-
-```
+}
+}
+}
 
 ```
 

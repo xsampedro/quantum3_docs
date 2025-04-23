@@ -172,7 +172,6 @@ and sets a target position.
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
@@ -212,8 +211,6 @@ public override void Update(Frame frame)
 }
 }
 }
-
-```
 
 ```
 
@@ -412,7 +409,6 @@ The following signals will provide imminent feedback that can be used to further
 
 C#
 
-```
 ```csharp
 namespace Quantum {
 public unsafe partial class NavMeshAgentTestSystem : SystemMainThread,
@@ -421,8 +417,6 @@ ISignalOnNavMeshWaypointReached,
 ISignalOnNavMeshMoveAgent {
 }
 }
-
-```
 
 ```
 
@@ -436,7 +430,6 @@ A sample implementation of the move agent callback. It can also be input for a K
 
 C#
 
-```
 ```csharp
 public void OnNavMeshMoveAgent(Frame frame, EntityRef entity, FPVector2 desiredDirection) {
 var agent = frame.Unsafe.GetPointer<NavMeshSteeringAgent>(entity);
@@ -455,8 +448,6 @@ var desiredRotation = FPVector2.RadiansSignedSkipNormalize(FPVector2.Up, desired
 transform->Rotation = FPQuaternion.AngleAxis(desiredRotation \* FP.Rad2Deg, -FPVector3.Up);
 }
 }
-
-```
 
 ```
 

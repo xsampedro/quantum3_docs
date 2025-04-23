@@ -87,7 +87,6 @@ The basic API is similarly to how it is done on Unity, use Getters and Setters i
 
 C#
 
-```
 ```csharp
 // Getters
 AnimatorComponent.GetBoolean(frame, filter.AnimatorComponent, "Defending");
@@ -99,8 +98,6 @@ AnimatorComponent.SetBoolean(frame, filter.AnimatorComponent, "Defending", true)
 AnimatorComponent.SetInteger(frame, filter.AnimatorComponent, "Direction", 25);
 AnimatorComponent.SetFixedPoint(frame, filter.AnimatorComponent, "Speed", FP.\_1);
 AnimatorComponent.SetTrigger(frame, filter.AnimatorComponent, "Shoot");
-
-```
 
 ```
 

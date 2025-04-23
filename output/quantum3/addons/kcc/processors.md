@@ -45,11 +45,8 @@ KCCProcessor
 
 C#
 
-```
 ```csharp
 public virtual bool OnEnter(KCCContext context, KCCProcessorInfo processorInfo, KCCOverlapHit overlapHit) => true;
-
-```
 
 ```
 
@@ -60,11 +57,8 @@ public virtual bool OnEnter(KCCContext context, KCCProcessorInfo processorInfo, 
 
 C#
 
-```
 ```csharp
 public virtual bool OnExit(KCCContext context, KCCProcessorInfo processorInfo) => true;
-
-```
 
 ```
 
@@ -105,18 +99,15 @@ KCC supports these stages executed during update:
 
 C#
 
-```
 ```csharp
 public unsafe class StepUpProcessor : KCCProcessor, IAfterMoveStep
 {
- public void AfterMoveStep(KCCContext context, KCCProcessorInfo processorInfo, KCCOverlapInfo overlapInfo)
- {
- // 1\. Detect blocking geometry
- // 2\. Push character upwards based on unapplied movement.
- }
+public void AfterMoveStep(KCCContext context, KCCProcessorInfo processorInfo, KCCOverlapInfo overlapInfo)
+{
+// 1\. Detect blocking geometry
+// 2\. Push character upwards based on unapplied movement.
 }
-
-```
+}
 
 ```
 

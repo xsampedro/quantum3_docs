@@ -42,18 +42,15 @@ QuantumEntityPrototype
 
 C#
 
-```
 ```csharp
- var entity = f.Create();
- var transform = new Transform2D();
- var collider = PhysicsCollider2D.Create(f, Shape2D.CreateCircle(1));
- var body = PhysicsBody2D.CreateDynamic(1);
+var entity = f.Create();
+var transform = new Transform2D();
+var collider = PhysicsCollider2D.Create(f, Shape2D.CreateCircle(1));
+var body = PhysicsBody2D.CreateDynamic(1);
 
- f.Set(entity, transform);
- f.Set(entity, collider);
- f.Set(entity, body);
-
-```
+f.Set(entity, transform);
+f.Set(entity, collider);
+f.Set(entity, body);
 
 ```
 
@@ -61,21 +58,18 @@ The same rule applies to the 3D Physics:
 
 C#
 
-```
 ```csharp
- var entity = f.Create();
- var transform = Transform3D.Create();
+var entity = f.Create();
+var transform = Transform3D.Create();
 
- var shape = Shape3D.CreateSphere(FP.\_1);
+var shape = Shape3D.CreateSphere(FP.\_1);
 
- var collider = PhysicsCollider3D.Create(shape);
- var body = PhysicsBody3D.CreateDynamic(FP.\_1);
+var collider = PhysicsCollider3D.Create(shape);
+var body = PhysicsBody3D.CreateDynamic(FP.\_1);
 
- f.Set(entity, transform);
- f.Set(entity, collider);
- f.Set(entity, body);
-
-```
+f.Set(entity, transform);
+f.Set(entity, collider);
+f.Set(entity, body);
 
 ```
 
@@ -119,7 +113,6 @@ Here are a couple code snippets related to capsule colliders that can be used:
 
 C#
 
-```
 ```csharp
 FP radius = FP.\_0\_50;
 FP extent = FP.\_1;
@@ -128,8 +121,6 @@ Shape2D shape = Shape2D.CreateCapsule(radius, extent);
 // Draw the capsule
 Draw.Capsule(FPVector2.Zero, shape.Capsule);
 Draw.Capsule(FPVector2.Zero, extent, radius);
-
-```
 
 ```
 
@@ -207,7 +198,6 @@ The PhysicsBody API allows for the manual application of external forces to a bo
 
 C#
 
-```
 ```csharp
 // This is the 3D API, the 2D one is identical.
 
@@ -222,8 +212,6 @@ public void AddLinearImpulse(FPVector3 amount, FPVector3? relativePoint = null)
 public void AddForceAtPosition(FPVector3 force, FPVector3 position, Transform3D\* transform)
 public void AddImpulseAtPosition(FPVector3 force, FPVector3 position, Transform3D\* transform)
 // Applies the force/impulse at the position specified while taking into account the CoM.
-
-```
 
 ```
 
@@ -268,17 +256,14 @@ To initialize PhysicsCollider and PhysicsBody via data-driven design, use the _S
 
 C#
 
-```
 ```csharp
 // data asset containing a shape config property
 partial class CharacterSpec {
- // this will be edited from Unity
- public Shape2DConfig Shape2D;
- public Shape3DConfig Shape3D;
- public FP Mass;
+// this will be edited from Unity
+public Shape2DConfig Shape2D;
+public Shape3DConfig Shape3D;
+public FP Mass;
 }
-
-```
 
 ```
 
@@ -286,7 +271,6 @@ When initializing the body, we use the shape config instead of the shape directl
 
 C#
 
-```
 ```csharp
 // instantiating a player entity from the Frame object
 var playerPrototype = f.FindAsset<EntityPrototype>(PLAYER\_PROTOTYPE\_PATH);
@@ -307,8 +291,6 @@ var body = PhysicsBody3D.CreateKinematic(playerSpec.Mass);
 f.Set(playerEntity, transform);
 f.Set(playerEntity, collider);
 f.Set(playerEntity, body);
-
-```
 
 ```
 
@@ -413,13 +395,10 @@ It is possible to change the shape of a **PhysicsCollider** after it has been in
 
 C#
 
-```
 ```csharp
 var collider = f.Get<PhysicsCollider3D>(entity);
 collider.Shape = myNewShape;
 f.Set(entity, collider);
-
-```
 
 ```
 
@@ -435,7 +414,6 @@ after changing the collider's shape.
 
 C#
 
-```
 ```csharp
 // following the snippet above
 
@@ -443,8 +421,6 @@ var body = f.Get<PhysicsBody3D>(entity);
 body.ResetCenterOfMass(f, entity); // Needs to be called first
 body.ResetInertia(f, entity); // Needs to be called second
 f.Set(entity, body);
-
-```
 
 ```
 

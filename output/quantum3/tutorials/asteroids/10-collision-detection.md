@@ -16,13 +16,10 @@ AsteroidsAsteroid.qtn
 
 Qtn
 
-```
 ```cs
 component AsteroidsAsteroid
 {
 }
-
-```
 
 ```
 
@@ -42,43 +39,40 @@ Add the following code to it:
 
 C#
 
-```
 ```csharp
 using UnityEngine.Scripting;
 
 namespace Quantum.Asteroids
 {
- \[Preserve\]
- public unsafe class AsteroidsCollisionsSystem : SystemSignalsOnly, ISignalOnCollisionEnter2D
- {
- public void OnCollisionEnter2D(Frame frame, CollisionInfo2D info)
- {
- // Projectile is colliding with something
- if (frame.Unsafe.TryGetPointer<AsteroidsProjectile>(info.Entity, out var projectile))
- {
- if (frame.Unsafe.TryGetPointer<AsteroidsShip>(info.Other, out var ship))
- {
- // Projectile Hit Ship
- }
- else if (frame.Unsafe.TryGetPointer<AsteroidsAsteroid>(info.Other, out var asteroid))
- {
- // projectile Hit Asteroid
- }
- }
-
- // Ship is colliding with something
- else if (frame.Unsafe.TryGetPointer<AsteroidsShip>(info.Entity, out var ship))
- {
- if (frame.Unsafe.TryGetPointer<AsteroidsAsteroid>(info.Other, out var asteroid))
- {
- // Asteroid Hit Ship
- }
- }
- }
- }
+\[Preserve\]
+public unsafe class AsteroidsCollisionsSystem : SystemSignalsOnly, ISignalOnCollisionEnter2D
+{
+public void OnCollisionEnter2D(Frame frame, CollisionInfo2D info)
+{
+// Projectile is colliding with something
+if (frame.Unsafe.TryGetPointer<AsteroidsProjectile>(info.Entity, out var projectile))
+{
+if (frame.Unsafe.TryGetPointer<AsteroidsShip>(info.Other, out var ship))
+{
+// Projectile Hit Ship
+}
+else if (frame.Unsafe.TryGetPointer<AsteroidsAsteroid>(info.Other, out var asteroid))
+{
+// projectile Hit Asteroid
+}
 }
 
-```
+// Ship is colliding with something
+else if (frame.Unsafe.TryGetPointer<AsteroidsShip>(info.Entity, out var ship))
+{
+if (frame.Unsafe.TryGetPointer<AsteroidsAsteroid>(info.Other, out var asteroid))
+{
+// Asteroid Hit Ship
+}
+}
+}
+}
+}
 
 ```
 
@@ -92,15 +86,12 @@ and add the following signals to it:
 
 C#
 
-```
 ```csharp
 signal OnCollisionProjectileHitShip(CollisionInfo2D info, AsteroidsProjectile\* projectile, AsteroidsShip\* ship);
 
 signal OnCollisionProjectileHitAsteroid(CollisionInfo2D info, AsteroidsProjectile\* projectile, AsteroidsAsteroid\* asteroid);
 
 signal OnCollisionAsteroidHitShip(CollisionInfo2D info, AsteroidsShip\* ship, AsteroidsAsteroid\* asteroid);
-
-```
 
 ```
 
@@ -114,20 +105,17 @@ AsteroidsProjectileSystem
 
 C#
 
-```
 ```csharp
 public void OnCollisionProjectileHitShip(Frame frame, CollisionInfo2D info, AsteroidsProjectile\* projectile, AsteroidsShip\* ship)
 {
- if (projectile->Owner == info.Other)
- {
- info.IgnoreCollision = true;
- return;
- }
-
- frame.Destroy(info.Entity);
+if (projectile->Owner == info.Other)
+{
+info.IgnoreCollision = true;
+return;
 }
 
-```
+frame.Destroy(info.Entity);
+}
 
 ```
 
@@ -155,16 +143,13 @@ file to the component.
 
 Qtn
 
-```
 ```cs
 component AsteroidsAsteroid
 {
-asset\_ref<EntityPrototype> ChildAsteroid;
+ asset\_ref<EntityPrototype> ChildAsteroid;
 }
 
 signal SpawnAsteroid(AssetRef<EntityPrototype> childPrototype, EntityRef parent);
-
-```
 
 ```
 
@@ -210,11 +195,8 @@ Finally, replace the following line
 
 C#
 
-```
 ```csharp
 asteroidTransform->Position = GetRandomEdgePointOnCircle(f, config.AsteroidSpawnDistanceToCenter);
-
-```
 
 ```
 
@@ -222,18 +204,15 @@ with:
 
 C#
 
-```
 ```csharp
 if (parent == EntityRef.None)
 {
-asteroidTransform->Position = GetRandomEdgePointOnCircle(f, config.AsteroidSpawnDistanceToCenter);
+ asteroidTransform->Position = GetRandomEdgePointOnCircle(f, config.AsteroidSpawnDistanceToCenter);
 }
 else
 {
-asteroidTransform->Position = f.Get<Transform2D>(parent).Position;
+ asteroidTransform->Position = f.Get<Transform2D>(parent).Position;
 }
-
-```
 
 ```
 
@@ -247,21 +226,18 @@ AsteroidsProjectileSystem
 
 C#
 
-```
 ```csharp
 public void OnCollisionProjectileHitAsteroid(Frame frame, CollisionInfo2D info, AsteroidsProjectile\* projectile, AsteroidsAsteroid\* asteroid)
 {
- if (asteroid->ChildAsteroid != null)
- {
- frame.Signals.SpawnAsteroid(asteroid->ChildAsteroid, info.Other);
- frame.Signals.SpawnAsteroid(asteroid->ChildAsteroid, info.Other);
- }
-
- frame.Destroy(info.Entity);
- frame.Destroy(info.Other);
+if (asteroid->ChildAsteroid != null)
+{
+frame.Signals.SpawnAsteroid(asteroid->ChildAsteroid, info.Other);
+frame.Signals.SpawnAsteroid(asteroid->ChildAsteroid, info.Other);
 }
 
-```
+frame.Destroy(info.Entity);
+frame.Destroy(info.Other);
+}
 
 ```
 
@@ -281,11 +257,8 @@ so add the two interfaces to it.
 
 C#
 
-```
 ```csharp
 public unsafe class AsteroidsProjectileSystem : SystemMainThreadFilter<AsteroidsProjectileSystem.Filter>, ISignalAsteroidsShipShoot, ISignalOnCollisionProjectileHitShip, ISignalOnCollisionProjectileHitAsteroid
-
-```
 
 ```
 
@@ -305,14 +278,11 @@ Add the corresponding function with the following code to it:
 
 C#
 
-```
 ```csharp
 public void OnCollisionAsteroidHitShip(Frame frame, CollisionInfo2D info, AsteroidsShip\* ship, AsteroidsAsteroid\* asteroid)
 {
-frame.Destroy(info.Entity);
+ frame.Destroy(info.Entity);
 }
-
-```
 
 ```
 
@@ -326,11 +296,8 @@ AsteroidsCollisionsSystem
 
 C#
 
-```
 ```csharp
 // Projectile Hit Ship
-
-```
 
 ```
 
@@ -338,11 +305,8 @@ with
 
 C#
 
-```
 ```csharp
 f.Signals.OnCollisionProjectileHitShip(info, projectile, ship);
-
-```
 
 ```
 
@@ -350,11 +314,8 @@ and,
 
 C#
 
-```
 ```csharp
 // Projectile Hit Asteroid
-
-```
 
 ```
 
@@ -362,11 +323,8 @@ with
 
 C#
 
-```
 ```csharp
 f.Signals.OnCollisionProjectileHitAsteroid(info, projectile, asteroid);
-
-```
 
 ```
 
@@ -374,11 +332,8 @@ and finally,
 
 C#
 
-```
 ```csharp
 // Asteroid Hit Ship
-
-```
 
 ```
 
@@ -386,11 +341,8 @@ with
 
 C#
 
-```
 ```csharp
 f.Signals.OnCollisionAsteroidHitShip(info, ship, asteroid);
-
-```
 
 ```
 
@@ -520,17 +472,14 @@ AsteroidWaveSpawnerSystem
 
 C#
 
-```
 ```csharp
 public void OnRemoved(Frame frame, EntityRef entity, AsteroidsAsteroid\* component)
 {
-if (frame.ComponentCount<AsteroidsAsteroid>() <= 1)
-{
-SpawnAsteroidWave(frame);
+ if (frame.ComponentCount<AsteroidsAsteroid>() <= 1)
+ {
+ SpawnAsteroidWave(frame);
+ }
 }
-}
-
-```
 
 ```
 

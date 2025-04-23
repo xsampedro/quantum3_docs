@@ -153,36 +153,33 @@ AIFunctionInt
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
- \[System.Serializable\]
- public unsafe class AgentPriority : AIFunction<int>
- {
- public EAgentPriority DesiredPriority;
+\[System.Serializable\]
+public unsafe class AgentPriority : AIFunction<int>
+{
+public EAgentPriority DesiredPriority;
 
- public override int Execute(Frame frame, EntityRef entity, ref AIContext aiContext)
- {
- // Get an agent-specific component
- var agentData = frame.Unsafe.GetPointer<AgentData>(entity);
+public override int Execute(Frame frame, EntityRef entity, ref AIContext aiContext)
+{
+// Get an agent-specific component
+var agentData = frame.Unsafe.GetPointer<AgentData>(entity);
 
- // Compare the agent current priority with the priority this AIFunction checks
- // If the agent is currently prioritizing it, then increase the Rank of the Consideration to 10
- // If the priority is something else, set it to 0 instead
- if(agentData->Priority == DesiredPriority)
- {
- return 10;
- }
- else
- {
- return 0;
- }
- }
- }
+// Compare the agent current priority with the priority this AIFunction checks
+// If the agent is currently prioritizing it, then increase the Rank of the Consideration to 10
+// If the priority is something else, set it to 0 instead
+if(agentData->Priority == DesiredPriority)
+{
+return 10;
 }
-
-```
+else
+{
+return 0;
+}
+}
+}
+}
 
 ```
 
@@ -235,21 +232,18 @@ true
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
-\[System.Serializable\]
-public unsafe class SampleCommitment : AIFuncionBool
-{
-public override int Execute(Frame frame, EntityRef entity, ref AIContext aiContext)
-{
-return false;
+ \[System.Serializable\]
+ public unsafe class SampleCommitment : AIFuncionBool
+ {
+ public override int Execute(Frame frame, EntityRef entity, ref AIContext aiContext)
+ {
+ return false;
+ }
+ }
 }
-}
-}
-
-```
 
 ```
 
@@ -332,25 +326,22 @@ method.
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
-using Photon.Deterministic;
+ using Photon.Deterministic;
 
-\[System.Serializable\]
-public unsafe partial class InputEntityHealth : AIFunction<FP>
-{
-public override FP Execute(Frame frame, EntityRef entity, ref AIContext aiContext)
-{
-// Read the current health from a component from the agent entity
-var health = frame.Unsafe.GetPointer<Health>(entity);
-return health->Current;
+ \[System.Serializable\]
+ public unsafe partial class InputEntityHealth : AIFunction<FP>
+ {
+ public override FP Execute(Frame frame, EntityRef entity, ref AIContext aiContext)
+ {
+ // Read the current health from a component from the agent entity
+ var health = frame.Unsafe.GetPointer<Health>(entity);
+ return health->Current;
+ }
+ }
 }
-}
-}
-
-```
 
 ```
 
@@ -438,12 +429,9 @@ Here is a snippet for initializing and updating a UT agent:
 
 C#
 
-```
 ```csharp
 UTManager.Init(f, &utAgent->UtilityReasoner, utAgent->UtilityReasoner.UTRoot, entity);
 UTManager.Update(f, &utAgent->UtilityReasoner, entity);
-
-```
 
 ```
 

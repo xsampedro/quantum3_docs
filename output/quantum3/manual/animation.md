@@ -27,7 +27,6 @@ Here is a code snippet showcasing a basics of caching relevant Unity components 
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
@@ -52,8 +51,6 @@ var kcc = PredictedFrame.Get<CharacterController3D>(EntityRef);
 
 ```
 
-```
-
 ### Trigger Events
 
 Some animations are based on a particular events taking place in the game; e.g. a player pressing jump or getting hit by an enemy. In these cases, it is usually preferable to raise an event from the simulation and have the view listen to it. This ensures decoupling and work well in conjunction with the polling based animation approach.
@@ -68,7 +65,6 @@ From Quantum, a system can trigger a Quantum Event when a character jumps:
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
@@ -99,8 +95,6 @@ filter.Kcc->Jump(f);
 
 ```
 
-```
-
 On the Unity side, a Unity component can listen to the ```
 PlayerJump
 ```
@@ -128,11 +122,8 @@ file:
 
 Qtn
 
-```
 ```cs
 event PlayerJump { EntityRef EntityRef; }
-
-```
 
 ```
 
@@ -140,7 +131,6 @@ Reacting to the event in a Unity component:
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
@@ -166,8 +156,6 @@ if (e.EntityRef == EntityRef)
 }
 }
 }
-
-```
 
 ```
 

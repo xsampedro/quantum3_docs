@@ -90,11 +90,8 @@ asset at runtime, this is undeterministic and will result in desynchronization!
 
 C#
 
-```
 ```csharp
 frame.PhysicsSceneSettings->CCDSettings.AllowCCD = true;
-
-```
 
 ```
 
@@ -110,12 +107,9 @@ component for the entity which should be using CCD.
 
 C#
 
-```
 ```csharp
 var physicsBody = f.Unsafe.GetPointer<PhysicsBody3D>(myEntityRef);
 physicsBody->UseContinuousCollisionDetection = true;
-
-```
 
 ```
 

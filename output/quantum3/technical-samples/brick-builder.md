@@ -122,15 +122,12 @@ Example:
 
 C#
 
-```
 ```csharp
 var asset = AssetObject.Create<MyAssetType>();
 
 asset.Guid = SomeDeterministicGuid;
 
 QuantumUnityDB.Global.AddAsset(asset);
-
-```
 
 ```
 
@@ -176,7 +173,6 @@ Usage:
 
 C#
 
-```
 ```csharp
 // create any asset
 var assetObject = AssetObject.Create<MyAssetObjectType>();
@@ -192,8 +188,6 @@ QuantumUnityDB.Global.AddAsset(assetObject);
 
 // set the guid
 assetObject.Guid = guid;
-
-```
 
 ```
 
@@ -273,13 +267,10 @@ method before the game starts, like so:
 
 C#
 
-```
 ```csharp
 var generator = GetComponent<DeterministicBrickMapGenerator>();
 
 generator.Generate(seed);
-
-```
 
 ```
 

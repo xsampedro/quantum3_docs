@@ -22,32 +22,29 @@ folder. Add the following code to it:
 
 C#
 
-```
 ```csharp
 using Photon.Deterministic;
 using UnityEngine;
 
 namespace Quantum.Asteroids
 {
-public class AsteroidsGameConfig: AssetObject
-{
-\[Header("Asteroids configuration")\]
-\[Tooltip("Prototype reference to spawn asteroids")\]
-public AssetRef<EntityPrototype> AsteroidPrototype;
-\[Tooltip("Speed applied to the asteroid when spawned")\]
-public FP AsteroidInitialSpeed = 8;
-\[Tooltip("Minimum torque applied to the asteroid when spawned")\]
-public FP AsteroidInitialTorqueMin = 7;
-\[Tooltip("Maximum torque applied to the asteroid when spawned")\]
-public FP AsteroidInitialTorqueMax = 20;
-\[Tooltip("Distance to the center of the map. This value is the radius in a random circular location where the asteroid is spawned")\]
-public FP AsteroidSpawnDistanceToCenter = 20;
-\[Tooltip("Amount of asteroids spawned in level 1. In each level, the number os asteroids spawned is increased by one")\]
-public int InitialAsteroidsCount = 5;
+ public class AsteroidsGameConfig: AssetObject
+ {
+ \[Header("Asteroids configuration")\]
+ \[Tooltip("Prototype reference to spawn asteroids")\]
+ public AssetRef<EntityPrototype> AsteroidPrototype;
+ \[Tooltip("Speed applied to the asteroid when spawned")\]
+ public FP AsteroidInitialSpeed = 8;
+ \[Tooltip("Minimum torque applied to the asteroid when spawned")\]
+ public FP AsteroidInitialTorqueMin = 7;
+ \[Tooltip("Maximum torque applied to the asteroid when spawned")\]
+ public FP AsteroidInitialTorqueMax = 20;
+ \[Tooltip("Distance to the center of the map. This value is the radius in a random circular location where the asteroid is spawned")\]
+ public FP AsteroidSpawnDistanceToCenter = 20;
+ \[Tooltip("Amount of asteroids spawned in level 1. In each level, the number os asteroids spawned is increased by one")\]
+ public int InitialAsteroidsCount = 5;
+ }
 }
-}
-
-```
 
 ```
 
@@ -138,17 +135,14 @@ RuntimeConfig.Asteroids
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
- public partial class RuntimeConfig
- {
- public AssetRef<Asteroids.AsteroidsGameConfig> GameConfig;
- }
+public partial class RuntimeConfig
+{
+public AssetRef<Asteroids.AsteroidsGameConfig> GameConfig;
 }
-
-```
+}
 
 ```
 
@@ -198,45 +192,42 @@ AsteroidsWaveSpawnerSystem
 
 C#
 
-```
 ```csharp
 using Photon.Deterministic;
 using UnityEngine.Scripting;
 
 namespace Quantum.Asteroids
 {
-\[Preserve\]
-public unsafe class AsteroidsWaveSpawnerSystem : SystemSignalsOnly
-{
-public void SpawnAsteroid(Frame frame, AssetRef<EntityPrototype> childPrototype)
-{
-AsteroidsGameConfig config = frame.FindAsset(frame.RuntimeConfig.GameConfig);
-EntityRef asteroid = frame.Create(childPrototype);
-Transform2D\* asteroidTransform = frame.Unsafe.GetPointer<Transform2D>(asteroid);
+ \[Preserve\]
+ public unsafe class AsteroidsWaveSpawnerSystem : SystemSignalsOnly
+ {
+ public void SpawnAsteroid(Frame frame, AssetRef<EntityPrototype> childPrototype)
+ {
+ AsteroidsGameConfig config = frame.FindAsset(frame.RuntimeConfig.GameConfig);
+ EntityRef asteroid = frame.Create(childPrototype);
+ Transform2D\* asteroidTransform = frame.Unsafe.GetPointer<Transform2D>(asteroid);
 
-asteroidTransform->Position = GetRandomEdgePointOnCircle(frame, config.AsteroidSpawnDistanceToCenter);
-asteroidTransform->Rotation = GetRandomRotation(frame);
+ asteroidTransform->Position = GetRandomEdgePointOnCircle(frame, config.AsteroidSpawnDistanceToCenter);
+ asteroidTransform->Rotation = GetRandomRotation(frame);
 
-if (frame.Unsafe.TryGetPointer<PhysicsBody2D>(asteroid, out var body))
-{
-body->Velocity = asteroidTransform->Up \* config.AsteroidInitialSpeed;
-body->AddTorque(frame.RNG->Next(config.AsteroidInitialTorqueMin, config.AsteroidInitialTorqueMax));
-}
-}
+ if (frame.Unsafe.TryGetPointer<PhysicsBody2D>(asteroid, out var body))
+ {
+ body->Velocity = asteroidTransform->Up \* config.AsteroidInitialSpeed;
+ body->AddTorque(frame.RNG->Next(config.AsteroidInitialTorqueMin, config.AsteroidInitialTorqueMax));
+ }
+ }
 
-public static FP GetRandomRotation(Frame frame)
-{
-return frame.RNG->Next(0, 360);
-}
+ public static FP GetRandomRotation(Frame frame)
+ {
+ return frame.RNG->Next(0, 360);
+ }
 
-public static FPVector2 GetRandomEdgePointOnCircle(Frame frame, FP radius)
-{
-return FPVector2.Rotate(FPVector2.Up \* radius , frame.RNG->Next() \* FP.PiTimes2);
+ public static FPVector2 GetRandomEdgePointOnCircle(Frame frame, FP radius)
+ {
+ return FPVector2.Rotate(FPVector2.Up \* radius , frame.RNG->Next() \* FP.PiTimes2);
+ }
+ }
 }
-}
-}
-
-```
 
 ```
 
@@ -292,13 +283,10 @@ QuantumUser > Simulation
 folder. Add the following code to it:
 
 ```
-```
 global
 {
- Int32 AsteroidsWaveCount;
+Int32 AsteroidsWaveCount;
 }
-
-```
 
 ```
 
@@ -318,20 +306,17 @@ AsteroidWaveSpawnerSystem
 
 C#
 
-```
 ```csharp
 private void SpawnAsteroidWave(Frame frame)
 {
- AsteroidsGameConfig config = frame.FindAsset(frame.RuntimeConfig.GameConfig);
- for (int i = 0; i < frame.Global->AsteroidsWaveCount + config.InitialAsteroidsCount; i++)
- {
- SpawnAsteroid(frame, config.AsteroidPrototype);
- }
-
- frame.Global->AsteroidsWaveCount++;
+AsteroidsGameConfig config = frame.FindAsset(frame.RuntimeConfig.GameConfig);
+for (int i = 0; i < frame.Global->AsteroidsWaveCount + config.InitialAsteroidsCount; i++)
+{
+SpawnAsteroid(frame, config.AsteroidPrototype);
 }
 
-```
+frame.Global->AsteroidsWaveCount++;
+}
 
 ```
 
@@ -345,14 +330,11 @@ function can be used which is called on every system once the simulation starts:
 
 C#
 
-```
 ```csharp
 public override void OnInit(Frame frame)
 {
-SpawnAsteroidWave(frame);
+ SpawnAsteroidWave(frame);
 }
-
-```
 
 ```
 
@@ -372,16 +354,13 @@ even though that system has not been changed at all. The reason for that is the 
 
 C#
 
-```
 ```csharp
 public struct Filter
 {
-public EntityRef Entity;
-public Transform2D\* Transform;
-public PhysicsBody2D\* Body;
+ public EntityRef Entity;
+ public Transform2D\* Transform;
+ public PhysicsBody2D\* Body;
 }
-
-```
 
 ```
 
@@ -399,13 +378,10 @@ folder. Add an empty component to it like this:
 
 Qtn
 
-```
 ```cs
 component AsteroidsShip
 {
 }
-
-```
 
 ```
 
@@ -443,17 +419,14 @@ to include the component:
 
 C#
 
-```
 ```csharp
 public struct Filter
 {
-public EntityRef Entity;
-public Transform2D\* Transform;
-public PhysicsBody2D\* Body;
-public AsteroidsShip\* AsteroidsShip;
+ public EntityRef Entity;
+ public Transform2D\* Transform;
+ public PhysicsBody2D\* Body;
+ public AsteroidsShip\* AsteroidsShip;
 }
-
-```
 
 ```
 

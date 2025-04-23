@@ -106,12 +106,9 @@ Quantum SDK 3.0.2 Stable 1660
        and delete its content.
 
 C#
-```
 ```csharp
 public unsafe partial class LegacyQPrototypeKCC : QPrototypeKCC {
 }
-
-```
 
 ```
 
@@ -130,12 +127,9 @@ public unsafe partial class LegacyQPrototypeKCC : QPrototypeKCC {
        and delete its content.
 
 C#
-```
 ```csharp
 public unsafe partial class LegacyQPrototypeKCCProcessorLink : QPrototypeKCCProcessorLink {
 }
-
-```
 
 ```
 

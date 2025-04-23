@@ -205,7 +205,6 @@ Let's analyze, in terms of quantum code, how the Get/Set methods should be used,
 
 C#
 
-```
 ```csharp
 // \-\- Using hardcoded keys --
 var bbComponent = f.Unsafe.GetPointer<AIBlackboardComponent>(entityRef);
@@ -220,8 +219,6 @@ public AIBlackboardValueKey PickupsKey;
 var value = bbComponent->GetInteger(frame, PickupsKey.Key);
 // Writing
 bbComponent->Set(frame, PickupsKey.Key, value);
-
-```
 
 ```
 
@@ -261,7 +258,6 @@ Then, on the simulation code, use this to initialize the component:
 
 C#
 
-```
 ```csharp
 // \-\- Blackboard setup
 // First, create the blackboard component (or have it created on the Entity Prototype)
@@ -275,21 +271,16 @@ f.Set(littleGuyEntity, blackboardComponent);
 
 ```
 
-```
-
 That's it. Once the initialization is done, it is ready to read/write from the Blackboard using its API:
 
 C#
 
-```
 ```csharp
 // There is one method for each specific blackboard type (int, byte, FP, boolean, FP vectors and entityRef)
 blackboardComponent->GetInteger(frame, key);
 
 // For the setter method, there are different overrides depending on the type of data passed as the value
 blackboardComponent->Set(frame, key, value);
-
-```
 
 ```
 

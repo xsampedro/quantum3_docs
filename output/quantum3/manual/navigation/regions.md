@@ -248,12 +248,9 @@ Foo
 
 C#
 
-```
 ```csharp
 var regionId = frame.Map.RegionMap\["Foo"\];
 frame.NavMeshRegionMask->ToggleRegion(regionId, false);
-
-```
 
 ```
 
@@ -265,13 +262,10 @@ component also has a RegionMask that can be used to toggle off regions for indiv
 
 C#
 
-```
 ```csharp
 var regionId = frame.Map.RegionMap\["Foo"\];
 var agent = f.Unsafe.GetPointer<NavMeshPathfinder>(entity);
 agent->RegionMask.ToggleRegion(regionId, false)
-
-```
 
 ```
 
@@ -293,15 +287,12 @@ signal.
 
 C#
 
-```
 ```csharp
 public class ResetRegionsSystem : SystemSignalsOnly, ISignalOnMapChanged {
-public void OnMapChanged(Frame frame, AssetRefMap previousMap) {
-frame.ClearAllNavMeshRegions();
+ public void OnMapChanged(Frame frame, AssetRefMap previousMap) {
+ frame.ClearAllNavMeshRegions();
+ }
 }
-}
-
-```
 
 ```
 

@@ -22,17 +22,14 @@ Set a new map during run-time from a system update method for example:
 
 C#
 
-```
 ```cs
 public override void Update(Frame frame) {
- // only change the map during verified frames
- if (frame.IsVerified) {
- // nextMap is of type AssetRef<Quantum.Map>
- frame.Map = frame.FindAsset(nextMap);
- }
+// only change the map during verified frames
+if (frame.IsVerified) {
+// nextMap is of type AssetRef<Quantum.Map>
+frame.Map = frame.FindAsset(nextMap);
 }
-
-```
+}
 
 ```
 
@@ -44,13 +41,10 @@ signal on all systems.
 
 C#
 
-```
 ```cs
 public void OnMapChanged(Frame frame, AssetRef<Map> previousMap) {
-// new map is frame.Map
+ // new map is frame.Map
 }
-
-```
 
 ```
 
@@ -154,13 +148,10 @@ Optionally associate any Quantum asset with a map and load it like this:
 
 C#
 
-```
 ```cs
 public override void OnInit(Frame frame) {
- if (frame.TryFindAsset(frame.Map.UserAsset.Id, out FooAsset mapAsset)) { }
+if (frame.TryFindAsset(frame.Map.UserAsset.Id, out FooAsset mapAsset)) { }
 }
-
-```
 
 ```
 

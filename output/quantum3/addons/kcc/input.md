@@ -54,7 +54,6 @@ Vector2Accumulator
 
 C#
 
-```
 ```csharp
 public class PlayerInput : MonoBehaviour
 {
@@ -82,8 +81,6 @@ input.LookRotationDelta = \_lookRotationAccumulator.ConsumeFrameAligned(callback
 callback.SetInput(input, DeterministicInputFlags.Repeatable);
 }
 }
-
-```
 
 ```
 

@@ -172,24 +172,18 @@ Frame.TryFindAsset
 
 C#
 
-```
 ```csharp
 CharacterSpec characterData = QuantumUnityDB.GetGlobalAsset(myAssetRef);
 FP maximumHealth = characterData.MaximumHealth;
 
 ```
 
-```
-
 C#
 
-```
 ```csharp
 if (QuantumUnityDB.TryGetGlobalAsset(myAssetRef, out CharacterSpec characterData)) {
- FP maximumHealth = characterData.MaximumHealth;
+FP maximumHealth = characterData.MaximumHealth;
 }
-
-```
 
 ```
 
@@ -209,21 +203,18 @@ _Usage:_
 
 C#
 
-```
 ```csharp
 public override void OnInspectorGUI()
 {
- base.OnInspectorGUI();
+base.OnInspectorGUI();
 
- CharacterSpec characterData = QuantumUnityDB.GetGlobalAssetEditorInstance(myAssetRef);
- FP maximumHealth = characterData.MaximumHealth;
+CharacterSpec characterData = QuantumUnityDB.GetGlobalAssetEditorInstance(myAssetRef);
+FP maximumHealth = characterData.MaximumHealth;
 
- // do something
+// do something
 
- EditorUtility.SetDirty(characterData);
+EditorUtility.SetDirty(characterData);
 }
-
-```
 
 ```
 
@@ -321,7 +312,6 @@ CharacterSpec
 
 C#
 
-```
 ```csharp
 public class TestScript : MonoBehaviour {
 // hard reference
@@ -335,8 +325,6 @@ void Start() {
 CharacterSpec characterData = QuantumUnityDB.GetGlobalAsset(SoftRef);
 }
 }
-
-```
 
 ```
 
@@ -364,7 +352,6 @@ type is used for linking references between assets or other configuration object
 
 C#
 
-```
 ```csharp
 // this is added to the RuntimePlayer.User.cs file
 namespace Quantum {
@@ -372,8 +359,6 @@ partial class RuntimePlayer {
 public AssetRef<CharacterSpec> CharacterSpec;
 }
 }
-
-```
 
 ```
 
@@ -437,7 +422,6 @@ class.
 
 C#
 
-```
 ```csharp
 public abstract class MapDataBakerCallback {
 public abstract void OnBake(MapData data);
@@ -445,8 +429,6 @@ public abstract void OnBeforeBake(MapData data);
 public virtual void OnBakeNavMesh(MapData data) { }
 public virtual void OnBeforeBakeNavMesh(MapData data) { }
 }
-
-```
 
 ```
 
@@ -462,7 +444,6 @@ methods.
 
 C#
 
-```
 ```csharp
 \[assembly: QuantumMapBakeAssembly\]
 public class MyCustomDataBaker: MapDataBakerCallback {
@@ -474,8 +455,6 @@ public void OnBeforeBake(MapData data) {
 
 }
 }
-
-```
 
 ```
 
@@ -537,7 +516,6 @@ method:
 
 C#
 
-```
 ```csharp
 public void AddStaticAsset(AssetGuid guid) {
 var asset = ScriptableObject.CreateInstance<CharacterSpec>();
@@ -549,13 +527,10 @@ QuantumUnityDB.Global.AddAsset(asset);
 
 ```
 
-```
-
 Alternatively, adding such an asset can be rewritten as:
 
 C#
 
-```
 ```csharp
 public void AddStaticAsset(AssetGuid guid) {
 var asset = ScriptableObject.CreateInstance<CharacterSpec>();
@@ -564,8 +539,6 @@ asset.Speed = 10;
 asset.MaxHealth = 100;
 QuantumUnityDB.Global.AddSource(new QuantumAssetObjectSourceStatic(asset), guid);
 }
-
-```
 
 ```
 
@@ -583,14 +556,11 @@ If the asset is addressable, this can be easily avoided:
 
 C#
 
-```
 ```csharp
 public void AddAddressableAsset(AssetGuid guid, Type assetType, string address) {
 var source = new QuantumAssetObjectSourceAddressable(address, assetType);
 QuantumUnityDB.Global.AddSource(source, guid);
 }
-
-```
 
 ```
 
@@ -606,7 +576,6 @@ factory, with error checking omitted for clarity.
 
 C#
 
-```
 ```csharp
 public void AddCustomAsset(AssetGuid guid) {
 var source = new AsyncAssetObjectSource() {
@@ -643,8 +612,6 @@ public AssetObject EditorInstance => null; // no support for editor instance
 
 ```
 
-```
-
 ### Dynamic QuantumUnityDB
 
 An alternative to adding new assets manually is to make ```
@@ -665,11 +632,8 @@ attribute can be used to instruct Quantum to load it with Addressables:
 
 C#
 
-```
 ```csharp
 \[assembly:Quantum.QuantumGlobalScriptableObjectAddress(typeof(QuantumUnityDB), "QuantumUnityDBAddress")\]
-
-```
 
 ```
 

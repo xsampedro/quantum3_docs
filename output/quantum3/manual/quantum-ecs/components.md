@@ -20,15 +20,12 @@ This is a basic example definition of a component in the DSL:
 
 Qtn
 
-```
 ```cs
 component Action
 {
-FP Cooldown;
-FP Power;
+ FP Cooldown;
+ FP Power;
 }
-
-```
 
 ```
 
@@ -60,15 +57,12 @@ Add<T>
 
 C#
 
-```
 ```csharp
 public enum AddResult {
- EntityDoesNotExist = 0, // The EntityRef passed in is invalid.
- ComponentAlreadyExists = 1, // The Entity in question already has this component attached to it.
- ComponentAdded = 2 // The component was successfully added to the entity.
+EntityDoesNotExist = 0, // The EntityRef passed in is invalid.
+ComponentAlreadyExists = 1, // The Entity in question already has this component attached to it.
+ComponentAdded = 2 // The component was successfully added to the entity.
 }
-
-```
 
 ```
 
@@ -84,15 +78,12 @@ Set<T>
 
 C#
 
-```
 ```csharp
 public enum SetResult {
- EntityDoesNotExist = 0, // The EntityRef passed in is invalid.
- ComponentUpdated = 1, // The component values were successfully updated.
- ComponentAdded = 2 // The Entity did not have a component of this type yet, so it was added with the new values.
+EntityDoesNotExist = 0, // The EntityRef passed in is invalid.
+ComponentUpdated = 1, // The component values were successfully updated.
+ComponentAdded = 2 // The Entity did not have a component of this type yet, so it was added with the new values.
 }
-
-```
 
 ```
 
@@ -100,15 +91,12 @@ For example if you were to set the starting value of a health component, you wou
 
 C#
 
-```
 ```csharp
 private void SetHealth(Frame frame, EntityRef entity, FP value){
- var health = frame.Get<Health>(entity);
- health.Value = value;
- frame.Set(entity, health);
+var health = frame.Get<Health>(entity);
+health.Value = value;
+frame.Set(entity, health);
 }
-
-```
 
 ```
 
@@ -154,13 +142,10 @@ singleton component
 
 C#
 
-```
 ```csharp
 singleton component MySingleton{
-FP Foo;
+ FP Foo;
 }
-
-```
 
 ```
 
@@ -204,7 +189,6 @@ ComponentTypeRef
 
 C#
 
-```
 ```csharp
 // set in an asset or prototype for example
 ComponentTypeRef componentTypeRef;
@@ -212,8 +196,6 @@ ComponentTypeRef componentTypeRef;
 var componentIndex = ComponentTypeId.GetComponentIndex(componentTypeRef);
 
 frame.Add(entityRef, componentIndex);
-
-```
 
 ```
 
@@ -225,19 +207,16 @@ For example, if we could extend our Action component from before as follows:
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
- public partial struct Action
- {
- public void UpdateCooldown(FP deltaTime){
- Cooldown -= deltaTime;
- }
- }
+public partial struct Action
+{
+public void UpdateCooldown(FP deltaTime){
+Cooldown -= deltaTime;
 }
-
-```
+}
+}
 
 ```
 
@@ -266,16 +245,13 @@ If you were to require a single component only, _ComponentIterator_ (safe) and _
 
 C#
 
-```
 ```csharp
 foreach (var pair in frame.GetComponentIterator<Transform3D>())
 {
- var component = pair.Component;
- component.Position += FPVector3.Forward \* frame.DeltaTime;
- frame.Set(pair.Entity, component);
+var component = pair.Component;
+component.Position += FPVector3.Forward \* frame.DeltaTime;
+frame.Set(pair.Entity, component);
 }
-
-```
 
 ```
 
@@ -283,23 +259,20 @@ Component block iterators give you the fastest possible access via pointers.
 
 C#
 
-```
 ```csharp
 // This syntax returns an EntityComponentPointerPair struct
 // which holds the EntityRef of the entity and the requested Component of type T.
 foreach (var pair in frame.Unsafe.GetComponentBlockIterator<Transform3D>())
 {
- pair.Component->Position += FPVector3.Forward \* frame.DeltaTime;
+pair.Component->Position += FPVector3.Forward \* frame.DeltaTime;
 }
 
 // Alternatively, it is possible to use the following syntax to deconstruct the struct
 // and get direct access to the EntityRef and the component
 foreach (var (entityRef, transform) in frame.Unsafe.GetComponentBlockIterator<Transform3D>())
 {
- transform->Position += FPVector3.Forward \* frame.DeltaTime;
+transform->Position += FPVector3.Forward \* frame.DeltaTime;
 }
-
-```
 
 ```
 
@@ -313,11 +286,8 @@ To create a filter simply use the **Filter()** API provided by the frame.
 
 C#
 
-```
 ```csharp
 var filtered = frame.Filter<Transform3D, PhysicsBody3D>();
-
-```
 
 ```
 
@@ -327,13 +297,10 @@ If you need to more specific by creating _without_ and _any_ **ComponentSet** fi
 
 C#
 
-```
 ```csharp
 var without = ComponentSet.Create<CharacterController3D>();
 var any = ComponentSet.Create<NavMeshPathFinder, NavMeshSteeringAgent>();
 var filtered = frame.Filter<Transform3D, PhysicsBody3D>(without, any);
-
-```
 
 ```
 
@@ -353,14 +320,11 @@ of the entity they are attached to.
 
 C#
 
-```
 ```csharp
 while (filtered.Next(out var e, out var t, out var b)) {
- t.Position += FPVector3.Forward \* frame.DeltaTime;
- frame.Set(e, t);
+t.Position += FPVector3.Forward \* frame.DeltaTime;
+frame.Set(e, t);
 }
-
-```
 
 ```
 
@@ -370,13 +334,10 @@ The generic filter also offers the possibility to work with component pointers.
 
 C#
 
-```
 ```csharp
 while (filtered.UnsafeNext(out var e, out var t, out var b)) {
- t->Position += FPVector3.Forward \* frame.DeltaTime;
+t->Position += FPVector3.Forward \* frame.DeltaTime;
 }
-
-```
 
 ```
 
@@ -390,17 +351,14 @@ For this you need to first define a struct with **public** properties for each c
 
 Qtn
 
-```
 ```cs
 struct PlayerFilter
 {
- public EntityRef Entity;
- public CharacterController3D\* KCC;
- public Health\* Health;
- public FP AccumulatedDamage;
+public EntityRef Entity;
+public CharacterController3D\* KCC;
+public Health\* Health;
+public FP AccumulatedDamage;
 }
-
-```
 
 ```
 
@@ -412,17 +370,14 @@ The **component type** members in a _FilterStruct_ **HAVE TO BE** pointers; only
 
 C#
 
-```
 ```csharp
 var players = f.Unsafe.FilterStruct<PlayerFilter>();
 var playerStruct = default(PlayerFilter);
 
 while (players.Next(&playerStruct))
 {
- // Do stuff
+// Do stuff
 }
-
-```
 
 ```
 
@@ -451,25 +406,22 @@ Frame.Unsafe.ComponentGetter
 
 C#
 
-```
 ```csharp
 public unsafe class MySpecificEntitySystem : SystemMainThread
 
-struct MyFilter {
-public EntityRef Entity; // Mandatory member!
-public Transform2D\* Transform2D;
-public PhysicsBody2D\* Body;
-}
+ struct MyFilter {
+ public EntityRef Entity; // Mandatory member!
+ public Transform2D\* Transform2D;
+ public PhysicsBody2D\* Body;
+ }
 
-public override void Update(Frame frame) {
-MyFilter result = default;
+ public override void Update(Frame frame) {
+ MyFilter result = default;
 
-if (frame.Unsafe.ComponentGetter<MyFilter>().TryGet(frame, frame.Global->MyEntity, &result)) {
-// Do Stuff
-}
-}
-
-```
+ if (frame.Unsafe.ComponentGetter<MyFilter>().TryGet(frame, frame.Global->MyEntity, &result)) {
+ // Do Stuff
+ }
+ }
 
 ```
 
@@ -477,31 +429,28 @@ If this operation has to performed often, you can cache the look-up struct in th
 
 C#
 
-```
 ```csharp
 public unsafe class MySpecificEntitySystem : SystemMainThread
 
-struct MyFilter {
-public EntityRef Entity; // Mandatory member!
-public Transform2D\* Transform2D;
-public PhysicsBody2D\* Body;
-}
+ struct MyFilter {
+ public EntityRef Entity; // Mandatory member!
+ public Transform2D\* Transform2D;
+ public PhysicsBody2D\* Body;
+ }
 
-ComponentGetter<MyFilter> \_myFilterGetter;
+ ComponentGetter<MyFilter> \_myFilterGetter;
 
-public override void OnInit(Frame frame) {
-\_myFilterGetter = frame.Unsafe.ComponentGetter<MyFilter>();
-}
+ public override void OnInit(Frame frame) {
+ \_myFilterGetter = frame.Unsafe.ComponentGetter<MyFilter>();
+ }
 
-public override void Update(Frame frame) {
-MyFilter result = default;
+ public override void Update(Frame frame) {
+ MyFilter result = default;
 
-if (\_myFilterGetter.TryGet(frame, frame.Global->MyEntity, &result)) {
-// Do Stuff
-}
-}
-
-```
+ if (\_myFilterGetter.TryGet(frame, frame.Global->MyEntity, &result)) {
+ // Do Stuff
+ }
+ }
 
 ```
 
@@ -574,10 +523,7 @@ For user-defined components this number is smaller (236), since the Core DLL alr
 Although this has proven to be enough for most games, it is possible to increase this maximum count to 512 by adding this compiler define to a QTN file:
 
 ```
-```
 #pragma max\_components 512
-
-```
 
 ```
 
@@ -643,7 +589,6 @@ Here is an example of the basic structure needed for a component definition:
 
 C#
 
-```
 ```csharp
 \[StructLayout(LayoutKind.Explicit)\]
 public unsafe struct Example : IComponent {
@@ -663,8 +608,6 @@ public override int GetHashCode() {
 return \_number;
 }
 }
-
-```
 
 ```
 

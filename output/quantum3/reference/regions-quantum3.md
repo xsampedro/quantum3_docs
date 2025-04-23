@@ -246,11 +246,8 @@ That keeps the time to request the master servers' addresses as low as possible.
 
 C#
 
-```
 ```csharp
-loadBalancingClient.ConnectToNameServer()
-
-```
+ loadBalancingClient.ConnectToNameServer()
 
 ```
 
@@ -278,11 +275,8 @@ When your client has determined a region, connect to the master server for that 
 
 C#
 
-```
 ```csharp
-loadBalancingClient.ConnectToRegionMaster("us")
-
-```
+ loadBalancingClient.ConnectToRegionMaster("us")
 
 ```
 

@@ -26,11 +26,8 @@ CreateDeterministicPlugin()
 
 C#
 
-```
 ```csharp
 public override DeterministicPlugin CreateDeterministicPlugin(IPluginHost gameHost, String pluginName, Dictionary<String, String> config, ref String errorMsg)
-
-```
 
 ```
 
@@ -118,13 +115,10 @@ class in the Unity project.
 
 C#
 
-```
 ```csharp
 var sessionRunner = new DotNetSessionRunner {
-AssetSerializer = new QuantumJsonSerializer()
+ AssetSerializer = new QuantumJsonSerializer()
 };
-
-```
 
 ```
 
@@ -182,13 +176,10 @@ Optionally the exported asset file can be embedded into the Quantum.Simulation.d
 
 XML
 
-```
 ```xml
-<ItemGroup>
-<EmbeddedResource Include="db.json" />
-</ItemGroup>
-
-```
+ <ItemGroup>
+ <EmbeddedResource Include="db.json" />
+ </ItemGroup>
 
 ```
 
@@ -222,25 +213,22 @@ These properties are replaced with the key-values settings from the Photon onlin
 
 XML
 
-```
 ```xml
 <root>
-<PluginSettings Enabled="true">
-<Plugins>
-<Plugin
-Name="QuantumPlugin3.0"
-Version=""
-AssemblyName="Quantum.Plugin.Custom.dll"
-Type="Quantum.QuantumCustomPluginFactory"
-PathToLUTFolder="assets/LUT"
-PathToDBFile="assets/db.json"
-EmbeddedDBFile="Quantum.db.json"
-/\>
-</Plugins>
-</PluginSettings>
+ <PluginSettings Enabled="true">
+ <Plugins>
+ <Plugin
+ Name="QuantumPlugin3.0"
+ Version=""
+ AssemblyName="Quantum.Plugin.Custom.dll"
+ Type="Quantum.QuantumCustomPluginFactory"
+ PathToLUTFolder="assets/LUT"
+ PathToDBFile="assets/db.json"
+ EmbeddedDBFile="Quantum.db.json"
+ /\>
+ </Plugins>
+ </PluginSettings>
 </root>
-
-```
 
 ```
 
@@ -256,28 +244,22 @@ Add new properties by adding a line to the Plugin XML node, key and value are bo
 
 XML
 
-```
 ```xml
 <Plugin
- NewStringProperty="foo"
- NewIntProperty="10"
+NewStringProperty="foo"
+NewIntProperty="10"
 /\>
-
-```
 
 ```
 
 C#
 
-```
 ```cs
 if (config.TryGetString("NewStringProperty", out var newStringProperty, defaultValue: "default")) {
 }
 
 if (config.TryParseInt("NewIntProperty", out var newIntProperty, defaultValue: 0)) {
 }
-
-```
 
 ```
 
@@ -303,11 +285,8 @@ It provides a variety of virtual callback methods to hook into the server flow.
 
 C#
 
-```
 ```cs
 void OnDeterministicServerSetup(IHost host, IEventSender eventSender, IWebhookHost webhookHost, Dictionary<string, string> config, ref Boolean runServerSimulation)
-
-```
 
 ```
 
@@ -333,11 +312,8 @@ Example:
 
 C#
 
-```
 ```cs
 config.TryParseBool("WebHookEnableReplay", out var isReplayStreamingEnabled, false);
-
-```
 
 ```
 
@@ -363,11 +339,8 @@ IDeterministicSessionRunner
 
 C#
 
-```
 ```cs
 void OnDeterministicServerClose()
-
-```
 
 ```
 
@@ -377,11 +350,8 @@ Is called when the Realtime room closes.
 
 C#
 
-```
 ```cs
 void OnDeterministicUpdate()
-
-```
 
 ```
 
@@ -391,11 +361,8 @@ Is called for running sessions during each server update after the input has bee
 
 C#
 
-```
 ```cs
 Boolean OnDeterministicStartRequest(Protocol.StartRequest startRequestData)
-
-```
 
 ```
 
@@ -405,11 +372,8 @@ This is called when Quantum is requesting to start the simulation. You can retur
 
 C#
 
-```
 ```cs
 void OnDeterministicGameConfigs(ref byte\[\] runtimeConfig, ref DeterministicSessionConfig sessionConfig)
-
-```
 
 ```
 
@@ -419,11 +383,8 @@ This is called when Quantum receives the initial game configurations.
 
 C#
 
-```
 ```cs
 void OnDeterministicPlayerAdd(int playerSlot, ref byte\[\] runtimePlayer)
-
-```
 
 ```
 
@@ -433,11 +394,8 @@ This is called when a new player is added to the Quantum simulation.
 
 C#
 
-```
 ```cs
 void OnDeterministicPlayerRemove(int playerSlot)
-
-```
 
 ```
 
@@ -447,11 +405,8 @@ This is called when a player is removed from the Quantum simulation.
 
 C#
 
-```
 ```cs
 Boolean OnDeterministicSnapshotRequested(ref Int32 tick, ref byte\[\] data)
-
-```
 
 ```
 
@@ -463,11 +418,8 @@ You can return false to deny the request.
 
 C#
 
-```
 ```cs
 Boolean OnDeterministicCommand(DeterministicPluginClient client, Protocol.Command cmd)
-
-```
 
 ```
 
@@ -479,11 +431,8 @@ You can return false to deny the command.
 
 C#
 
-```
 ```cs
 void OnDeterministicLateStart(DeterministicPluginClient client, Protocol.SimulationStart startData)
-
-```
 
 ```
 
@@ -493,11 +442,8 @@ Is called when the late-joining or reconnecting client is about to receive the s
 
 C#
 
-```
 ```cs
 void OnDeterministicInputReceived(DeterministicPluginClient client, DeterministicTickInput input)
-
-```
 
 ```
 
@@ -507,11 +453,8 @@ Is called when a player input is received by the Quantum simulation. You can ove
 
 C#
 
-```
 ```cs
 void OnDeterministicInputConfirmed(DeterministicPluginClient client, Int32 tick, Int32 playerIndex, DeterministicTickInput input)
-
-```
 
 ```
 
@@ -521,11 +464,8 @@ Is called when input for a client and tick is confirmed.
 
 C#
 
-```
 ```cs
 Boolean OnDeterministicServerInput(DeterministicTickInput input)
-
-```
 
 ```
 
@@ -535,11 +475,8 @@ Override to set the input data for a server controlled player. Tick and player i
 
 C#
 
-```
 ```cs
 void OnDeterministicStartSession()
-
-```
 
 ```
 
@@ -549,11 +486,8 @@ Is called when the Quantum simulation is started.
 
 C#
 
-```
 ```cs
 void OnDeterministicServerReplacedInput(DeterministicTickInput input)
-
-```
 
 ```
 
@@ -563,11 +497,8 @@ Is called when the server replaces the input for a player.
 
 C#
 
-```
 ```cs
 void OnDeltaCompressedInput(int tick, byte\[\] data)
-
-```
 
 ```
 
@@ -577,11 +508,8 @@ This callback is invoked when the delta compressed input if finalized and can be
 
 C#
 
-```
 ```cs
 void SendDeterministicCommand(Protocol.Command cmd)
-
-```
 
 ```
 

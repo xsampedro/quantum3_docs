@@ -157,14 +157,11 @@ frame.Create()
 
 C#
 
-```
 ```csharp
 void CreateExampleEntity(Frame frame) {
-// Using a reference to the entity prototype asset
-var exampleEntity = frame.Create(myPrototypeReference);
+ // Using a reference to the entity prototype asset
+ var exampleEntity = frame.Create(myPrototypeReference);
 }
-
-```
 
 ```
 
@@ -199,13 +196,10 @@ FormerlyNamed
 
 Qtn
 
-```
 ```cs
 \[FormerlyNamed("OldComponentName")\]
 component NewComponentName {
 }
-
-```
 
 ```
 

@@ -34,11 +34,8 @@ There are two ways to modify an existing map:
 
 C#
 
-```
 ```csharp
 public void SetOriginalTileCost(Frame frame, Vector2Byte location, byte cost)
-
-```
 
 ```
 
@@ -46,12 +43,9 @@ public void SetOriginalTileCost(Frame frame, Vector2Byte location, byte cost)
 
 C#
 
-```
 ```csharp
 public int AddCostModifier(Frame frame, FPVector2 minPosition, FPVector2 maxPosition, byte cost)
 public bool RemoveCostModifier(Frame frame, int modifierID)
-
-```
 
 ```
 
@@ -73,14 +67,11 @@ FlowFieldMap
 
 C#
 
-```
 ```csharp
 var ffMap = new FlowFieldMap(new Vector2Int(16, 16), FP.\_2, 8, 4, COSTS);
 ffMap.Initialize(frame.SimulationConfig.ThreadCount, false);
 
 frame.Context.FlowFieldMap = ffMap;
-
-```
 
 ```
 

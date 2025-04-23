@@ -18,72 +18,69 @@ BoundarySystem
 
 C#
 
-```
 ```csharp
 using UnityEngine.Scripting;
 using Photon.Deterministic;
 
 namespace Quantum.Asteroids
 {
- \[Preserve\]
- public unsafe class BoundarySystem : SystemMainThreadFilter<BoundarySystem.Filter>
- {
- public struct Filter
- {
- public EntityRef Entity;
- public Transform2D\* Transform;
- }
-
- public override void Update(Frame frame, ref Filter filter)
- {
- if (IsOutOfBounds(filter.Transform->Position, new FPVector2(10, 10), out FPVector2 newPosition))
- {
- filter.Transform->Position = newPosition;
- filter.Transform->Teleport(frame, newPosition);
- }
- }
-
- /// <summary>
- /// Test if a position is out of bounds and provide a warped position.
- /// When the entity leaves the bounds it will emerge on the other side.
- /// </summary>
- public bool IsOutOfBounds(FPVector2 position, FPVector2 mapExtends, out FPVector2 newPosition)
- {
- newPosition = position;
-
- if (position.X >= -mapExtends.X && position.X <= mapExtends.X &&
- position.Y >= -mapExtends.Y && position.Y <= mapExtends.Y)
- {
- // position is inside map bounds
- return false;
- }
-
- // warp x position
- if (position.X < -mapExtends.X)
- {
- newPosition.X = mapExtends.X;
- }
- else if (position.X > mapExtends.X)
- {
- newPosition.X = -mapExtends.X;
- }
-
- // warp y position
- if (position.Y < -mapExtends.Y)
- {
- newPosition.Y = mapExtends.Y;
- }
- else if (position.Y > mapExtends.Y)
- {
- newPosition.Y = -mapExtends.Y;
- }
-
- return true;
- }
- }
+\[Preserve\]
+public unsafe class BoundarySystem : SystemMainThreadFilter<BoundarySystem.Filter>
+{
+public struct Filter
+{
+public EntityRef Entity;
+public Transform2D\* Transform;
 }
 
-```
+public override void Update(Frame frame, ref Filter filter)
+{
+if (IsOutOfBounds(filter.Transform->Position, new FPVector2(10, 10), out FPVector2 newPosition))
+{
+filter.Transform->Position = newPosition;
+filter.Transform->Teleport(frame, newPosition);
+}
+}
+
+/// <summary>
+/// Test if a position is out of bounds and provide a warped position.
+/// When the entity leaves the bounds it will emerge on the other side.
+/// </summary>
+public bool IsOutOfBounds(FPVector2 position, FPVector2 mapExtends, out FPVector2 newPosition)
+{
+newPosition = position;
+
+if (position.X >= -mapExtends.X && position.X <= mapExtends.X &&
+position.Y >= -mapExtends.Y && position.Y <= mapExtends.Y)
+{
+// position is inside map bounds
+return false;
+}
+
+// warp x position
+if (position.X < -mapExtends.X)
+{
+newPosition.X = mapExtends.X;
+}
+else if (position.X > mapExtends.X)
+{
+newPosition.X = -mapExtends.X;
+}
+
+// warp y position
+if (position.Y < -mapExtends.Y)
+{
+newPosition.Y = mapExtends.Y;
+}
+else if (position.Y > mapExtends.Y)
+{
+newPosition.Y = -mapExtends.Y;
+}
+
+return true;
+}
+}
+}
 
 ```
 
@@ -125,7 +122,6 @@ AsteroidsGameConfig
 
 C#
 
-```
 ```csharp
 \[Header("Map configuration")\]
 \[Tooltip("Total size of the map. This is used to calculate when an entity is outside de gameplay area and then wrap it to the other side")\]
@@ -134,8 +130,6 @@ public FPVector2 GameMapSize = new FPVector2(25, 25);
 public FPVector2 MapExtends => \_mapExtends;
 
 private FPVector2 \_mapExtends;
-
-```
 
 ```
 
@@ -151,16 +145,13 @@ function in the following way:
 
 C#
 
-```
 ```csharp
 public override void Loaded(IResourceManager resourceManager, Native.Allocator allocator)
 {
- base.Loaded(resourceManager, allocator);
+base.Loaded(resourceManager, allocator);
 
- \_mapExtends = GameMapSize / 2;
+\_mapExtends = GameMapSize / 2;
 }
-
-```
 
 ```
 
@@ -172,20 +163,17 @@ script and adjust the code to load the config and use the extends from it:
 
 C#
 
-```
 ```csharp
 public override void Update(Frame frame, ref Filter filter)
 {
-AsteroidsGameConfig config = frame.FindAsset(frame.RuntimeConfig.GameConfig);
+ AsteroidsGameConfig config = frame.FindAsset(frame.RuntimeConfig.GameConfig);
 
-if (IsOutOfBounds(filter.Transform->Position, config.MapExtends, out FPVector2 newPosition))
-{
-filter.Transform->Position = newPosition;
-filter.Transform->Teleport(frame, newPosition);
+ if (IsOutOfBounds(filter.Transform->Position, config.MapExtends, out FPVector2 newPosition))
+ {
+ filter.Transform->Position = newPosition;
+ filter.Transform->Teleport(frame, newPosition);
+ }
 }
-}
-
-```
 
 ```
 

@@ -83,16 +83,13 @@ to be automatically loaded and made available for view components.
 
 C#
 
-```
 ```csharp
 namespace Quantum {
-using UnityEngine;
-public class MyGameContext : QuantumMonoBehaviour, IQuantumViewContext {
-public GameObject Template;
+ using UnityEngine;
+ public class MyGameContext : QuantumMonoBehaviour, IQuantumViewContext {
+ public GameObject Template;
+ }
 }
-}
-
-```
 
 ```
 
@@ -104,20 +101,17 @@ ViewContext
 
 C#
 
-```
 ```csharp
 namespace Quantum {
- using UnityEngine;
- public class MyViewScript : QuantumEntityViewComponent<MyGameContext> {
- GameObject \_go;
+using UnityEngine;
+public class MyViewScript : QuantumEntityViewComponent<MyGameContext> {
+GameObject \_go;
 
- public override void OnInitialize() {
- \_go = Instantiate(ViewContext.Template);
- }
- }
+public override void OnInitialize() {
+\_go = Instantiate(ViewContext.Template);
 }
-
-```
+}
+}
 
 ```
 
@@ -181,32 +175,29 @@ Setting character animation based on character controller state.
 
 C#
 
-```
 ```csharp
 namespace Quantum {
-using UnityEngine;
+ using UnityEngine;
 
-public class CharacterViewAnimations : QuantumEntityViewComponent {
-private Animator \_animator;
+ public class CharacterViewAnimations : QuantumEntityViewComponent {
+ private Animator \_animator;
 
-public override void OnInitialize() {
-\_animator = GetComponentInChildren<Animator>();
+ public override void OnInitialize() {
+ \_animator = GetComponentInChildren<Animator>();
+ }
+
+ public override void OnUpdateView() {
+ // probably should use RealSpeed, but the variable isn't been written to in the KCC code currently
+ var kcc = PredictedFrame.Get<KCC>(EntityRef);
+ var kinematicSpeed = kcc.Data.KinematicVelocity.Magnitude;
+
+ \_animator.SetFloat("Speed", kinematicSpeed.AsFloat \* 10);
+ \_animator.SetBool("Jump", kcc.Data.HasJumped);
+ \_animator.SetBool("FreeFall", !kcc.Data.IsGrounded);
+ \_animator.SetBool("Grounded", kcc.Data.IsGrounded);
+ }
+ }
 }
-
-public override void OnUpdateView() {
-// probably should use RealSpeed, but the variable isn't been written to in the KCC code currently
-var kcc = PredictedFrame.Get<KCC>(EntityRef);
-var kinematicSpeed = kcc.Data.KinematicVelocity.Magnitude;
-
-\_animator.SetFloat("Speed", kinematicSpeed.AsFloat \* 10);
-\_animator.SetBool("Jump", kcc.Data.HasJumped);
-\_animator.SetBool("FreeFall", !kcc.Data.IsGrounded);
-\_animator.SetBool("Grounded", kcc.Data.IsGrounded);
-}
-}
-}
-
-```
 
 ```
 
@@ -214,48 +205,45 @@ Camera follow behaviour example:
 
 C#
 
-```
 ```csharp
 // Context, added to QuantumEntityViewUpdater game object
 namespace Quantum {
-using UnityEngine;
+ using UnityEngine;
 
-public class CustomViewContext : MonoBehaviour, IQuantumViewContext {
-public Camera MyCamera;
-}
+ public class CustomViewContext : MonoBehaviour, IQuantumViewContext {
+ public Camera MyCamera;
+ }
 }
 
 // View component, added to entity prefab (QuantumEntityView)
 namespace Quantum {
-using UnityEngine;
+ using UnityEngine;
 
-public class QuantumCameraFollow : QuantumEntityViewComponent<CustomViewContext> {
-public Vector3 Offset;
-public float LerpSpeed = 4;
-private bool \_isPlayerLocal;
+ public class QuantumCameraFollow : QuantumEntityViewComponent<CustomViewContext> {
+ public Vector3 Offset;
+ public float LerpSpeed = 4;
+ private bool \_isPlayerLocal;
 
-public override void OnActivate(Frame frame) {
-var playerLink = frame.Get<PlayerLink>(EntityRef);
-\_isPlayerLocal = Game.PlayerIsLocal(playerLink.Player);
+ public override void OnActivate(Frame frame) {
+ var playerLink = frame.Get<PlayerLink>(EntityRef);
+ \_isPlayerLocal = Game.PlayerIsLocal(playerLink.Player);
 
+ }
+
+ public override void OnUpdateView() {
+ if (\_isPlayerLocal == false) {
+ return;
+ }
+
+ var myPosition = transform.position;
+ var desiredPos = myPosition + Offset;
+ var currentCameraPos = ViewContext.MyCamera.transform.position;
+
+ ViewContext.MyCamera.transform.position = Vector3.Lerp(currentCameraPos, desiredPos, Time.deltaTime \* LerpSpeed);
+ ViewContext.MyCamera.transform.LookAt(transform);
+ }
+ }
 }
-
-public override void OnUpdateView() {
-if (\_isPlayerLocal == false) {
-return;
-}
-
-var myPosition = transform.position;
-var desiredPos = myPosition + Offset;
-var currentCameraPos = ViewContext.MyCamera.transform.position;
-
-ViewContext.MyCamera.transform.position = Vector3.Lerp(currentCameraPos, desiredPos, Time.deltaTime \* LerpSpeed);
-ViewContext.MyCamera.transform.LookAt(transform);
-}
-}
-}
-
-```
 
 ```
 

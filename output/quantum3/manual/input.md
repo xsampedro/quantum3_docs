@@ -14,15 +14,12 @@ Input can be defined in any [DSL](/quantum/current/manual/quantum-ecs/dsl) file.
 
 Qtn
 
-```
 ```cs
 input
 {
-button Jump;
-FPVector3 Direction;
+ button Jump;
+ FPVector3 Direction;
 }
-
-```
 
 ```
 
@@ -42,14 +39,11 @@ PollInput
 
 C#
 
-```
 ```csharp
- private void OnEnable()
- {
- QuantumCallback.Subscribe(this, (CallbackPollInput callback) => PollInput(callback));
- }
-
-```
+private void OnEnable()
+{
+QuantumCallback.Subscribe(this, (CallbackPollInput callback) => PollInput(callback));
+}
 
 ```
 
@@ -57,25 +51,22 @@ Then, in the callback, read from the input source and populate the input struct.
 
 C#
 
-```
 ```csharp
- public void PollInput(CallbackPollInput callback)
- {
- Quantum.Input i = new Quantum.Input();
+public void PollInput(CallbackPollInput callback)
+{
+Quantum.Input i = new Quantum.Input();
 
- var direction = new Vector3();
- direction.x = UnityEngine.Input.GetAxisRaw("Horizontal");
- direction.y = UnityEngine.Input.GetAxisRaw("Vertical");
+var direction = new Vector3();
+direction.x = UnityEngine.Input.GetAxisRaw("Horizontal");
+direction.y = UnityEngine.Input.GetAxisRaw("Vertical");
 
- i.Jump = UnityEngine.Input.GetKey(KeyCode.Space);
+i.Jump = UnityEngine.Input.GetKey(KeyCode.Space);
 
- // convert to fixed point.
- i.Direction = direction.ToFPVector3();
+// convert to fixed point.
+i.Direction = direction.ToFPVector3();
 
- callback.SetInput(i, DeterministicInputFlags.Repeatable);
- }
-
-```
+callback.SetInput(i, DeterministicInputFlags.Repeatable);
+}
 
 ```
 
@@ -101,14 +92,11 @@ Buttons are defined as follows:
 
 Qtn
 
-```
 ```cs
 input
 {
- button Jump;
+button Jump;
 }
-
-```
 
 ```
 
@@ -144,12 +132,9 @@ button
 
 C#
 
-```
 ```csharp
 // In Unity, when polling a player's input
 input.Jump = UnityEngine.Input.GetKey(KeyCode.Space);
-
-```
 
 ```
 
@@ -161,12 +146,9 @@ type. To achieve this, it is necessary to set the state of the button in simulat
 
 C#
 
-```
 ```csharp
 // In Quantum code
 input.button.Update(frame, value);
-
-```
 
 ```
 
@@ -182,14 +164,11 @@ DSL
 
 Qtn
 
-```
 ```cs
 input
 {
- FPVector2 Direction;
+FPVector2 Direction;
 }
-
-```
 
 ```
 
@@ -221,14 +200,11 @@ where we will store the encoded version.
 
 Qtn
 
-```
 ```cs
 input
 {
-Byte EncodedDirection;
+ Byte EncodedDirection;
 }
-
-```
 
 ```
 
@@ -236,42 +212,39 @@ Next, extend the input struct the same way a component is extended (see: [Adding
 
 C#
 
-```
 ```csharp
 namespace Quantum
 {
-partial struct Input
-{
-public FPVector2 Direction
-{
-get
-{
-if (EncodedDirection == default)
-return default;
+ partial struct Input
+ {
+ public FPVector2 Direction
+ {
+ get
+ {
+ if (EncodedDirection == default)
+ return default;
 
-Int32 angle = ((Int32)EncodedDirection - 1) \* 2;
+ Int32 angle = ((Int32)EncodedDirection - 1) \* 2;
 
-return FPVector2.Rotate(FPVector2.Up, angle \* FP.Deg2Rad);
-}
-set
-{
-if (value == default)
-{
-EncodedDirection = default;
-return;
-}
+ return FPVector2.Rotate(FPVector2.Up, angle \* FP.Deg2Rad);
+ }
+ set
+ {
+ if (value == default)
+ {
+ EncodedDirection = default;
+ return;
+ }
 
-var angle = FPVector2.RadiansSigned(FPVector2.Up, value) \* FP.Rad2Deg;
+ var angle = FPVector2.RadiansSigned(FPVector2.Up, value) \* FP.Rad2Deg;
 
-angle = (((angle + 360) % 360) / 2) + 1;
+ angle = (((angle + 360) % 360) / 2) + 1;
 
-EncodedDirection = (Byte) (angle.AsInt);
+ EncodedDirection = (Byte) (angle.AsInt);
+ }
+ }
+ }
 }
-}
-}
-}
-
-```
 
 ```
 
