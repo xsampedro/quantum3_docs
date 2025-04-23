@@ -36,7 +36,7 @@ type Scraper struct {
 // New creates a new API documentation scraper
 func New(config Config) *Scraper {
 	if config.OutputDir == "" {
-		config.OutputDir = "output"
+		config.OutputDir = "output/quantum3"
 	}
 
 	if config.BasePath == "" {

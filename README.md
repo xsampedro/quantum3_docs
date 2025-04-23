@@ -18,7 +18,8 @@ This repository was created to facilitate uploading API documentation to [Contex
 ├── README.md           # Project documentation
 ├── go.mod              # Go module definition
 ├── main.go             # Main application code
-└── output/             # Output directory for scraped documentation
+└── output/             # Root output directory
+    └── quantum3/       # Output directory for Quantum3 documentation
 ```
 
 ## Getting Started
@@ -36,7 +37,7 @@ This repository was created to facilitate uploading API documentation to [Contex
 
 3. Run the application:
    ```
-   go run main.go
+   go run main.go -list=false
    ```
 
 ## GitHub Actions
@@ -55,9 +56,16 @@ The action will run the scraper, commit any changes to the documentation, and pu
 
 To configure the application for your specific needs:
 
-1. Update the vendor domain in `main.go` by modifying the `AllowedDomains` parameter
-2. Set the correct API documentation starting URL by updating the `apiDocsURL` variable
-3. Customize the scraping logic in the `OnHTML` handler to match the structure of the vendor's documentation
+1. Update the vendor domain in `main.go` by modifying the `domain` flag
+2. Set the correct API documentation starting URL by updating the `baseURL` flag
+3. Change the output directory using the `output` flag (defaults to `output/quantum3`)
+4. Use `-list=true` to only list URLs without downloading (defaults to `true`)
+5. Adjust concurrency with the `concurrency` flag (defaults to twice the number of CPU cores)
+
+Example with custom settings:
+```
+go run main.go -url="https://example.com/docs" -output="output/custom" -list=false -concurrency=4
+```
 
 ## License
 

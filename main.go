@@ -12,7 +12,7 @@ import (
 func main() {
 	// Define command-line flags
 	baseURL := flag.String("url", "https://doc.photonengine.com/quantum/current/quantum-intro", "Base URL for the Quantum documentation")
-	outputDir := flag.String("output", "output", "Directory to save the scraped documentation")
+	outputDir := flag.String("output", "output/quantum3", "Directory to save the scraped documentation")
 	domain := flag.String("domain", "doc.photonengine.com", "Allowed domain for scraping")
 	listOnly := flag.Bool("list", true, "Only list URLs without downloading content")
 	basePath := flag.String("base-path", "/quantum/current/", "Base path to restrict scraping")
