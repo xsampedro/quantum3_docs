@@ -2,6 +2,10 @@
 
 A simple Go application that scrapes API documentation from a vendor's website and saves it locally.
 
+## Purpose
+
+This repository was created to facilitate uploading API documentation to [Context7](https://context7.com/add-library), which requires documentation to be in markdown format and hosted in a GitHub repository.
+
 ## Prerequisites
 
 - Go 1.21 or later
@@ -14,7 +18,7 @@ A simple Go application that scrapes API documentation from a vendor's website a
 ├── README.md           # Project documentation
 ├── go.mod              # Go module definition
 ├── main.go             # Main application code
-└── docs/               # Output directory for scraped documentation
+└── output/             # Output directory for scraped documentation
 ```
 
 ## Getting Started
@@ -45,4 +49,10 @@ To configure the application for your specific needs:
 
 ## License
 
-[Add license information here] 
+MIT License
+
+Copyright (c) 2023 xsampedro
+
+This license applies only to the scraper code itself. The content in the 'output' folder consists of API documentation scraped from the vendor's website and remains subject to the vendor's own copyright and licensing terms. No copyright claim is made over this scraped content.
+
+For full license text, see the [LICENSE](LICENSE) file. 
