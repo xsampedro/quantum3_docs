@@ -39,6 +39,18 @@ This repository was created to facilitate uploading API documentation to [Contex
    go run main.go
    ```
 
+## GitHub Actions
+
+This repository includes a GitHub Action workflow that can be manually triggered to re-run the scraper:
+
+1. Go to the "Actions" tab in your GitHub repository
+2. Select the "Manual API Docs Scraper" workflow
+3. Click "Run workflow"
+4. Optionally provide a reason for the update
+5. Click "Run workflow" again to start the process
+
+The action will run the scraper, commit any changes to the documentation, and push them to the repository.
+
 ## Configuration
 
 To configure the application for your specific needs:
