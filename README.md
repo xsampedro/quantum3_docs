@@ -91,7 +91,7 @@ go run main.go -type=realtime -output="output/custom-realtime" -list-only=false 
 
 MIT License
 
-Copyright (c) 2023 xsampedro
+Copyright (c) 2025 xsampedro.com
 
 This license applies only to the scraper code itself. The content in the 'output' folder consists of API documentation scraped from the vendor's website and remains subject to the vendor's own copyright and licensing terms. No copyright claim is made over this scraped content.
 
