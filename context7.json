@@ -1,0 +1,24 @@
+{
+  "$schema": "https://context7.com/schema/context7.json",
+  "projectTitle": "Quantum3 and Realtime API Documentation",
+  "description": "Comprehensive API documentation for Photon's Quantum3 and Realtime networking libraries",
+  "folders": ["output"],
+  "excludeFolders": [
+    "scraper",
+    "./go.mod",
+    "./go.sum",
+    "./main.go"
+  ],
+  "excludeFiles": [
+    "go.mod",
+    "go.sum",
+    "main.go",
+    "scraper.go"
+  ],
+  "rules": [
+    "Focus on the documentation content in the output folder",
+    "Use Quantum3 for physics-based multiplayer games",
+    "Use Realtime for general real-time multiplayer applications",
+    "Refer to the official Photon documentation for the most up-to-date information"
+  ]
+}
