@@ -10,7 +10,7 @@ These are explained below.
 
 Additionally, check the documentation included in the client platform SDKs for implementation details.
 
-In all cases, the [Photon Cloud Dashboard](https://dashboard.photonengine.com) is useful to check the AppId and subscription.
+In all cases, the [Photon Cloud Dashboard](https://dashboard.photonengine.com/) is useful to check the AppId and subscription.
 
 ## Authentication Errors
 
@@ -48,7 +48,7 @@ This error happens when the AppId used to connect to Photon Cloud is not of the 
 
 For example, trying to start a Photon Fusion SDK Client using a Realtime SDK AppId type or a Voice SDK AppId.
 
-The AppId type can be verified directly via the [Photon Cloud Dashboard](https://dashboard.photonengine.com).
+The AppId type can be verified directly via the [Photon Cloud Dashboard](https://dashboard.photonengine.com/).
 
 If you are experiencing this type of error, review the AppId type and/or create a new AppId to check.
 

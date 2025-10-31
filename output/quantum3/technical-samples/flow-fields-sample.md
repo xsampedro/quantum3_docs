@@ -4,13 +4,19 @@ _Source: https://doc.photonengine.com/quantum/current/technical-samples/flow-fie
 
 # Flow Fields Sample
 
-![Level 4](/v2/img/docs/levels/level04-advanced_1.5x.png)
+Level
+
+ADVANCED
+
+Topology
+
+**DETERMINISTIC**
 
 ## Download
 
 | Version | Release Date | Download |
 | --- | --- | --- |
-| 3.0.0 | Sep 02, 2024 | [Quantum Flow Fields Sample 3.0.0 Build 500](https://dashboard.photonengine.com/download/quantum/quantum-flow-fields-sample-3.0.0.zip) |  |
+| 3.0.0 | Aug 12, 2025 | [Quantum Flow Fields Sample 3.0.0](https://downloads.photonengine.com/download/quantum/quantum-flow-fields-sample-3.0.0.zip?pre=sp) |
 
 ## Basic Example
 
@@ -19,7 +25,8 @@ The simple example showcases only one moving unit in a static predefined map.
 ![Example Basic](/docs/img/quantum/v2/addons/flow-fields/example-basic-1.png)## Where to look?
 
 - The example is implemented in the 'ExampleBasic' scene;
-- \\quantum\_unity\\Assets\\Photon\\FlowFields\\ExampleBasic;
+- Simulation scripts are located in "Assets/QuantumUser/Simulation/FlowFieldsExamples/ExampleBasic".
+- View scripts are located in "Assets/QuantumUser/View/FlowFieldsExamples/ExampleBasic".
 
 ## Controls
 
@@ -36,8 +43,8 @@ The advanced example showcases multiple units with avoidance and final destinati
 ![Example Advanced](/docs/img/quantum/v2/addons/flow-fields/example-advanced-1.png)## Where to look?
 
 - The example is implemented 'ExampleAdvanced' scene;
-- \\quantum\_unity\\Assets\\Photon\\FlowFields\\ExampleAdvanced;
-- \\quantum\_code\\quantum.code\\ExampleAdvanced
+- Simulation scripts are located in "Assets/QuantumUser/Simulation/FlowFieldsExamples/ExampleAdvanced".
+- View scripts are located in "Assets/QuantumUser/View/FlowFieldsExamples/ExampleAdvanced".
 
 ## Controls
 

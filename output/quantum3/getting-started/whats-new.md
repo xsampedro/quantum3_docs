@@ -2,7 +2,7 @@
 
 _Source: https://doc.photonengine.com/quantum/current/getting-started/whats-new_
 
-# What's New
+# What's New In 3.0
 
 ## Quantum SDK Is Now A Unitypackage
 
@@ -76,7 +76,7 @@ See the [Webhook Online API Documentation](/quantum/current/manual/webhooks) for
 
 ## Quantum 3 AppIds
 
-Quantum 3 applications require the explicit creation of a Quantum 3 AppId on the [Photon Dashboard](https://dashboard.photonengine.compubliccloud).
+Quantum 3 applications require the explicit creation of a Quantum 3 AppId on the [Photon Dashboard](https://dashboard.photonengine.com/publiccloud).
 
 Read the [Quantum Asteroids Tutorial - Project Setup](/quantum/current/tutorials/asteroids/2-project-setup) tutorial for more information.
 

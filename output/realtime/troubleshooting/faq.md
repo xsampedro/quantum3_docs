@@ -12,8 +12,8 @@ Generally, we suggest to use either [Fusion](https://www.photonengine.com/slides
 
 For a quick overview, both product sheets contain the product picker "Quadrant":
 
-- [Quadrant in Fusion slides](https://www.photonengine.com/slides/fusion#page-7)
-- [Quadrant in Quantum slides](https://www.photonengine.com/slides/quantum#page-6)
+- [Quadrant in Fusion slides](https://www.photonengine.com/slides/fusion#quadrant)
+- [Quadrant in Quantum slides](https://www.photonengine.com/slides/quantum#quadrant)
 
 Feel free to reach out to us for any questions.
 
@@ -217,11 +217,6 @@ Otherwise, when the actor tries to rejoin, if the difference in milliseconds bet
 
 
 So an inactive actor can rejoin a room only for PlayerTTL milliseconds after Deactivation time.
-
-A "quick rejoin" is composed of two steps:
-
-- Reconnect: simply call the appropriate connect method once disconnected.
-- Rejoin: call `loadBalancingClient.OpRejoin(roomName)`.
 
 ## Billing
 

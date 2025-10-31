@@ -6,7 +6,7 @@ _Source: https://doc.photonengine.com/realtime/current/reference/counter-analyti
 
 The Photon Cloud records a set of analytics counters per application to help measure success and identify potential problems.
 
-To access the counters, [open the Photon Dashboard](https://dashboard.photonengine.com) and click on the Analyze button for a given app.
+To access the counters, [open the Photon Dashboard](https://dashboard.photonengine.com/) and click on the Analyze button for a given app.
 
 ## General
 
@@ -58,13 +58,21 @@ Approximated by dividing the sum of messages/s by the rooms in use (both counted
 
 Sum of the bytes/s reported by game servers.
 
-#### Bandwidth/s per Peer
+#### Master Bandwidth/s per Peer
 
-Approximated by dividing bandwidth/s by the CCU.
+Approximated by dividing bandwidth/s by the peers for related Master Servers.
+
+#### Gameserver Bandwidth/s per Peer
+
+Approximated by dividing bandwidth/s by the peers for related Game Servers.
+
+#### WebHooks Bandwidth/s per Peer
+
+Approximated by dividing WebHooks bandwidth/s by the peers.
 
 #### Traffic
 
-Accumulated traffic for the loaded timespan.
+Accumulated traffic for the loaded timespan. This includes traffic from the Master Servers, Game Servers and WebHooks.
 
 Select a “monthly” view and include the "All Regions" counter to estimate billable use.
 
@@ -78,7 +86,7 @@ Approximated by dividing the disconnects/sec counter by the CCU.
 
 When you choose **"all regions"** from the regions select, a new graph will show in addition to the other regions selected.
 
-For the application counters "Msg/s per Room", "Bandwidth/s per Peer" and "CCU per Room" it shows as the respective average for your app across all available regions.
+For the application counters "Msg/s per Room" ("Msg/s per Channel" for Chat apps), "Bandwidth/s per Peer" and "CCU per Room" it shows as the respective average for your app across all available regions.
 
 Other charts render "all regions" as the topmost graph represeting the sum of the values of the same counter for all available regions.
 

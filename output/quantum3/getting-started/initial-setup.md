@@ -6,14 +6,23 @@ _Source: https://doc.photonengine.com/quantum/current/getting-started/initial-se
 
 ## Getting the Quantum SDK
 
+[Download the latest released stable package of Quantum SDK 3.0.](https://downloads.photonengine.com/download/latest/photon-quantum-sdk-3) [Open the changelog section the latest released stable package of Quantum SDK 3.0.](/quantum/current/getting-started/release-notes)
+
+### Downloads
+
 | Version | Release Date | Download |
 | --- | --- | --- |
-| 3.0.2 Stable | Mar 03, 2025 | [Quantum SDK 3.0.2 Stable Build 1660](https://dashboard.photonengine.com/download/quantum/photon-quantum-3.0.2-stable-1660.unitypackage) | [Release Notes](release-notes#build-1660-mar-03-2025) |
-| Mar 03, 2025 | [Quantum Migration SDK 3.0.2 Stable Build 1660](https://dashboard.photonengine.com/download/quantum/photon-quantum-3.0.2-stable-migration-1660.zip) | [Release Notes](release-notes#build-1660-mar-03-2025) |
+| 3.0.8 Stable | Oct 08, 2025 | [Quantum SDK 3.0.8 Stable Build 1858](https://downloads.photonengine.com/download/quantum/photon-quantum-3.0.8-stable-1858.unitypackage?pre=sp) | [Release Notes](/quantum/v3/getting-started/release-notes#build-1858-oct-08-2025) |
+
+### Migration Package
+
+| Version | Release Date | Download |
+| --- | --- | --- |
+| 3.0.8 Stable | Oct 08, 2025 | [Quantum SDK Migration 3.0.8 Stable Build 1858](https://downloads.photonengine.com/download/quantum/photon-quantum-3.0.8-stable-migration-1858.zip?pre=sp) | [Release Notes](/quantum/v3/getting-started/release-notes#build-1858-oct-08-2025) |
 
 ## Requirements
 
-- Quantum 3 AppId ( [Photon Dashboard](https://dashboard.photonengine.compubliccloud))
+- Quantum 3 AppId ( [Photon Dashboard](https://dashboard.photonengine.com/publiccloud))
 - Minimum Unity 2021.3 LTS
 - Visual Studio 2022, JetBrains Rider
 - Microsoft Windows 10 or Mac OS X
@@ -38,6 +47,10 @@ _Source: https://doc.photonengine.com/quantum/current/getting-started/initial-se
 Back to top
 
 - [Getting the Quantum SDK](#getting-the-quantum-sdk)
+
+  - [Downloads](#downloads)
+  - [Migration Package](#migration-package)
+
 - [Requirements](#requirements)
 - [Supported Platforms](#supported-platforms)
 - [SDK Contents](#sdk-contents)

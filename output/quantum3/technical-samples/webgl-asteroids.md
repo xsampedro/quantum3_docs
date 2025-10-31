@@ -4,7 +4,13 @@ _Source: https://doc.photonengine.com/quantum/current/technical-samples/webgl-as
 
 # Quantum Crazy Starter WebGL
 
-![Level 4](/v2/img/docs/levels/level01-beginner_1.5x.png)
+Level
+
+BEGINNER
+
+Topology
+
+**DETERMINISTIC**
 
 ![Crazy Games](/docs/img/quantum/v3/technical-samples/webgl-asteroids/img-init.png)## Overview
 
@@ -18,20 +24,21 @@ For a more in-depth, multiplayer-focused experience, check out our [Asteroids tu
 
 | Version | Release Date | Download |
 | --- | --- | --- |
-| 3.0.2 | Apr 17, 2025 | [Quantum WebGL Sample 3.0.2 Build 623](https://dashboard.photonengine.com/download/quantum/quantum-webgl-sample-3.0.2.zip) |
+| 3.0.2 | Apr 17, 2025 | [Quantum WebGL Sample 3.0.2](https://downloads.photonengine.com/download/quantum/quantum-webgl-sample-3.0.2.zip?pre=sp) |
+| 3.0.0 | Nov 04, 2024 | [Quantum WebGL Sample 3.0.0](https://downloads.photonengine.com/download/quantum/quantum-webgl-sample-3.0.0.zip?pre=sp) |
 
 ## Download Vanilla Project
 
 | Version | Release Date | Download |
 | --- | --- | --- |
-| 3.0.2 | Apr 22, 2025 | [Quantum CrazyGames WebGL Vanilla Sample 3.0.2 Build 630](https://dashboard.photonengine.com/download/quantum/quantum-crazygames-webgl-vanilla-sample-3.0.2.zip) |
+| 3.0.2 | Apr 22, 2025 | [Quantum CrazyGames WebGL Vanilla Sample 3.0.2](https://downloads.photonengine.com/download/quantum/quantum-crazygames-webgl-vanilla-sample-3.0.2.zip?pre=sp) |
 
 ## Technical Info
 
 - Unity: 6000.0.17f1.
 - Platforms: WebGL
 
-To run the sample in online multiplayer mode, first create a Quantum AppId in the [PhotonEngine Dashboard](https://dashboard.photonengine.com) and paste it into the `AppId` field in `PhotonServerSettings` asset.
+To run the sample in online multiplayer mode, first create a Quantum AppId in the [PhotonEngine Dashboard](https://dashboard.photonengine.com/) and paste it into the `AppId` field in `PhotonServerSettings` asset.
 
 Then load the `Menu` scene in the Scenes menu and press `Play`.
 

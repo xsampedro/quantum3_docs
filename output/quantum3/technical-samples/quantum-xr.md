@@ -4,7 +4,13 @@ _Source: https://doc.photonengine.com/quantum/current/technical-samples/quantum-
 
 # Quantum XR
 
-![Level 4](/v2/img/docs/levels/level04-advanced_1.5x.png)
+Level
+
+ADVANCED
+
+Topology
+
+**DETERMINISTIC**
 
 ## Overview
 
@@ -19,13 +25,13 @@ Also, a few physics-based mini-games are also available (basket ball, punching b
 ## Before You start
 
 - The project has been developed with Unity 2022.3 and Quantum 3.0
-- To run the sample, first create a Quantum AppId and a Voice AppId in the [PhotonEngine Dashboard](https://dashboard.photonengine.com) and paste them it into the `App Id Quantum` and `App Id Voice` fields in Photon Server Settings (reachable from the Tools/Quantum menu). Then load the scene and press `Play`.
+- To run the sample, first create a Quantum AppId and a Voice AppId in the [PhotonEngine Dashboard](https://dashboard.photonengine.com/) and paste them it into the `App Id Quantum` and `App Id Voice` fields in Photon Server Settings (reachable from the Tools/Quantum menu). Then load the scene and press `Play`.
 
 ## Download
 
 | Version | Release Date | Download |
 | --- | --- | --- |
-| 3.0.0 | Sep 16, 2024 | [Quantum XR 3.0.0 Build 508](https://dashboard.photonengine.com/download/quantum/quantum-xr-3.0.0.zip) |
+| 3.0.0 | Oct 07, 2025 | [Quantum XR 3.0.0](https://downloads.photonengine.com/download/quantum/quantum-xr-3.0.0.zip?pre=sp) |
 
 ## Handling Input
 

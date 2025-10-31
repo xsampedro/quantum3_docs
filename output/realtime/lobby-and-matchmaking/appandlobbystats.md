@@ -6,17 +6,13 @@ _Source: https://doc.photonengine.com/realtime/current/lobby-and-matchmaking/app
 
 Photon servers can broadcast application and lobby statistics to clients.
 
-You can make use of this data to implement a complex custom matchmaking system.
+You can make use of this data to enhance your client-driven matchmaking.
 
 You can also brag about these statistics in your game to show how popular it is. :\]
 
 ## Application Statistics
 
-When connected to a Photon master server, a Photon client receives applications statistics.
-
-Regardless of whether the client is joined to a lobby or not, it will receive AppStats events.
-
-Application statistics are per region.
+While connected to a Master Server, clients receive application statistics for the current region.
 
 The applications statistics are:
 

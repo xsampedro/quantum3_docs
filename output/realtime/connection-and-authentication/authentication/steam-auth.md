@@ -6,7 +6,7 @@ _Source: https://doc.photonengine.com/realtime/current/connection-and-authentica
 
 ## Application Setup
 
-Adding Steam as an authentication provider is easy and it could be done in few seconds from your [Photon Applications' Dashboard](https://dashboard.photonengine.com).
+Adding Steam as an authentication provider is easy and it could be done in few seconds from your [Photon Applications' Dashboard](https://dashboard.photonengine.com/).
 
 Go to the "Manage" page of an application and scroll down to the "Authentication" section.
 

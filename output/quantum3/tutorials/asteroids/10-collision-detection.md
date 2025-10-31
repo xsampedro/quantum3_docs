@@ -143,7 +143,7 @@ if (parent == EntityRef.None)
 }
 else
 {
-    asteroidTransform->Position = f.Get<Transform2D>(parent).Position;
+    asteroidTransform->Position = frame.Get<Transform2D>(parent).Position;
 }
 
 ```
@@ -209,7 +209,7 @@ with
 C#
 
 ```csharp
-f.Signals.OnCollisionProjectileHitShip(info, projectile, ship);
+frame.Signals.OnCollisionProjectileHitShip(info, projectile, ship);
 
 ```
 
@@ -227,7 +227,7 @@ with
 C#
 
 ```csharp
-f.Signals.OnCollisionProjectileHitAsteroid(info, projectile, asteroid);
+frame.Signals.OnCollisionProjectileHitAsteroid(info, projectile, asteroid);
 
 ```
 
@@ -245,7 +245,7 @@ with
 C#
 
 ```csharp
-f.Signals.OnCollisionAsteroidHitShip(info, ship, asteroid);
+frame.Signals.OnCollisionAsteroidHitShip(info, ship, asteroid);
 
 ```
 

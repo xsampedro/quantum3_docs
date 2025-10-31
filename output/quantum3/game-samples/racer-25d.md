@@ -4,7 +4,13 @@ _Source: https://doc.photonengine.com/quantum/current/game-samples/racer-25d_
 
 # Racer 2.5D
 
-![Level 4](/v2/img/docs/levels/level03-intermediate_1.5x.png)
+Level
+
+INTERMEDIATE
+
+Topology
+
+**DETERMINISTIC**
 
 ## Overview
 
@@ -18,11 +24,14 @@ This sample is provided with full source code and demonstrates how Quantum can b
 
 | Version | Release Date | Download |
 | --- | --- | --- |
-| 3.0.2 | Mar 19, 2025 | [Quantum Racer 2.5D 3.0.2 Build 604](https://dashboard.photonengine.com/download/quantum/quantum-racer-2.5d-3.0.2.zip) |
+| 3.0.7 | Sep 10, 2025 | [Quantum Racer 2.5D 3.0.7](https://downloads.photonengine.com/download/quantum/quantum-racer-2.5d-3.0.7.zip?pre=sp) |
+| 3.0.5 | Jul 23, 2025 | [Quantum Racer 2.5D 3.0.5](https://downloads.photonengine.com/download/quantum/quantum-racer-2.5d-3.0.5.zip?pre=sp) |
+| 3.0.4 | Jun 10, 2025 | [Quantum Racer 2.5D 3.0.4](https://downloads.photonengine.com/download/quantum/quantum-racer-2.5d-3.0.4.zip?pre=sp) |
+| 3.0.2 | Mar 19, 2025 | [Quantum Racer 2.5D 3.0.2](https://downloads.photonengine.com/download/quantum/quantum-racer-2.5d-3.0.2.zip?pre=sp) |
 
 ## Before You Start
 
-To run the sample in online multiplayer mode, first create a Quantum AppId in the [PhotonEngine Dashboard](https://dashboard.photonengine.com) and paste it into the `AppId` field in `PhotonServerSettings` asset.
+To run the sample in online multiplayer mode, first create a Quantum AppId in the [PhotonEngine Dashboard](https://dashboard.photonengine.com/) and paste it into the `AppId` field in `PhotonServerSettings` asset.
 
 Then load the `Menu` scene in the Scenes menu and press `Play`.
 

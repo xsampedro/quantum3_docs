@@ -12,7 +12,7 @@ Most of the FAQ content is derived from questions asked by developers in the `#q
 
 When the AppId is rejected by the server there is no proper error message, yet. Make sure you have created your AppId correctly:
 
-1. Create a Quantum App Id on [your Photon dashboard](https://dashboard.photonengine.com)
+1. Create a Quantum App Id on [your Photon dashboard](https://dashboard.photonengine.com/)
 2. Click CREATE A NEW APP
 3. Set Photon Type to **Photon Quantum**
 4. Fill out the name field

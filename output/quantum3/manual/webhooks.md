@@ -35,6 +35,8 @@ Webhooks are enabled per AppId on the Photon Dashboard.
 | WebHookEnableOnJoin | `bool` | `true` | If set to `true`, the [JoinGame](#joingame) webhook will be fired when any client tries to join a game session. |
 | WebHookEnableOnLeave | `bool` | `false` | If set to `true`, the [LeaveGame](#leavegame) webhook will be fired when any client leaves a Game Session |
 | WebHookUrl{KEY} | `string` | `https://foo.net/path` | This pattern is optional and can be used to overwrite the default paths based on `WebHookBaseUrl` for individual webhooks. Valid replacements for `{KEY}` are `OnCreate`, `OnJoin`, `OnLeave`, etc. |
+| WebHookBaseUrlAllowList | `Dictionary<string, string>` | `{ "one": "https://foo-one", "two": "https://foo-two" }` | The base url allow list that client can chose the key by adding the key as room property "QuantumWebHookBaseUrl".<br> <br>`MatchmakingArguments.CustomProperties = new PhotonHashtable() { { RoomProperties.WebHookBaseUrl, "two" } }`<br> If the key send by a client matches an entry from the allow list it will replace the `WebHookBaseUrl` for all webhooks in the session. If the key is not found a warning is logged and the `WebHookBaseUrl` is used. |
+| WebHookDefaultTimeout | `int` | `60` | Overwrite the default timeout in seconds that Photon Server applies for webhooks (30 sec). |
 
 ### Quantum Dashboard Configurations
 
@@ -80,11 +82,11 @@ These common request headers are added to **every** web request.
 
 | Name | Type | Content | Description |
 | --- | --- | --- | --- |
-| `Accept` | `string` | `application/json` | Webhooks only accept `JSON` as a response body |
-| `Accept-Charset` | `string` | `utf-8` | Webhooks only accept utf-8 as response body charset |
-| `Content-Type` | `string` | `application/json` | Webhooks all send `JSON` body data |
-| `X-SecretKey` | `string` | `\\*\\*\\*\*\*\*\*\*\*\*` | This key should only be know to the custom backend and should be used to authenticate the incoming web request. This is set on the Photon Dashboard as `WebHookSecret`. |
-| `X-Origin` | `string` | `Photon` | Will always be set to "Photon" |
+| Accept | `string` | `application/json` | Webhooks only accept `JSON` as a response body |
+| Accept-Charset | `string` | `utf-8` | Webhooks only accept utf-8 as response body charset |
+| Content-Type | `string` | `application/json` | Webhooks all send `JSON` body data |
+| X-SecretKey | `string` | `\\*\\*\\*\*\*\*\*\*\*\*` | This key should only be know to the custom backend and should be used to authenticate the incoming web request. This is set on the Photon Dashboard as `WebHookSecret`. |
+| X-Origin | `string` | `Photon` | Will always be set to "Photon" |
 
 ### CreateGame
 
@@ -105,15 +107,15 @@ POST https://{WebHookBaseUrl}/game/create
 
 | Name | Type | Example | Description |
 | --- | --- | --- | --- |
-| `AppId` | `string` | `d1f67eec-51fb-45c1` | The Photon AppId. |
-| `AppVersion` | `string` | `1.0-live` | The AppVersion used when creating the room/game session. |
-| `Region` | `string` | `eu` | The Region code of the Game Server that the room/game session was created in. |
-| `Cloud` | `string` | `1` | The `Cloud Id` of that the Game Server is running on. |
-| `UserId` | `string` | `db757806-8570-45aa` | The `UserId` of the client that creates the room/game session. |
-| `AuthCookie` | `Dictionary<string, object>` | `db757806-8570-45aa` | The Photon custom authentication cookie set by the backend. |
-| `RoomName` | `string` | `e472a861-a1e2-49f7` | The room/game session Name. |
-| `GameId` | `string` | `0:eu:e472a861-a1e2-49f7` | A unique `GameId` which is composed of `{Cloud:}{Region:}RoomName`. Can be overwritten in the response. |
-| `EnterRoomParams` | `[EnterRoomParams](#enterroomparams)` | JSON: See `EnterRoomParam` section | The Photon room/game session Options sent by the client. |
+| AppId | `string` | `d1f67eec-51fb-45c1` | The Photon AppId. |
+| AppVersion | `string` | `1.0-live` | The AppVersion used when creating the room/game session. |
+| Region | `string` | `eu` | The Region code of the Game Server that the room/game session was created in. |
+| Cloud | `string` | `1` | The `Cloud Id` of that the Game Server is running on. |
+| UserId | `string` | `db757806-8570-45aa` | The `UserId` of the client that creates the room/game session. |
+| AuthCookie | `Dictionary<string, object>` | `db757806-8570-45aa` | The Photon custom authentication cookie set by the backend. |
+| RoomName | `string` | `e472a861-a1e2-49f7` | The room/game session Name. |
+| GameId | `string` | `0:eu:e472a861-a1e2-49f7` | A unique `GameId` which is composed of `{Cloud:}{Region:}RoomName`. Can be overwritten in the response. |
+| EnterRoomParams | `[EnterRoomParams](#enterroomparams)` | JSON: See `EnterRoomParam` section | The Photon room/game session Options sent by the client. |
 
 Json Example:
 
@@ -145,15 +147,15 @@ JSON
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `200 OK` | `[CreateGame Response](#creategame_response)` | room/game session creation can commence, config data from the response will overwrite data sent by the client. |
-| `400 Bad Request` | `[WebhookError](#webhookerror)` | room/game session creation is not allowed and will be canceled. The client will receive an error. |
+| 200 OK | `[CreateGame Response](#creategame_response)` | room/game session creation can commence, config data from the response will overwrite data sent by the client. |
+| 400 Bad Request | `[WebhookError](#webhookerror)` | room/game session creation is not allowed and will be canceled. The client will receive an error. |
 
 **CreateGame Response**
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `GameId` | `string` | Overwrites the `GameId` used in subsequent web requests. Can be `null` or omitted. |
-| `EnterRoomParams` | `[EnterRoomParams](#enterroomparams)` | Enforce selected Room Options during its creation. The `JSON` object does not have to include all members, only the ones that should be overwritten.<br>Only the initial options are protected by sending `EnterRoomParams`. Most of them can be changed by clients sending Photon Room properties. To block this enable the Photon dashboard property `BlockRoomProperties`. Can be `null` or omitted. |
+| GameId | `string` | Overwrites the `GameId` used in subsequent web requests. Can be `null` or omitted. |
+| EnterRoomParams | `[EnterRoomParams](#enterroomparams)` | Enforce selected Room Options during its creation. The `JSON` object does not have to include all members, only the ones that should be overwritten.<br>Only the initial options are protected by sending `EnterRoomParams`. Most of them can be changed by clients sending Photon Room properties. To block this enable the Photon dashboard property `BlockRoomProperties`. Can be `null` or omitted. |
 
 | Name | Type | Description |
 | --- | --- | --- |
@@ -219,10 +221,10 @@ POST https://{WebHookBaseUrl}/game/join
 
 | Name | Type | Example | Description |
 | --- | --- | --- | --- |
-| `AppId` | `string` | `d1f67eec-51fb-45c1` | The Photon AppId |
-| `GameId` | `string` | `0:eu:db757806-8570-45aa` | Unique `GameId` |
-| `UserId` | `string` | `db757806-8570-45aa` | Photon `UserId` |
-| `AuthCookie` | `Dictionary<string, object>` | `db757806-8570-45aa` | The Photon custom authentication cookie set by the backend. |
+| AppId | `string` | `d1f67eec-51fb-45c1` | The Photon AppId |
+| GameId | `string` | `0:eu:db757806-8570-45aa` | Unique `GameId` |
+| UserId | `string` | `db757806-8570-45aa` | Photon `UserId` |
+| AuthCookie | `Dictionary<string, object>` | `db757806-8570-45aa` | The Photon custom authentication cookie set by the backend. |
 
 Json Example:
 
@@ -244,15 +246,15 @@ JSON
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `200 OK` | `[JoinGame Response](#joingame_response)` | The client will join the room. |
-| `400 Bad Request` | `[WebhookError](#webhookerror)` | Joining the room will fail. |
+| 200 OK | `[JoinGame Response](#joingame_response)` | The client will join the room. |
+| 400 Bad Request | `[WebhookError](#webhookerror)` | Joining the room will fail. |
 
 **JoinGame Response**
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `RuntimePlayer` | `[RuntimePlayer](#runtimeplayer)` | Return a `RuntimePlayer` object that will be used for the client that created this room/session.<br>This only overwrites the first `AddPlayer` data sent for player slot `0`. `MaxPlayerSlots` should be set to `1`. |
-| `MaxPlayerSlots` | `int` | The maximum number of player slots this client can acquire:<br>`0` = only spectating<br>`1..255` = specific number<br>`-1` = unlimited<br>If this response is send but this value is not set `MaxPlayerSlots` will default to 1.<br>Players requesting an invalid player slot number or more slots than allowed will be disconnected. |
+| RuntimePlayer | `[RuntimePlayer](#runtimeplayer)` | Return a `RuntimePlayer` object that will be used for the client that created this room/session.<br>This only overwrites the first `AddPlayer` data sent for player slot `0`. `MaxPlayerSlots` should be set to `1`. |
+| MaxPlayerSlots | `int` | The maximum number of player slots this client can acquire:<br>`0` = only spectating<br>`1..255` = specific number<br>`-1` = unlimited<br>If this response is send but this value is not set `MaxPlayerSlots` will default to 1.<br>Players requesting an invalid player slot number or more slots than allowed will be disconnected. |
 
 Json Example:
 
@@ -291,12 +293,13 @@ POST https://{WebHookBaseUrl}/game/leave
 
 | Name | Type | Example | Description |
 | --- | --- | --- | --- |
-| `AppId` | `string` | `d1f67eec-51fb-45c1` | The Photon AppId |
-| `GameId` | `string` | `0:eu:db757806-8570-45aa` | Unique `GameId` |
-| `UserId` | `string` | `db757806-8570-45aa` | Photon `UserId` |
-| `ActorNr` | `int` | `db757806-8570-45aa` | The Photon actor number, a incrementing runtime id for clients. |
-| `AuthCookie` | `Dictionary<string, object>` | `db757806-8570-45aa` | Photon `UserId` |
-| `IsInactive` | `bool` | `db757806-8570-45aa` | Is set to true when the player left the room but is still marked inactive, e.g. when Player TTL was set. Additional LeaveGame requests can follow in this case. |
+| AppId | `string` | `d1f67eec-51fb-45c1` | The Photon AppId |
+| GameId | `string` | `0:eu:db757806-8570-45aa` | Unique `GameId` |
+| UserId | `string` | `db757806-8570-45aa` | Photon `UserId` |
+| ActorNr | `int` | `db757806-8570-45aa` | The Photon actor number, a incrementing runtime id for clients. |
+| AuthCookie | `Dictionary<string, object>` | `db757806-8570-45aa` | Photon `UserId` |
+| IsInactive | `bool` | `false` | Is `true` when the player that left the room is still marked inactive, e.g. when `PlayerTTL` was set. Additional LeaveGame requests can follow in this case. |
+| FailedOnCreate | `bool` | `false` | This flag indicates that this leave game webhook was invoked for a client that failed to create a room. |
 
 Json Example:
 
@@ -311,7 +314,8 @@ JSON
   "AuthCookie": {
     "Secret": "**********"
   },
-  "IsInactive": false
+  "IsInactive": false,
+  "FailedOnCreate": false
 }
 
 ```
@@ -320,8 +324,8 @@ JSON
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `200 OK` | `[LeaveGame Response](#leavegame_response)` | Just a confirmation of receipt. |
-| `400 Bad Request` | `[WebhookError](#webhookerror)` | Error is ignored, it will just be logged on the Photon Cloud. |
+| 200 OK | `[LeaveGame Response](#leavegame_response)` | Just a confirmation of receipt. |
+| 400 Bad Request | `[WebhookError](#webhookerror)` | Error is ignored, it will just be logged on the Photon Cloud. |
 
 **LeaveGame Response**
 
@@ -331,7 +335,6 @@ JSON
 
 ```json
 {
-  // empty
 }
 
 ```
@@ -353,9 +356,9 @@ POST https://{WebHookBaseUrl}/game/close
 
 | Name | Type | Example | Description |
 | --- | --- | --- | --- |
-| `AppId` | `string` | `d1f67eec-51fb-45c1` | The Photon AppId |
-| `GameId` | `string` | `0:eu:db757806-8570-45aa` | Unique game id |
-| `CloseReason` | `int ( [CloseReason](#closereason)`) | `0` | The reason why this room/session has been closed. |
+| AppId | `string` | `d1f67eec-51fb-45c1` | The Photon AppId |
+| GameId | `string` | `0:eu:db757806-8570-45aa` | Unique game id |
+| CloseReason | `int ( [CloseReason](#closereason)`) | `0` | The reason why this room/session has been closed. |
 
 Json Example:
 
@@ -373,14 +376,14 @@ JSON
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `200 OK` |  | Confirmation of receipt. |
+| 200 OK |  | Confirmation of receipt. |
 
 #### CloseReason
 
 | Name | Value | Description |
 | --- | --- | --- |
-| `Ok` | `0` | Session was closed without errors. |
-| `FailedOnCreate` | `1` | Session was closed because it failed to Create. |
+| Ok | `0` | Session was closed without errors. |
+| FailedOnCreate | `1` | Session was closed because it failed to Create. |
 
 ### GameConfigs
 
@@ -401,13 +404,13 @@ POST https://{WebHookBaseUrl}/game/configs
 
 | Name | Type | Example | Description |
 | --- | --- | --- | --- |
-| `AppId` | `string` | `d1f67eec-51fb-45c1` | The Photon AppId |
-| `GameId` | `string` | `0:eu:db757806-8570-45aa` | Unique game id |
-| `UserId` | `string` | `db757806-8570-45aa` | Photon `UserId` |
-| `ActorNr` | `int` | `db757806-8570-45aa` | The Photon actor number, a incrementing runtime id for clients. |
-| `RuntimeConfig` | `[RuntimeConfig](#runtimeconfig)` | `{ "Level": 1 }` | The `RuntimeConfig` object sent by the client to the plugin. Can be null. |
-| `SessionConfig` | `[SessionConfig](#sessionconfig)` | `{ "PlayerCount": 8, .. }` | The `SessionConfig` object sent by the client to the plugin. Can be null. |
-| `AuthCookie` | `Dictionary<string, object>` | `db757806-8570-45aa` | The Photon custom authentication cookie set by the backend. |
+| AppId | `string` | `d1f67eec-51fb-45c1` | The Photon AppId |
+| GameId | `string` | `0:eu:db757806-8570-45aa` | Unique game id |
+| UserId | `string` | `db757806-8570-45aa` | Photon `UserId` |
+| ActorNr | `int` | `db757806-8570-45aa` | The Photon actor number, a incrementing runtime id for clients. |
+| RuntimeConfig | `[RuntimeConfig](#runtimeconfig)` | `{ "Level": 1 }` | The `RuntimeConfig` object sent by the client to the plugin. Can be null. |
+| SessionConfig | `[SessionConfig](#sessionconfig)` | `{ "PlayerCount": 8, .. }` | The `SessionConfig` object sent by the client to the plugin. Can be null. |
+| AuthCookie | `Dictionary<string, object>` | `db757806-8570-45aa` | The Photon custom authentication cookie set by the backend. |
 
 Json Example:
 
@@ -443,8 +446,8 @@ JSON
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `200 OK` | `[GameConfigs Response](#gameconfigs_response)` | The game start sequence can continue. Game configs attached to response should be overwritten. |
-| `400 Bad Request` | `[WebhookError](#webhookerror)` | The game will be terminated and all clients are disconnected. |
+| 200 OK | `[GameConfigs Response](#gameconfigs_response)` | The game start sequence can continue. Game configs attached to response should be overwritten. |
+| 400 Bad Request | `[WebhookError](#webhookerror)` | The game will be terminated and all clients are disconnected. |
 
 **GameConfigs Response**
 
@@ -452,8 +455,8 @@ Both objects on the response can be `null` to accept the configs that the client
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `RuntimeConfig` | `[RuntimeConfig](#runtimeconfig)` | The `RuntimeConfig` object to overwrite the one the client sent. |
-| `SessionConfig` | `[SessionConfig](#sessionconfig)` | The `SessionConfig` object to overwrite the one the client sent. |
+| RuntimeConfig | `[RuntimeConfig](#runtimeconfig)` | The `RuntimeConfig` object to overwrite the one the client sent. |
+| SessionConfig | `[SessionConfig](#sessionconfig)` | The `SessionConfig` object to overwrite the one the client sent. |
 
 Json Example:
 
@@ -497,13 +500,13 @@ POST https://{WebHookBaseUrl}/player/add
 
 | Name | Type | Example | Description |
 | --- | --- | --- | --- |
-| `AppId` | `string` | `d1f67eec-51fb-45c1` | The Photon AppId |
-| `GameId` | `string` | `0:eu:db757806-8570-45aa` | Unique game id |
-| `UserId` | `string` | `db757806-8570-45aa` | Photon UserId or ClientId |
-| `ActorNr` | `int` | `db757806-8570-45aa` | The Photon actor number, a incrementing runtime id for clients. |
-| `PlayerSlot` | `int` | `0` | Player slot requested. Usually is 0. |
-| `RuntimePlayer` | `[RuntimePlayer](#runtimeplayer)` | `{ "Foo": 222 }` | The `RuntimePlayer` object sent by the client to the plugin. Can be null. |
-| `AuthCookie` | `Dictionary<string, object>` | `db757806-8570-45aa` | The Photon custom authentication cookie set by the backend. |
+| AppId | `string` | `d1f67eec-51fb-45c1` | The Photon AppId |
+| GameId | `string` | `0:eu:db757806-8570-45aa` | Unique game id |
+| UserId | `string` | `db757806-8570-45aa` | Photon UserId or ClientId |
+| ActorNr | `int` | `db757806-8570-45aa` | The Photon actor number, a incrementing runtime id for clients. |
+| PlayerSlot | `int` | `0` | Player slot requested. Usually is 0. |
+| RuntimePlayer | `[RuntimePlayer](#runtimeplayer)` | `{ "Foo": 222 }` | The `RuntimePlayer` object sent by the client to the plugin. Can be null. |
+| AuthCookie | `Dictionary<string, object>` | `db757806-8570-45aa` | The Photon custom authentication cookie set by the backend. |
 
 Json Example:
 
@@ -530,14 +533,14 @@ JSON
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `200 OK` | `[AddPlayer Response](#addplayer_response)` | The client can add a player to the selected player slot and optionally received a `RuntimePlayer` object from the backend. |
-| `400 Bad Request` | `[WebhookError](#webhookerror)` | The client cannot add the player and will receive an error protocol message and callback: `OnLocalPlayerAddFailed`. |
+| 200 OK | `[AddPlayer Response](#addplayer_response)` | The client can add a player to the selected player slot and optionally received a `RuntimePlayer` object from the backend. |
+| 400 Bad Request | `[WebhookError](#webhookerror)` | The client cannot add the player and will receive an error protocol message and callback: `OnLocalPlayerAddFailed`. |
 
 **AddPlayer Response**
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `RuntimePlayer` | `object` | The `RuntimePlayer` object to overwrite the `RuntimePlayer` that the client sent. If `null` the clients `RuntimePlayer` will be accepted. |
+| RuntimePlayer | `object` | The `RuntimePlayer` object to overwrite the `RuntimePlayer` that the client sent. If `null` the clients `RuntimePlayer` will be accepted. |
 
 Json Example:
 
@@ -569,13 +572,13 @@ POST https://{WebHookBaseUrl}/player/added
 
 | Name | Type | Example | Description |
 | --- | --- | --- | --- |
-| `AppId` | `string` | `d1f67eec-51fb-45c1` | The Photon AppId |
-| `GameId` | `string` | `0:eu:db757806-8570-45aa` | Unique game id |
-| `UserId` | `string` | `db757806-8570-45aa` | Photon UserId or ClientId |
-| `ActorNr` | `int` | `db757806-8570-45aa` | The Photon actor number, a incrementing runtime id for clients. |
-| `PlayerSlot` | `int` | 0 | The (local) player slot that the client reserved. |
-| `Player` | `int` | 21 | The (global) Player id that the client received. |
-| `AuthCookie` | `Dictionary<string, object>` | `db757806-8570-45aa` | The Photon custom authentication cookie set by the backend. |
+| AppId | `string` | `d1f67eec-51fb-45c1` | The Photon AppId |
+| GameId | `string` | `0:eu:db757806-8570-45aa` | Unique game id |
+| UserId | `string` | `db757806-8570-45aa` | Photon UserId or ClientId |
+| ActorNr | `int` | `db757806-8570-45aa` | The Photon actor number, a incrementing runtime id for clients. |
+| PlayerSlot | `int` | 0 | The (local) player slot that the client reserved. |
+| Player | `int` | 21 | The (global) Player id that the client received. |
+| AuthCookie | `Dictionary<string, object>` | `db757806-8570-45aa` | The Photon custom authentication cookie set by the backend. |
 
 Json Example:
 
@@ -600,7 +603,7 @@ JSON
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `200 OK` |  | Confirmation of receipt. |
+| 200 OK |  | Confirmation of receipt. |
 
 ### PlayerRemoved
 
@@ -619,14 +622,14 @@ POST https://{WebHookBaseUrl}/player/removed
 
 | Name | Type | Example | Description |
 | --- | --- | --- | --- |
-| `AppId` | `string` | `d1f67eec-51fb-45c1` | The Photon AppId |
-| `GameId` | `string` | `0:eu:db757806-8570-45aa` | Unique game id |
-| `UserId` | `string` | `db757806-8570-45aa` | Photon UserId or ClientId |
-| `ActorNr` | `int` | `db757806-8570-45aa` | The Photon actor number, a incrementing runtime id for clients. |
-| `PlayerSlot` | `int` | 0 | The (local) player slot. |
-| `Player` | `int` | 21 | The (global) Player id. |
-| `Reason` | `int` | 0 | The reason why the player was removed from the game.<br>0 = `Requested`<br>1 = `ClientDisconnected`<br>2 = `Error` |
-| `AuthCookie` | `Dictionary<string, object>` | `db757806-8570-45aa` | The Photon custom authentication cookie set by the backend. |
+| AppId | `string` | `d1f67eec-51fb-45c1` | The Photon AppId |
+| GameId | `string` | `0:eu:db757806-8570-45aa` | Unique game id |
+| UserId | `string` | `db757806-8570-45aa` | Photon UserId or ClientId |
+| ActorNr | `int` | `db757806-8570-45aa` | The Photon actor number, a incrementing runtime id for clients. |
+| PlayerSlot | `int` | 0 | The (local) player slot. |
+| Player | `int` | 21 | The (global) Player id. |
+| Reason | `int` | 0 | The reason why the player was removed from the game.<br>0 = `Requested`<br>1 = `ClientDisconnected`<br>2 = `Error` |
+| AuthCookie | `Dictionary<string, object>` | `db757806-8570-45aa` | The Photon custom authentication cookie set by the backend. |
 
 Json Example:
 
@@ -652,17 +655,26 @@ JSON
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `200 OK` |  | Confirmation of receipt. |
+| 200 OK |  | Confirmation of receipt. |
 
 ### GameResult
 
-Using the `GameResult` Quantum event in the simulation will trigger the upload of a [GameResult](#gameresult-event) instance by clients to the Quantum server once per game.
+Using the `GameResult` Quantum event in the simulation will trigger the upload of a [GameResult](#gameresult-event) instance by clients to the Quantum server **once** per game.
 
-The results are aggregated and forwarded as the `GameResult` webhook when the game/room is closed.
+The results are aggregated and forwarded as the `GameResult` webhook to a custom backend server when the game/room is **closed**. Because lingering clients and `RoomTTL` can prolong closing the room, there can be a delay between the game ending and the result webhook.
+
+The results are combined by each different submitted result. Ideally only one because every client send the same data. The result list is sorted by the number of players that submitted it and can be used to perform a simple majority vote to slightly increase the correctness of the result.
 
 Requires `WebHookBaseUrl` and `WebHookEnableGameResult` to be set on the Photon dashboard.
 
-If the server is running the simulation the webhooks are executed immediately from the server simulation and can be used as a reliable and trusted source of game results.
+> **Note:**
+>
+> - The `GameResult` webhook supports both standard JSON format and binary payloads using `base64` encoding.
+> - **Dictionaries are not supported**, due to Unity serialization limitations. Quantum relies on Unity's built-in serialization system, which does not support `Dictionary<,>` types. These fields will be ignored or cause deserialization failures if present.
+
+Requires `WebHookBaseUrl` and `WebHookEnableGameResult` to be set on the Photon dashboard.
+
+If the server is running the simulation the webhooks are executed immediately from the server simulation setting `IsServerResult` to `true` and can be used as a reliable and trusted source of game results.
 
 JavaScript
 
@@ -671,13 +683,29 @@ POST https://{WebHookBaseUrl}/game/result
 
 ```
 
+**Replays**
+
+The game result can also be used inside a replay by registering to `EventGameResult `.
+
+C#
+
+```csharp
+var eventDispatcher = new EventDispatcher();
+eventDispatcher.SubscribeManual((EventGameResult e) => {
+  if (e.Game?.Session != null) {
+    // Handle result and stop replay
+  }
+});
+
+```
+
 **GameResult Request**
 
 | Name | Type | Example | Description |
 | --- | --- | --- | --- |
-| `AppId` | `string` | `d1f67eec-51fb-45c1` | The Photon AppId |
-| `GameId` | `string` | `0:eu:db757806-8570-45aa` | Unique game id |
-| `Results` | `[GameResultInfo](#gameresultinfo)\[\]` | see below | The aggregated game results |
+| AppId | `string` | `d1f67eec-51fb-45c1` | The Photon AppId |
+| GameId | `string` | `0:eu:db757806-8570-45aa` | Unique game id |
+| Results | `[GameResultInfo](#gameresultinfo)\[\]` | see below | The aggregated game results |
 
 Json Example:
 
@@ -692,21 +720,38 @@ JSON
           "Clients": [
               {
                   "UserId": "FJEH43FL56FSDR",
-                  "Players": [
-                      0
-                  ],
+                  "Players": [ 0 ],
                   "GameTime": 63.3636703
+              },
+              {
+                  "UserId": "8FMEINF3845BSD",
+                  "Players": [ 1 ],
+                  "GameTime": 62.9345634
               }
           ],
           "Result": {
               "$type": "Quantum.GameResult, Quantum.Simulation",
-              "Frame": 12010
+              "Frame": 12010,
+              "Winner": 0
+          },
+          "IsServerResult": false
+      },
+      {
+          "Clients": [
+              {
+                  "UserId": "LUDHBS7Z3F55",
+                  "Players": [ 2 ],
+                  "GameTime": 63.1234567
+              }
+          ],
+          "Result": {
+              "$type": "Quantum.GameResult, Quantum.Simulation",
+              "Frame": 12010,
               "Winner": 2
           },
           "IsServerResult": false
       }
-  ],
-  "UserId": "0"
+  ]
 }
 
 ```
@@ -715,23 +760,23 @@ JSON
 
 | Name | Description |
 | --- | --- |
-| `200 OK` | Confirmation of receipt |
+| 200 OK | Confirmation of receipt |
 
 **GameResultInfo**
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `Result` | `[GameResult](#gameresult-event)` | The game specific game result Json object that the listed clients sent |
-| `Clients` | `[GameResultClientInfo](#gameresultclientinfo)\[\]` | The list of clients that generated this result |
-| `IsServerResult` | `bool` | Has this result been generated by server simulation |
+| Result | `[GameResult](#gameresult-event)` | The game specific game result Json object that the listed clients sent |
+| Clients | `[GameResultClientInfo](#gameresultclientinfo)\[\]` | The list of clients that generated this result |
+| IsServerResult | `bool` | Has this result been generated by server simulation |
 
 **GameResultClientInfo**
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `UserId` | `string` | The Photon user id |
-| `Players` | `int\[\]` | The list of players that this user controls |
-| `GameTime` | `float` | The timestamp when the result reached the server |
+| UserId | `string` | The Photon user id |
+| Players | `int\[\]` | The list of players that this user controls |
+| GameTime | `float` | The timestamp when the result reached the server |
 
 ### ReplayStart
 
@@ -754,14 +799,14 @@ POST https://{WebHookBaseUrl}/replay/start
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `AppId` | `string` | The Photon AppId. |
-| `AppVersion` | `string` | The AppVersion used when creating the room/game session. |
-| `Region` | `string` | The Region code of the Game Server that the room/game session was created in. |
-| `Cloud` | `string` | The `Cloud Id` of that the Game Server is running on. |
-| `RoomName` | `string` | The room/game session Name. |
-| `GameId` | `string` | A unique `GameId` which is composed of `{Cloud:}{Region:}RoomName`. |
-| `SessionConfig` | `[SessionConfig](#sessionconfig)` | The `SessionConfig` that the simulation started with. |
-| `RuntimeConfig` | `byte\[\]` | The GZipped Json of the `[RuntimeConfig](#runtimeconfig)` that the simulation started with. |
+| AppId | `string` | The Photon AppId. |
+| AppVersion | `string` | The AppVersion used when creating the room/game session. |
+| Region | `string` | The Region code of the Game Server that the room/game session was created in. |
+| Cloud | `string` | The `Cloud Id` of that the Game Server is running on. |
+| RoomName | `string` | The room/game session Name. |
+| GameId | `string` | A unique `GameId` which is composed of `{Cloud:}{Region:}RoomName`. |
+| SessionConfig | `[SessionConfig](#sessionconfig)` | The `SessionConfig` that the simulation started with. |
+| RuntimeConfig | `byte\[\]` | The GZipped Json of the `[RuntimeConfig](#runtimeconfig)` that the simulation started with. |
 
 Json Example:
 
@@ -789,14 +834,14 @@ JSON
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `200 OK` | `[ReplayStart Response](#replaystart_response)` | The replay streaming can start or be disabled when the `Skip` property is set. |
-| `400 Bad Request` | `[WebhookError](#webhookerror)` | In this case an error is logged on the server and the replay streaming is stopped. |
+| 200 OK | `[ReplayStart Response](#replaystart_response)` | The replay streaming can start or be disabled when the `Skip` property is set. |
+| 400 Bad Request | `[WebhookError](#webhookerror)` | In this case an error is logged on the server and the replay streaming is stopped. |
 
 **ReplayStart Response**
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `Skip` | `bool` | The replay streaming is disabled for this game session. |
+| Skip | `bool` | The replay streaming is disabled for this game session. |
 
 Json Example:
 
@@ -826,9 +871,9 @@ There are additional dashboard variables that configure the replay input streami
 
 | Dashboard Variable | Type | Description | Default |
 | --- | --- | --- | --- |
-| `WebHookReplayUseBinaryRequests` | `bool` | The web request are not send as JSON content but as binary data. | `false` |
-| `WebHookReplayUseCompression` | `bool` | The input data on the chunks is GZip compressed. | `false` |
-| `WebHookReplaySendIntervalInSec` | `int` | The chunk send interval in seconds (min = 2, max = 40). | `20` |
+| WebHookReplayUseBinaryRequests | `bool` | The web request are not send as JSON content but as binary data. | `false` |
+| WebHookReplayUseCompression | `bool` | The input data on the chunks is GZip compressed. | `false` |
+| WebHookReplaySendIntervalInSec | `int` | The chunk send interval in seconds (min = 2, max = 40). | `20` |
 
 **ReplayChunk Request**
 
@@ -836,15 +881,15 @@ If `WebHookReplayUseBinaryRequests` is selected, then the following properties a
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `AppId` | `string` | The Photon AppId |
-| `GameId` | `string` | The game id to identify the replay chunk. |
-| `ChunkNumber` | `int` | The incrementing chunk number. |
-| `IsLast` | `bool` | A flag that indicates that the last chunk has been send. Usually when a room closes. |
-| `LastTick` | `int` | The oldest tick of input on this chunk. |
-| `TickCount` | `int` | The number of ticks of input on this chunk. |
-| `TickCountTotal` | `int` | The total incrementing number of ticks in the whole replay. |
-| `IsCompressed` | `bool` | A flag indicating the input is GZip compressed. |
-| `Input` | `byte\[\]` | The binary delta compressed input that needs to be appended to the complete input stream for this replay.<br> The input for each tick has a leading int describing the data length. It can be stored in the `ReplayFile.InputHistoryRaw` field to be readable with the `QuantumRunnerLocalReplay` script in Unity. |
+| AppId | `string` | The Photon AppId |
+| GameId | `string` | The game id to identify the replay chunk. |
+| ChunkNumber | `int` | The incrementing chunk number. |
+| IsLast | `bool` | A flag that indicates that the last chunk has been send. Usually when a room closes. |
+| LastTick | `int` | The oldest tick of input on this chunk. |
+| TickCount | `int` | The number of ticks of input on this chunk. |
+| TickCountTotal | `int` | The total incrementing number of ticks in the whole replay. |
+| IsCompressed | `bool` | A flag indicating the input is GZip compressed. |
+| Input | `byte\[\]` | The binary delta compressed input that needs to be appended to the complete input stream for this replay.<br> The input for each tick has a leading int describing the data length. It can be stored in the `ReplayFile.InputHistoryRaw` field to be readable with the `QuantumRunnerLocalReplay` script in Unity. |
 
 Json Example:
 
@@ -869,15 +914,16 @@ JSON
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `200 OK` |  | Confirmation of receipt. |
+| 200 OK |  | Confirmation of receipt. |
+| 400 Bad Request | `[WebhookError](#webhookerror)` | In this case an error is logged on the server and the replay streaming is stopped. |
 
 ### WebhookError
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `Status` | `int` | HTTP status code |
-| `Error` | `string` | Error name |
-| `Message` | `string` | Error message |
+| Status | `int` | HTTP status code |
+| Error | `string` | Error name |
+| Message | `string` | Error message |
 
 Json example:
 
@@ -1076,8 +1122,8 @@ This definitions is designed to be similar to the `EnterRoomParams` class in Pho
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `RoomOptions` | `[RoomOptions](#roomoptions)` | RoomOptions object |
-| `ExpectedUsers` | `string\[\]` | A list of `UserIds` that are permitted to enter the room/session (additionally to the user creating the room). If `MaxPlayers` is greater than the number `ExpectedUsers` listed, any player may join and fill the unreserved slots.<br>Works only for `RoomJoin()` not `JoinRandom()`. |
+| RoomOptions | `[RoomOptions](#roomoptions)` | RoomOptions object |
+| ExpectedUsers | `string\[\]` | A list of `UserIds` that are permitted to enter the room/session (additionally to the user creating the room). If `MaxPlayers` is greater than the number `ExpectedUsers` listed, any player may join and fill the unreserved slots.<br>Works only for `RoomJoin()` not `JoinRandom()`. |
 
 Json example:
 
@@ -1121,17 +1167,17 @@ All values are nullable types and can be set to `null` or be omitted when sendin
 
 | Name | Type | Description |
 | --- | --- | --- |
-| `IsVisible` | `bool` | Defines if this room is listed in the Photon matchmaking. |
-| `IsOpen` | `bool` | Defines if this room can be joined by other clients. |
-| `MaxPlayers` | `byte` | Max number of players that can be in the room at any time. 0 means "no limit". |
-| `PlayerTtl` | `int` | Time To Live (TTL) for an 'actor' in a room. If a client disconnects, this actor is inactive first and removed after this timeout. In milliseconds. |
-| `EmptyRoomTtl` | `int` | Time To Live (TTL) for a room when the last player leaves. Keeps room in memory for case a player re-joins soon. In milliseconds. |
-| `CustomRoomProperties` | ``Dictionary <string, object>`` | The room's custom properties to set during creation. |
-| `CustomRoomPropertiesForLobby` | `string\[\]` | Defines which of the custom room properties get listed in the lobby.<br>Value type of the properties has to be `bool`, `byte`, `short`, `int`, `long`or `string`.<br>Max number of properties is **3**.<br>The max length for string value is **64**.<br>Key restrictions can also be enforced by the Photon dashboard property: `AllowedLobbyProperties`. |
-| `SuppressRoomEvents` | `bool` | Tells the server to skip room events for joining and leaving players.<br>Default is `false`. |
-| `SuppressPlayerInfo` | `bool` | Disables events join and leave from the server as well as property broadcasts in a room (to minimize traffic).<br>Default is `false`. |
-| `PublishUserId` | `bool` | Defines if the UserIds of players get "published" in the room. Useful for FindFriends, if players want to play another game together.<br>Default is `false`. |
-| `DeleteNullProperties` | `bool` | Optionally, properties get deleted, when null gets assigned as value.<br>Default is `false`. |
+| IsVisible | `bool` | Defines if this room is listed in the Photon matchmaking. |
+| IsOpen | `bool` | Defines if this room can be joined by other clients. |
+| MaxPlayers | `byte` | Max number of players that can be in the room at any time. 0 means "no limit". |
+| PlayerTtl | `int` | Time To Live (TTL) for an 'actor' in a room. If a client disconnects, this actor is inactive first and removed after this timeout. In milliseconds. |
+| EmptyRoomTtl | `int` | Time To Live (TTL) for a room when the last player leaves. Keeps room in memory for case a player re-joins soon. In milliseconds. |
+| CustomRoomProperties | ``Dictionary <string, object>`` | The room's custom properties to set during creation. |
+| CustomRoomPropertiesForLobby | `string\[\]` | Defines which of the custom room properties get listed in the lobby.<br>Value type of the properties has to be `bool`, `byte`, `short`, `int`, `long`or `string`.<br>Max number of properties is **3**.<br>The max length for string value is **64**.<br>Key restrictions can also be enforced by the Photon dashboard property: `AllowedLobbyProperties`. |
+| SuppressRoomEvents | `bool` | Tells the server to skip room events for joining and leaving players.<br>Default is `false`. |
+| SuppressPlayerInfo | `bool` | Disables events join and leave from the server as well as property broadcasts in a room (to minimize traffic).<br>Default is `false`. |
+| PublishUserId | `bool` | Defines if the UserIds of players get "published" in the room. Useful for FindFriends, if players want to play another game together.<br>Default is `false`. |
+| DeleteNullProperties | `bool` | Optionally, properties get deleted, when null gets assigned as value.<br>Default is `false`. |
 
 ## PlayFab
 

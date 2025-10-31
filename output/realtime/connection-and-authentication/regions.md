@@ -18,7 +18,7 @@ Below is an outline of the client workflow:
 
 (3) Finally, the client connects to the designated Game Server in order to join the room. This Game Server is located in the same region as the Master Server the client connected to in step (2).
 
-![Photon Cloud Regions' Connect Flows](/docs/img/photon-cloud-connect-name-server.png)
+![Photon Cloud Regions' Connect Flows](/docs/img/photon-cloud-connect-name-server.jpg)
 Connect to Photon Cloud regions
 
 
@@ -111,7 +111,7 @@ The Region Allowlist enables you to customize the available regions per applicat
 
 By using using more or less regions, you balance the quality of service (roundtrip times are better, when there is a region close to players) versus the matchmaking experience (less regions mean more players per region).
 
-To define the regions per app, [open the dashboard](https://dashboard.photonengine.com), click "Manage" for a chosen application and then click "Edit Allowlist".
+To define the regions per app, [open the dashboard](https://dashboard.photonengine.com/), click "Manage" for a chosen application and then click "Edit Allowlist".
 
 You will find an input field to enter the list of allowed regions as follows:
 
@@ -142,11 +142,11 @@ Options are..
 
 All Photon Cloud apps are working in all available regions without any extra charge.
 
-[See pricing.](https://www.photonengine.com/realtime/pricing)
+[See pricing.](https://www.photonengine.com/en-us/pricing)
 
 Photon Cloud's dashboard lets you monitor the usage of your game in each region and easily upgrade or downgrade your subscription plan.
 
-[Go to your dashboard.](https://dashboard.photonengine.com)
+[Go to your dashboard.](https://dashboard.photonengine.com/)
 
 ### C# Realtime API
 
@@ -184,10 +184,10 @@ Sometimes it may be "random" due to little variations or exact same ping calcula
 
 Theoretically, you could:
 
-- have the same exact ping to multiple regions from the same device. So it is random, if you end up with different regions on clients connected to the same network.
-- different ping values for the same region on different devices (or different retries on the same device) connected to the same network.
+- have the _same ping to multiple regions_ from the same device. Even clients connected to the same network can end up on different regions.
+- have different ping values _for the same region_ on different devices (or different retries on the same device) connected to the same network.
 
-For instance, in the case of "us" and "usw" (or "ru" and "rue"), you could either make use of the online regions allowlist to select the ones you want and drop the others or connect to an explicit region.
+For instance, in the case of "us" and "usw", you could either use the Regions Allowlist to select the ones you want or make clients connect to a specific region.
 
 To debug, set the logging level to "Info" and clear the "current best region" (in PUN: PhotonNetwork.BestRegionSummaryInPreferences = null). Have a look at the details or send us the log via mail.
 

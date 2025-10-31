@@ -8,6 +8,7 @@ _Source: https://doc.photonengine.com/quantum/current/game-samples/platform-shoo
 
 - Unity Editor 2022.3.54
 - Supported Platforms: PC (Windows/Mac), WebGL, Mobile (Android, iOS)
+- Quantum 3 AppId created in the [Photon Engine Dashboard](https://dashboard.photonengine.com). [How to create a Quantum 3 AppId](/quantum/current/reference/create-quantum-appid)
 
 ## Download
 
@@ -21,7 +22,9 @@ Import the unitypackage into a new Unity project or open the unzipped Unity proj
 
 | Version | Release Date | Download |
 | --- | --- | --- |
-| 3.0.2 | Mar 18, 2025 | [Quantum Platform Shooter 2D 3.0.2 Build 600](https://dashboard.photonengine.com/download/quantum/quantum-platform-shooter-2d-3.0.2.zip) |
+| 3.0.7 | Sep 05, 2025 | [Quantum Platform Shooter 2D 3.0.7](https://downloads.photonengine.com/download/quantum/quantum-platform-shooter-2d-3.0.7.zip?pre=sp) |
+| 3.0.4 | May 27, 2025 | [Quantum Platform Shooter 2D 3.0.4](https://downloads.photonengine.com/download/quantum/quantum-platform-shooter-2d-3.0.4.zip?pre=sp) |
+| 3.0.3 | Apr 28, 2025 | [Quantum Platform Shooter 2D 3.0.3](https://downloads.photonengine.com/download/quantum/quantum-platform-shooter-2d-3.0.3.zip?pre=sp) |
 
 ## Quantum Hub window
 

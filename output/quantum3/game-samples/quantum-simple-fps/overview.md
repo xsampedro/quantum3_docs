@@ -4,7 +4,13 @@ _Source: https://doc.photonengine.com/quantum/current/game-samples/quantum-simpl
 
 # Overview
 
-![Level 4](/v2/img/docs/levels/level01-beginner_1.5x.png)
+Level
+
+BEGINNER
+
+Topology
+
+**DETERMINISTIC**
 
 The **Quantum Simple FPS** game is a first-person shooter designed to provide an entry-level game sample with a straightforward code structure. Its primary focus is to serve as a learning resource for beginners and developers interested in creating their own first-person shooter games.
 

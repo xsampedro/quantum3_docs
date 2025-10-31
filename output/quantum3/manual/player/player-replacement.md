@@ -84,7 +84,7 @@ Remember: _this is just a suggestion_. This architecture is not at all mandatory
 
 Here is a visualisation of this strategy used in the [Twin Stick Shooter Sample](/quantum/current/game-samples/twin-stick-shooter):
 
-![Input Polling](/docs/img/quantum/v2/game-samples/twin-stick-shooter/Polling Input.jpg)
+![Input Polling](/docs/img/quantum/v2/game-samples/twin-stick-shooter/Polling-Input.jpg)
 
 **Attention:** the Twin Stick Shooter Sample is an **ADVANCED** sample, so an understanding of Quantum's basics is necessary prior to analysing it.
 

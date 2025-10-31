@@ -174,8 +174,8 @@ namespace Quantum
 
 There are two component specific reactive callbacks:
 
-- `ISignalOnComponentAdd<T>`: called when a component type T is added to an entity.
-- `ISignalOnComponentRemove<T>`: called when a component type T is removed from an entity.
+- `ISignalOnComponentAdded<T>`: called when a component type T is added to an entity.
+- `ISignalOnComponentRemoved<T>`: called when a component type T is removed from an entity.
 
 These are particularly useful in case you need to manipulate part of the component when it is added/removed - for instance allocate and deallocate a list in a custom component.
 

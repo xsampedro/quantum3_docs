@@ -15,15 +15,13 @@ The `QuantumEntityViewUpdater` script is responsible for triggering the `Animate
 
 Provides integration between Quantum Animator and Unity's Mecanim system, allowing for smooth transitions and frame synchronization of animations. It provides frame-rate control and enables the usage of [Animation Layers](https://docs.unity3d.com/Manual/AnimationLayers.html), which is not supported by `AnimatorPlayables`.
 
-![Debug.](/docs/img/quantum/v3/addons/animator/animator-mecanim-debug.png)
+![Debug.](/docs/img/quantum/v3/addons/animator/animator-mecanim-debug.png)#### Muting Transitions
 
-Muting Transitions
-
-To prevent transitions from occuring automatically in Unity, make sure to check `Mute Graph Transitions On Export` in the `Animator Graph` settings.
+When using `AnimatorMecanim` there is the slight possibility that false-positive transitions may occur, resulting in subtle, visual glitches. To prevent this, the `Mute Graph Transitions On Export` in the `AnimatorGraph` settings can be turned on. When the `AnimatorGraph` is baked, all transitions in the `AnimatorController` will be muted.
 
 ### Animator Playables
 
-It handles animations using Playable Graphs instead of Mecanim, providing a more customizable approach to animation updates with the Quantum Animator. However, not all Mecanim features are supported in this setup, such as Animation Layers.
+This handles animations using Playable Graphs instead of Mecanim, providing a more customizable approach to animation updates with the Quantum Animator. However, not all Mecanim features are supported in this setup, such as Animation Layers.
 
 ## Animator Events
 
@@ -194,7 +192,7 @@ The `Root Motion` option needs to be enabled in order to allow the motion data t
 
 ![Baked Root Motion data.](/docs/img/quantum/v3/addons/animator/animator-enable-root-motion.png)#### Disable State Root Motion
 
-By default, the motion data is enabled for all states in the `AnimatorGraph` as long s the `Root Motion` option is enabled. Adding the `Animator Disable Root Motion Behaviour` to a Mecanim state ensures that the state is excluded from root motion calculations.
+By default, the motion data is enabled for all states in the `AnimatorGraph` as long as the `Root Motion` option is enabled. Adding the `Animator Disable Root Motion Behaviour` to a Mecanim state ensures that the state is excluded from root motion calculations.
 
 ![Baked Root Motion data.](/docs/img/quantum/v3/addons/animator/animator-removing-root-motion-from-state.png)#### Usage Example
 

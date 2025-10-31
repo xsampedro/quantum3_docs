@@ -20,7 +20,7 @@ When creating a new game scene, there are a few alternatives to create and popul
 
 1. Create a new Quantum scene from the top toolbar: `Quantum/Setup/Create New Quantum Scene`;
 2. Or transform an already created scene into a Quantum scene with: `Quantum/Setup/Add Quantum To Current Scene`;
-3. Or do the map setup manually by creating the Game Object with the `QuantumMapData` component and create, wherever preferred, a new `Map` asset from the context menu in `Create/Quantum/Map`.
+3. Or do the map setup manually by creating the Game Object with the `QuantumMapData` component and create, wherever preferred, a new `Map` asset from the context menu in `Create/Quantum/Assets/Map`.
 
 In the `QuantumEditorSettings` asset in the project under the `Editor Features` section, automatic map baking for scene saving, playmode changes and building the app can be enabled or disabled.
 
@@ -93,16 +93,7 @@ Aside from colliders and navmeshes, game maps may include other elements that ar
 
 An example of utilizing custom data when baking a map is to include spawn points in the baked map. Designers can then place and freely move these spawn points in the Unity Scene.
 
-In a DSL file add an asset declaration:
-
-C#
-
-```csharp
-asset MapCustomData;
-
-```
-
-Then, create a new class in the `Quantum` project to store the spawnpoint data:
+Create a new class Quantum asset class to store the spawnpoint data:
 
 C#
 
@@ -111,7 +102,7 @@ namespace Quantum
 {
   using System;
   using Photon.Deterministic;
-  public unsafe partial class MapCustomData
+  public unsafe class MapCustomData : AssetObject
   {
     [Serializable]
     public struct SpawnPointData

@@ -199,7 +199,7 @@ public override bool StartEnabled => false;
 
 Systems can be grouped, which allows them to be enabled and disabled together.
 
-Select the `SystemsConfig`, add a new system of type `SystemGroup`, then append child systems to it.
+Select the `SystemsConfig` asset, add a new system of type `SystemGroup`, then append child systems to it.
 
 ![System Group](/docs/img/quantum/v3/manual/ecs/system-setup-groups.png)
 
@@ -210,11 +210,8 @@ C#
 ```csharp
 namespace Quantum
 {
-  public class MySystemGroup : SystemMainThreadGroup
+  public class MySystemGroup : SystemGroup
   {
-    public MySystemGroup(string update, params SystemMainThread[] children) : base(update, children)
-    {
-    }
   }
 }
 
@@ -302,7 +299,7 @@ Entity refs are safe-to-keep references to entities (temporarily replacing point
 
 ### Filters
 
-Quantum v2 does not have _entity types_. In the sparse-set ECS memory model, entities are indexes to a collection of components; the _EntityRef_ type holds some additional information such as versioning. These collections are kept in dynamically allocated sparse sets.
+Quantum does not have _entity types_. In the sparse-set ECS memory model, entities are indexes to a collection of components; the _EntityRef_ type holds some additional information such as versioning. These collections are kept in dynamically allocated sparse sets.
 
 Therefore, instead of iterating over a collection of entities, filters are used to create a set of components the system will work on.
 
@@ -399,8 +396,8 @@ Besides explicit signals defined directly in the DSL, Quantum also includes some
 
 The collision callback signals will be covered in the specific chapter about the physics engine, so here's a brief description of other pre-built signals:
 
-- `ISignalOnPlayerDataSet`: called when a game client sends an instance of RuntimePlayer to server (and the data is confirmed/attached to one tick).
-- `ISignalOnAdd<T>`, `ISignalOnRemove<T>`: called when a component type T is added/removed to/from an entity.
+- `ISignalOnPlayerAdded`: called when a game client sends an instance of RuntimePlayer to server (and the data is confirmed/attached to one tick).
+- `ISignalOnComponentAdded<T>`, `ISignalOnComponentRemoved<T>`: called when a component type T is added/removed to/from an entity.
 
 ## Triggering Events
 
@@ -424,7 +421,7 @@ C#
 
 ```csharp
 // any System can trigger the generated events (FP._0_5 means fixed point value for 0.5)
-f.Events.TriggerSound(FPVector2.Zero, FP._0_5);
+f.Events.TriggerSound(FPVector2.Zero, FP._0_50);
 
 ```
 

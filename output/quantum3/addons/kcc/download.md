@@ -6,22 +6,22 @@ _Source: https://doc.photonengine.com/quantum/current/addons/kcc/download_
 
 Here you can download sample project which includes step-by-step explanations and several gameplay oriented examples. Download addon if you are updating to new version or want to start from scratch.
 
-## Download - Sample
+## Downloads
 
 | Version | Release Date | Download |
 | --- | --- | --- |
-| 3.0.5 | Mar 06, 2025 | [Quantum KCC Sample 3.0.5 Build 596](https://dashboard.photonengine.com/download/quantum/quantum-kcc-sample-3.0.5.zip) |
-
-## Download - Addon
+| 3.0.5 | Mar 06, 2025 | [Quantum KCC Sample 3.0.5](https://downloads.photonengine.com/download/quantum/quantum-kcc-sample-3.0.5.zip?pre=sp) | [Release Notes](/quantum/v3/addons/kcc/download#3.0.5) |
+| 3.0.4 | Dec 05, 2024 | [Quantum KCC Sample 3.0.4](https://downloads.photonengine.com/download/quantum/quantum-kcc-sample-3.0.4.zip?pre=sp) | [Release Notes](/quantum/v3/addons/kcc/download#3.0.4) |
 
 | Version | Release Date | Download |
 | --- | --- | --- |
-| 3.0.5 | Mar 06, 2025 | [Quantum KCC 3.0.5 Build 595](https://dashboard.photonengine.com/download/quantum/quantum-kcc-3.0.5.unitypackage) | [Release Notes](#3.0.5) |
+| 3.0.5 | Mar 06, 2025 | [Quantum KCC 3.0.5](https://downloads.photonengine.com/download/quantum/quantum-kcc-3.0.5.unitypackage?pre=sp) | [Release Notes](/quantum/v3/addons/kcc/download#3.0.5) |
+| 3.0.4 | Dec 05, 2024 | [Quantum KCC 3.0.4](https://downloads.photonengine.com/download/quantum/quantum-kcc-3.0.4.unitypackage?pre=sp) | [Release Notes](/quantum/v3/addons/kcc/download#3.0.4) |
 
 ## Requirements
 
 - Unity 2021.3
-- Quantum V3 AppId: To run the sample, first create a Quantum V3 AppId in the [PhotonEngine Dashboard](https://dashboard.photonengine.com) and paste it into the `App Id Quantum` field in Photon Server Settings (reachable from the `Tools/Quantum/Find Config/Photon Server Settings` menu in Unity editor).
+- Quantum V3 AppId: To run the sample, first create a Quantum V3 AppId in the [PhotonEngine Dashboard](https://dashboard.photonengine.com/) and paste it into the `App Id Quantum` field in Photon Server Settings (reachable from the `Tools/Quantum/Find Config/Photon Server Settings` menu in Unity editor).
 
 ## Release Notes
 
@@ -29,22 +29,22 @@ Here you can download sample project which includes step-by-step explanations an
 
 Last tested with `Quantum SDK 3.0.2 Stable 1660`
 
-#### 3.0.5
+## 3.0.5
 
 - Fixed position in CapsuleCast.
 - Improved mesh collider depenetration algorithm.
 - Added support for processor priority and sorting - virtual FP KCCProcessor.GetPriority(). Processors with higher priority are executed first.
-- Added full support for processor suppressing - KCCContext.StageInfo.SuppressProcessors<T>(). This skips execution of all pending processors of type T in current stage - e.g. IBeforeMove.
+- Added full support for processor suppressing - KCCContext.StageInfo.SuppressProcessors(). This skips execution of all pending processors of type T in current stage - e.g. IBeforeMove.
 - Environment Processor - added IPrepareData interface to allow modifying KCCData properties (like Gravity) before calculating velocities.
 
-#### 3.0.4
+## 3.0.4
 
 - Added Entity reference to KCC.
 - KCC.Teleport(FPVector3) marked as obsolete and replaced by KCC.Teleport(Frame, FPVector3). This propagates the teleport also to Transform3D component.
 - Drawing KCC collider gizmo based on linked KCC settings when the game object is selected.
 - Quantum.Unity.asmref file moved from KCC/View/Generated to KCC/View.
 
-#### 3.0.3 (Breaking Changes)
+## 3.0.3 (Breaking Changes)
 
 - Code generated prototype scripts are now included in the addon package instead of being generated in the user project.
 
@@ -82,7 +82,7 @@ public unsafe partial class LegacyQPrototypeKCCProcessorLink : QPrototypeKCCProc
     - Rename the `QPrototypeKCC` script inside Unity Editor to `LegacyQPrototypeKCC` and move it into a subfolder called `Legacy.`
     - Rename the `QPrototypeKCCProcessorLink` script inside Unity Editor to `LegacyQPrototypeKCCProcessorLink` and move it into a subfolder called `Legacy`.
 
-#### 3.0.2
+## 3.0.2
 
 - Improved penetration solver.
 - Range of CCD Radius Multiplier increased to 10-90%.
@@ -90,20 +90,27 @@ public unsafe partial class LegacyQPrototypeKCCProcessorLink : QPrototypeKCCProc
 - `KCC.ResolvePenetration()` now takes data from `KCCData` passed as argument and stores results there.
 - Added `\[Preserve\]` attribute to `KCCSystem` prevent stripping.
 
-#### 3.0.1
+## 3.0.1
 
 - Improved multi-collider penetration correction.
 - Fixes for `StepUpProcessor`. Now it requires horizontal movement push-back to activate.
 - Fixed initialization of `KCCData.LookYaw` after spawning an entity based on its transform component.
 
-#### 3.0.0
+## 3.0.0
 
 - Initial release.
 
 Back to top
 
-- [Download - Sample](#download-sample)
-- [Download - Addon](#download-addon)
+- [Downloads](#downloads)
 - [Requirements](#requirements)
 - [Release Notes](#release-notes)
+
   - [Photon Quantum KCC Addon](#photon-quantum-kcc-addon)
+
+- [3.0.5](#section)
+- [3.0.4](#section-1)
+- [3.0.3 (Breaking Changes)](#breaking-changes)
+- [3.0.2](#section-2)
+- [3.0.1](#section-3)
+- [3.0.0](#section-4)

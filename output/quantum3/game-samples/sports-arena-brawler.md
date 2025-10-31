@@ -4,7 +4,13 @@ _Source: https://doc.photonengine.com/quantum/current/game-samples/sports-arena-
 
 # Sports Arena Brawler
 
-![Level 4](/v2/img/docs/levels/level03-intermediate_1.5x.png)
+Level
+
+INTERMEDIATE
+
+Topology
+
+**DETERMINISTIC**
 
 ## Overview
 
@@ -16,7 +22,10 @@ _This sample was developed by the MicroverseLabs studio._
 
 | Version | Release Date | Download |
 | --- | --- | --- |
-| 3.0.2 | Mar 17, 2025 | [Quantum Sports Arena Brawler 3.0.2 Build 598](https://dashboard.photonengine.com/download/quantum/quantum-sports-arena-brawler-3.0.2.zip) |
+| 3.0.7 | Sep 05, 2025 | [Quantum Sports Arena Brawler 3.0.7](https://downloads.photonengine.com/download/quantum/quantum-sports-arena-brawler-3.0.7.zip?pre=sp) |
+| 3.0.5 | Jul 18, 2025 | [Quantum Sports Arena Brawler 3.0.5](https://downloads.photonengine.com/download/quantum/quantum-sports-arena-brawler-3.0.5.zip?pre=sp) |
+| 3.0.4 | Jun 10, 2025 | [Quantum Sports Arena Brawler 3.0.4](https://downloads.photonengine.com/download/quantum/quantum-sports-arena-brawler-3.0.4.zip?pre=sp) |
+| 3.0.3 | Apr 28, 2025 | [Quantum Sports Arena Brawler 3.0.3](https://downloads.photonengine.com/download/quantum/quantum-sports-arena-brawler-3.0.3.zip?pre=sp) |
 
 ## Technical Info
 

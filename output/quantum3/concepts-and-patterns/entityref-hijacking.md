@@ -58,7 +58,7 @@ if(f.IsVerified) {
 
 ```
 
-Or bail out early on non-verified, i.e. predicted, frames by using:
+Or bail out early on non-verified frames, i.e. predicted frames, by using:
 
 C#
 

@@ -241,8 +241,12 @@ When the Quantum plugin encounters errors with the client start protocol or inpu
 | Error #19 | Player not found | The client send a command for a `PlayerSlot` that they don't own. |
 | Error #20 | RPC data corrupted | The `RuntimePlayer` object when adding a player or the command data was too large (max. 24 KB). |
 | Error #21 | Quantum SDK 2 not supported on Quantum 3 AppIds, check Photon dashboard to set correct version | The client using Quantum SDK 2.1 tried to connect with a Quantum 3 AppId. |
-| Error #33 | Player data was rejected 'Webhook Error Message' | The add player webhook failed. |
-| Error #34 | Game configs not loaded 'Webhook Error Message' | The game configs webhook failed, disconnecting all clients. |
+| Error #22 | Tick violation, type=RPC, requested=694, current=93 | The server detected that the client is input of command flooding the server and disconnected it, this means it is sending inputs too far into the future or too many commands for a long period. |
+| Error #30 | Create game failed `Exception Message` | The client caused an exception during the create game operation |
+| Error #31 | Create game failed `Webhook Error Message` | The CreateGame webhook failed. |
+| Error #32 | Join game failed `Webhook Error Message` | The JoinGame webhook failed. |
+| Error #33 | Player data was rejected `Webhook Error Message` | The add player webhook failed. |
+| Error #34 | Game configs not loaded `Webhook Error Message` | The game configs webhook failed, disconnecting all clients. |
 | Error #40 | Caught exception receiving protocol messages | An exception was raised when the client processed a protocol message, this is not necessarily a server error, but the client state is unrecoverable and it will disconnect. |
 | Error #41 | Input cache full | The local delta compression input buffer for the client is full, this could happen after long breakpoint pauses for example. This state is not recoverable for the client. |
 | Error #42 | Communicator not connected | The connection was lost while the simulation was running. This can be prevented by detecting disconnects earlier using Photon Realtime callbacks for example. |

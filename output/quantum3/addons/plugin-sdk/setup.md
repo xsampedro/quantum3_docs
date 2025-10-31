@@ -6,8 +6,6 @@ _Source: https://doc.photonengine.com/quantum/current/addons/plugin-sdk/setup_
 
 Available in the [Gaming Circle](https://www.photonengine.com/gaming) and [Industries Circle](https://www.photonengine.com/industries)
 
-![Circle](/v2/img/docs/circles/icon-gaming_1x.png)
-
 ## Installation
 
 1. _(Windows only)_ Unblock `Photon-Quantum-X.X.X.Plugin-SDK.zip` by `right-click > Properties > Unblock` before unzipping it.

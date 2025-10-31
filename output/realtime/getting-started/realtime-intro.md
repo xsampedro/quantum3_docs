@@ -42,7 +42,7 @@ Within a room, players can share state and data in several ways:
 
 Photon Realtime always connects clients to a server, as opposed to connecting clients directly. Some SDKs (e.g. Fusion) may establish an additional, independent connection to a host.
 
-The [Photon Cloud is the default option as scalable infrastructure.](/realtime/current/connection-and-authentication/regions) A free Photon Account provides access to it for testing and development without obligation.
+The [Photon Cloud is the default option as scalable infrastructure.](/realtime/current/connection-and-authentication/regions) Creating an Exit Games Account is free and without any obligation to purchase any Exit Games products.
 
 The server side is split into three distinct server types:
 
@@ -72,7 +72,7 @@ Below are a few code samples to give you an idea of how the Realtime API is bein
 
 Use the Photon Cloud to skip setting up servers. You will need to set an AppId in the code.
 
-Get your AppId from [the Realtime Dashboard](https://dashboard.photonengine.com) after [**free** signup](https://id.photonengine.com/account/signup).
+Get your AppId from [the Realtime Dashboard](https://dashboard.photonengine.com/) after [**free** signup](https://id.photonengine.com/account/signup).
 
 ### Connect
 

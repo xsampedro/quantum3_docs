@@ -6,8 +6,6 @@ _Source: https://doc.photonengine.com/quantum/current/addons/plugin-sdk/quantum-
 
 Available in the [Gaming Circle](https://www.photonengine.com/gaming) and [Industries Circle](https://www.photonengine.com/industries)
 
-![Circle](/v2/img/docs/circles/icon-gaming_1x.png)
-
 ## Plugin Factory
 
 The plugin factory is used by the Photon Server to instantiate the plugin code for individual rooms. The base Photon Server class `IPluginFactory2` is derived by the Quantum plugin factory `DeterministicPluginFactory`. Override and implement the `CreateDeterministicPlugin()` method to instantiate different plugins and/or server objects.

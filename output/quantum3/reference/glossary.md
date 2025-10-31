@@ -4,13 +4,13 @@ _Source: https://doc.photonengine.com/quantum/current/reference/glossary_
 
 # Glossary
 
-**ACK**
+### ACK
 
 A (low level) command to acknowledge reliable commands. Used for Reliable UDP (RUDP).
 
 * * *
 
-**Actor**
+### Actor
 
 Players in a room are also called "Actors".
 
@@ -20,7 +20,7 @@ Values for the ActorNumber start at 1 in each room and are not re-used (when a c
 
 * * *
 
-**Application**
+### Application
 
 Applications contain the game logic, written in C# and run by the Photon Core.
 
@@ -28,7 +28,7 @@ They extend the abstract class Application for this. The Photon Cloud makes use 
 
 * * *
 
-**Application ID (AppId)**
+### Application ID (AppId)
 
 In the Photon Cloud, the Application ID (AppId) is the main identifier for a Title and its [Virtual Application](#virtualapp).
 
@@ -36,7 +36,7 @@ You can find your AppId prominently in the [Dashboard](#dashboard). It is needed
 
 * * *
 
-**Application Version (AppVersion)**
+### Application Version (AppVersion)
 
 In all client SDKs except PUN, AppVersion is the same thing as [GameVersion](#gameversion).
 
@@ -51,7 +51,7 @@ That allows serialization of Unity's `Vector3` but you need to check the "Custom
 
 * * *
 
-**Binaries Folder**
+### Binaries Folder
 
 In the [Photon Server SDK](#photon-server-sdk), the binaries folders contain platform-specific builds of the Photon Core.
 
@@ -59,7 +59,7 @@ They are prefixed with "bin\_" and in the "deploy" folder.
 
 * * *
 
-**Build script**
+### Build script
 
 A batch file or MsBuild project to compile and copy applications for their deployment.
 
@@ -67,7 +67,7 @@ Takes care of getting a clean build for deployment.
 
 * * *
 
-**Business Logic**
+### Business Logic
 
 A game's logic, which runs on top of Photon Core.
 
@@ -75,13 +75,13 @@ This "layer" handles operations and events.
 
 * * *
 
-**Channel**
+### Channel
 
 Can refer to either low-level channels in the RUDP protocol or to the "conversation" channels in [Photon Chat](#chat).
 
 * * *
 
-**Chat**
+### Chat
 
 Photon Chat is a lightweight service for communication between users.
 
@@ -91,7 +91,7 @@ Chat uses a separate connection and is independent of rooms.
 
 * * *
 
-**Client**
+### Client
 
 Applications that connect to a server are called clients.
 
@@ -101,7 +101,7 @@ Photon clients are programmed with a client API, also referred to as client libr
 
 * * *
 
-**Cluster**
+### Cluster
 
 A cluster consists of a [Master Server](#masterserver) and several [Game Servers](#gameserver). Each cluster is separated from any others.
 
@@ -109,7 +109,7 @@ Often a [Region](#region) has only one cluster.
 
 * * *
 
-**Command**
+### Command
 
 Commands are used on the eNet protocol layer to transport your data or establish / shutdown connections.
 
@@ -117,7 +117,7 @@ You won't write these, but we will explain them for your background knowledge.
 
 * * *
 
-**Concurrent User (CCU)**
+### Concurrent User (CCU)
 
 Concurrent Users for a game are all clients that have a connection to a server at the same time.
 
@@ -129,19 +129,19 @@ Users of a game play only a small amount of time per day and much less per month
 
 * * *
 
-**Connect**
+### Connect
 
 Before clients can call operations on Photon, they need to connect and establish a connection.
 
 * * *
 
-**Custom Operation**
+### Custom Operation
 
 Any operation that is not in the client API or new to the server side.
 
 * * *
 
-**Custom Properties**
+### Custom Properties
 
 In Photon, you can set Custom Properties for Rooms and Players.
 
@@ -151,17 +151,17 @@ Custom Player Properties are deleted when players abandon a game.
 
 * * *
 
-**Dashboard**
+### Dashboard
 
 The dashboard aggregates counter data and generates graphs for monitoring purposes.
 
 Photon applications can be managed from their respective dashboard.
 
-[Realtime Apps Dashboard](https://dashboard.photonengine.com)
+[Realtime Apps Dashboard](https://dashboard.photonengine.com/)
 
 * * *
 
-**Deploy Folder**
+### Deploy Folder
 
 In the Server SDK, this folder contains everything that is needed to run Photon.
 
@@ -169,7 +169,7 @@ Namely: the binaries-folders and compiled Applications.
 
 * * *
 
-**Device**
+### Device
 
 In general: a mobile.
 
@@ -177,7 +177,7 @@ Or any other system to runs your client application.
 
 * * *
 
-**Disconnect**
+### Disconnect
 
 Ends a connection between client and server.
 
@@ -187,7 +187,7 @@ Also, the server logic could disconnect players.
 
 * * *
 
-**EmptyRoomTTL**
+### EmptyRoomTTL
 
 Amount of time in milliseconds that Photon servers should wait before disposing an empty room.
 
@@ -204,7 +204,7 @@ By default, maximum value allowed is:
 
 * * *
 
-**Event**
+### Event
 
 Events are asynchronous messages sent to clients.
 
@@ -214,7 +214,7 @@ The origin is identified as [ActorNumber](#actor).
 
 * * *
 
-**EvCode**
+### EvCode
 
 Short for event code.
 
@@ -222,7 +222,7 @@ Identifies the type of events and which information (and types) the event contai
 
 * * *
 
-**Exit Games, Photon and Photon Engine**
+### Exit Games, Photon and Photon Engine
 
 “Exit Games” is the company behind Photon technology, services, and products. Founded in 2003, the company specializes in providing multiplayer Software as a Service (SaaS) solutions. Externally, “Photon” is used as the overarching product family brand, while “Photon Engine” highlights Photon’s engine-like capabilities.
 
@@ -232,13 +232,13 @@ The name “Exit Games” is used primarily in legal or contractual contexts. Th
 
 * * *
 
-**Fusion**
+### Fusion
 
 Fusion is our state of the art state transfer networking solution. It aims to support more than 100 players in a session even for competitive games.
 
 * * *
 
-**Game**
+### Game
 
 Depending on context, "game" refers to a title/application or a round/match between a few players.
 
@@ -246,7 +246,7 @@ We try to stick to "Title" for the first meaning and use ["Room"](#room) for the
 
 * * *
 
-**Game Server**
+### Game Server
 
 Game Servers handle the actual in-game communication for the clients.
 
@@ -254,7 +254,7 @@ They only communicate with the [Master Server](#masterserver), so they neither p
 
 * * *
 
-**GameVersion**
+### GameVersion
 
 The GameVersion is a string any game can set.
 
@@ -262,7 +262,7 @@ In the Photon Cloud it can be useful to separate users of incompatible versions 
 
 * * *
 
-**Latency**
+### Latency
 
 Time between request and ACK.
 
@@ -270,7 +270,7 @@ Might differ on client and server. Measured as RoundTrip Time (RTT).
 
 * * *
 
-**Hive**
+### Hive
 
 Refers to the Hive Application in the [Photon Server SDK](#photon-server-sdk).
 
@@ -278,7 +278,7 @@ A basic business logic to get you started.
 
 * * *
 
-**LoadBalancingClient**
+### LoadBalancingClient
 
 This class the fondation for many of our SDKS, including Photon Client SDK
 
@@ -288,7 +288,7 @@ When joining a room, clients switch to a specific Game Server.
 
 * * *
 
-**Lobby**
+### Lobby
 
 A lobby is a virtual container or "list" of rooms. You can use multiple lobbies and there are different types of lobbies, too.
 
@@ -300,7 +300,7 @@ A client can only be in a lobby, a room or neither.
 
 * * *
 
-**Log Files**
+### Log Files
 
 The [Photon Server](#photon-server-sdk) is designed to run as service and does not have extensive GUI.
 
@@ -310,13 +310,13 @@ Photon Core writes into "deploy\\bin\_\*\\log".
 
 * * *
 
-**Matchmaking**
+### Matchmaking
 
 The process of finding a game or match.
 
 * * *
 
-**Master Client**
+### Master Client
 
 Master Client is a "special" [client](#client) per [room](#room).
 
@@ -328,7 +328,7 @@ Unless explicitly set, the Master Client is the actor (player) with the least ac
 
 * * *
 
-**Master Server**
+### Master Server
 
 The Master Server handles the matchmaking for a region or cluster. It distributes rooms across a range of [Game Servers](#gameserver).
 
@@ -336,7 +336,7 @@ It is important that clients look up their Master Server via the [Name Server](#
 
 * * *
 
-**Messages**
+### Messages
 
 Messages are in general anything that updates someone else or does something on the server.
 
@@ -355,7 +355,7 @@ In worst case one object can cause 10 messages per second per player. That's not
 
 * * *
 
-**Multiplayer Topologies (aka Topologies)**
+### Multiplayer Topologies (aka Topologies)
 
 “Multiplayer Topologies” refer to the architectural models used in synchronous multiplayer games to synchronize the game state across multiple players in real time. Photon Fusion and Photon Quantum support four primary approaches:
 
@@ -391,7 +391,7 @@ In worst case one object can cause 10 messages per second per player. That's not
 
 * * *
 
-**Messages Limit**
+### Messages Limit
 
 We limit the messages (updates) per room and per second for two reasons:
 
@@ -402,7 +402,7 @@ The messages per room and second are shown in the [Dashboard](#dashboard).
 
 * * *
 
-**Name Server**
+### Name Server
 
 The Name Server provides a list of available regions to clients and handles their authentication requests.
 
@@ -412,7 +412,7 @@ There are multiple, loadbalanced Name Servers.
 
 * * *
 
-**Operation**
+### Operation
 
 Another word for RPC functions on the Photon server side.
 
@@ -420,7 +420,7 @@ Clients use operations to do anything on the server and even to send events to o
 
 * * *
 
-**OpCode**
+### OpCode
 
 Short for operation code.
 
@@ -430,7 +430,7 @@ Clients get operation responses with opCodes to identify the type of action for 
 
 * * *
 
-**Peer**
+### Peer
 
 This term refers to one side of a connection.
 
@@ -438,7 +438,7 @@ The [client](#client) has a peer and the server is the remote peer for the [clie
 
 * * *
 
-**Photon Circle (aka Circle)**
+### Photon Circle (aka Circle)
 
 “Photon Circle” is a dedicated support offering designed to help developers successfully integrate and maintain Photon’s multiplayer services. It provides specialized resources, such as documentation, tutorials, and best practices, that streamline the development process. Members receive priority assistance from Photon’s technical support team, ensuring quick resolutions to challenges.
 
@@ -448,7 +448,7 @@ It is offered in two editions: (i) “Photon Gaming Circle” for gaming studios
 
 * * *
 
-**Photon Cloud**
+### Photon Cloud
 
 “Photon Cloud” is a real-time, cloud-based multiplayer service offered by Exit Games. It provides a global server infrastructure which is automatically scaled to provide low-latency connections for all Photon Products.
 
@@ -460,7 +460,7 @@ Depending on the use-case and scenario (gaming or non-gaming) there are two Phot
 
 * * *
 
-**Photon Cloud Region (aka Region)**
+### Photon Cloud Region (aka Region)
 
 Client devices connect to the Photon Cloud via specific Regions, which correspond to specific physical hosting centers.
 
@@ -474,7 +474,7 @@ Example: Photon Chat, which is not latency critical, is available in fewer regio
 
 * * *
 
-**Photon Control**
+### Photon Control
 
 The Photon administration tool of the Photon Server SDK.
 
@@ -482,13 +482,13 @@ Start the PhotonControl.exe to get a tray-bar menu and easily manage Photon's se
 
 * * *
 
-**Photon Core**
+### Photon Core
 
 The C++ core of Photon. It handles connections and the eNet protocol for you.
 
 * * *
 
-**Photon Products (aka Products)**
+### Photon Products (aka Products)
 
 “Photon Products” is a range of networking products created by Exit Games to power real-time multiplayer games and experiences across multiple platforms. Most important platforms supported are Mobile, VR/XR, PC, Console, Web.
 
@@ -502,7 +502,7 @@ Together, these products provide developers with scalable, cross-platform soluti
 
 * * *
 
-**Photon SDKs (aka SDK) and Versions**
+### Photon SDKs (aka SDK) and Versions
 
 “Photon SDKs” are downloadable Software Development Kits for Photon products. They follow a versioning scheme of major.minor.build. Major versions are referenced by shortcuts, for example, “Fusion 2” to denote all Fusion 2.x releases. The same convention applies to other Photon products and SDKs.
 
@@ -510,7 +510,7 @@ In documentation tables, abbreviations (e.g., “F2” for Fusion 2, “Q2” fo
 
 * * *
 
-**Photon Server SDK**
+### Photon Server SDK
 
 The Photon Server SDK contains the tools to run and build your own Photon Server instances on basically any Windows Machine.
 
@@ -518,7 +518,7 @@ The Photon Server SDK contains the tools to run and build your own Photon Server
 
 * * *
 
-**PhotonServer.config**
+### PhotonServer.config
 
 This is the configuration file for the Photon Core.
 
@@ -528,7 +528,7 @@ Formerly it was called PhotonSocketServer.xml and for a short time PhotonSocketS
 
 * * *
 
-**Photon Unity Networking (PUN)**
+### Photon Unity Networking (PUN)
 
 Photon Unity Networking is a C# client package for Unity.
 
@@ -540,7 +540,7 @@ It is now in Long Term Support mode and won't get major feature updates anymore.
 
 * * *
 
-**PlayerTTL**
+### PlayerTTL
 
 Amount of time in milliseconds that an actor can remain inactive inside the room before it gets removed.
 
@@ -550,7 +550,7 @@ A value of -1 means inactive actors do not timeout.
 
 * * *
 
-**Policy File**
+### Policy File
 
 The Policy Application runs on Photon to send the "crossdomain.xml".
 
@@ -558,19 +558,19 @@ Webplayer platforms like Unity Webplayer, Flash and Silverlight request authoriz
 
 * * *
 
-**Quantum**
+### Quantum
 
 Quantum is our state of the art predict rollback networking solution.
 
 * * *
 
-**Region**
+### Region
 
 See [Photon Cloud Region](#photon-cloud-region).
 
 * * *
 
-**Reliable**
+### Reliable
 
 Reliable commands will reach the other side or lead to a timeout disconnect.
 
@@ -578,7 +578,7 @@ They are sequenced per channel and dispatching will stall when a reliable comman
 
 * * *
 
-**ReturnCode**
+### ReturnCode
 
 Primary result of every operation in form of a byte-value.
 
@@ -586,7 +586,7 @@ Can be checked if an operation was done successfully (RC\_OK == 0) or which erro
 
 * * *
 
-**Room**
+### Room
 
 Players meet in rooms to play a match or communicate.
 
@@ -608,7 +608,7 @@ Photon rooms have these properties and methods:
 
 * * *
 
-**RPC**
+### RPC
 
 Short for Remote Procedure Call.
 
@@ -616,7 +616,7 @@ Can be a term for Operations (calling methods on the server) but in most cases i
 
 * * *
 
-**RUDP**
+### RUDP
 
 Reliable UDP.
 
@@ -626,13 +626,13 @@ A sender repeats reliable messages until they are [acknowledged](#ack)
 
 * * *
 
-**Socket Server**
+### Socket Server
 
 Another name for the Photon Core.
 
 * * *
 
-**Timeout**
+### Timeout
 
 With eNet, client and server monitor if the other side is acknowledging reliable commands.
 
@@ -640,7 +640,7 @@ If these ACKs are missing for a longer time, the connection is considered lost.
 
 * * *
 
-**Unreliable**
+### Unreliable
 
 Unreliable commands are not ACKd by the other side.
 
@@ -648,10 +648,78 @@ They are sequenced per channel but when dispatching, the sequence can have holes
 
 * * *
 
-**Virtual Application**
+### Virtual Application
 
 The Photon Cloud runs a single game logic ( [Application](#application)) for all titles.
 
 Internally, games are separated per [AppId](#appid) and [GameVersion](#gameversion).
 
 Back to top
+
+- [ACK](#ack)
+- [Actor](#actor)
+- [Application](#application)
+- [Application ID (AppId)](#application-id-appid)
+- [Application Version (AppVersion)](#application-version-appversion)
+- [Binaries Folder](#binaries-folder)
+- [Build script](#build-script)
+- [Business Logic](#business-logic)
+- [Channel](#channel)
+- [Chat](#chat)
+- [Client](#client)
+- [Cluster](#cluster)
+- [Command](#command)
+- [Concurrent User (CCU)](#concurrent-user-ccu)
+- [Connect](#connect)
+- [Custom Operation](#custom-operation)
+- [Custom Properties](#custom-properties)
+- [Dashboard](#dashboard)
+- [Deploy Folder](#deploy-folder)
+- [Device](#device)
+- [Disconnect](#disconnect)
+- [EmptyRoomTTL](#emptyroomttl)
+- [Event](#event)
+- [EvCode](#evcode)
+- [Exit Games, Photon and Photon Engine](#exit-games-photon-and-photon-engine)
+- [Fusion](#fusion)
+- [Game](#game)
+- [Game Server](#game-server)
+- [GameVersion](#gameversion)
+- [Latency](#latency)
+- [Hive](#hive)
+- [LoadBalancingClient](#loadbalancingclient)
+- [Lobby](#lobby)
+- [Log Files](#log-files)
+- [Matchmaking](#matchmaking)
+- [Master Client](#master-client)
+- [Master Server](#master-server)
+- [Messages](#messages)
+- [Multiplayer Topologies (aka Topologies)](#multiplayer-topologies-aka-topologies)
+- [Messages Limit](#messages-limit)
+- [Name Server](#name-server)
+- [Operation](#operation)
+- [OpCode](#opcode)
+- [Peer](#peer)
+- [Photon Circle (aka Circle)](#photon-circle-aka-circle)
+- [Photon Cloud](#photon-cloud)
+- [Photon Cloud Region (aka Region)](#photon-cloud-region-aka-region)
+- [Photon Control](#photon-control)
+- [Photon Core](#photon-core)
+- [Photon Products (aka Products)](#photon-products-aka-products)
+- [Photon SDKs (aka SDK) and Versions](#photon-sdks-aka-sdk-and-versions)
+- [Photon Server SDK](#photon-server-sdk)
+- [PhotonServer.config](#photonserver.config)
+- [Photon Unity Networking (PUN)](#photon-unity-networking-pun)
+- [PlayerTTL](#playerttl)
+- [Policy File](#policy-file)
+- [Quantum](#quantum)
+- [Region](#region)
+- [Reliable](#reliable)
+- [ReturnCode](#returncode)
+- [Room](#room)
+- [RPC](#rpc)
+- [RUDP](#rudp)
+- [Socket Server](#socket-server)
+- [Timeout](#timeout)
+- [Unreliable](#unreliable)
+- [Virtual Application](#virtual-application)

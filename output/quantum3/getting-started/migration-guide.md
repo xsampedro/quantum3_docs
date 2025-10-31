@@ -2,7 +2,9 @@
 
 _Source: https://doc.photonengine.com/quantum/current/getting-started/migration-guide_
 
-# Migration Guide
+# Migration Guides
+
+## Migrating Quantum From 2.1 to 3.0
 
 The complete guide to migrate Quantum 2.1 projects to Quantum 3.0.
 
@@ -18,7 +20,7 @@ The following addons are **not** yet compatible with Quantum 3:
 
 - Asset Injection
 
-## Quantum 3.0 Migration
+### Migration Steps
 
 - Ensure that the project has a backup and/or is under source control
 - Upgrade the Quantum project to the **latest 2.1 Quantum SDK**
@@ -27,7 +29,7 @@ The following addons are **not** yet compatible with Quantum 3:
 - Extract the content into the root folder of the Quantum 2.1 project
 - **Bot SDK specifics**: find on the Bot SDK v3 package the migration instructions which are specific to the addon
 
-### Before Starting
+#### Before Starting
 
 - Because of changes to the Quantum Asset:
   - Each non-abstract and non-generic Asset has to live in a separate file that is named as this: `<AssetName>.cs`
@@ -36,7 +38,7 @@ The following addons are **not** yet compatible with Quantum 3:
 - Fields defined in a qtn-file called `EntityRef` have to be renamed.
 - It's recommended to save intermediate steps as a git commit when doing either an automated or manual migration.
 
-### A) Automated Process
+#### A) Automated Process
 
 - Run the `Quantum3Migration.ps1` Powershell script
 
@@ -67,7 +69,7 @@ Usage:
 
 ```
 
-### B) Manual Process
+#### B) Manual Process
 
 - Import `Quantum3MigrationPreparation.unitypackage`
 - Run `Quantum` \> `Migration Preparation` \> `Add Migration Defines`
@@ -90,7 +92,7 @@ Usage:
 - Run `Tools` \> `Quantum` \> `Migration` \> `Reimport All AssetObjects`
 - Run the Quantum user file installation from the `QuantumHub` (Ctrl + H)
 
-### Final Steps
+#### Final Steps
 
 - While the migration define `QUANTUM\_ENABLE\_MIGRATION` is enabled, the detection if CodeGen has to run (qtn files changed) is disabled and needs to be run manually using the Unity menu: `Tools` \> `Quantum` \> `CodeGen` \> `Run Qtn CodeGen`
 - Scripts have gone through an extensive refactor:
@@ -107,7 +109,7 @@ Usage:
 - Re-bake all maps and navmeshes.
 - Quantum 3 API changes have all been wrapped into `\[Obsolete\]` attributes to make a successfully migrated project compile. Make sure to check and fix all related warnings after that especially Quantum asset and prototype scripts and prefer their new names to make `GameObject.AddComponent<QAssetEntityView>` work.
 
-## Breaking Changes Realtime 5
+### Breaking Changes Realtime 5
 
 - The namespaces `ExitGames.\*` are obsolete. Use `Photon.Client` and `Photon.Realtime` instead.
 - The `LoadBalancingClient` was renamed to `RealtimeClient`.
@@ -124,17 +126,17 @@ Usage:
 - `RealtimeClient.ConnectionCallbackTargets` is now internal. Use `AddCallbackTarget()` and `RemoveCallbackTarget()` instead.
 - Enum `DebugLevel` was renamed to `LogLevel`. The enum names are now Pascal case.
 
-## FAQ
+### FAQ
 
-### "Couldn't set project path"
+#### "Couldn't set project path"
 
 You renamed the Quantum Unity project folder. Set the `QuantumUnityPath` parameter to the correct path.
 
-### Quantum Hub
+#### Quantum Hub
 
 During migration, it is possible due to user error or other bugs that Quantum Hub does not allow the user to complete the installation process. To remedy this you can try to delete the `PhotonServerSettings` scriptable object in your project in order to let the Hub regenerate the files.
 
-### Failed Importing Package
+#### Failed Importing Package
 
 Your Quantum 3 package file path is wrong. Set the `Quantum3PackagePath` parameter to the correct path.
 
@@ -142,7 +144,7 @@ OR
 
 Your Quantum 3 Migration package file path is wrong. Set the `Quantum3MigrationPackagePath` parameter to the correct path.
 
-### Unity Editor Path
+#### Unity Editor Path
 
 The Unity Editor path is the path to the editor executable.
 
@@ -150,17 +152,17 @@ On Windows, it is usually located in `C:\\Program Files\\Unity\\Hub\\Editor\\UNI
 
 The powershell script only works on Windows.
 
-### Quantum.Code Project
+#### Quantum.Code Project
 
 If you have a different quantum code csproj name other than the default, the migration may fail. You will need to set the `QuantumCodePath` parameter to the correct path.
 
-### Bot SDK
+#### Bot SDK
 
 The Bot SDK must also be migrated in parallel if you are using it in your project.
 
 Bot SDK data is now a singleton, rather than stored globally.
 
-### Powershell Arguments
+#### Powershell Arguments
 
 Powershell arguments must be passed with a single '-' and not '--'.
 
@@ -168,15 +170,15 @@ Example: `-UnityEditorPath "C:\\Program Files\\Unity\\Hub\\Editor\\2021.3.0f1\\E
 
 Wrong: `--UnityEditorPath "C:\\Program Files\\Unity\\Hub\\Editor\\2021.3.0f1\\Editor\\Unity.exe"`
 
-### .Qtn Fields
+#### .Qtn Fields
 
 It is possible to name a field defined in a .qtn file `EntityRef`. This is supported by codegen, but not by migration. If you are having errors it is recommended to rename these fields before migrating.
 
-### Quantum Version
+#### Quantum Version
 
 If you are getting undefined errors, ensure you are updated to latest Quantum 2.1 release before attempting a migration.
 
-### Max Component Count 512
+#### Max Component Count 512
 
 Projects that use the 512 component count libraries need to add a new pragma to a qtn-file.
 
@@ -187,22 +189,7 @@ Projects that use the 512 component count libraries need to add a new pragma to 
 
 Back to top
 
-- [Quantum 3.0 Migration](#quantum-3.0-migration)
-
-  - [Before Starting](#before-starting)
-  - [A) Automated Process](#a-automated-process)
-  - [B) Manual Process](#b-manual-process)
-  - [Final Steps](#final-steps)
-
-- [Breaking Changes Realtime 5](#breaking-changes-realtime-5)
-- [FAQ](#faq)
-  - ["Couldn't set project path"](#couldnt-set-project-path)
-  - [Quantum Hub](#quantum-hub)
-  - [Failed Importing Package](#failed-importing-package)
-  - [Unity Editor Path](#unity-editor-path)
-  - [Quantum.Code Project](#quantum.code-project)
-  - [Bot SDK](#bot-sdk)
-  - [Powershell Arguments](#powershell-arguments)
-  - [.Qtn Fields](#qtn-fields)
-  - [Quantum Version](#quantum-version)
-  - [Max Component Count 512](#max-component-count-512)
+- [Migrating Quantum From 2.1 to 3.0](#migrating-quantum-from-2.1-to-3.0)
+  - [Migration Steps](#migration-steps)
+  - [Breaking Changes Realtime 5](#breaking-changes-realtime-5)
+  - [FAQ](#faq)

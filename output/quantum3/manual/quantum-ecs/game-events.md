@@ -18,7 +18,7 @@ Although both are valid approaches, their use-cases are slightly different. Gene
 Events are a fire-and-forget mechanism to transfer information from the simulation to the view. They should never be used to modify or updates parts of the games state (`Signals` are used for that). Events have a couple of important aspects to understand that help manage them during prediction and rollbacks.
 
 - Events do not synchronize anything between clients and they are fired by each client's own simulation.
-- Since the same Frame can be simulated more than once (prediction, rollback), it is possible to have events being triggered multiple times. To avoid undesired duplicated Events Quantum identifies duplicates using a hash code function over the Event data members, the Event id and the tick. See `nothashed` keyword for further information.
+- Since the same Frame can be simulated more than once (prediction, rollback), it is possible to have events being triggered multiple times. To avoid undesired duplicated Events, Quantum identifies duplicates using a hash code function over the Event data members, the Event id and the tick. See `nothashed` keyword for further information.
 - Regular, non-`synced`, Events will be either cancelled or confirmed once the predicted Frame from which they were fired has been verified. See `Canceled And Confirmed Events` for further information.
 - Events are dispatched after all Frames have been simulated right after the `OnUpdateView` callback. Events are called in the same order they were invoked with the exception of non-`synced` Events which can be skipped when identified as duplicated. Due to this timing, the targeted `QuantumEntityView` may already have been destroyed.
 
@@ -346,7 +346,7 @@ public void OnEvent(MyEvent e) {
 
 ### Extend Event Implementation
 
-Although Events support using a `QList`. When resolving the list the corresponding Frame might not be available anymore. Additional data types can be added using a `partial` class declarations (see `EventListEvent` below).
+Although Events support using a `QList`, when the list is resolved on the corresponding Frame, it might not be available anymore. Additional data types can be added using a `partial` class declarations (see `EventListEvent` below).
 
 C#
 

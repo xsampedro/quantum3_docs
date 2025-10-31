@@ -259,17 +259,9 @@ AIParamInt, AIParamBool, AIParamByte, AIParamFP, AIParamFPVector2, AIParamFPVect
 
 With AIFunction Nodes, it is possible to pre-define "Getter" nodes of a variety of types. The main purpose of this is to make it possible to create specific nodes which will return values accordingly to your game specific needs.
 
-The base types for the AIFunction Nodes are:
+The base `AIFunction` class is generic and supports mainly the types: byte, bool, int, FP, FPVector2, FPVector3, EntityRef and AssetRef.
 
-- AIFunctionByte;
-- AIFunctionBool;
-- AIFunctionInt;
-- AIFunctionFP;
-- AIFunctionFPVector2;
-- AIFunctionFPVector3;
-- AIFunctionEntityRef
-
-To create your own AIFunction nodes, just inherit from any of the classes above and implement the abstract `Exectue()` method. Here is a sample AIFunction node which will return the position of some some Entity stored in a custom component:
+To create your own AIFunction nodes, create a new class that implements the desired abstract type and implement the desired `Exectue()` method (there is a `Frame` and a `FrameThreadSafe` version). Here is a sample AIFunction node that returns the position of an Entity referenced in a custom component:
 
 C#
 
@@ -277,9 +269,9 @@ C#
 namespace Quantum
 {
   [System.Serializable]
-  public unsafe class GetEntityPosition : AIFunctionFPVector3
+  public unsafe class GetEntityPosition : AIFunction<FPVector3>
   {
-    public override FPVector3 Execute(Frame frame, EntityRef entity = default)
+    public override FPVector3 Execute(Frame frame, EntityRef entity, ref AIContext aiContext)
     {
       MyComponent myComponent = frame.Unsafe.GetPointer<MyComponent>(entity);
       Transform3D* targetTransform = frame.Unsafe.GetPointer<Transform3D>(myComponent->TargetEntity);
@@ -294,7 +286,9 @@ When you compile the quantum solution, the AIFunction will now be available from
 
 **As for linking AIFunction Nodes**, it has to be done with the `AIParam` type which was explained above. So, if I have an HFSM Action which needs to get the position of an entity based on the AIFunction class above, an `AIParamFP` field is needed:
 
-```
+C#
+
+```csharp
 namespace Quantum
 {
   [System.Serializable]
@@ -316,16 +310,15 @@ namespace Quantum
 
 ```
 
-As shown on the example above, you can either use the general Resolve method, which returns a value depending on the Source that was defined on the visual editor (blackboard, config, AIFunction nodes). But if it is known that the AIParam is defined by a AIFunction node, then using the specific Resolve method can be a better choice as it does not requires many parameters and is a little bit faster.
+As shown on the example above, it is possible to either use the general Resolve method, which returns a value depending on the Source that was defined on the visual editor (blackboard, config, AIFunction nodes). But if it is known that the AIParam is defined by a AIFunction node, then using the specific Resolve method can be a better choice as it does not requires many parameters and is a little bit faster.
 
-An AIFunction Node can also have an `AIParam` field, allowing the creation of nested AIFunctions.
+An AIFunction Node can also have `AIParam` fields, allowing the creation of nested AIFunctions.
 
 ### On the Visual Editor
 
 When a public `AIParam` is declared on Actions and Decisions, it will appear on the Visual Editor and you will be able to define its value either manually or from specialized nodes. For example, considering a `public AIParamInt IncreaseAmount`:
 
-![AIParam Sample](/docs/img/quantum/v2/addons/bot-sdk/ai-param-sample.gif)
-\### Creating AIParam for custom Enums
+![AIParam Sample](/docs/img/quantum/v2/addons/bot-sdk/ai-param-sample.gif)### Creating AIParam for custom Enums
 
 It can be useful to also create AIParams for Enums, besides of the types mentioned before. In order to do that, you need to create your own AIParam type for the specific Enum that you need. Here are the code snippets for it:
 
@@ -514,6 +507,7 @@ To change the history entries amount, select the asset named `SettingsDatabase` 
   - [AIParam](#aiparam)
   - [AIFunction Nodes](#aifunction-nodes)
   - [On the Visual Editor](#on-the-visual-editor)
+  - [Creating AIParam for custom Enums](#creating-aiparam-for-custom-enums)
 
 - [AIContext](#aicontext)
 

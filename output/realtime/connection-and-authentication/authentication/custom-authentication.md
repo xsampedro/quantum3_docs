@@ -4,23 +4,15 @@ _Source: https://doc.photonengine.com/realtime/current/connection-and-authentica
 
 # Custom Authentication
 
-By default, all applications allow anonymous users to connect and do not have any authentication mechanism.
+Custom Authentication for Photon is used if none of the existing Authentication Providers fits your needs and you want to integrate another service to identify users - including your very own user backend.
 
-Photon provides the option to implement custom authentication for Photon applications.
+In short, a Custom Authentication Provider is a web service, built and managed by you. The Photon server gets set up to pass authentication values to a configured URL and wait briefly for a response. Depending on the result, the client can connect to Photon or gets rejected. In best case, a userID is defined by the backend and optionally additional info can be passed in a secure way to be used in Server Plugins.
 
-Custom Authentication with Photon is flexible.
-
-It supports well known third-party authentication providers as well as fully personalized solutions for that matter.
-
-- Facebook Authentication Provider, hosted by Exit Games. [Check out the tutorial](/realtime/current/tutorials/custom-auth-facebook-javascript)
-- Custom Authentication Provider, built - and maybe hosted by you.
-
+## Sample Implementation
 
 We provide sample implementations of authentication providers via a Git repository.
 
-
 Feel free to fork the repository and send us your pull requests.
-
 
 You find the sources on [GitHub](https://github.com/exitgames/photon.custom-authentication).
 
@@ -32,7 +24,7 @@ The following steps describe the general flow of the authentication process.
 Custom authentication flow diagram
 
 
-1. Your client passes info about which authentication provider to use and the necessary authentication data to the Photon server with `Connect()`.
+1. Your client passes info about which authentication provider to use and the necessary authentication data to the Photon server when the client connects.
 2. The Photon server gets the desired authentication provider for your application and takes one of these steps
    - The authentication provider configuration is found -> the authentication proceeds with step 3.
    - The authentication provider configuration is not found -> the client will be either allowed to connect or rejected, depending on a setting of your application
@@ -45,7 +37,7 @@ Custom authentication flow diagram
 
 ## Setup for Photon Cloud
 
-You can setup all authentication providers from your [Photon Applications' Dashboard](https://dashboard.photonengine.com).
+You can setup all authentication providers from your [Photon Applications' Dashboard](https://dashboard.photonengine.com/).
 
 Go to the details page of an application and open the custom authentication section.
 
@@ -53,7 +45,7 @@ When configuring custom authentication, keep in mind that changes may take a mom
 
 ### Add an Authentication Provider
 
-Configuring a custom authentication provider is easy and it could be done in few seconds from your [Photon Applications' Dashboard](https://dashboard.photonengine.com).
+Configuring a custom authentication provider is easy and it could be done in few seconds from your [Photon Applications' Dashboard](https://dashboard.photonengine.com/).
 
 ![Photon Cloud: Custom Authentication Creation](/docs/img/auth/custom.auth.create.new.PNG)
 Creating a custom authentication provider
@@ -75,7 +67,7 @@ Also, there is a possibility to allow or reject anonymous clients that try to co
 
 By default this is enabled, meaning initially all clients are authorized to connect to your application whether authenticated or not.
 
-You can check this in the authentication section on the application details page from your [Photon Applications' Dashboard](https://dashboard.photonengine.com).
+You can check this in the authentication section on the application details page from your [Photon Applications' Dashboard](https://dashboard.photonengine.com/).
 
 The option is shown only when you add at least one authentication provider.
 
@@ -614,6 +606,7 @@ Example: `{ "ResultCode": 5, "Message": "Version not allowed." }`.
 
 Back to top
 
+- [Sample Implementation](#sample-implementation)
 - [Authentication Flow](#authentication-flow)
 - [Setup for Photon Cloud](#setup-for-photon-cloud)
 

@@ -34,7 +34,7 @@ For this tutorial you need your **Facebook App ID** and **App Secret**.
 
 ### 2\. Photon Cloud Application
 
-Go to the _Details_ page of your application via your [Photon Cloud Dashboard](https://dashboard.photonengine.com).
+Go to the _Details_ page of your application via your [Photon Cloud Dashboard](https://dashboard.photonengine.com/).
 
 Expand the Custom Authentication section.
 

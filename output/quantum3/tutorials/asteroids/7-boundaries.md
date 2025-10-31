@@ -31,7 +31,6 @@ namespace Quantum.Asteroids
         {
             if (IsOutOfBounds(filter.Transform->Position, new FPVector2(10, 10), out FPVector2 newPosition))
             {
-                filter.Transform->Position = newPosition;
                 filter.Transform->Teleport(frame, newPosition);
             }
         }
@@ -120,7 +119,6 @@ public override void Update(Frame frame, ref Filter filter)
     AsteroidsGameConfig config = frame.FindAsset(frame.RuntimeConfig.GameConfig);
     if (IsOutOfBounds(filter.Transform->Position, config.MapExtends, out FPVector2 newPosition))
     {
-        filter.Transform->Position = newPosition;
         filter.Transform->Teleport(frame, newPosition);
     }
 }

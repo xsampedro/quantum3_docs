@@ -4,17 +4,21 @@ _Source: https://doc.photonengine.com/quantum/current/technical-samples/brick-bu
 
 # Brick Builder Sample
 
-![Level 4](/v2/img/docs/levels/level03-intermediate_1.5x.png)
+Level
+
+INTERMEDIATE
+
+Topology
+
+**DETERMINISTIC**
 
 Available in the [Gaming Circle](https://www.photonengine.com/gaming)
-
-![Circle](/v2/img/docs/circles/icon-gaming_1x.png)
 
 ## Download
 
 | Version | Release Date | Download |
 | --- | --- | --- |
-| 3.0.2 | Mar 30, 2025 | [Quantum BrickBuilder Sample 3.0.2 Build 611](https://dashboard.photonengine.com/download/quantum/quantum-brickbuilder-sample-3.0.2.zip) |
+| 3.0.2 | Mar 30, 2025 | [Quantum Brick Builder Sample 3.0.2](https://downloads.photonengine.com/download/quantum/quantum-brickbuilder-sample-3.0.2.zip?pre=sp) |
 
 ## Overview
 

@@ -4,7 +4,13 @@ _Source: https://doc.photonengine.com/quantum/current/game-samples/motor-dome_
 
 # Motor Dome
 
-![Level 4](/v2/img/docs/levels/level03-intermediate_1.5x.png)
+Level
+
+INTERMEDIATE
+
+Topology
+
+**DETERMINISTIC**
 
 ## Overview
 
@@ -28,7 +34,9 @@ Select `StartScene` from the scenes dropdown and press the play button.
 
 | Version | Release Date | Download |
 | --- | --- | --- |
-| 3.0.2 | Mar 18, 2025 | [Quantum Motor Dome 3.0.2 Build 602](https://dashboard.photonengine.com/download/quantum/quantum-motor-dome-3.0.2.zip) |
+| 3.0.8 | Oct 21, 2025 | [Quantum Motor Dome 3.0.8](https://downloads.photonengine.com/download/quantum/quantum-motor-dome-3.0.8.zip?pre=sp) |
+| 3.0.4 | Jun 25, 2025 | [Quantum Motor Dome 3.0.4](https://downloads.photonengine.com/download/quantum/quantum-motor-dome-3.0.4.zip?pre=sp) |
+| 3.0.2 | Mar 18, 2025 | [Quantum Motor Dome 3.0.2](https://downloads.photonengine.com/download/quantum/quantum-motor-dome-3.0.2.zip?pre=sp) |
 
 ## Highlights
 

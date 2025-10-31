@@ -4,7 +4,13 @@ _Source: https://doc.photonengine.com/quantum/current/technical-samples/bot-sdk-
 
 # Bot SDK Sample
 
-![Level 4](/v2/img/docs/levels/level01-beginner_1.5x.png)
+Level
+
+BEGINNER
+
+Topology
+
+**DETERMINISTIC**
 
 ## Overview
 
@@ -14,7 +20,8 @@ This is a very simple showcase of Bot SDK features. Use it to decide if it fits 
 
 | Version | Release Date | Download |
 | --- | --- | --- |
-| 3.0.0 | Oct 01, 2024 | [Quantum BotSdk Sample Development 3.0.0 Build 522](https://dashboard.photonengine.com/download/quantum/quantum-botsdk-sample-development-3.0.0.zip) |
+| 3.0.5 | Sep 29, 2025 | [Quantum Bot SDK Sample Development 3.0.5](https://downloads.photonengine.com/download/quantum/quantum-botsdk-sample-development-3.0.5.zip?pre=sp) |
+| 3.0.0 | Oct 01, 2024 | [Quantum Bot SDK Sample Development 3.0.0](https://downloads.photonengine.com/download/quantum/quantum-botsdk-sample-development-3.0.0.zip?pre=sp) |
 
 ## The Collectors Sample
 

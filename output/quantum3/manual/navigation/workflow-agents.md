@@ -42,7 +42,7 @@ The tutorial expects a Unity scene with a Quantum setup including a baked Quantu
 
 ![Navmesh Agent Prototype](/docs/img/quantum/v3/manual/navigation/agents-unity.png)## Creating an Agent in Code
 
-The tutorial expects a Unity scene with a Quantum setup including a baked Quantum navmesh (see [Importing A Unity Navmesh](/quantum/current/manual/workflow-navmesh)).
+The tutorial expects a Unity scene with a Quantum setup including a baked Quantum navmesh (see [Importing A Unity Navmesh](/quantum/current/workflow-navmesh)).
 
 Create a new Quantum system using right-click on the folder `QuantumUser > Simulation` and select `Create > Quantum > System`. Rename the script and class to `NavMeshAgentTestSystem`, open the `NavMeshAgentTestSystem` asset and add the new system to the `DefaultSystemsConfig.Entries`.
 

@@ -4,7 +4,13 @@ _Source: https://doc.photonengine.com/quantum/current/game-samples/platform-shoo
 
 # Overview
 
-![Level 4](/v2/img/docs/levels/level03-intermediate_1.5x.png)
+Level
+
+INTERMEDIATE
+
+Topology
+
+**DETERMINISTIC**
 
 ![](/docs/img/quantum/v3/game-samples/platform-shooter-2d/platform-shooter-2d-banner.jpg)
 

@@ -4,48 +4,47 @@ _Source: https://doc.photonengine.com/realtime/current/connection-and-authentica
 
 # Facebook Authentication
 
+For Facebook Authentication, clients will first use Meta's API to authenticate the user, then send the resulting secret token to Photon to confirm and use their identity.
+
+This page describes the setup and workflow.
+
 ## Server Side
 
 ### Facebook App Setup
 
-First, we need to create a Facebook application if you don't have one already.
+First, you need to create a Facebook application if you don't have one already.
 
-- Go to [Facebook Developers](https://developers.facebook.com) website.
+- Go to the [Facebook Developers](https://developers.facebook.com) website and login.
 - Click _Apps_ -\> _Create a New App_ , enter the name of your app and press _Create App_ button.
 - Choose _Apps_ -\> _\[your\_app\]_ and copy **App ID** and **App Secret**.
 
 ### Photon Configuration
 
-Go to the _Details_ page of your application via your [Photon Cloud Dashboard](https://dashboard.photonengine.com).
+Open the [Photon Cloud Dashboard](https://dashboard.photonengine.com/), and find the application to setup.
 
-Expand the Custom Authentication section.
+Click "Manage" and find the "Authentication" section, which shows the currently configured authentication providers.
 
-The _Authentication URL_ for Facebook authentication is set by Exit Games.
+Add a provider for "Facebook" and fill in the two required parameters:
 
-Set the values for these two parameters:
-
-- appid = _your Facebook App ID_
+- appid = this refers to _your Facebook App ID_
 - secret = _your Facebook App Secret_
+
+Unlike for Custom Authentication, the _Authentication URL_ is fixed and set automatically.
 
 Save changes.
 
-## Client Code
+## Client Side
 
-The client needs to set the correct authentication type (Facebook, 2) and send a valid Facebook token as a query string parameter named "token".
+On the client side, apps first have to authenticate via Facebook to get a token, which is sent to the Photon server in the AuthenticationValues.
 
-### PUN
+In Unity, you will need to:
 
-- Open Unity.
-- [Import](http://u3d.as/1cMM).
-- [Setup PUN](/pun/v2/getting-started/initial-setup).
 - Import [Facebook SDK for Unity](https://developers.facebook.com/docs/unity/).
 - In Unity's main menu go to _Facebook_ -\> _Edit Settings_, enter the _App Name_ and _App Id_ for your Facebook Application.
 
 ## Implementation
 
-Create a new MonoBehaviour, attach it to an object on scene and then open.
-
-Use the following code for Facebook initialization and login:
+Create a new MonoBehaviour, attach it to an object on scene and add the following code for Facebook initialization and login:
 
 C#
 
@@ -102,42 +101,48 @@ private void AuthCallback(ILoginResult result)
 
 ```
 
-To use Facebook Authentication in PUN, add:
+`OnFacebookLoggedIn()` gets called when the authentication with Facebook is complete and the user's Facebook token is available.
+
+The example below shows how to set up the AuthenticationValues:
 
 C#
 
 ```csharp
 private void OnFacebookLoggedIn()
 {
-    // AccessToken class will have session details
+    // Facebook's AccessToken class will have session details
     string aToken = AccessToken.CurrentAccessToken.TokenString;
     string facebookId = AccessToken.CurrentAccessToken.UserId;
-    PhotonNetwork.AuthValues = new AuthenticationValues();
-    PhotonNetwork.AuthValues.AuthType = CustomAuthenticationType.Facebook;
-    PhotonNetwork.AuthValues.UserId = facebookId; // alternatively set by server
-    PhotonNetwork.AuthValues.AddAuthParameter("token", aToken);
-    PhotonNetwork.ConnectUsingSettings("1.0");
+    var authValues = new AuthenticationValues();
+    authValues.AuthType = CustomAuthenticationType.FacebookGaming;  // specifically for gaming apps
+    authValues.UserId = facebookId;
+    authValues.AddAuthParameter("token", aToken);
+    // set the new authValues on the client / runner and connect
+    // example for Realtime API
+    client.AuthValues = authValues;
+    client.ConnectUsingSettings();
 }
 
 ```
 
-The PUN callbacks for success and error that you can implement are:
+If your app does **not use the Facebook Gaming APIs** (described on https://developers.facebook.com/docs/games), the `AuthType` need to be set to `CustomAuthenticationType.Facebook`.
+
+From here on, the usual connection workflow happens. This differs a little, depending on the used Photon SDK.
+
+The Realtime API in C# has the `IConnectionCallbacks` and you want to check `OnConnectedToMaster()` as well as `OnCustomAuthenticationFailed(string debugMessage)`.
 
 C#
 
 ```csharp
-public class FacebookAuthTest : MonoBehaviourPunCallbacks
-{
-    public override void OnConnectedToMaster()
+    public void OnConnectedToMaster()
     {
         Debug.Log("Successfully connected to Photon!");
     }
-    // something went wrong
-    public override void OnCustomAuthenticationFailed(string debugMessage)
+    // something went wrong, check the setup of the Facebook app, login, token, etc.
+    public void OnCustomAuthenticationFailed(string debugMessage)
     {
         Debug.LogErrorFormat("Error authenticating to Photon using facebook: {0}", debugMessage);
     }
-}
 
 ```
 
@@ -148,8 +153,5 @@ Back to top
   - [Facebook App Setup](#facebook-app-setup)
   - [Photon Configuration](#photon-configuration)
 
-- [Client Code](#client-code)
-
-  - [PUN](#pun)
-
+- [Client Side](#client-side)
 - [Implementation](#implementation)

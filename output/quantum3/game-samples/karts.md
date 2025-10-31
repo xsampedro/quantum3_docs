@@ -4,7 +4,13 @@ _Source: https://doc.photonengine.com/quantum/current/game-samples/karts_
 
 # Karts
 
-![Level 4](/v2/img/docs/levels/level03-intermediate_1.5x.png)
+Level
+
+INTERMEDIATE
+
+Topology
+
+**DETERMINISTIC**
 
 ## Overview
 
@@ -24,7 +30,8 @@ The sample supports up to 12 karts, has 2 tracks, 4 different powerups, 3 kart t
 
 | Version | Release Date | Download |
 | --- | --- | --- |
-| 3.0.2 | Mar 24, 2025 | [Quantum Karts 3.0.2 Build 607](https://dashboard.photonengine.com/download/quantum/quantum-karts-3.0.2.zip) |
+| 3.0.4 | May 27, 2025 | [Quantum Karts 3.0.4](https://downloads.photonengine.com/download/quantum/quantum-karts-3.0.4.zip?pre=sp) |
+| 3.0.2 | Mar 24, 2025 | [Quantum Karts 3.0.2](https://downloads.photonengine.com/download/quantum/quantum-karts-3.0.2.zip?pre=sp) |
 
 ## Technical Info
 
@@ -33,7 +40,7 @@ The sample supports up to 12 karts, has 2 tracks, 4 different powerups, 3 kart t
 
 ## Before You Start
 
-To run the sample in online multiplayer mode, first create a Quantum AppId in the [PhotonEngine Dashboard](https://dashboard.photonengine.com) and paste it into the `AppId` field in `PhotonServerSettings` asset.
+To run the sample in online multiplayer mode, first create a Quantum AppId in the [PhotonEngine Dashboard](https://dashboard.photonengine.com/) and paste it into the `AppId` field in `PhotonServerSettings` asset.
 
 Then load the `Menu` scene in the Scenes menu and press `Play`.
 

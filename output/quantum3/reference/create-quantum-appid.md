@@ -4,18 +4,20 @@ _Source: https://doc.photonengine.com/quantum/current/reference/create-quantum-a
 
 # Create A Photon Quantum AppId
 
-Go to the [Photon Engine Dashboard](https://dashboard.photonengine.com) and log in or create an account.
+Go to the [Photon Engine Dashboard](https://dashboard.photonengine.com/) and log in or create an account.
 
-On the dashboard select `Applications > Public Cloud` and press `CREATE A NEW APP`.
+On the dashboard select `YOUR > APPS > Development` and press `CREATE A NEW APP`.
 
 ![](/docs/img/quantum/v3/reference/dashboard.png)
 
 - Select **Quantum** as Photon SDK
 - Select **Quantum 3** as SDK Version
+- Give the Application a name
+- Press `CREATE`
 
 ![](/docs/img/quantum/v3/reference/dashboard-create-new-appid.png)
 
-Copy the AppId from the freshly created Quantum app.
+Copy the AppId from the newly created Quantum app.
 
 ![](/docs/img/quantum/v3/reference/dashboard-appid.png)
 

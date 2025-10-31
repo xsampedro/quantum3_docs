@@ -188,6 +188,7 @@ The LoadBalancing API, e.g., uses a `Hashtable` for custom event content in its 
 Recommended for further reading:
 
 - [Receiver Groups](/realtime/current/gameplay/cached-events)
+
 - [Serialization in Photon](/realtime/current/reference/serialization-in-photon)
 
 ### Fragmentation and Channels

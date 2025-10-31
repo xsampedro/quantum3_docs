@@ -307,7 +307,7 @@ We provide a script which demonstrates how to do instant replays, like kill-cam 
 
 To use it, just add the Unity component called `QuantumInstantReplayDemo` to a Game Object, do the setup (set playback speed, replay length, etc.) and then, during gameplay, hit the Start and Stop buttons.
 
-![Instant Replay Image](/docs/img/quantum/v2/manual/replay/instant-replay.png)Back to top
+![Instant Replay Image](/docs/img/quantum/v3/manual/replay/instant-replay.png)Back to top
 
 - [Introduction](#introduction)
 - [How To Save A Replay](#how-to-save-a-replay)

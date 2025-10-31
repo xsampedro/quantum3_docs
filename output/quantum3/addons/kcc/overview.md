@@ -4,7 +4,9 @@ _Source: https://doc.photonengine.com/quantum/current/addons/kcc/overview_
 
 # Overview
 
-![Level 4](/v2/img/docs/levels/level01-beginner_1.5x.png)
+Level
+
+BEGINNER
 
 ## Overview
 

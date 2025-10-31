@@ -55,7 +55,7 @@ Next adjust the code in the `UpdateShipMovement` function of the `AsteroidsShipS
 C#
 
 ```csharp
-var config = f.FindAsset(filter.AsteroidsShip->ShipConfig);
+var config = frame.FindAsset(filter.AsteroidsShip->ShipConfig);
 FP shipAcceleration = config.ShipAceleration;
 FP turnSpeed = config.ShipTurnSpeed;
 
@@ -174,11 +174,11 @@ Adjust the `AsteroidsShipShoot` function in the `AsteroidsProjectileSystem` by a
 C#
 
 ```csharp
-AsteroidsProjectile* projectile = f.Unsafe.GetPointer<AsteroidsProjectile>(projectileEntity);
-var config = f.FindAsset(projectile->ProjectileConfig);
+AsteroidsProjectile* projectile = frame.Unsafe.GetPointer<AsteroidsProjectile>(projectileEntity);
+var config = frame.FindAsset(projectile->ProjectileConfig);
 projectile->TTL = config.ProjectileTTL;
 projectile->Owner = owner;
-PhysicsBody2D* body = f.Unsafe.GetPointer<PhysicsBody2D>(projectileEntity);
+PhysicsBody2D* body = frame.Unsafe.GetPointer<PhysicsBody2D>(projectileEntity);
 body->Velocity = ownerTransform->Up * config.ProjectileInitialSpeed;
 
 ```
@@ -220,7 +220,7 @@ C#
 ```csharp
 var relativeOffset = FPVector2.Up * config.ShotOffset;
 var spawnPosition = filter.Transform->TransformPoint(relativeOffset);
-f.Signals.AsteroidsShipShoot(filter.Entity, spawnPosition, config.ProjectilePrototype);
+frame.Signals.AsteroidsShipShoot(filter.Entity, spawnPosition, config.ProjectilePrototype);
 
 ```
 

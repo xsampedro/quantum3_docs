@@ -40,6 +40,7 @@ C#
 
 ```csharp
 using UnityEngine.Scripting;
+using Photon.Deterministic;
 namespace Quantum.Asteroids
 {
     [Preserve]

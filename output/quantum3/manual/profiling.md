@@ -49,27 +49,23 @@ With the most current Quantum SDK versions (2.1) Quantum also supplies data for 
 
 ## Quantum Task Profiler
 
-The Quantum Task Profiler is a custom and stand-alone graphical performance profiler for Unity similar to the Unity Timeline profiler. It can run with debug or release Quantum dlls selected.
+The Quantum Task Profiler is a custom and standalone graphical performance profiler for Unity similar to the Unity Timeline profiler.
 
-To enable it set the `QuantumGameFlags.EnableTaskProfiler` on the `SessionRunner.Arguments.GameFlags`.
+It can run with debug and release Quantum dlls.
 
-- Toggle `IsTaskProfilerEnabled` on the `QuantumRunnerLocalDebug` game object to enable the TaskProfiler in local debug mode
-- Or toggle `QuantumMenuConnectArgs.EnableTaskProfiler` in the `QuantumMenuUIController` game object using the QuantumMenu online mode
 - Start the game
 - Open `Tools > Quantum > Window > Task Profiler`
 - Toggle the `Record` button
 
+![](/docs/img/quantum/v2/manual/profiler-taskprofiler.png)### Remote Profiling
+
 Similar to the Unity Profiler an app running on a remote device connects to the Unity Editor via UDP inside the **same** local network.
 
-![Quantum Task Profiler](/docs/img/quantum/v2/manual/profiler-taskprofiler.png)
-Quantum Task Profiler
-### Remote Profiling
+Make sure to configure the firewall of the machine running the Unity Editor to unblock UDP port 30000 and to disable rules that block every connection for a specific Unity Editor installation.
 
-It is possible to remotely hook into the Quantum Task Profiler to build running on the same network as the editor (UDP Port 30000). To enable the feature, simply toggle the `Remote Profiler` checkbox at the bottom of the `QuantumEditorSettings` asset. Close and reopen the Task Profiler View afterwards.
+To enable it select the `QuantumEditorSettings` asset and toggle on `Enable Remove Task Profiler`. It will add the scripting define `QUANTUM\_ENABLE\_REMOTE\_PROFILER` to the **current** selected build platform. The define has to exist for the build platform used to create a build that is profiled.
 
-![Profiling Graphs](/docs/img/quantum/v2/manual/profiler-remote-enable.png)
-Toggle for the Remote Profiler in the QuantumEditorSettings
-## Quantum Graph Profiler
+![](/docs/img/quantum/v3/manual/profiling/profiler-remote-enable.png)## Quantum Graph Profiler
 
 The Quantum Graph profiler is a tool that can be integrated into a game scene to display game performance and network state graphs. This profiler is part of the Quantum SDK and can be found in `Assets\\Photon\\Quantum\\Runtime\\GraphProfilers`.
 
@@ -92,9 +88,7 @@ The profiler offers graphs for:
 - `Ping`: network peer round trip time (RTT);
 - `Markers`: up to 8 custom boolean can track values using markers. Each marker is represented by unique color; by default `Red = input replaced by server` and `Orange = checksum calculated`.
 
-![Profiling Graphs](/docs/img/quantum/v2/manual/profiler-graph-profiler.png)
-Real-Time Profiling Graphs
-#### A Note on Markers
+![](/docs/img/quantum/v2/manual/profiler-graph-profiler.png)#### A Note on Markers
 
 For better legibility, the markers graph is running 2x faster than the others. This can be adjusted via the `Samples` property on the Profilers prefab.
 

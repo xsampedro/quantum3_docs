@@ -4,6 +4,10 @@ _Source: https://doc.photonengine.com/quantum/current/addons/animator/overview_
 
 # Overview
 
+Level
+
+INTERMEDIATE
+
 ## Introduction
 
 Quantum’s deterministic animator works by baking information from Unity’s Mecanim Controller. It imports many configurations such as the States, the Transitions, the Motion clips and so on.
@@ -22,7 +26,10 @@ The Animator, as it comes by default, has these known limitations:
 
 | Version | Release Date | Download |
 | --- | --- | --- |
-| 3.0.5 | Apr 22, 2025 | [Quantum Animator 3.0.5 Build 629](https://dashboard.photonengine.com/download/quantum/quantum-animator-3.0.5-alpha.unitypackage) |
+| 3.0.8 | Sep 29, 2025 | [Quantum Animator 3.0.8](https://downloads.photonengine.com/download/quantum/quantum-animator-3.0.8-alpha.unitypackage?pre=sp) |
+| 3.0.7 | Aug 11, 2025 | [Quantum Animator 3.0.7](https://downloads.photonengine.com/download/quantum/quantum-animator-3.0.7-alpha.unitypackage?pre=sp) |
+| 3.0.6 | Jul 04, 2025 | [Quantum Animator 3.0.6](https://downloads.photonengine.com/download/quantum/quantum-animator-3.0.6-alpha.unitypackage?pre=sp) |
+| 3.0.5 | Apr 22, 2025 | [Quantum Animator 3.0.5](https://downloads.photonengine.com/download/quantum/quantum-animator-3.0.5-alpha.unitypackage?pre=sp) |
 
 Back to top
 

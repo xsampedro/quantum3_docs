@@ -136,13 +136,17 @@ Components can accessed, used or passed as parameters as either pointers or as v
 
 Quantum's custom allocator exposes blittable collections as part of the rollback-able game state. Collections only support support blittable types (i.e. primitive and DSL-defined types).
 
-To manage collection, the Frame API offers 3 methods for each:
+To manage collections, the Frame API offers 3 methods for each:
 
 - `Frame.AllocateXXX`: To allocate space for the collection on the heap.
 - `Frame.FreeXXX`: To free/deallocate the collection's memory.
 - `Frame.ResolveXXX`: To access the collection by resolving the pointer it.
 
-**Note:** After freeing a collection, it **HAS TO** be nullified by setting it to `default`. This is required for serialization of the game state to work properly. Omitting the nullification will result in indeterministic behavior and de-synchronization. As alternative to freeing a collection and nullifying its Ptrs manually, it possible to use the `FreeOnComponentRemoved` attribute on the field in question.
+Nullify collections
+
+After freeing a collection, it **HAS TO** be nullified by setting it to `default`. This is required for serialization of the game state to work properly. Omitting the nullification will result in non-deterministic behavior and de-synchronization. As alternative to freeing a collection and nullifying its Ptrs manually, it possible to use the `FreeOnComponentRemoved` attribute on the field in question.
+
+An alternative that **already** nullifies it under the hood is using the Free overload which takes a `ref` variable, such as `FreeList<T>(ref QListPtr<t> ptr)`. In this case, there is no need to set the collection to `default` manually.
 
 ### Important Notes
 
@@ -151,7 +155,7 @@ To manage collection, the Frame API offers 3 methods for each:
 
   - implement the reactive callbacks `ISignalOnAdd<T>` and `ISignalOnRemove<T>` and allocate/free the collections there. (For more information on these specific signals, see the Components page in the ECS section of the Manual); or,
   - use the `\[AllocateOnComponentAdded\]` and `\[FreeOnComponentRemoved\]` attributes to let Quantum handle the allocation and deallocation when the component is added and removed respectively.
-- Quantum do **NOT** pre-allocate collections from prototypes, unless there is at least value. If the collection is empty, the memory has to be manually allocated.
+- Quantum does **NOT** pre-allocate collections from prototypes, unless there is at least one entry on the collection. If the collection is empty, the memory has to be manually allocated.
 - Attempting to _free_ a collection more than once will throw an error and puts the heap in an invalid state internally.
 
 ### Lists
@@ -175,7 +179,7 @@ The basic API methods for dealing with these Lists are:
 
 Once resolved, a list can be iterated over or manipulated with all the expected API methods of a list such as Add, Remove, Contains, IndexOf, RemoveAt, \[\], etc... .
 
-To use the list in the component of type _Targets_ defined in the code snippet above, you could create the following system:
+Here is an example of how to use the list in the component of type _Targets_ defined in the code snippet above, you could create the following system:
 
 C#
 
@@ -184,20 +188,11 @@ namespace Quantum
 {
   public unsafe class HandleTargets : SystemMainThread, ISignalOnComponentAdded<Targets>, ISignalOnComponentRemoved<Targets>
   {
-    public override void Update(Frame frame)
-    {
-      foreach (var (entity, component) in frame.GetComponentIterator<Targets>()) {
-        // To use a list, you must first resolve its pointer via the frame
-        var list = frame.ResolveList(component.Enemies);
-        // Do stuff
-      }
-    }
     public void OnAdded(Frame frame, EntityRef entity, Targets* component)
     {
-      // allocating a new List (returns the blittable reference type - QListPtr)
+      // Allocate a new List (returns the blittable reference type - QListPtr)
         component->Enemies = frame.AllocateList<EntityRef>();
     }
-
     public void OnRemoved(Frame frame, EntityRef entity, Targets* component)
     {
       // A component HAS TO de-allocate all collection it owns from the frame data, otherwise it will lead to a memory leak.
@@ -208,6 +203,14 @@ namespace Quantum
       // EVEN IF is only referencing an external one!
       // This is to prevent serialization issues that otherwise lead to a desynchronisation.
       component->Enemies = default;
+    }
+    public override void Update(Frame frame)
+    {
+      foreach (var (entity, component) in frame.GetComponentIterator<Targets>()) {
+        // To use a list, you must first resolve its pointer via the frame
+        var list = frame.ResolveList(component.Enemies);
+        // Do anything with the list
+      }
     }
   }
 }
@@ -396,7 +399,7 @@ Qtn
 ```cs
 input
 {
-  FPVector2 Movement;
+    FPVector2 Movement;
     button Fire;
 }
 
@@ -659,21 +662,23 @@ Component: No prototype will be generated for this component.
 
 | Attribute | Parameters | Description |
 | --- | --- | --- |
+| **AllocateOnComponentAdded** |  | Can be applied to dynamic collections. <br> <br>This will allocate memory for the collection if it has not already been allocated when the component holding the collection is added to an entity. |
+| **ArrayLength**<br> ONLY FOR CSharp | `int` length | Using _length_ allows to define the size of a an array. |
+| **ArrayLength**<br> ONLY FOR CSharp | `int` minLength<br> <br>`int` maxLength | Using _minLength_ and _maxLength_ allows to define a range for the size in the Inspector. <br> <br>The final size can then be set in the Inspector.<br> <br>( _minLength_ and _maxLength_ are inclusive) |
 | **DrawIf** | `string` fieldName<br> <br>`long` value<br> <br>`CompareOperator` compare<br> <br>`HideType` hide | Displays the property only if the condition evaluates to true.<br> <br>_fieldName_ = the name of the property to evaluate.<br> <br>_value_ = the value used for comparison.<br> <br>_compare_ = the comparison operation to be performed `Equal`, `NotEqual`, `Less`, `LessOrEqual`, `GreaterOrEqual` or `Greater`.<br> <br>_hide_ = the field's behavior when the expression evaluates to `False`:`Hide` or `ReadOnly`.<br> <br> For more information on compare and hide, see below. |
+| **FreeOnComponentRemoved** |  | Can be applied to dynamic collections and `Ptrs`. <br> <br>This will deallocate the associated memory and nullify the `Ptr` held in the field when the component is removed.<br> <br>If used on a struct's field, any component that uses such struct will free the collection when removed.<br> <br> IMPORTANT: Do **NOT** use this attribute in combination with cross-referenced collections as it only nullifies the `Ptr` held in that particular field and the others will be pointing to invalid memory. |
+| **ExcludeFromPrototype** |  | Can be applied a component or component fields. |
 | **Header** | `string` header | Adds a header above the property.<br> <br>_header_ = the header text to display. |
 | **HideInInspector** |  | Serializes the field and hides the following property in the Unity inspector. |
 | **Layer** |  | Can only be applied to type **int**.<br> <br>Will call `EditorGUI.LayerField` on the field. |
-| **Optional** | `string` enabledPropertyPath | Allows to turn the display of a property on/off.<br> <br>_enabledPropertyPath_ = the path to the `bool` used to evaluate the toggle. |
-| **Space** |  | Adds a space above the property |
-| **Tooltip** | `string` tooltip | Displays a tool tip when hovering over the property.<br> <br>_tooltip_ = the tip to display. |
-| **ArrayLength**<br> ONLY FOR CSharp | `int` length | Using _length_ allows to define the size of a an array. |
-| **ArrayLength**<br> ONLY FOR CSharp | `int` minLength<br> <br>`int` maxLength | Using _minLength_ and _maxLength_ allows to define a range for the size in the Inspector. <br> <br>The final size can then be set in the Inspector.<br> <br>( _minLength_ and _maxLength_ are inclusive) |
-| **ExcludeFromPrototype** |  | Can be applied a component or component fields. |
 | **OnlyInPrototype** |  | Can be applied to a field which then will be ignored in the object state and only be added to the prototype. |
 | **OnlyInPrototype** | `string` fieldName<br>`string` fieldType | Can be applied to a component which then will add the field to the prototype but ignore it in the object state (similar to the above). |
 | **PreserveInPrototype** |  | Added to a type marks it as usable in prototypes and prevents prototype class from being emit.<br> Added to a field only affects a specific field. Useful for simple `\[Serializable\]` structs as it avoids having to use `\_Prototype` types on Unity side. |
-| **AllocateOnComponentAdded** |  | Can be applied to dynamic collections. <br> <br>This will allocate memory for the collection if it has not already been allocated when the component holding the collection is added to an entity. |
-| **FreeOnComponentRemoved** |  | Can be applied to dynamic collections and `Ptrs`. <br> <br>This will deallocate the associated memory and nullify the `Ptr` held in the field when the component is removed.<br> <br> IMPORTANT: Do **NOT** use this attribute in combination with cross-referenced collections as it only nullifies the `Ptr` held in that particular field and the others will be pointing to invalid memory. |
+| **Optional** | `string` enabledPropertyPath | Allows to turn the display of a property on/off.<br> <br>_enabledPropertyPath_ = the path to the `bool` used to evaluate the toggle. |
+| **Range** | `(0, 10)` | Adds a Unity default range slider to the inspector that works for `int`. |
+| **RangeEx** | `(0.1, 9.9)` | Adds a range slider to the inspector that works for `FP` and `long`.<br> <br> The values will be clamped by the Editor inspector using `float` and, similar to Quantum maps, are only deterministic when being build or exported. |
+| **Space** |  | Adds a space above the property |
+| **Tooltip** | `string` tooltip | Displays a tool tip when hovering over the property.<br> <br>_tooltip_ = the tip to display. |
 
 The _Attributes_ can be used in both C# and qtn files unless otherwise specified; however, there are some syntactic differences.### Use in CSharp
 
@@ -759,6 +764,17 @@ var rawConstant = Constants.Raw.Pi;
 
 ```
 
+## Naming Entities
+
+Quantum entities do not have names. Though it's possible to set a `static``delegate` that returns a custom string representation for an `EntityRef`. This entity name is displayed in `FramePrinter`, `QuantumStateInspector` and `EntityViewUpdater`.
+
+C#
+
+```csharp
+EntityRef.GetEntityNameUser = (entityRef, frame) => "foo";
+
+```
+
 Back to top
 
 - [Introduction](#introduction)
@@ -801,3 +817,4 @@ Back to top
 
 - [Compiler Options](#compiler-options)
 - [Custom FP Constants](#custom-fp-constants)
+- [Naming Entities](#naming-entities)

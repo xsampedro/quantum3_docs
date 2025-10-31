@@ -20,7 +20,7 @@ The App ID is a generated identifier for your Photon Cloud application.
 
 It is used when an application client connects and separates your users from those of other applications.
 
-Sign in and browse to your [application dashboard](https://dashboard.photonengine.com).
+Sign in and browse to your [application dashboard](https://dashboard.photonengine.com/).
 
 To reveal the full App ID just click on it. It is now pre-selected for copy/paste.
 

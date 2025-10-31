@@ -91,12 +91,12 @@ namespace Quantum
 C#
 
 ```csharp
-void SendCommand(DeterministicCommand command);
-void SendCommand(Int32 player, DeterministicCommand command);
+DeterministicCommandSendResult SendCommand(DeterministicCommand command);
+DeterministicCommandSendResult SendCommand(Int32 playerSlot, DeterministicCommand command);
 
 ```
 
-Specify the player index (PlayerRef) if multiple players are controlled from the same machine. Games with only one local player can ignore the player index field.
+Specify the player slot if multiple players are controlled from the same machine. Games with only one local player can ignore the player slot field.
 
 ## Polling Commands From The Simulation
 
@@ -112,7 +112,7 @@ namespace Quantum
     {
         public override void Update(Frame frame)
         {
-            for (int i = 0; i < f.PlayerCount; i++)
+            for (int i = 0; i < frame.MaxPlayerCount; i++)
             {
                  var command = frame.GetPlayerCommand(i) as CommandSpawnEnemy;
                  command?.Execute(frame);

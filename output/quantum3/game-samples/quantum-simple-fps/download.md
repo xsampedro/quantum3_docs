@@ -8,7 +8,8 @@ _Source: https://doc.photonengine.com/quantum/current/game-samples/quantum-simpl
 
 | Version | Release Date | Download |
 | --- | --- | --- |
-| 3.0.0 | Aug 16, 2024 | [Quantum Simple FPS 3.0.0 Build 450](https://dashboard.photonengine.com/download/quantum/quantum-simple-fps-3.0.0.zip) |
+| 3.0.5 | Jul 24, 2025 | [Quantum Simple FPS 3.0.5](https://downloads.photonengine.com/download/quantum/quantum-simple-fps-3.0.5.zip?pre=sp) |
+| 3.0.0 | Aug 16, 2024 | [Quantum Simple FPS 3.0.0](https://downloads.photonengine.com/download/quantum/quantum-simple-fps-3.0.0.zip?pre=sp) |
 
 ## Requirements
 
@@ -23,7 +24,7 @@ The **Quantum Simple FPS** is built for PC and WebGL with Keyboard and Mouse inp
 
 ### Creating a Photon Quantum AppId
 
-1. Go to the [Photon Engine Dashboard](https://dashboard.photonengine.com) and log in or create an account.
+1. Go to the [Photon Engine Dashboard](https://dashboard.photonengine.com/) and log in or create an account.
 
 2. On the dashboard open `Applications > Public Cloud` and select a Quantum 3 app or create a new app selecting Quantum 3 as Photon SDK.
 ![Quantum Hub](/docs/img/quantum/v3/_shared/dashboard-menu.png)
@@ -38,7 +39,7 @@ The **Quantum Simple FPS** is built for PC and WebGL with Keyboard and Mouse inp
 
 ![PhotonServerSettings](/docs/img/quantum/v3/_shared/menu.png)![PhotonServerSettings](/docs/img/quantum/v3/_shared/asset.png)
 
-To run the game, follow instructions in [Starting The Game](/quantum/current/game-samples/simple-fps/starting-the-game) section.
+To run the game, follow instructions in [Starting The Game](/quantum/current/game-samples/quantum-simple-fps/starting-the-game) section.
 
 Back to top
 

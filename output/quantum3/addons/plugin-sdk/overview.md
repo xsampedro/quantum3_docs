@@ -6,8 +6,6 @@ _Source: https://doc.photonengine.com/quantum/current/addons/plugin-sdk/overview
 
 Available in the [Gaming Circle](https://www.photonengine.com/gaming) and [Industries Circle](https://www.photonengine.com/industries)
 
-![Circle](/v2/img/docs/circles/icon-gaming_1x.png)
-
 ## Overview
 
 The Custom Plugin SDK enables developers to create a custom Quantum server, test it locally and upload to an Photon Enterprise Cloud.
@@ -25,15 +23,45 @@ Starting a local Photon Server is only supported on Windows.
 
 | Version | Release Date | Download |
 | --- | --- | --- |
-| 3.0.2 | Mar 04, 2025 | [Quantum Plugin SDK 3.0.2 Build 52](https://dashboard.photonengine.com/download/quantum/quantum-plugin-sdk-3.0.2.zip) | [Release Notes](#build-52-mar-04-2025) |
-| 3.0.1 | Dec 13, 2024 | [Quantum Plugin SDK 3.0.1 Build 49](https://dashboard.photonengine.com/download/quantum/quantum-plugin-sdk-3.0.1.zip) | [Release Notes](#build-49-dec-13-2024) |
-| 3.0.0 | Dec 09, 2024 | [Quantum Plugin SDK 3.0.0 Build 44](https://dashboard.photonengine.com/download/quantum/quantum-plugin-sdk-3.0.0-44.zip) | [Release Notes](#build-44-dec-09-2024) |
+| 3.0.3 | Apr 28, 2025 | [Quantum Plugin SDK 3.0.3](https://downloads.photonengine.com/download/quantum/quantum-plugin-sdk-3.0.3.zip?pre=sp) | [Release Notes](/quantum/v3/addons/plugin-sdk/overview#build-55-apr-28-2025) |
+| 3.0.2 | Mar 04, 2025 | [Quantum Plugin SDK 3.0.2](https://downloads.photonengine.com/download/quantum/quantum-plugin-sdk-3.0.2.zip?pre=sp) | [Release Notes](/quantum/v3/addons/plugin-sdk/overview#build-50-mar-03-2025) |
+| 3.0.1 | Dec 13, 2024 | [Quantum Plugin SDK 3.0.1](https://downloads.photonengine.com/download/quantum/quantum-plugin-sdk-3.0.1.zip?pre=sp) | [Release Notes](/quantum/v3/addons/plugin-sdk/overview#build-49-dec-13-2024) |
+| 3.0.0 | Dec 09, 2024 | [Quantum Plugin SDK 3.0.0](https://downloads.photonengine.com/download/quantum/quantum-plugin-sdk-3.0.0-44.zip?pre=sp) | [Release Notes](/quantum/v3/addons/plugin-sdk/overview#build-44-dec-09-2024) |
+
+Quantum 3.1 Preview build:
+
+| Version | Release Date | Download |
+| --- | --- | --- |
+| 3.1.0 | Oct 16, 2025 | [Quantum Plugin SDK 3.1.0](https://downloads.photonengine.com/download/quantum/quantum-plugin-sdk-3.1.0.zip?pre=sp) | [Release Notes](/quantum/current/addons/plugin-sdk/overview#changelog) |
 
 ## Changelog
 
+### 3.1.0
+
+#### Build 63 (Oct 16, 2025)
+
+- Added the `Quantum.Engine.dll` to the package lib folder
+
+#### Build 62 (Oct 14, 2025)
+
+- Upgrading Photon Server SDK to version: '6.0.19.34543\`
+- Fixed an issue that caused the game result webhook to be send for games that never started a game session
+- Added the property `FailedOnCreate` to the `LeaveGameRequest` webhook to indicate that this client failed to create the room
+- Replay streaming will be disabled after the ReplayChunk webhook returns an error
+- Input or command flooding clients will be disconnected with `Error #22`
+
+### 3.0.3
+
+#### Build 55 (Apr 28, 2025)
+
+- Added a Powershell script to upgrade the plugin SDK
+- Added `WebHookBaseUrlAllowList` dashboard and `RoomProperties.WebHookBaseUrl` to support user selected webhook urls using a key-value allow list on the server
+- Added custom webhook timeout parameters and a customizable default webhook timeout using dashboard key `WebHookDefaultTimeout` (in miliseconds)
+- Upgrading local Photon Server to version `6.0.14.33515`
+
 ### 3.0.2
 
-#### Build 52 (Mar 04, 2025)
+#### Build 50 (Mar 03, 2025)
 
 - Input deserialization errors caused by clients are now ignored, set `ClientInputExceptionTolerance` (default is 2) to define how many are ignored before disconnecting the client
 - Custom plugins running on the cloud are using a more efficient native memory allocator
@@ -99,6 +127,8 @@ Back to top
 - [Overview](#overview)
 - [Download](#download)
 - [Changelog](#changelog)
-  - [3.0.2](#section)
-  - [3.0.1](#section-1)
-  - [3.0.0](#section-2)
+  - [3.1.0](#section)
+  - [3.0.3](#section)
+  - [3.0.2](#section-1)
+  - [3.0.1](#section-2)
+  - [3.0.0](#section-3)

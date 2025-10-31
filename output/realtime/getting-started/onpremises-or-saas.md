@@ -29,7 +29,7 @@ Photon Multiplayer Game Backend
 | Game logic | The Photon Cloud provides a turnkey solution for all of the Photon products.<br> For Fusion and Quantum, we are running server side plugins out of the box to support our SDKs. | The server's logic can be fully customized in C#.<br> Several demo applications are available in source with the [free server SDKs](https://www.photonengine.com/sdks#server-sdkserverserver) and provide a high performance off-the-shelf framework for your application.<br> Benefit from our protocols and abstraction of low level functionality and add any feature you might be missing. |
 | Start instantly | Photon Cloud lets you register and immediately run your application.<br> No setup needed.<br> No server needed. | Once downloaded, [start your Photon Server in less than 5 minutes](/server/current/getting-started/photon-server-in-5min).<br> Photon is very easy to set up and runs locally as well as remote. |
 | Licensing | Choose between various subscriptions, matching your monthly active users count.<br> Whether you are an indie, startup or a AAA studio, you will find a matching plan.<br> [Photon Realtime has a free plan for up to 20 CCU.](https://www.photonengine.com/realtime) | Licenses can be bought by Industries Circle members only. |
-|  | [**See Plans**](https://www.photonengine.com/realtime/pricing) | [**Mail us**](/cdn-cgi/l/email-protection#d4bcb1b8b8bb94a4bcbba0bbbab1bab3bdbab1fab7bbb9) |
+|  | [**See Plans**](https://www.photonengine.com/realtime/pricing) | [**Mail us**](/cdn-cgi/l/email-protection#c5ada0a9a9aa85b5adaab1aaaba0aba2acaba0eba6aaa8) |
 | Features |
 | Virtual Application |  |  |
 | Name Server |  |  |

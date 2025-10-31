@@ -42,7 +42,7 @@ On the first page press the `Install Quantum User Files` button. This generates 
 
 ## Step 5 Create and Link a Quantum AppID
 
-To be able to run your Quantum application online and not just for local offline development, you need to link it to an App running with a Quantum Plugin. For this you simply go to your [Dashboard](https://dashboard.photonengine.compubliccloud) and hit the `Create a New App` button in the top right corner.
+To be able to run your Quantum application online and not just for local offline development, you need to link it to an App running with a Quantum Plugin. For this you simply go to your [Dashboard](https://dashboard.photonengine.com/publiccloud) and hit the `Create a New App` button in the top right corner.
 
 ![Photon Dashboard](/docs/img/quantum/v3/tutorials/asteroids/2-dashboard-create-app-id.png)
 Photon Dashboard

@@ -368,6 +368,7 @@ Bullets generally fly in a straight line, so you don't have to send individual p
 
 You can clean up a bullet when it hits anything or after it travelled "so many" units.
 
+
 - Don't send animations. Usually you can derive all animations from input and actions a player does.
 
 

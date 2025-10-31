@@ -4,7 +4,7 @@ _Source: https://doc.photonengine.com/realtime/current/gameplay/web-extensions/w
 
 # Webhooks
 
-Use webhooks with Photon Cloud to extend your application, allow players to rejoin games and to persist player and game data.
+Use webhooks with Photon to extend your application, allow players to rejoin games and to persist player and game data.
 
 Photon webhooks are event-driven HTTP POST requests sent by the Photon servers to your specified service.
 
@@ -14,7 +14,7 @@ We are phasing out "Persistent Games" support. New titles will not be able to re
 
 ## Setup
 
-To set up webhooks with Photon Cloud, follow the _Manage_ link from the application list on your [dashboard](https://dashboard.photonengine.com).
+To set up webhooks with Photon Cloud, follow the _Manage_ link from the application list on your [dashboard](https://dashboard.photonengine.com/).
 
 Add new or change existing within the _Webhooks_ section.
 
@@ -104,7 +104,7 @@ If set to `true`, clients will be notified with an `ErrorEvent` when a call to a
 - **IsPersistent**
 
 
-If set to `true`, Photon Cloud sends the state before removing a room from memory.
+If set to `true`, Photon sends the state before removing a room from memory.
 
 
 This option is only valid when both _PathCreate_ and _PathClose_ are properly configured.
@@ -139,33 +139,13 @@ If you do use them you should know the following:
 
 - Configuration:
 
-  - BaseUrl:
-
-
-    ```
-    `https://myawesomegame.com/chat/webhooks?clientver={AppVersion}&key=&keyA=valueA&keyA=valueB&keyB=valueB&=value
-    `
-    ```
-
+  - BaseUrl: `https://myawesomegame.com/chat/webhooks?clientver={AppVersion}&key=&keyA=valueA&keyA=valueB&keyB=valueB&=value`
   - PathCreate: `create`
   - PathClose: `close`
 - Resulting URLs:
 
-  - PathCreate:
-
-
-    ```
-    `https://myawesomegame.com/realtime/webhooks/create?clientver=1.0&key=&keyA=valueA&keyA=valueB&keyB=valueB&=value
-    `
-    ```
-
-  - PathClose:
-
-
-    ```
-    `https://myawesomegame.com/realtime/webhooks/close?clientver=1.1&key=&keyA=valueA&keyA=valueB&keyB=valueB&=value
-    `
-    ```
+  - PathCreate: `https://myawesomegame.com/realtime/webhooks/create?clientver=1.0&key=&keyA=valueA&keyA=valueB&keyB=valueB&=value`
+  - PathClose: `https://myawesomegame.com/realtime/webhooks/close?clientver=1.1&key=&keyA=valueA&keyA=valueB&keyB=valueB&=value`
 
 ### HTTP Headers Considerations
 
@@ -196,8 +176,8 @@ The JSON object's properties' names will be used as HTTP request header field na
     ```
 - Custom HTTP headers field names are case sensitive.
 
-- The supported formats for `Date` and `If-Modified-Since` can be found [here](https://docs.microsoft.com/en-us/dotnet/api/system.datetime.parse#StringToParse).
 
+- The supported formats for `Date` and `If-Modified-Since` can be found [here](https://docs.microsoft.com/en-us/dotnet/api/system.datetime.parse#StringToParse).
 - `Content-Type` should not be used as as the webhooks plugin will set it to `application/json`.
 
 - The following HTTP headers are restricted and will be ignored if set from the "CustomHttpHeaders" configuration value.
@@ -242,7 +222,7 @@ All Photon webhooks share the base URL to POST to, the ability to return an even
 
 `AppId`:
 
-AppId of your application as set from the game client and found in the [dashboard](https://dashboard.photonengine.com).
+AppId of your application as set from the game client and found in the [dashboard](https://dashboard.photonengine.com/).
 
 `AppVersion`:
 
@@ -278,7 +258,7 @@ name of the actor triggering the hook as set from the client SDK.
 
 #### Expected Response
 
-When sending the webhooks, Photon Cloud will in most cases expect only a response that has a JSON object with a `ResultCode` property set to 0.
+When sending the webhooks, Photon will in most cases expect only a response that has a JSON object with a `ResultCode` property set to 0.
 
 The zero `ResultCode` is an acknowledgment for the reception of the webhook request from and for successful processing on the web server.
 
@@ -290,7 +270,7 @@ Other than [PathCreate](#create), the server continues normal execution, despite
 
 The event also contains `ParameterCode.Info`. [See the API doc for your SDK](https://www.photonengine.com/sdks) for additional info.
 
-The only case where Photon expects more is when a player is trying to rejoin a Room that has been closed by Photon Cloud and already removed from memory.
+The only case where Photon expects more is when a player is trying to rejoin a Room that has been closed and already removed from memory.
 
 For more details about this, please refer to the [PathCreate section](#create).
 
@@ -346,7 +326,7 @@ Most of the `RoomOptions` along with the `TypedLobby` used when creating the roo
 
 The value of the `ActorNr` will be 1 and the actor will auto join the room without firing [PathJoin](#join) webhooks.
 
-If an actor tries to join or rejoin a room that was previously created but removed from Photon Cloud, the `Type` will be set to `Load`.
+If an actor tries to join or rejoin a room that was previously created but removed from the server's memory, the `Type` will be set to `Load`.
 
 The web server should return the serialized `State` of the same room.
 
@@ -358,7 +338,7 @@ If the state cannot be found for some reason, the web service should check the v
 
 If `CreateIfNotExists` is true, you can return an empty room state (e.g. `{ "State" : "", "ResultCode" : 0 }`) to allow creation of a room the options provided by the client.
 
-With its value being false Photon Cloud should be informed that the web server failed to load the state by returning a `ResultCode` other than 0.
+With its value being false, Photon should be informed that the web server failed to load the state by returning a `ResultCode` other than 0.
 
 Consider adding a human readable error message with the cause.
 
@@ -520,7 +500,7 @@ JSON
 
 ### PathJoin
 
-If an actor joins or rejoins a room that was not removed from Photon Cloud this webhook will be fired.
+If an actor joins or rejoins a room that was not removed from memory yet, this webhook will be fired.
 
 The `Type` argument is set to `Join`.
 
@@ -802,9 +782,6 @@ This is valid only when using UDP/ENET.
 - `ManagedDisconnect`: Indicates client is too slow to handle data sent.
 - `ServerDisconnect`: Indicates low level protocol error which can be caused by data corruption.
 - `TimeoutDisconnect`: Indicates that the server has _timed-out_ client.
-
-
-Find additional info in the [doc on analyzing disconnects](/realtime/current/troubleshooting/analyzing-disconnects).
 - `LeaveRequest`: Indicates that the client explicitly abandoned the room by calling `OpLeaveRoom()``OpLeaveRoom(false)`.
 - `PlayerTtlTimedOut`: Indicates that the inactive actor _timed-out_, meaning the `PlayerTtL` of the room expired for that actor.
 
@@ -815,7 +792,7 @@ See the API doc for your SDK for additional info.
 
 Normally peers _timeout_ long before that but Photon does a check for every connected peer's _timestamp_ of the last exchange with the servers (called `LastTouch`) every 5 minutes.
 - `PluginRequest`: Indicates that the actor was removed from ActorList by plugin.
-- `PluginFailedJoin`: Indicates an internal error in Photon Cloud webhooks implementation.
+- `PluginFailedJoin`: Indicates an internal error in the plugin implementation.
 
 `IsInactive`: Refers to the state of the actor before leaving the Room. If set to `true` then the actor can rejoin the game. If set to `false`, then the actor left for good and is removed from ActorList and can't rejoin the game.
 
@@ -887,7 +864,7 @@ JSON
 
 ### PathClose
 
-This hook is fired just before removing a room instance from memory in the Photon Cloud.
+This hook is fired just before removing a room instance from memory server side.
 
 This happens only when the `EmptyRoomTTL` has expired.
 
@@ -895,7 +872,7 @@ This happens only when the `EmptyRoomTTL` has expired.
 
 A room is considered empty when the last active actor in the room leaves it.
 
-In case `IsPersistent` is set to `true`, Photon Cloud will send the `State` which is a serialized _snapshot_ of the room that contains its properties and information about the actors and cached events.
+In case `IsPersistent` is set to `true`, Photon will send the `State` which is a serialized _snapshot_ of the room that contains its properties and information about the actors and cached events.
 
 In this case, the `Type` of the webhook will have the `Save` value.
 

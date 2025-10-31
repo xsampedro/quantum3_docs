@@ -79,6 +79,20 @@ physicsBody->WakeUp();
 
 ```
 
+## Change Units Between Maps
+
+Is it possible to move entities between maps by manually change the `MapIndex` of the `FlowFieldPathfinder` component. This index is 0 by default but you can set it directly on inspector or manullay:
+
+C#
+
+```csharp
+var pathfinder  = frame.GetPointer<FlowFieldPathfinder>(entity);
+pathfinder->ChangeMap((Frame)frame, flowFieldIndex);
+
+```
+
+The maps doesn't have an index itself, this index is used to get the map from the array of maps in the `FrameContext`. So the order of the maps is the same as the order in the array that was set in the `Quantum Runner Local Debug` on Unit's inspector.
+
 Back to top
 
 - [A\* Path](#a-path)
@@ -86,5 +100,8 @@ Back to top
 - [Path Caching](#path-caching)
 - [Portal Fields](#portal-fields)
 - [Movement](#movement)
+
   - [MovementBasic Example](#movementbasic-example)
   - [MovementAdvanced Example](#movementadvanced-example)
+
+- [Change Units Between Maps](#change-units-between-maps)

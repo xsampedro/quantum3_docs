@@ -31,7 +31,7 @@ The following callbacks define the life-cycle of (pooled) entity view and its `Q
 
 A `QuantumEntityViewComponent` can be defined to have one optional generic type for a context object. A context object is a simple class (can be a MonoBehaviour, singleton, etc) that derives from `IQuantumViewContext`. It's an option to share data between different parts of the game.
 
-The context has to be a child of the `QuantumEntityViewUpdater` game object and it must be added during `Awake()` to be automatically loaded and made available for view components.
+The context has to be in the same game object as the `QuantumEntityViewUpdater` or in a child game object and it must be added during `Awake()` to be automatically loaded and made available for view components.
 
 C#
 

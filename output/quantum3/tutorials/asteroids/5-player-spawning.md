@@ -93,7 +93,7 @@ Until now the ship movement in the `AsteroidsShipSystem` always moved using inpu
 C#
 
 ```csharp
-var input = f.GetPlayerInput(0);
+var input = frame.GetPlayerInput(0);
 
 ```
 
@@ -105,7 +105,7 @@ C#
 Input* input = default;
 if(f.Unsafe.TryGetPointer(filter.Entity, out PlayerLink* playerLink))
 {
-    input = f.GetPlayerInput(playerLink->PlayerRef);
+    input = frame.GetPlayerInput(playerLink->PlayerRef);
 }
 
 ```
@@ -114,7 +114,7 @@ Note that the filter has not been adjusted so the system will still filter for e
 
 Getting a component using `TryGet` in Quantum is very fast `O(1)` because Quantum uses a sparse set ECS.
 
-`f.Unsafe` provides access to Quantum's unsafe API which is generally faster and more convenient to use than the no-pointer counterparts. However, if you want to avoid using pointers the safe API such as `f.Get` can be used.
+`frame.Unsafe` provides access to Quantum's unsafe API which is generally faster and more convenient to use than the no-pointer counterparts. However, if you want to avoid using pointers the safe API such as `frame.Get` can be used.
 
 Switch to Unity and enter play mode. The ship will be spawned and it reacts to keyboard inputs.
 

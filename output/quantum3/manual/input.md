@@ -72,7 +72,7 @@ NOTE: The float to fixed point conversion here is deterministic because it is do
 
 Although Quantum 3 delta-compresses input, it is still generally a good practice to make the raw `Input` data as compact as possible for optimal bandwidth. Below are a few ways to optimize it.
 
-## Buttons
+### Buttons
 
 Instead of using booleans or similar data types to represent key presses, the `Button` type is used inside the Input DSL definition. This is because it only uses one bit per instance, so it is favorable to use where possible. Although they only use one bit over the network, locally they will contain a bit more game state. This is because the single bit is only representative of whether or not the button was pressed during the current frame, the rest of the information is computed locally.
 
@@ -114,7 +114,7 @@ input.button.Update(frame, value);
 
 This way, the specific states (Pressed, Down, Released) is also internally generated. Not updating the button state every frame results in those states being wrongly set.
 
-## Encoded Direction
+### Encoded Direction
 
 In a typical setting, movement is often represented using a direction vector, often defined in a `DSL` file as such:
 
@@ -193,5 +193,5 @@ Back to top
 - [Commands](#commands)
 - [Polling in Unity](#polling-in-unity)
 - [Optimization](#optimization)
-- [Buttons](#buttons)
-- [Encoded Direction](#encoded-direction)
+  - [Buttons](#buttons)
+  - [Encoded Direction](#encoded-direction)

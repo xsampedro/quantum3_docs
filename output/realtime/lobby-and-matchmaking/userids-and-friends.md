@@ -6,7 +6,7 @@ _Source: https://doc.photonengine.com/realtime/current/lobby-and-matchmaking/use
 
 ## UserIDs
 
-In Photon, a player is identified using a unique UserID.
+In Photon, a player is identified using a unique UserID. In best case, across multiple sessions.
 
 UserIDs are case sensitive. **Example**: " **Photonian**" and " **photonian**" are two different UserIDs for two different players.
 
@@ -20,13 +20,9 @@ In old C# client SDKs, this was enabled using `RoomOptions.CheckUserOnJoin`.
 
 ### Unique UserIDs
 
-Generally, UserIDs are not intended to be displayed.
+Unlike usernames, displaynames or nicknames, the UserIDs are not intended to be shown. They are often not very readable or memorable.
 
-Unlike usernames, displaynames or nicknames.
-
-A UserID does not have to be human-readable or very human-friendly.
-
-So you could, for instance, use a [GUID](http://guid.one/guid) as a UserID.
+It is not uncommon to use a [GUID](http://guid.one/guid) as a UserID.
 
 The advantages of keeping a unique UserID per player:
 
@@ -45,9 +41,7 @@ You can add user profiles (e.g. experience, statistics, achievements, levels, et
 
 
 For instance, Photon UserID could be set to Facebook ID, Google ID, Steam ID, PlayFab ID, etc.
-- You can prohibit malicious users from connecting to your applications by keeping a blocklist of their UserIDs and making use of
-
-[Custom Authentication](/realtime/current/connection-and-authentication/authentication/custom-authentication#returning-data-to-client).
+- You can prohibit malicious users from connecting to your applications by keeping a blocklist of their UserIDs and making use of Custom Authentication.
 
 ### Setting UserIDs
 
@@ -58,9 +52,11 @@ The UserID for a client can be set in three ways:
 1. Client sends its UserID before connecting by setting `AuthenticationValues.UserId`.
 
 
-This option is useful when you do not use [Custom Authentication](/realtime/current/connection-and-authentication/authentication/custom-authentication#returning-data-to-client) and want to set a UserID.
-2. An external authentication provider returns the UserID on successful authentication. See [Custom Authentication](/realtime/current/connection-and-authentication/authentication/custom-authentication#returning-data-to-client). It will override any value sent by the client.
-3. Photon Server will assign GUIDs as IDs for users that did not get UserIDs using 1 or 2. So even anonymous users will have UserIDs.
+This option is useful when you do not use Custom Authentication and just want to set a UserID.
+2. An external authentication provider returns the UserID on successful authentication. This overrides any value sent by the client.
+3. Photon Server will assign GUIDs as IDs for users that did not get UserIDs using 1 or 2. So even anonymous users will have a temporary UserID.
+
+More about [Custom Authentication](/realtime/current/connection-and-authentication/authentication/custom-authentication#returning-data-to-client).
 
 ### Publish UserIDs
 
@@ -160,20 +156,19 @@ loadBalancingClient.OpJoinRoom(enterRoomParams);
 
 ## Friends
 
-- Friends' UserIDs are case sensitive. **Example**: " **mybestfriend**" and " **MyBestFriend**" are two different UserIDs for two different friends.
-
-- Only friends connected to the same AppID, the same Photon Cloud region and play the same Photon AppVersion can find each other no matter what device or platform they're using.
-
-- FindFriends works only when connected to the Master Server, it does not work when the client is joined to a room.
-
-
 You can find out if your friends who are playing the same game are online and if so, which room they are joined to.
 
 Like users, friends are also identified using their UserID.
 
 So the FriendID is the same thing as the UserID and in order to find some friends you need to know their UserIDs first.
 
-Then you can send the list of UserIDs to Photon Servers using:
+Friends can only find one another, if they are connected to the same Region with the same AppId and AppVersion.
+
+Friends make use of UserIDs, which are case sensitive.
+
+FindFriends is only available on the Master Server. Clients can not find friends while playing a session in a room.
+
+Examples:
 
 C#
 
@@ -203,18 +198,6 @@ public class FindFriendsExample : IMatchmakingCallbacks
 }
 
 ```
-
-Photon does not persist friends lists.
-
-You may need an external service for that.
-
-Since Photon does not keep track of your userbase, any non existing user in your game will just be considered offline.
-
-A friend is considered online only when he/she is connected to Photon at the time of making the FindFriends query.
-
-A room name will be returned per user if the latter is online and joined to the room with the same name.
-
-If multiple clients with the same UserId are joined to multiple separate rooms in the same Cluster / VirtualApp, FindFriends should return the latest joined one.
 
 Back to top
 

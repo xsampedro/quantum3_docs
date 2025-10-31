@@ -152,7 +152,9 @@ The following `QueryOptions` allow you to define the mask used by the query. If 
 
 - **HitTriggers** : has to be used **in combination with** other flags to hit trigger colliders.
 
-- **HitAll** : will hit all entities that have a PhysicsCollider
+- **HitAll** : will hit all static colliders and entities that have a PhysicsCollider, including triggers.
+
+- **HitSolids** : will hit all static colliders and entities that have a PhysicsCollider, except trigger colliders.
 
 
 By default, a query will use the `HitAll` option. Choosing any other option will save computation.

@@ -12,7 +12,7 @@ You will need a VIVEPORT AppId and a VIVEPORT AppSecret. Contact the VIVEPORT co
 
 ## Application Setup
 
-As first step, you should setup VIVEPORT Authentication in the [Photon Applications' Dashboard](https://dashboard.photonengine.com).
+As first step, you should setup VIVEPORT Authentication in the [Photon Applications' Dashboard](https://dashboard.photonengine.com/).
 
 Go to the "Manage" page of an application and scroll down to the "Authentication" section.
 

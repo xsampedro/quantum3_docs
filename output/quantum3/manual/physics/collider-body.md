@@ -106,7 +106,7 @@ Draw.Capsule(FPVector2.Zero, extent, radius);
 
 The picture below showcases the semantic differences between Quantum's and Unity's Capsule Colliders, for clarity sake.
 
-![Difference between Unity's capsules and Quantum's capsules](/docs/img/quantum/v3/manual/physics/capsule-diffrences.png)
+![Difference between Unity's capsules and Quantum's capsules](/docs/img/quantum/v3/manual/physics/capsule-diffrences.jpg)
 Difference between Unity's capsules and Quantum's capsules.
 ### Center of Mass
 

@@ -554,7 +554,7 @@ On Bot SDK, the main entry points are:
 
 In order to better visualize what happens during a frame when these methods are executed, here is a flow graph:
 
-![HFSM In A Frame](/docs/img/quantum/v3/addons/bot-sdk/what-happens-frame.png)Back to top
+![HFSM In A Frame](/docs/img/quantum/v3/addons/bot-sdk/what-happens-frame.jpg)Back to top
 
 - [Introduction](#introduction)
 - [Pros and Cons](#pros-and-cons)

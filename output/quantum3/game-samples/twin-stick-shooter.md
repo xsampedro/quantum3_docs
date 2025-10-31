@@ -4,7 +4,13 @@ _Source: https://doc.photonengine.com/quantum/current/game-samples/twin-stick-sh
 
 # Twin Stick Shooter
 
-![Level 4](/v2/img/docs/levels/level03-intermediate_1.5x.png)
+Level
+
+INTERMEDIATE
+
+Topology
+
+**DETERMINISTIC**
 
 ## Overview
 
@@ -16,7 +22,9 @@ It showcases AI systems present in Bot SDK in conjunction to other auxilliary im
 
 | Version | Release Date | Download |
 | --- | --- | --- |
-| 3.0.2 | Apr 08, 2025 | [Quantum TwinStickShooter 3.0.2 Build 620](https://dashboard.photonengine.com/download/quantum/quantum-twinstickshooter-3.0.2.zip) |
+| 3.0.7 | Sep 09, 2025 | [Quantum Twin Stick Shooter 3.0.7](https://downloads.photonengine.com/download/quantum/quantum-twinstickshooter-3.0.7.zip?pre=sp) |
+| 3.0.5 | Jul 24, 2025 | [Quantum Twin Stick Shooter 3.0.5](https://downloads.photonengine.com/download/quantum/quantum-twinstickshooter-3.0.5.zip?pre=sp) |
+| 3.0.2 | Apr 08, 2025 | [Quantum Twin Stick Shooter 3.0.2](https://downloads.photonengine.com/download/quantum/quantum-twinstickshooter-3.0.2.zip?pre=sp) |
 
 ## Technical Info
 
@@ -64,27 +72,27 @@ It showcases AI systems present in Bot SDK in conjunction to other auxilliary im
 
 Game Start - Players and Bots joining
 
-![Game Start](/docs/img/quantum/v2/game-samples/twin-stick-shooter/Game Start - Player and Bot joining.jpg)
+![Game Start](/docs/img/quantum/v2/game-samples/twin-stick-shooter/Game-Start-Player-and-Bot-joining.jpg)
 
 Input Polling - Includes player replacement
 
-![Input Polling](/docs/img/quantum/v2/game-samples/twin-stick-shooter/Polling Input.jpg)
+![Input Polling](/docs/img/quantum/v2/game-samples/twin-stick-shooter/Polling-Input.jpg)
 
 Applying the Input to characters
 
-![Applying the Input to characters](/docs/img/quantum/v2/game-samples/twin-stick-shooter/Applying the Input.jpg)
+![Applying the Input to characters](/docs/img/quantum/v2/game-samples/twin-stick-shooter/Applying-the-Input.jpg)
 
 AI Building Blocks
 
-![AI Building Blocks](/docs/img/quantum/v2/game-samples/twin-stick-shooter/The AI building blocks.jpg)
+![AI Building Blocks](/docs/img/quantum/v2/game-samples/twin-stick-shooter/The-AI-building-blocks.jpg)
 
 AI Strategy and Tactics
 
-![AI Strategy and Tactics](/docs/img/quantum/v2/game-samples/twin-stick-shooter/Strategy and Tactics.jpg)
+![AI Strategy and Tactics](/docs/img/quantum/v2/game-samples/twin-stick-shooter/Strategy-and-Tactics.jpg)
 
 The Game Manager
 
-![The Game Manager](/docs/img/quantum/v2/game-samples/twin-stick-shooter/Game Management.jpg)## Screenshots
+![The Game Manager](/docs/img/quantum/v2/game-samples/twin-stick-shooter/Game-Management.jpg)## Screenshots
 
 ![](/docs/img/quantum/v2/game-samples/twin-stick-shooter/gameplay.png)
 

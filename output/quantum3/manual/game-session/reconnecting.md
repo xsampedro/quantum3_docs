@@ -196,7 +196,7 @@ var runner = (QuantumRunner)await SessionRunner.StartAsync(sessionRunnerArgument
 
 ```
 
-Independently of having joined as a new Photon room actor or having rejoined, reconnecting clients are identified by their `ClientId` and will be assigned to the same player index they previously had if the slot was not filled by another players in the meantime. In short: player must use the **same `ClientId`** when reconnecting.
+Independently of having joined as a new Photon room actor or having rejoined, reconnecting clients are identified by their `ClientId` and will be assigned to the same player index they previously had if the slot was not filled by another player in the meantime. In short: player must use the **same `ClientId`** when reconnecting.
 
 Quantum will not let a client start the session while another `active` player with the same `ClientId` is inside the room and waits for the disconnect timeout (10 seconds):
 
@@ -310,6 +310,140 @@ For games that have a low user count (e.g. 1 vs 1) the chance that there is no o
 - Shutdown QuantumRunner
 - Fast Photon Reconnect
 - restart Quantum with snapshot
+
+#### Local Snapshot Snippet
+
+To use this snippet create an empty scene, create a game object and place this script on it.
+
+As a minimum set the `Map` and the `SimulationConfig` on the `RuntimeConfig`.
+
+Add at least one entry in `RuntimePlayers`.
+
+Add the `QuantumStats` prefab to see if a Quantum simulation runs.
+
+Press `Connect` to start the online game. Press `Disconnect` to stop, wait a couple seconds and press `Reconnect` and see that it the session is already in progress and has a tick larger than 60.
+
+C#
+
+```csharp
+namespace Quantum.Demo {
+  using System;
+  using System.Collections.Generic;
+  using Photon.Deterministic;
+  using Photon.Realtime;
+  using UnityEngine;
+  using UnityEngine.SceneManagement;
+  /// <summary>
+  /// A Unity script that demonstrates how to connect to a Quantum cloud and start a Quantum game session.
+  /// </summary>
+  public class QuantumSimpleReconnectionGUI : QuantumMonoBehaviour {
+    /// <summary>
+    /// The RuntimeConfig to use for the Quantum game session. The RuntimeConfig describes custom game properties.
+    /// </summary>
+    public RuntimeConfig RuntimeConfig;
+    /// <summary>
+    /// The RuntimePlayers to add to the Quantum game session. The RuntimePlayers describe individual custom player properties.
+    /// </summary>
+    public List<RuntimePlayer> RuntimePlayers;
+    /// <summary>
+    /// Room keep alive time.
+    /// </summary>
+    public int EmptyRoomTtlInSeconds = 20;
+    RealtimeClient _client;
+    string _loadedScene;
+    QuantumReconnectInformation _reconnectInformation;
+    int _disconnectedTick;
+    byte[] _disconnectedFrame;
+    bool CanReconnect => _reconnectInformation != null && _reconnectInformation.HasTimedOut == false;
+    async void OnGUI() {
+      if (_client != null && _client.IsConnectedAndReady) {
+        if (GUI.Button(new Rect(10, 60, 160, 40), "Disconnect")) {
+          await Stop();
+        }
+      } else {
+        if (GUI.Button(new Rect(10, 60, 160, 40), CanReconnect ? "Reconnect" : "Connect")) {
+          await Run();
+        }
+      }
+    }
+    async System.Threading.Tasks.Task Run() {
+      var connectionArguments = new MatchmakingArguments {
+        PhotonSettings = PhotonServerSettings.Global.AppSettings,
+        PluginName = "QuantumPlugin",
+        MaxPlayers = Quantum.Input.MAX_COUNT,
+        // Keep the client connection object, it has cached authentication information
+        NetworkClient = _client,
+        // Keep an empty room open for a time
+        EmptyRoomTtlInSeconds = EmptyRoomTtlInSeconds,
+        // Set the stored reconnection information
+        ReconnectInformation = _reconnectInformation,
+        // Don't let random matchmaking get into this room
+        IsRoomVisible = false
+      };
+      if (CanReconnect) {
+        // Switch to reconnecting mode
+        _client = await MatchmakingExtensions.ReconnectToRoomAsync(connectionArguments);
+      } else {
+        _client = await MatchmakingExtensions.ConnectToRoomAsync(connectionArguments);
+        // Remove the disconnect information, it would break a new room
+        _disconnectedTick = 0;
+        _disconnectedFrame = null;
+      }
+      // Load the map if AutoLoadSceneFromMap is not set
+      if (QuantumUnityDB.TryGetGlobalAsset(RuntimeConfig.SimulationConfig, out Quantum.SimulationConfig simulationConfigAsset)
+        && simulationConfigAsset.AutoLoadSceneFromMap == SimulationConfig.AutoLoadSceneFromMapMode.Disabled) {
+        if (QuantumUnityDB.TryGetGlobalAsset(RuntimeConfig.Map, out Quantum.Map map) == false) {
+          throw new Exception("Map not found");
+        }
+        using (new ConnectionServiceScope(_client)) {
+          await SceneManager.LoadSceneAsync(map.Scene, LoadSceneMode.Additive);
+          SceneManager.SetActiveScene(SceneManager.GetSceneByName(map.Scene));
+          _loadedScene = map.Scene;
+        }
+      }
+      var sessionRunnerArguments = new SessionRunner.Arguments {
+        RunnerFactory = QuantumRunnerUnityFactory.DefaultFactory,
+        GameParameters = QuantumRunnerUnityFactory.CreateGameParameters,
+        ClientId = _client.UserId,
+        RuntimeConfig = new QuantumUnityJsonSerializer().CloneConfig(RuntimeConfig),
+        SessionConfig = QuantumDeterministicSessionConfigAsset.DefaultConfig,
+        GameMode = DeterministicGameMode.Multiplayer,
+        PlayerCount = Quantum.Input.MAX_COUNT,
+        Communicator = new QuantumNetworkCommunicator(_client),
+        // Set the initial tick
+        InitialTick = _disconnectedTick,
+        // Set the serialized frame
+        FrameData = _disconnectedFrame
+      };
+      // Add a player to the game
+      var runner = (QuantumRunner)await SessionRunner.StartAsync(sessionRunnerArguments);
+      for (int i = 0; i < RuntimePlayers.Count; i++) {
+        runner.Game.AddPlayer(i, RuntimePlayers[i]);
+      }
+    }
+    async System.Threading.Tasks.Task Stop() {
+      // Save the serialized frame
+      _disconnectedTick = QuantumRunner.DefaultGame.Frames.Verified.Number;
+      _disconnectedFrame = QuantumRunner.DefaultGame.Frames.Verified.Serialize(DeterministicFrameSerializeMode.Serialize);
+      // Save the reconnect information
+      _reconnectInformation = new QuantumReconnectInformation();
+      // Set the timeout to empty room ttl
+      _reconnectInformation.Set(_client, TimeSpan.FromSeconds(EmptyRoomTtlInSeconds));
+      if (string.IsNullOrEmpty(_loadedScene) == false) {
+        // Unload a scene if we loaded one
+        await SceneManager.UnloadSceneAsync(_loadedScene);
+      }
+      // Shutdown the runner
+      if (QuantumRunner.Default != null) {
+        await QuantumRunner.Default.ShutdownAsync();
+      }
+      // Make sure the client has disconnected
+      await _client.DisconnectAsync();
+    }
+  }
+}
+
+```
 
 Back to top
 

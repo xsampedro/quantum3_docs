@@ -366,22 +366,6 @@ With Slot Reservation, Photon can block a slot for specific users and take that 
 
 To reserve slots there is an `expectedUsers` parameter (exact parameter or argument name may vary depending on your client SDK) in the methods that get you in a room (`JoinRoom`, `JoinOrCreateRoom`, `JoinRandomRoom` and `CreateRoom`. Exact functions or methods names may vary depending on your client SDK).
 
-{% if PUN %}
-
-C#
-
-```csharp
-// create room example
-PhotonNetwork.CreateRoom(roomName, roomOptions, typedLobby, expectedUsers);
-// join room example
-PhotonNetwork.JoinRoom(roomName, expectedUsers);
-// join or create room example
-PhotonNetwork.JoinOrCreateRoom(roomName, roomOptions, typedLobby, expectedUsers);
-// join random room example
-PhotonNetwork.JoinRandomRoom(expectedProperties, maxPlayers, expectedUsers, matchmakingType, typedLobby, sqlLobbyFilter, expectedUsers);
-
-```
-
 C#
 
 ```csharp
